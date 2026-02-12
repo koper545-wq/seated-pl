@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "NEXT_TURBOPACK=0 next dev",
     "dev:clean": "rm -rf .next && npm run dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint"
   },
