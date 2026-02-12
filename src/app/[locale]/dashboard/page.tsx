@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
@@ -11,6 +10,7 @@ import {
   getBookingsByGuestId,
   bookingStatusLabels,
   guestWrittenReviews,
+  getGuestProfileByMockUserId,
 } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,9 +21,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useMockUser } from "@/components/dev/account-switcher";
 
 export default function GuestDashboardPage() {
-  const profile = currentGuestProfile;
+  const mockUser = useMockUser();
+
+  // Get profile based on mock user or fallback to default
+  const profile = mockUser
+    ? (getGuestProfileByMockUserId(mockUser.id) || currentGuestProfile)
+    : currentGuestProfile;
   const badges = getGuestBadges(profile.badges);
   const levelInfo = getGuestLevel(profile.xp);
   const bookings = getBookingsByGuestId(profile.id);

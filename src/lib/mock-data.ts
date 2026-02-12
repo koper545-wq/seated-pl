@@ -1195,12 +1195,34 @@ export const hostEvents: HostEvent[] = [
 ];
 
 export function getHostEventsByHostId(hostId: string): HostEvent[] {
-  // In real app, filter by hostId
-  // For demo, return all events for host-1
-  if (hostId === "host-1") {
-    return hostEvents;
+  // Map mock user IDs to host event sets
+  // In real app, would filter by hostId from database
+  switch (hostId) {
+    case "host-1":
+    case "host-experienced":
+      // Experienced host - Anna Kowalska - gets all events
+      return hostEvents;
+    case "host-new":
+      // New host - Karolina - gets only first event
+      return hostEvents.slice(0, 1).map(e => ({
+        ...e,
+        hostId: "host-new",
+        revenue: 720,
+        confirmedGuests: 6,
+        pendingBookings: 2,
+      }));
+    case "host-restaurant":
+      // Restaurant - Trattoria Toskańska - gets all events with higher numbers
+      return hostEvents.map(e => ({
+        ...e,
+        hostId: "host-restaurant",
+        revenue: e.revenue * 2.5,
+        confirmedGuests: Math.floor(e.confirmedGuests * 1.8),
+        pendingBookings: Math.floor(e.pendingBookings * 1.5),
+      }));
+    default:
+      return [];
   }
-  return [];
 }
 
 export function getHostEventById(eventId: string): HostEvent | undefined {
@@ -1274,70 +1296,234 @@ export function getGuestLevel(xp: number): { level: number; name: string; progre
   return { level: levelInfo.level, name: levelInfo.name, progress };
 }
 
-export const currentGuestProfile: GuestProfile = {
-  id: "user-current",
-  email: "jan@example.com",
-  firstName: "Jan",
-  lastName: "Kowalski",
-  avatar: "",
-  bio: "Pasjonat dobrego jedzenia i nowych smaków. Uwielbiam poznawać ludzi przy wspólnym stole. Specjalizuję się w kuchni włoskiej i azjatyckiej.",
-  city: "Wrocław",
-  memberSince: new Date("2024-06-15"),
-  isPublic: true,
-  eventsAttended: 8,
-  reviewsWritten: 5,
-  xp: 450,
-  level: 3,
-  dietaryRestrictions: ["gluten-free"],
-  favoriteCategories: ["supper-club", "warsztaty", "degustacje"],
-  socialLinks: {
-    instagram: "jan_foodie",
+// ============================================
+// MOCK GUEST PROFILES (linked to mockUsers)
+// ============================================
+
+export const mockGuestProfiles: Record<string, GuestProfile> = {
+  "guest-new": {
+    id: "guest-new",
+    email: "nowy@test.pl",
+    firstName: "Marta",
+    lastName: "Nowak",
+    avatar: "",
+    bio: "Dopiero zaczynam swoją przygodę z wydarzeniami kulinarnymi. Szukam ciekawych doświadczeń!",
+    city: "Wrocław",
+    memberSince: new Date("2025-02-01"),
+    isPublic: true,
+    eventsAttended: 0,
+    reviewsWritten: 0,
+    xp: 0,
+    level: 1,
+    dietaryRestrictions: [],
+    favoriteCategories: [],
+    socialLinks: {},
+    badges: [],
+    photos: [],
+    attendedEvents: [],
   },
-  badges: ["badge-1", "badge-2", "badge-4", "badge-5"],
-  photos: [],
-  attendedEvents: [
-    {
-      eventId: "1",
-      eventTitle: "Włoska Kolacja u Ani - Toskańskie Smaki",
-      eventDate: new Date("2025-01-15T19:00:00"),
-      eventType: "Supper Club",
-      hostName: "Anna Kowalska",
-      imageGradient: "from-amber-200 to-orange-300",
+  "guest-active": {
+    id: "guest-active",
+    email: "aktywny@test.pl",
+    firstName: "Jan",
+    lastName: "Kowalski",
+    avatar: "",
+    bio: "Pasjonat dobrego jedzenia i nowych smaków. Uwielbiam poznawać ludzi przy wspólnym stole. Specjalizuję się w kuchni włoskiej i azjatyckiej.",
+    city: "Wrocław",
+    memberSince: new Date("2024-06-15"),
+    isPublic: true,
+    eventsAttended: 8,
+    reviewsWritten: 5,
+    xp: 450,
+    level: 3,
+    dietaryRestrictions: ["gluten-free"],
+    favoriteCategories: ["supper-club", "warsztaty", "degustacje"],
+    socialLinks: {
+      instagram: "jan_foodie",
     },
-    {
-      eventId: "5",
-      eventTitle: "Bieg + Brunch - Poranna Energia",
-      eventDate: new Date("2025-01-12T09:00:00"),
-      eventType: "Active + Food",
-      hostName: "Run & Eat Wrocław",
-      imageGradient: "from-green-200 to-teal-300",
-    },
-    {
-      eventId: "2",
-      eventTitle: "Sushi Masterclass",
-      eventDate: new Date("2024-12-10T18:00:00"),
-      eventType: "Warsztaty",
-      hostName: "Kenji Tanaka",
-      imageGradient: "from-rose-200 to-pink-300",
-    },
-    {
-      eventId: "3",
-      eventTitle: "Naturalne Wina Gruzji",
-      eventDate: new Date("2024-11-22T20:00:00"),
-      eventType: "Degustacje",
-      hostName: "Giorgi Beridze",
-      imageGradient: "from-purple-200 to-violet-300",
-    },
-    {
-      eventId: "6",
-      eventTitle: "Thai Street Food Pop-up",
-      eventDate: new Date("2024-10-05T18:00:00"),
-      eventType: "Pop-up",
-      hostName: "Mai & Tom Kitchen",
-      imageGradient: "from-orange-200 to-red-300",
-    },
-  ],
+    badges: ["badge-1", "badge-2", "badge-4", "badge-5"],
+    photos: [],
+    attendedEvents: [
+      {
+        eventId: "1",
+        eventTitle: "Włoska Kolacja u Ani - Toskańskie Smaki",
+        eventDate: new Date("2025-01-15T19:00:00"),
+        eventType: "Supper Club",
+        hostName: "Anna Kowalska",
+        imageGradient: "from-amber-200 to-orange-300",
+      },
+      {
+        eventId: "5",
+        eventTitle: "Bieg + Brunch - Poranna Energia",
+        eventDate: new Date("2025-01-12T09:00:00"),
+        eventType: "Active + Food",
+        hostName: "Run & Eat Wrocław",
+        imageGradient: "from-green-200 to-teal-300",
+      },
+      {
+        eventId: "2",
+        eventTitle: "Sushi Masterclass",
+        eventDate: new Date("2024-12-10T18:00:00"),
+        eventType: "Warsztaty",
+        hostName: "Kenji Tanaka",
+        imageGradient: "from-rose-200 to-pink-300",
+      },
+      {
+        eventId: "3",
+        eventTitle: "Naturalne Wina Gruzji",
+        eventDate: new Date("2024-11-22T20:00:00"),
+        eventType: "Degustacje",
+        hostName: "Giorgi Beridze",
+        imageGradient: "from-purple-200 to-violet-300",
+      },
+      {
+        eventId: "6",
+        eventTitle: "Thai Street Food Pop-up",
+        eventDate: new Date("2024-10-05T18:00:00"),
+        eventType: "Pop-up",
+        hostName: "Mai & Tom Kitchen",
+        imageGradient: "from-orange-200 to-red-300",
+      },
+    ],
+  },
 };
+
+// ============================================
+// MOCK HOST PROFILES (linked to mockUsers)
+// ============================================
+
+export interface HostProfile {
+  id: string;
+  email: string;
+  name: string;
+  hostType: "individual" | "restaurant";
+  avatar?: string;
+  coverImage?: string;
+  bio: string;
+  city: string;
+  memberSince: Date;
+  isVerified: boolean;
+  // Stats
+  totalEvents: number;
+  upcomingEvents: number;
+  totalGuests: number;
+  avgRating: number;
+  totalReviews: number;
+  totalEarnings: number;
+  // Social
+  socialLinks?: {
+    instagram?: string;
+    facebook?: string;
+    website?: string;
+  };
+  // Badges
+  badges: string[];
+  // Specialties
+  cuisineTypes: string[];
+  eventTypes: string[];
+}
+
+export const mockHostProfiles: Record<string, HostProfile> = {
+  "host-new": {
+    id: "host-new",
+    email: "host.nowy@test.pl",
+    name: "Karolina Wiśniewska",
+    hostType: "individual",
+    avatar: "",
+    bio: "Pasjonatka kuchni polskiej z nowoczesnym twistem. Dopiero zaczynam jako host, ale mam wielkie plany!",
+    city: "Wrocław",
+    memberSince: new Date("2025-01-15"),
+    isVerified: false,
+    totalEvents: 1,
+    upcomingEvents: 1,
+    totalGuests: 6,
+    avgRating: 4.8,
+    totalReviews: 4,
+    totalEarnings: 720,
+    socialLinks: {
+      instagram: "karolina_gotuje",
+    },
+    badges: ["badge-10"],
+    cuisineTypes: ["Polska", "Fusion"],
+    eventTypes: ["Supper Club"],
+  },
+  "host-experienced": {
+    id: "host-experienced",
+    email: "host.pro@test.pl",
+    name: "Anna Kowalska",
+    hostType: "individual",
+    avatar: "",
+    coverImage: "",
+    bio: "Kuchnia włoska to moja pasja od 10 lat. Mieszkałam 3 lata w Toskanii, gdzie nauczyłam się autentycznych przepisów od lokalnych nonnas. Teraz dzielę się tą miłością do włoskich smaków z gośćmi w moim domu.",
+    city: "Wrocław",
+    memberSince: new Date("2023-03-10"),
+    isVerified: true,
+    totalEvents: 47,
+    upcomingEvents: 3,
+    totalGuests: 412,
+    avgRating: 4.92,
+    totalReviews: 156,
+    totalEarnings: 52400,
+    socialLinks: {
+      instagram: "anna_wloska_kuchnia",
+      facebook: "annakuchniawloska",
+      website: "www.toskanskiesmaki.pl",
+    },
+    badges: ["badge-10", "badge-11", "badge-12", "badge-13"],
+    cuisineTypes: ["Włoska", "Śródziemnomorska"],
+    eventTypes: ["Supper Club", "Warsztaty", "Degustacje"],
+  },
+  "host-restaurant": {
+    id: "host-restaurant",
+    email: "restauracja@test.pl",
+    name: "Trattoria Toskańska",
+    hostType: "restaurant",
+    avatar: "",
+    coverImage: "",
+    bio: "Autentyczna włoska restauracja w sercu Wrocławia. Organizujemy zamknięte kolacje degustacyjne, warsztaty robienia makaronu i wieczory z włoskim winem. Nasz szef kuchni Marco pochodzi z Florencji.",
+    city: "Wrocław",
+    memberSince: new Date("2022-09-01"),
+    isVerified: true,
+    totalEvents: 89,
+    upcomingEvents: 5,
+    totalGuests: 1247,
+    avgRating: 4.87,
+    totalReviews: 423,
+    totalEarnings: 156800,
+    socialLinks: {
+      instagram: "trattoria_toskanska",
+      facebook: "TrattoriaToskanskaWroclaw",
+      website: "www.trattoriatoskanska.pl",
+    },
+    badges: ["badge-10", "badge-11", "badge-12", "badge-13", "badge-14"],
+    cuisineTypes: ["Włoska", "Toskańska", "Wina"],
+    eventTypes: ["Supper Club", "Warsztaty", "Degustacje", "Wine Pairing"],
+  },
+};
+
+// Helper function to get profile by mock user ID
+export function getProfileByMockUserId(mockUserId: string): GuestProfile | HostProfile | null {
+  if (mockGuestProfiles[mockUserId]) {
+    return mockGuestProfiles[mockUserId];
+  }
+  if (mockHostProfiles[mockUserId]) {
+    return mockHostProfiles[mockUserId];
+  }
+  return null;
+}
+
+// Helper function to get guest profile by mock user ID
+export function getGuestProfileByMockUserId(mockUserId: string): GuestProfile | null {
+  return mockGuestProfiles[mockUserId] || null;
+}
+
+// Helper function to get host profile by mock user ID
+export function getHostProfileByMockUserId(mockUserId: string): HostProfile | null {
+  return mockHostProfiles[mockUserId] || null;
+}
+
+// Default guest profile (for backward compatibility)
+export const currentGuestProfile: GuestProfile = mockGuestProfiles["guest-active"];
 
 export function getGuestBadges(badgeIds: string[]): MockBadge[] {
   return badges.filter((badge) => badgeIds.includes(badge.id) && badge.category === "guest");

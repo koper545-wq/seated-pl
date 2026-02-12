@@ -12,6 +12,7 @@ import {
   getBookingsByEventId,
   HostEvent,
   hostEventStatusLabels,
+  getHostProfileByMockUserId,
 } from "@/lib/mock-data";
 import {
   Plus,
@@ -31,9 +32,15 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
+import { useMockUser } from "@/components/dev/account-switcher";
 
 export default function HostDashboardPage() {
-  const hostEvents = getHostEventsByHostId("host-1");
+  const mockUser = useMockUser();
+  const hostProfile = mockUser ? getHostProfileByMockUserId(mockUser.id) : null;
+
+  // Use mock user's host ID or default to host-1
+  const hostId = mockUser?.role === "host" ? mockUser.id : "host-1";
+  const hostEvents = getHostEventsByHostId(hostId);
 
   // Separate events by status/time
   const now = new Date();
