@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { Menu, User, LogOut, Settings, Calendar, Users, Heart, Gift } from "lucide-react";
+import { Menu, User, LogOut, Settings, Calendar, Users, Heart, ChefHat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -13,20 +13,20 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { currentGuestProfile } from "@/lib/mock-data";
+import { useSession, signOut } from "next-auth/react";
+import { useMockUser } from "@/components/dev/account-switcher";
 
 export function Header() {
   const t = useTranslations("nav");
+  const { data: session, status } = useSession();
+  const mockUser = useMockUser();
+  const isLoading = status === "loading";
 
-  // Mock session for development - using mock data instead of NextAuth
-  const session = {
-    user: {
-      name: `${currentGuestProfile.firstName} ${currentGuestProfile.lastName}`,
-      email: currentGuestProfile.email,
-      image: currentGuestProfile.avatar,
-    }
-  };
-  const isLoading = false;
+  // Use mock user if set, otherwise use real session
+  const currentUser = mockUser
+    ? { name: mockUser.name, email: mockUser.email, image: mockUser.image }
+    : session?.user;
+  const isHost = mockUser?.role === "host";
 
   const navigation = [
     { name: t("events"), href: "/events" },
@@ -35,8 +35,8 @@ export function Header() {
     { name: t("giftCards"), href: "/gift-cards" },
   ];
 
-  const userInitials = session?.user?.name
-    ? session.user.name
+  const userInitials = currentUser?.name
+    ? currentUser.name
         .split(" ")
         .map((n) => n[0])
         .join("")
@@ -72,7 +72,7 @@ export function Header() {
 
             {isLoading ? (
               <div className="h-9 w-20 bg-muted animate-pulse rounded-md" />
-            ) : session?.user ? (
+            ) : currentUser ? (
               <div className="flex items-center gap-3">
                 <Link
                   href="/dashboard"
@@ -88,10 +88,10 @@ export function Header() {
                     >
                       <Avatar className="h-9 w-9">
                         <AvatarImage
-                          src={session.user.image || undefined}
-                          alt={session.user.name || "User"}
+                          src={currentUser.image || undefined}
+                          alt={currentUser.name || "User"}
                         />
-                        <AvatarFallback className="bg-amber-100 text-amber-700">
+                        <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700" : "bg-amber-100 text-amber-700"}>
                           {userInitials}
                         </AvatarFallback>
                       </Avatar>
@@ -104,49 +104,75 @@ export function Header() {
                     <div className="flex items-center gap-3 mt-6 pb-4 border-b">
                       <Avatar className="h-12 w-12">
                         <AvatarImage
-                          src={session.user.image || undefined}
-                          alt={session.user.name || "User"}
+                          src={currentUser.image || undefined}
+                          alt={currentUser.name || "User"}
                         />
-                        <AvatarFallback className="bg-amber-100 text-amber-700 text-lg">
+                        <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700 text-lg" : "bg-amber-100 text-amber-700 text-lg"}>
                           {userInitials}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium">{session.user.name}</p>
+                        <p className="font-medium">{currentUser.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          {session.user.email}
+                          {currentUser.email}
                         </p>
+                        {isHost && (
+                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
+                            Host
+                          </span>
+                        )}
                       </div>
                     </div>
                     <nav className="flex flex-col space-y-1 mt-4">
-                      <Link
-                        href="/dashboard"
-                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                      >
-                        <User className="h-4 w-4" />
-                        <span>{t("profile")}</span>
-                      </Link>
-                      <Link
-                        href="/dashboard/bookings"
-                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                      >
-                        <Calendar className="h-4 w-4" />
-                        <span>{t("myBookings")}</span>
-                      </Link>
-                      <Link
-                        href="/dashboard/homies"
-                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                      >
-                        <Users className="h-4 w-4" />
-                        <span>{t("homies")}</span>
-                      </Link>
-                      <Link
-                        href="/dashboard/wishlist"
-                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                      >
-                        <Heart className="h-4 w-4" />
-                        <span>{t("wishlist")}</span>
-                      </Link>
+                      {isHost ? (
+                        <>
+                          <Link
+                            href="/host/dashboard"
+                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                          >
+                            <ChefHat className="h-4 w-4" />
+                            <span>{t("hostDashboard") || "Panel hosta"}</span>
+                          </Link>
+                          <Link
+                            href="/host/events"
+                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                          >
+                            <Calendar className="h-4 w-4" />
+                            <span>{t("myEvents") || "Moje wydarzenia"}</span>
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          <Link
+                            href="/dashboard"
+                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                          >
+                            <User className="h-4 w-4" />
+                            <span>{t("profile")}</span>
+                          </Link>
+                          <Link
+                            href="/dashboard/bookings"
+                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                          >
+                            <Calendar className="h-4 w-4" />
+                            <span>{t("myBookings")}</span>
+                          </Link>
+                          <Link
+                            href="/dashboard/homies"
+                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                          >
+                            <Users className="h-4 w-4" />
+                            <span>{t("homies")}</span>
+                          </Link>
+                          <Link
+                            href="/dashboard/wishlist"
+                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                          >
+                            <Heart className="h-4 w-4" />
+                            <span>{t("wishlist")}</span>
+                          </Link>
+                        </>
+                      )}
                       <Link
                         href="/dashboard/settings"
                         className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
@@ -155,13 +181,16 @@ export function Header() {
                         <span>{t("settings")}</span>
                       </Link>
                       <hr className="my-2" />
-                      <Link
-                        href="/login"
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("seated-mock-user");
+                          signOut({ callbackUrl: "/" });
+                        }}
                         className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors text-red-600 w-full text-left"
                       >
                         <LogOut className="h-4 w-4" />
                         <span>{t("logout")}</span>
-                      </Link>
+                      </button>
                     </nav>
                   </SheetContent>
                 </Sheet>
@@ -195,22 +224,27 @@ export function Header() {
                   </SheetTitle>
                 </SheetHeader>
 
-                {session?.user && (
+                {currentUser && (
                   <div className="flex items-center gap-3 mt-6 pb-4 border-b">
                     <Avatar className="h-10 w-10">
                       <AvatarImage
-                        src={session.user.image || undefined}
-                        alt={session.user.name || "User"}
+                        src={currentUser.image || undefined}
+                        alt={currentUser.name || "User"}
                       />
-                      <AvatarFallback className="bg-amber-100 text-amber-700">
+                      <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700" : "bg-amber-100 text-amber-700"}>
                         {userInitials}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium text-sm">{session.user.name}</p>
+                      <p className="font-medium text-sm">{currentUser.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {session.user.email}
+                        {currentUser.email}
                       </p>
+                      {isHost && (
+                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
+                          Host
+                        </span>
+                      )}
                     </div>
                   </div>
                 )}
@@ -228,26 +262,48 @@ export function Header() {
 
                   <hr className="my-2" />
 
-                  {session?.user ? (
+                  {currentUser ? (
                     <>
-                      <Link
-                        href="/dashboard"
-                        className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
-                      >
-                        {t("dashboard")}
-                      </Link>
-                      <Link
-                        href="/dashboard/bookings"
-                        className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
-                      >
-                        {t("myBookings")}
-                      </Link>
-                      <Link
-                        href="/login"
+                      {isHost ? (
+                        <>
+                          <Link
+                            href="/host/dashboard"
+                            className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                          >
+                            {t("hostDashboard") || "Panel hosta"}
+                          </Link>
+                          <Link
+                            href="/host/events"
+                            className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                          >
+                            {t("myEvents") || "Moje wydarzenia"}
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          <Link
+                            href="/dashboard"
+                            className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                          >
+                            {t("dashboard")}
+                          </Link>
+                          <Link
+                            href="/dashboard/bookings"
+                            className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                          >
+                            {t("myBookings")}
+                          </Link>
+                        </>
+                      )}
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("seated-mock-user");
+                          signOut({ callbackUrl: "/" });
+                        }}
                         className="text-lg font-medium text-red-600 hover:text-red-700 transition-colors text-left"
                       >
                         {t("logout")}
-                      </Link>
+                      </button>
                     </>
                   ) : (
                     <>

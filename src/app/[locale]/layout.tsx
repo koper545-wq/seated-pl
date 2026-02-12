@@ -6,8 +6,8 @@ import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { Header, Footer } from "@/components/layout";
-// SessionProvider disabled temporarily - using mock data
-// import { SessionProvider } from "@/components/providers";
+import { SessionProvider } from "@/components/providers";
+import { DevAccountSwitcher } from "@/components/dev/account-switcher";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -83,14 +83,16 @@ export default async function LocaleLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <NextIntlClientProvider messages={messages}>
-          {/* SessionProvider disabled - using mock data for development */}
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </NextIntlClientProvider>
+        <SessionProvider>
+          <NextIntlClientProvider messages={messages}>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <DevAccountSwitcher />
+          </NextIntlClientProvider>
+        </SessionProvider>
       </body>
     </html>
   );

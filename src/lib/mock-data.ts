@@ -1,6 +1,69 @@
 // Mock data for development - will be replaced with database queries
 
 // ============================================
+// MOCK USERS (for testing/development)
+// ============================================
+
+export type MockUserRole = "guest" | "host" | "admin";
+export type MockHostType = "individual" | "restaurant";
+
+export interface MockUser {
+  id: string;
+  email: string;
+  name: string;
+  image?: string;
+  role: MockUserRole;
+  hostType?: MockHostType;
+  description: string; // Short description for dev switcher
+}
+
+export const mockUsers: MockUser[] = [
+  {
+    id: "guest-new",
+    email: "nowy@test.pl",
+    name: "Marta Nowak",
+    image: "",
+    role: "guest",
+    description: "Nowy gość - 0 wydarzeń",
+  },
+  {
+    id: "guest-active",
+    email: "aktywny@test.pl",
+    name: "Jan Kowalski",
+    image: "",
+    role: "guest",
+    description: "Aktywny gość - 8 wydarzeń, poziom 3",
+  },
+  {
+    id: "host-new",
+    email: "host.nowy@test.pl",
+    name: "Karolina Wiśniewska",
+    image: "",
+    role: "host",
+    hostType: "individual",
+    description: "Nowy host prywatny - 1 wydarzenie",
+  },
+  {
+    id: "host-experienced",
+    email: "host.pro@test.pl",
+    name: "Anna Kowalska",
+    image: "",
+    role: "host",
+    hostType: "individual",
+    description: "Doświadczony host - 15 wydarzeń, 4.9⭐",
+  },
+  {
+    id: "host-restaurant",
+    email: "restauracja@test.pl",
+    name: "Trattoria Toskańska",
+    image: "",
+    role: "host",
+    hostType: "restaurant",
+    description: "Restauracja - 25 wydarzeń, verified",
+  },
+];
+
+// ============================================
 // BADGES
 // ============================================
 
