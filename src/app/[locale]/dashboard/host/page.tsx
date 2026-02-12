@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
-  getHostEventsByHostId,
   getBookingsByEventId,
   HostEvent,
   hostEventStatusLabels,
@@ -34,12 +33,14 @@ import {
 } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useMockUser } from "@/components/dev/account-switcher";
+import { useEvents } from "@/contexts/events-context";
 
 export default function HostDashboardPage() {
   const { user: mockUser, isLoading } = useMockUser();
+  const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
 
-  // Show loading while checking user
-  if (isLoading) {
+  // Show loading while checking user or events
+  if (isLoading || !eventsLoaded) {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
@@ -54,7 +55,7 @@ export default function HostDashboardPage() {
 
   // Use mock user's host ID or default to host-1
   const hostId = mockUser?.role === "host" ? mockUser.id : "host-1";
-  const hostEvents = getHostEventsByHostId(hostId);
+  const hostEvents = getHostEvents(hostId);
 
   // Separate events by status/time
   const now = new Date();

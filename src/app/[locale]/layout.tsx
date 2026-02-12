@@ -8,6 +8,7 @@ import "../globals.css";
 import { Header, Footer } from "@/components/layout";
 import { SessionProvider } from "@/components/providers";
 import { DevAccountSwitcher } from "@/components/dev/account-switcher";
+import { EventsProvider } from "@/contexts/events-context";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -85,12 +86,14 @@ export default async function LocaleLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <SessionProvider>
           <NextIntlClientProvider messages={messages}>
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <DevAccountSwitcher />
+            <EventsProvider>
+              <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+              <DevAccountSwitcher />
+            </EventsProvider>
           </NextIntlClientProvider>
         </SessionProvider>
       </body>

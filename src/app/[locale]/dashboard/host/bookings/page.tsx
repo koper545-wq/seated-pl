@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,13 +36,34 @@ import {
   AlertCircle,
   TrendingUp,
   CalendarDays,
+  Loader2,
 } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
+import { useMockUser } from "@/components/dev/account-switcher";
 
 export default function HostBookingsPage() {
-  const [bookings, setBookings] = useState<MockBooking[]>(
-    getBookingsByHostId("host-1") // Demo: Anna Kowalska's bookings
-  );
+  const { user: mockUser, isLoading } = useMockUser();
+  const hostId = mockUser?.id || "host-1";
+
+  const [bookings, setBookings] = useState<MockBooking[]>([]);
+
+  // Initialize bookings when mock user loads
+  useEffect(() => {
+    if (!isLoading) {
+      setBookings(getBookingsByHostId(hostId));
+    }
+  }, [isLoading, hostId]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-stone-500">Ładowanie...</p>
+        </div>
+      </div>
+    );
+  }
   const [actionBooking, setActionBooking] = useState<{
     booking: MockBooking;
     action: "approve" | "decline";

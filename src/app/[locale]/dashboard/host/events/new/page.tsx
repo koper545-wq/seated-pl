@@ -47,6 +47,8 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 import { eventLanguages } from "@/lib/mock-data";
+import { useMockUser } from "@/components/dev/account-switcher";
+import { useEvents } from "@/contexts/events-context";
 
 const eventTypes = [
   { value: "supper-club", label: "Supper Club", icon: "🍽️" },
@@ -92,6 +94,8 @@ const durationOptions = [
 
 export default function CreateEventPage() {
   const router = useRouter();
+  const { user: mockUser } = useMockUser();
+  const { addEvent } = useEvents();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -182,9 +186,39 @@ export default function CreateEventPage() {
 
   const handleSubmit = async (asDraft: boolean = false) => {
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    // In real app, send to API
+    const hostId = mockUser?.id || "host-1";
+
+    // Create the event using the context
+    const eventDateValue = eventDate || new Date();
+    const slug = title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
+    addEvent(hostId, {
+      title,
+      slug,
+      type: eventTypes.find((t) => t.value === eventType)?.label || eventType,
+      typeSlug: eventType,
+      date: eventDateValue,
+      dateFormatted: format(eventDateValue, "d MMM yyyy, HH:mm", { locale: pl }),
+      startTime,
+      duration,
+      location: neighborhood === "stare-miasto" ? "Stare Miasto" : neighborhood,
+      fullAddress: useDefaultAddress ? "ul. Ruska 46/3, Wrocław" : customAddress,
+      price,
+      capacity,
+      spotsLeft: capacity,
+      bookingsCount: 0,
+      pendingBookings: 0,
+      confirmedGuests: 0,
+      revenue: 0,
+      imageGradient: "from-amber-400 to-orange-500",
+      status: asDraft ? "draft" : "pending_review",
+      description,
+      menuDescription,
+      dietaryOptions: selectedDietary,
+      createdAt: new Date(),
+    });
 
     router.push("/dashboard/host?created=true");
   };

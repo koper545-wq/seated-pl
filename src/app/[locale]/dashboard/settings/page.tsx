@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
-import { currentGuestProfile, dietaryOptions, eventTypes, profileLanguages } from "@/lib/mock-data";
+import { currentGuestProfile, dietaryOptions, eventTypes, profileLanguages, getGuestProfileByMockUserId, getHostProfileByMockUserId } from "@/lib/mock-data";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Bell, BellOff, Loader2 } from "lucide-react";
+import { useMockUser } from "@/components/dev/account-switcher";
 
 function NotificationToggle() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -150,9 +151,55 @@ function LanguageSelector() {
 }
 
 export default function SettingsPage() {
-  const [profile, setProfile] = useState(currentGuestProfile);
+  const { user: mockUser, isLoading } = useMockUser();
+
+  // Get profile based on mock user
+  const getInitialProfile = () => {
+    if (!mockUser) return currentGuestProfile;
+
+    if (mockUser.role === "host") {
+      const hostProfile = getHostProfileByMockUserId(mockUser.id);
+      if (hostProfile) {
+        return {
+          ...currentGuestProfile,
+          id: hostProfile.id,
+          firstName: hostProfile.name.split(" ")[0] || hostProfile.name,
+          lastName: hostProfile.name.split(" ").slice(1).join(" ") || "",
+          email: mockUser.email,
+          avatar: hostProfile.avatar,
+          city: hostProfile.city,
+          bio: hostProfile.bio,
+        };
+      }
+    } else {
+      const guestProfile = getGuestProfileByMockUserId(mockUser.id);
+      if (guestProfile) return guestProfile;
+    }
+
+    return currentGuestProfile;
+  };
+
+  const [profile, setProfile] = useState(getInitialProfile);
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Update profile when mockUser changes
+  useEffect(() => {
+    if (!isLoading) {
+      setProfile(getInitialProfile());
+    }
+  }, [isLoading, mockUser]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-stone-500">Ładowanie...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSave = async () => {
     setIsSaving(true);

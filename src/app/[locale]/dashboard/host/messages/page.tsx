@@ -13,11 +13,13 @@ import {
   MessageSquare,
   ChevronRight,
   Calendar,
+  Loader2,
 } from "lucide-react";
 import {
   getConversationsByUserId,
   type MockConversation,
 } from "@/lib/mock-data";
+import { useMockUser } from "@/components/dev/account-switcher";
 
 function formatMessageTime(date: Date): string {
   const now = new Date();
@@ -100,9 +102,23 @@ function ConversationItem({
 export default function HostMessagesPage() {
   const t = useTranslations("messages");
   const [searchQuery, setSearchQuery] = useState("");
+  const { user: mockUser, isLoading } = useMockUser();
+
+  const hostId = mockUser?.id || "host-1";
 
   // Get conversations for current host
-  const conversations = getConversationsByUserId("host-1", "host");
+  const conversations = getConversationsByUserId(hostId, "host");
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-stone-500">Ładowanie...</p>
+        </div>
+      </div>
+    );
+  }
 
   const filteredConversations = conversations.filter(
     (conv) =>

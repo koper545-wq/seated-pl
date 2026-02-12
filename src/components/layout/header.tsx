@@ -128,14 +128,14 @@ export function Header() {
                       {isHost ? (
                         <>
                           <Link
-                            href="/host/dashboard"
+                            href="/dashboard/host"
                             className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
                           >
                             <ChefHat className="h-4 w-4" />
                             <span>{t("hostDashboard") || "Panel hosta"}</span>
                           </Link>
                           <Link
-                            href="/host/events"
+                            href="/dashboard/host"
                             className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
                           >
                             <Calendar className="h-4 w-4" />
@@ -268,13 +268,13 @@ export function Header() {
                       {isHost ? (
                         <>
                           <Link
-                            href="/host/dashboard"
+                            href="/dashboard/host"
                             className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
                           >
                             {t("hostDashboard") || "Panel hosta"}
                           </Link>
                           <Link
-                            href="/host/events"
+                            href="/dashboard/host"
                             className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
                           >
                             {t("myEvents") || "Moje wydarzenia"}

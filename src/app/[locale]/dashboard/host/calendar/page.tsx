@@ -16,9 +16,12 @@ import {
   Clock,
   Users,
   MapPin,
+  Loader2,
 } from "lucide-react";
-import { getHostEventsByHostId, type HostEvent } from "@/lib/mock-data";
+import { type HostEvent } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { useMockUser } from "@/components/dev/account-switcher";
+import { useEvents } from "@/contexts/events-context";
 
 const MONTHS = [
   "january", "february", "march", "april", "may", "june",
@@ -108,8 +111,22 @@ export default function HostCalendarPage() {
   const t = useTranslations("calendar");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<"month" | "list">("month");
+  const { user: mockUser, isLoading } = useMockUser();
+  const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
 
-  const hostEvents = getHostEventsByHostId("host-1");
+  const hostId = mockUser?.id || "host-1";
+  const hostEvents = getHostEvents(hostId);
+
+  if (isLoading || !eventsLoaded) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-stone-500">Ładowanie...</p>
+        </div>
+      </div>
+    );
+  }
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();

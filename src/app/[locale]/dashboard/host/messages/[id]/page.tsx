@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Send, Calendar, MoreVertical } from "lucide-react";
+import { ArrowLeft, Send, Calendar, MoreVertical, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +19,7 @@ import {
   type MockMessage,
 } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { useMockUser } from "@/components/dev/account-switcher";
 
 function formatMessageTime(date: Date): string {
   return date.toLocaleTimeString("pl-PL", {
@@ -103,9 +104,11 @@ export default function HostConversationPage({
   const [messages, setMessages] = useState<MockMessage[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { user: mockUser, isLoading } = useMockUser();
 
   const conversation = getConversationById(id);
-  const currentUserId = "host-1"; // Host perspective
+  const currentUserId = mockUser?.id || "host-1";
+  const currentUserName = mockUser?.name || "Anna Kowalska";
 
   useEffect(() => {
     const conversationMessages = getMessagesByConversationId(id);
@@ -124,7 +127,7 @@ export default function HostConversationPage({
       id: `msg-new-${Date.now()}`,
       conversationId: id,
       senderId: currentUserId,
-      senderName: "Anna Kowalska",
+      senderName: currentUserName,
       text: newMessage.trim(),
       isRead: false,
       createdAt: new Date(),
@@ -134,6 +137,17 @@ export default function HostConversationPage({
     setNewMessage("");
     inputRef.current?.focus();
   };
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-stone-500">Ładowanie...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!conversation) {
     return (
