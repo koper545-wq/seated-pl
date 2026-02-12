@@ -30,12 +30,26 @@ import {
   FileText,
   History,
   MessageSquare,
+  Loader2,
 } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { useMockUser } from "@/components/dev/account-switcher";
 
 export default function HostDashboardPage() {
-  const mockUser = useMockUser();
+  const { user: mockUser, isLoading } = useMockUser();
+
+  // Show loading while checking user
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-muted-foreground">Ładowanie panelu hosta...</p>
+        </div>
+      </div>
+    );
+  }
+
   const hostProfile = mockUser ? getHostProfileByMockUserId(mockUser.id) : null;
 
   // Use mock user's host ID or default to host-1

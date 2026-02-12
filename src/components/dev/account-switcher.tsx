@@ -180,9 +180,10 @@ export function DevAccountSwitcher() {
   );
 }
 
-// Hook to get current mock user
-export function useMockUser(): MockUser | null {
+// Hook to get current mock user with loading state
+export function useMockUser(): { user: MockUser | null; isLoading: boolean } {
   const [mockUser, setMockUser] = useState<MockUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem(MOCK_USER_KEY);
@@ -190,9 +191,10 @@ export function useMockUser(): MockUser | null {
       const user = mockUsers.find((u) => u.id === stored);
       if (user) setMockUser(user);
     }
+    setIsLoading(false);
   }, []);
 
-  return mockUser;
+  return { user: mockUser, isLoading };
 }
 
 // Get mock user ID from localStorage (for server-side compatible usage)

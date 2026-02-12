@@ -1,6 +1,7 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import { useEffect } from "react";
+import { Link, useRouter } from "@/i18n/navigation";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 import {
@@ -22,9 +23,35 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useMockUser } from "@/components/dev/account-switcher";
+import { Loader2 } from "lucide-react";
 
 export default function GuestDashboardPage() {
-  const mockUser = useMockUser();
+  const { user: mockUser, isLoading } = useMockUser();
+  const router = useRouter();
+
+  // Redirect hosts to host dashboard
+  useEffect(() => {
+    if (!isLoading && mockUser?.role === "host") {
+      router.push("/dashboard/host");
+    }
+  }, [isLoading, mockUser, router]);
+
+  // Show loading while checking user
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-stone-500">Ładowanie...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If host, show nothing (redirect will happen)
+  if (mockUser?.role === "host") {
+    return null;
+  }
 
   // Get profile based on mock user or fallback to default
   const profile = mockUser

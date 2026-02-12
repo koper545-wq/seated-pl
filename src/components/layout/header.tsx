@@ -19,7 +19,7 @@ import { useMockUser } from "@/components/dev/account-switcher";
 export function Header() {
   const t = useTranslations("nav");
   const { data: session, status } = useSession();
-  const mockUser = useMockUser();
+  const { user: mockUser } = useMockUser();
   const isLoading = status === "loading";
 
   // Use mock user if set, otherwise use real session
@@ -27,6 +27,7 @@ export function Header() {
     ? { name: mockUser.name, email: mockUser.email, image: mockUser.image }
     : session?.user;
   const isHost = mockUser?.role === "host";
+  const dashboardHref = isHost ? "/dashboard/host" : "/dashboard";
 
   const navigation = [
     { name: t("events"), href: "/events" },
@@ -75,7 +76,7 @@ export function Header() {
             ) : currentUser ? (
               <div className="flex items-center gap-3">
                 <Link
-                  href="/dashboard"
+                  href={dashboardHref}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {t("dashboard")}
