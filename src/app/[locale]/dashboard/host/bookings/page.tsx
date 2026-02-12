@@ -46,6 +46,10 @@ export default function HostBookingsPage() {
   const hostId = mockUser?.id || "host-1";
 
   const [bookings, setBookings] = useState<MockBooking[]>([]);
+  const [actionBooking, setActionBooking] = useState<{
+    booking: MockBooking;
+    action: "approve" | "decline";
+  } | null>(null);
 
   // Initialize bookings when mock user loads
   useEffect(() => {
@@ -64,10 +68,6 @@ export default function HostBookingsPage() {
       </div>
     );
   }
-  const [actionBooking, setActionBooking] = useState<{
-    booking: MockBooking;
-    action: "approve" | "decline";
-  } | null>(null);
 
   // Separate bookings
   const pendingBookings = bookings.filter((b) => b.status === "pending");

@@ -36,6 +36,7 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
           converted[hostId] = (events as HostEvent[]).map((event) => ({
             ...event,
             date: new Date(event.date),
+            createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
           }));
         }
         setCustomEvents(converted);
