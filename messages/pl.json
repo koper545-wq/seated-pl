@@ -1,0 +1,677 @@
+{
+  "common": {
+    "appName": "Seated",
+    "tagline": "Kulinarne doświadczenia we Wrocławiu"
+  },
+  "nav": {
+    "events": "Wydarzenia",
+    "howItWorks": "Jak to działa",
+    "becomeHost": "Zostań hostem",
+    "faq": "FAQ",
+    "login": "Zaloguj się",
+    "register": "Dołącz",
+    "logout": "Wyloguj się",
+    "myAccount": "Moje konto",
+    "profile": "Profil",
+    "myBookings": "Moje rezerwacje",
+    "homies": "Homies",
+    "wishlist": "Lista życzeń",
+    "settings": "Ustawienia",
+    "dashboard": "Dashboard",
+    "hostPanel": "Panel hosta",
+    "adminPanel": "Panel admina",
+    "giftCards": "Kup zaproszenie"
+  },
+  "footer": {
+    "platform": "Platforma",
+    "info": "Informacje",
+    "followUs": "Obserwuj nas",
+    "terms": "Regulamin",
+    "privacy": "Polityka prywatności",
+    "contact": "Kontakt",
+    "copyright": "© {year} Seated. Wszystkie prawa zastrzeżone.",
+    "madeWith": "Stworzone z ❤️ we Wrocławiu"
+  },
+  "home": {
+    "hero": {
+      "title": "Odkryj kulinarne doświadczenia",
+      "titleHighlight": "we Wrocławiu",
+      "subtitle": "Supper clubs, warsztaty gotowania, pop-upy i degustacje. Poznaj pasjonatów gotowania i smakuj wyjątkowe chwile.",
+      "cta": "Przeglądaj wydarzenia",
+      "ctaSecondary": "Zostań hostem"
+    },
+    "howItWorks": {
+      "title": "Jak to działa?",
+      "subtitle": "W trzech prostych krokach",
+      "step1": {
+        "title": "Znajdź wydarzenie",
+        "description": "Przeglądaj wydarzenia kulinarne w Twojej okolicy. Filtruj po typie, dacie lub kuchni."
+      },
+      "step2": {
+        "title": "Zarezerwuj miejsce",
+        "description": "Wybierz liczbę osób i podaj preferencje dietetyczne. Host potwierdzi Twoją rezerwację."
+      },
+      "step3": {
+        "title": "Ciesz się doświadczeniem",
+        "description": "Otrzymasz adres 24h przed wydarzeniem. Poznaj nowych ludzi i odkryj niesamowite smaki!"
+      }
+    },
+    "categories": {
+      "title": "Rodzaje wydarzeń",
+      "supperClub": "Supper Club",
+      "supperClubDesc": "Wielodaniowa kolacja w prywatnym domu",
+      "chefsTable": "Chef's Table",
+      "chefsTableDesc": "Ekskluzywne menu od profesjonalnego szefa kuchni",
+      "workshops": "Warsztaty",
+      "workshopsDesc": "Naucz się gotować od profesjonalistów",
+      "tastings": "Degustacje",
+      "tastingsDesc": "Odkryj wina, sery i lokalne specjały",
+      "popup": "Pop-up",
+      "popupDesc": "Tymczasowe restauracje w nieoczekiwanych miejscach",
+      "activeFood": "Active + Food",
+      "activeFoodDesc": "Połączenie aktywności fizycznej z jedzeniem",
+      "farmExperience": "Farm Experience",
+      "farmExperienceDesc": "Od pola do stołu"
+    },
+    "upcomingEvents": "Nadchodzące wydarzenia",
+    "viewAll": "Zobacz wszystkie",
+    "becomeHost": {
+      "title": "Podziel się swoją pasją",
+      "subtitle": "Zostań hostem i zarabiaj robiąc to, co kochasz",
+      "benefit1": "Ustal własne ceny i harmonogram",
+      "benefit2": "Poznaj pasjonatów jedzenia",
+      "benefit3": "Dołącz do społeczności",
+      "cta": "Dowiedz się więcej"
+    },
+    "testimonials": {
+      "title": "Co mówią nasi goście"
+    },
+    "stats": {
+      "events": "wydarzeń",
+      "guests": "zadowolonych gości",
+      "hosts": "aktywnych hostów",
+      "rating": "średnia ocena"
+    }
+  },
+  "events": {
+    "title": "Wydarzenia",
+    "subtitle": "kulinarnych doświadczeń czeka na Ciebie",
+    "search": "Szukaj wydarzeń, hostów...",
+    "filters": "Filtry",
+    "sort": "Sortuj",
+    "sortOptions": {
+      "dateAsc": "Data (najbliższe)",
+      "dateDesc": "Data (najdalsze)",
+      "priceAsc": "Cena (rosnąco)",
+      "priceDesc": "Cena (malejąco)",
+      "ratingDesc": "Ocena (najwyższa)"
+    },
+    "filterLabels": {
+      "eventType": "Typ wydarzenia",
+      "location": "Lokalizacja",
+      "priceRange": "Zakres cen",
+      "date": "Data"
+    },
+    "activeFilters": "Aktywne:",
+    "clearFilters": "Wyczyść filtry",
+    "clearAll": "Wyczyść wszystkie",
+    "applyFilters": "Zastosuj filtry",
+    "found": "Znaleziono {count} wydarzeń",
+    "noResults": "Nie znaleziono wydarzeń",
+    "noResultsHint": "Spróbuj zmienić filtry lub wyszukaj inne słowo kluczowe",
+    "soldOut": "Wyprzedane",
+    "spotsLeft": "{count} miejsc",
+    "perPerson": "os."
+  },
+  "eventDetails": {
+    "bookNow": "Zarezerwuj",
+    "soldOut": "Wyprzedane",
+    "joinWaitlist": "Dołącz do listy oczekujących",
+    "spotsLeft": "{count} wolnych miejsc",
+    "duration": "Czas trwania",
+    "location": "Lokalizacja",
+    "price": "Cena za osobę",
+    "menu": "Menu",
+    "dietaryOptions": "Opcje dietetyczne",
+    "whatToBring": "Co zabrać",
+    "aboutHost": "O hoście",
+    "hostEvents": "{count} wydarzeń",
+    "hostRating": "{rating} ({count} opinii)",
+    "viewProfile": "Zobacz profil",
+    "follow": "Obserwuj",
+    "qa": {
+      "title": "Pytania i odpowiedzi",
+      "askQuestion": "Zadaj pytanie",
+      "placeholder": "Twoje pytanie...",
+      "submit": "Wyślij",
+      "noQuestions": "Brak pytań. Bądź pierwszy!"
+    },
+    "similarEvents": "Podobne wydarzenia"
+  },
+  "booking": {
+    "title": "Rezerwacja",
+    "steps": {
+      "seats": "Miejsca",
+      "details": "Dane",
+      "payment": "Płatność",
+      "confirmation": "Potwierdzenie"
+    },
+    "selectSeats": "Wybierz liczbę miejsc",
+    "tickets": "Liczba biletów",
+    "availableSpots": "Dostępne miejsca: {count}",
+    "yourDetails": "Twoje dane",
+    "fullName": "Imię i nazwisko",
+    "email": "Adres email",
+    "phone": "Numer telefonu",
+    "dietaryPreferences": "Preferencje dietetyczne",
+    "specialRequests": "Specjalne życzenia",
+    "specialRequestsPlaceholder": "Alergie, urodziny, itp.",
+    "summary": "Podsumowanie",
+    "subtotal": "Suma częściowa",
+    "serviceFee": "Opłata serwisowa ({percent}%)",
+    "total": "Razem",
+    "terms": "Akceptuję {terms} i {privacy}",
+    "termsLink": "regulamin",
+    "privacyLink": "politykę prywatności",
+    "confirmBooking": "Potwierdź rezerwację",
+    "processing": "Przetwarzanie...",
+    "success": {
+      "title": "Rezerwacja potwierdzona!",
+      "subtitle": "Dziękujemy za rezerwację",
+      "details": "Szczegóły rezerwacji zostały wysłane na {email}",
+      "whatNext": "Co dalej?",
+      "step1": "Host potwierdzi Twoją rezerwację w ciągu 24h",
+      "step2": "Otrzymasz pełny adres 24h przed wydarzeniem",
+      "step3": "Ciesz się wyjątkowym doświadczeniem!",
+      "viewBookings": "Moje rezerwacje",
+      "backToEvents": "Wróć do wydarzeń"
+    }
+  },
+  "auth": {
+    "continueWithGoogle": "Kontynuuj z Google",
+    "continueWithFacebook": "Kontynuuj z Facebook",
+    "orDivider": "lub",
+    "login": {
+      "title": "Witaj ponownie!",
+      "subtitle": "Zaloguj się, aby kontynuować swoją kulinarną przygodę",
+      "email": "Adres email",
+      "password": "Hasło",
+      "forgotPassword": "Zapomniałeś hasła?",
+      "submit": "Zaloguj się",
+      "submitting": "Logowanie...",
+      "noAccount": "Nie masz konta?",
+      "register": "Zarejestruj się",
+      "accountCreated": "Konto zostało utworzone. Możesz się teraz zalogować.",
+      "errors": {
+        "invalid": "Nieprawidłowy email lub hasło",
+        "generic": "Wystąpił błąd podczas logowania"
+      }
+    },
+    "register": {
+      "title": "Dołącz do Seated",
+      "subtitle": "Stwórz konto i odkryj kulinarne doświadczenia",
+      "firstName": "Imię",
+      "lastName": "Nazwisko",
+      "email": "Adres email",
+      "password": "Hasło",
+      "confirmPassword": "Potwierdź hasło",
+      "terms": "Akceptuję {terms} i {privacy}",
+      "submit": "Zarejestruj się",
+      "submitting": "Rejestracja...",
+      "hasAccount": "Masz już konto?",
+      "login": "Zaloguj się",
+      "errors": {
+        "passwordMismatch": "Hasła nie są zgodne",
+        "emailExists": "Ten email jest już zarejestrowany",
+        "generic": "Wystąpił błąd podczas rejestracji"
+      }
+    },
+    "forgotPassword": {
+      "title": "Zresetuj hasło",
+      "subtitle": "Podaj adres email powiązany z Twoim kontem",
+      "email": "Adres email",
+      "submit": "Wyślij link resetujący",
+      "submitting": "Wysyłanie...",
+      "backToLogin": "Wróć do logowania",
+      "success": {
+        "title": "Sprawdź swoją skrzynkę",
+        "subtitle": "Wysłaliśmy link do resetowania hasła na adres {email}",
+        "hint": "Jeśli nie widzisz wiadomości, sprawdź folder spam."
+      }
+    }
+  },
+  "dashboard": {
+    "guest": {
+      "title": "Dashboard",
+      "welcome": "Witaj, {name}!",
+      "stats": {
+        "eventsAttended": "Uczestniczono",
+        "upcomingEvents": "Nadchodzące",
+        "reviewsGiven": "Opinie"
+      },
+      "upcomingBookings": "Nadchodzące rezerwacje",
+      "noUpcoming": "Brak nadchodzących rezerwacji",
+      "browseEvents": "Przeglądaj wydarzenia",
+      "recentActivity": "Ostatnia aktywność",
+      "badges": "Twoje odznaki"
+    },
+    "host": {
+      "title": "Panel hosta",
+      "welcome": "Witaj, {name}!",
+      "stats": {
+        "totalEvents": "Wydarzenia",
+        "totalGuests": "Gości",
+        "revenue": "Przychód",
+        "rating": "Ocena"
+      },
+      "upcomingEvents": "Nadchodzące wydarzenia",
+      "createEvent": "Stwórz wydarzenie",
+      "pendingBookings": "Oczekujące rezerwacje",
+      "recentReviews": "Ostatnie opinie"
+    },
+    "bookings": {
+      "title": "Moje rezerwacje",
+      "upcoming": "Nadchodzące",
+      "past": "Historia",
+      "cancelled": "Anulowane",
+      "noBookings": "Brak rezerwacji",
+      "viewDetails": "Szczegóły",
+      "cancel": "Anuluj",
+      "cancelConfirm": "Czy na pewno chcesz anulować tę rezerwację?"
+    },
+    "settings": {
+      "title": "Ustawienia",
+      "profile": "Profil",
+      "notifications": "Powiadomienia",
+      "privacy": "Prywatność",
+      "language": "Język",
+      "save": "Zapisz zmiany",
+      "saved": "Zapisano!"
+    }
+  },
+  "becomeHost": {
+    "title": "Zostań hostem",
+    "subtitle": "Podziel się swoją pasją do gotowania",
+    "steps": {
+      "type": "Typ",
+      "details": "Dane",
+      "experience": "Doświadczenie",
+      "location": "Lokalizacja",
+      "photos": "Zdjęcia",
+      "review": "Podsumowanie"
+    },
+    "hostType": {
+      "title": "Kim jesteś?",
+      "individual": "Osoba prywatna",
+      "individualDesc": "Gotuję hobbystycznie w domu",
+      "restaurant": "Restauracja / Firma",
+      "restaurantDesc": "Reprezentuję lokal gastronomiczny"
+    },
+    "success": {
+      "title": "Dziękujemy za aplikację!",
+      "subtitle": "Twoja aplikacja została wysłana",
+      "nextSteps": "Co dalej?",
+      "step1": "Nasz zespół przejrzy Twoją aplikację w ciągu 48h",
+      "step2": "Skontaktujemy się z Tobą mailowo",
+      "step3": "Po akceptacji będziesz mógł tworzyć wydarzenia"
+    }
+  },
+  "admin": {
+    "title": "Panel administracyjny",
+    "nav": {
+      "dashboard": "Dashboard",
+      "analytics": "Analityka",
+      "hosts": "Hosty",
+      "events": "Wydarzenia",
+      "users": "Użytkownicy",
+      "settings": "Ustawienia"
+    },
+    "stats": {
+      "users": "Użytkownicy",
+      "hosts": "Hosty",
+      "events": "Wydarzenia",
+      "revenue": "Przychód"
+    },
+    "settings": {
+      "title": "Ustawienia platformy",
+      "commission": "Prowizja",
+      "commissionType": "Typ prowizji",
+      "percentage": "Procent (%)",
+      "fixed": "Stała kwota (PLN)",
+      "commissionValue": "Wartość prowizji",
+      "minCommission": "Minimalna prowizja",
+      "maxCommission": "Maksymalna prowizja",
+      "preview": "Podgląd",
+      "previewText": "Dla wydarzenia {price} PLN prowizja wyniesie: {fee} PLN",
+      "save": "Zapisz ustawienia",
+      "saving": "Zapisuję...",
+      "saved": "Zapisano!"
+    },
+    "vouchers": {
+      "title": "Kupony i karty podarunkowe",
+      "subtitle": "Zarządzaj kodami rabatowymi i kartami podarunkowymi",
+      "createVoucher": "Nowy kupon",
+      "createVoucherDesc": "Stwórz nowy kod rabatowy",
+      "code": "Kod",
+      "type": "Typ",
+      "percentage": "Procentowy",
+      "fixed": "Kwotowy",
+      "giftCard": "Karta podarunkowa",
+      "value": "Wartość",
+      "minOrder": "Min. zamówienie",
+      "maxDiscount": "Max rabat",
+      "validFrom": "Ważny od",
+      "validUntil": "Ważny do",
+      "usageLimit": "Limit użyć",
+      "unlimited": "Bez limitu",
+      "description": "Opis",
+      "cancel": "Anuluj",
+      "create": "Utwórz",
+      "statusActive": "Aktywny",
+      "statusUsed": "Wykorzystany",
+      "statusExpired": "Wygasły",
+      "statusDisabled": "Wyłączony",
+      "activeVouchers": "Aktywne kupony",
+      "giftCards": "Karty podarunkowe",
+      "totalUsages": "Łączne użycia",
+      "allVouchers": "Wszystkie kupony",
+      "remaining": "Pozostało",
+      "uses": "użyć",
+      "disable": "Wyłącz",
+      "enable": "Włącz"
+    }
+  },
+  "errors": {
+    "notFound": "Strona nie została znaleziona",
+    "notFoundDesc": "Przepraszamy, nie możemy znaleźć strony której szukasz.",
+    "backHome": "Wróć na stronę główną",
+    "generic": "Coś poszło nie tak",
+    "tryAgain": "Spróbuj ponownie"
+  },
+  "time": {
+    "today": "Dzisiaj",
+    "tomorrow": "Jutro",
+    "minutes": "{count} min",
+    "hours": "{count} godz."
+  },
+  "feedback": {
+    "backToBookings": "Powrót do rezerwacji",
+    "backToPanel": "Powrót do panelu",
+    "continue": "Kontynuuj",
+    "back": "Wstecz",
+    "submit": "Wyślij opinię",
+    "submitting": "Wysyłanie...",
+    "previous": "Poprzedni",
+    "next": "Następny",
+    "guest": {
+      "title": "Podziel się opinią",
+      "subtitle": "Twoja opinia pomoże hostom się rozwijać i innym gościom znajdować świetne wydarzenia",
+      "hostedBy": "Prowadzący: {name}",
+      "step1": {
+        "title": "Oceń doświadczenie",
+        "description": "Jak oceniasz poszczególne aspekty wydarzenia?"
+      },
+      "step2": {
+        "title": "Wyróżniki i recenzja",
+        "description": "Co było najlepsze? Podziel się swoimi przemyśleniami"
+      },
+      "step3": {
+        "title": "Dodaj zdjęcia",
+        "description": "Opcjonalnie - pokaż innym jak wyglądało wydarzenie"
+      },
+      "categories": {
+        "food": "Jedzenie",
+        "atmosphere": "Atmosfera",
+        "communication": "Komunikacja",
+        "value": "Stosunek jakości do ceny",
+        "overall": "Ogólna ocena"
+      },
+      "highlights": {
+        "label": "Co Ci się najbardziej podobało?",
+        "deliciousFood": "Pyszne jedzenie",
+        "greatHost": "Świetny host",
+        "beautifulSetting": "Piękne miejsce",
+        "learnedSomething": "Nauczyłem się czegoś",
+        "metCoolPeople": "Poznałem fajnych ludzi",
+        "worthThePrice": "Warte swojej ceny",
+        "wouldReturn": "Wrócę ponownie",
+        "instagramWorthy": "Instagramowe"
+      },
+      "review": {
+        "label": "Twoja recenzja",
+        "placeholder": "Opisz swoje doświadczenie - co Ci się podobało, co było wyjątkowe...",
+        "hint": "Minimum {min} znaków",
+        "public": "Opublikuj recenzję na profilu hosta"
+      },
+      "photos": {
+        "label": "Zdjęcia z wydarzenia (opcjonalnie)",
+        "add": "Dodaj zdjęcie",
+        "hint": "Możesz dodać do 3 zdjęć. Zdjęcia będą widoczne publicznie."
+      },
+      "summary": {
+        "title": "Podsumowanie",
+        "overallRating": "Ocena ogólna",
+        "highlights": "Wyróżniki",
+        "photos": "Zdjęcia"
+      }
+    },
+    "host": {
+      "title": "Oceń swoich gości",
+      "subtitle": "Twoja opinia jest prywatna i pomoże budować zaufaną społeczność",
+      "guestsAttended": "gości",
+      "lastGuest": "Ostatni gość",
+      "submitAll": "Wyślij wszystkie oceny",
+      "ratings": {
+        "label": "Oceń gościa"
+      },
+      "categories": {
+        "punctuality": "Punktualność",
+        "respect": "Szacunek",
+        "engagement": "Zaangażowanie",
+        "overall": "Ogólna ocena"
+      },
+      "tags": {
+        "positive": "Pozytywne cechy",
+        "concerns": "Uwagi (opcjonalnie)",
+        "greatGuest": "Świetny gość",
+        "friendly": "Przyjazny",
+        "engaged": "Zaangażowany",
+        "helpful": "Pomocny",
+        "punctual": "Punktualny",
+        "wouldHostAgain": "Zaprosiłbym ponownie",
+        "late": "Spóźniony",
+        "noShow": "Nie pojawił się",
+        "dietaryIssues": "Problemy dietetyczne",
+        "disruptive": "Przeszkadzał"
+      },
+      "privateNote": {
+        "label": "Prywatne notatki",
+        "placeholder": "Notatki tylko dla Ciebie - nie będą widoczne dla gościa...",
+        "hint": "Te notatki są prywatne i pomogą Ci zapamiętać tego gościa"
+      },
+      "eventNotes": {
+        "title": "Notatki o wydarzeniu",
+        "description": "Opcjonalne notatki o całym wydarzeniu",
+        "placeholder": "Notatki o całym wydarzeniu, pomysły na przyszłość..."
+      },
+      "summary": {
+        "title": "Podsumowanie",
+        "guestsRated": "Ocenionych gości: {rated} z {total}"
+      }
+    },
+    "submitted": {
+      "title": "Dziękujemy za opinię!",
+      "description": "Twoja opinia pomoże budować lepszą społeczność",
+      "xpEarned": "Zdobyłeś {xp} XP za podzielenie się opinią!",
+      "viewBookings": "Moje rezerwacje",
+      "browseEvents": "Przeglądaj wydarzenia",
+      "hostTitle": "Dziękujemy za oceny!",
+      "hostDescription": "Twoje opinie pomogą budować zaufaną społeczność",
+      "privateNote": "Twoje notatki i oceny są prywatne i widoczne tylko dla Ciebie",
+      "viewDashboard": "Powrót do panelu",
+      "createEvent": "Stwórz nowe wydarzenie"
+    }
+  },
+  "notifications": {
+    "title": "Powiadomienia",
+    "subtitle": "Zarządzaj powiadomieniami",
+    "enable": "Włącz powiadomienia",
+    "enableDescription": "Otrzymuj powiadomienia o nowych wiadomościach, rezerwacjach i aktualizacjach wydarzeń",
+    "enabled": "Powiadomienia włączone",
+    "disabled": "Powiadomienia wyłączone",
+    "permissionDenied": "Powiadomienia są zablokowane w przeglądarce. Zmień ustawienia przeglądarki aby włączyć powiadomienia.",
+    "categories": {
+      "bookings": "Rezerwacje",
+      "bookingsDesc": "Potwierdzenia, zmiany statusu i przypomnienia",
+      "messages": "Wiadomości",
+      "messagesDesc": "Nowe wiadomości od hostów lub gości",
+      "events": "Wydarzenia",
+      "eventsDesc": "Nowe wydarzenia od obserwowanych hostów",
+      "reminders": "Przypomnienia",
+      "remindersDesc": "Przypomnienia przed wydarzeniami",
+      "marketing": "Marketing",
+      "marketingDesc": "Promocje i nowości na platformie"
+    },
+    "testNotification": "Wyślij testowe powiadomienie",
+    "testSent": "Testowe powiadomienie zostało wysłane"
+  },
+  "calendar": {
+    "title": "Kalendarz",
+    "subtitle": "Twoje wydarzenia w widoku kalendarza",
+    "today": "Dzisiaj",
+    "month": "Miesiąc",
+    "week": "Tydzień",
+    "list": "Lista",
+    "noEventsThisMonth": "Brak wydarzeń w tym miesiącu",
+    "noEventsThisWeek": "Brak wydarzeń w tym tygodniu",
+    "upcomingEvents": "Nadchodzące wydarzenia",
+    "pastEvents": "Minione wydarzenia",
+    "draft": "Szkic",
+    "published": "Opublikowane",
+    "pendingReview": "Oczekuje na akceptację",
+    "guests": "gości",
+    "spotsLeft": "wolnych miejsc",
+    "viewDetails": "Zobacz szczegóły",
+    "editEvent": "Edytuj",
+    "createEvent": "Stwórz wydarzenie",
+    "months": {
+      "january": "Styczeń",
+      "february": "Luty",
+      "march": "Marzec",
+      "april": "Kwiecień",
+      "may": "Maj",
+      "june": "Czerwiec",
+      "july": "Lipiec",
+      "august": "Sierpień",
+      "september": "Wrzesień",
+      "october": "Październik",
+      "november": "Listopad",
+      "december": "Grudzień"
+    },
+    "weekdays": {
+      "mon": "Pon",
+      "tue": "Wt",
+      "wed": "Śr",
+      "thu": "Czw",
+      "fri": "Pt",
+      "sat": "Sob",
+      "sun": "Ndz"
+    }
+  },
+  "waitlist": {
+    "title": "Lista oczekujących",
+    "joinWaitlist": "Dołącz do listy oczekujących",
+    "wantToKnow": "Chcesz się dowiedzieć, gdy zwolni się miejsce?",
+    "description": "Podaj swój email, a powiadomimy Cię gdy zwolni się miejsce na to wydarzenie.",
+    "email": "Adres email",
+    "emailPlaceholder": "twoj@email.com",
+    "join": "Zapisz się",
+    "joining": "Zapisuję...",
+    "success": "Zapisano na listę oczekujących!",
+    "successDescription": "Powiadomimy Cię emailem, gdy zwolni się miejsce. Będziesz mieć 12 godzin na rezerwację.",
+    "alreadyJoined": "Jesteś już na liście oczekujących",
+    "alreadyJoinedDescription": "Powiadomimy Cię gdy zwolni się miejsce",
+    "position": "Pozycja na liście: {position}",
+    "peopleWaiting": "{count} osób czeka",
+    "cancel": "Anuluj",
+    "close": "Zamknij",
+    "remove": "Usuń z listy",
+    "notifyWindow": "Będziesz mieć 12h na rezerwację po otrzymaniu powiadomienia"
+  },
+  "messages": {
+    "title": "Wiadomości",
+    "subtitle": "Twoje konwersacje",
+    "noConversations": "Brak wiadomości",
+    "noConversationsDesc": "Kiedy rozpoczniesz rozmowę z hostem lub gościem, pojawi się ona tutaj",
+    "searchPlaceholder": "Szukaj w wiadomościach...",
+    "typeMessage": "Napisz wiadomość...",
+    "send": "Wyślij",
+    "today": "Dzisiaj",
+    "yesterday": "Wczoraj",
+    "online": "Online",
+    "lastSeen": "Ostatnio widziany {time}",
+    "unread": "{count} nieprzeczytanych",
+    "markAsRead": "Oznacz jako przeczytane",
+    "startConversation": "Rozpocznij rozmowę",
+    "aboutEvent": "Dotyczy: {event}",
+    "host": "Host",
+    "guest": "Gość",
+    "you": "Ty",
+    "emptyChat": "Rozpocznij rozmowę wysyłając wiadomość",
+    "messageHost": "Napisz do hosta",
+    "messageGuest": "Napisz do gościa",
+    "backToMessages": "Powrót do wiadomości"
+  },
+  "giftCards": {
+    "title": "Karty podarunkowe",
+    "subtitle": "Podaruj wyjątkowe doświadczenie kulinarne bliskiej osobie",
+    "benefit1Title": "Dowolne wydarzenie",
+    "benefit1Desc": "Obdarowany wybiera spośród wszystkich wydarzeń na platformie",
+    "benefit2Title": "Ważna rok",
+    "benefit2Desc": "Karta jest ważna przez 12 miesięcy od zakupu",
+    "benefit3Title": "Osobista wiadomość",
+    "benefit3Desc": "Dodaj życzenia, które trafią do obdarowanego",
+    "selectAmount": "Wybierz kwotę",
+    "selectAmountDesc": "Ile ma wynosić wartość karty podarunkowej?",
+    "or": "lub",
+    "customAmount": "Własna kwota",
+    "minAmount": "Minimalna kwota: 50 PLN",
+    "giftCardPreview": "Wartość karty podarunkowej",
+    "validFor": "Ważna przez 12 miesięcy",
+    "continue": "Dalej",
+    "recipientDetails": "Dane odbiorcy",
+    "recipientDetailsDesc": "Podaj dane osoby, która otrzyma kartę",
+    "selectedAmount": "Wybrana kwota",
+    "recipientName": "Imię odbiorcy",
+    "recipientNamePlaceholder": "np. Anna",
+    "recipientEmail": "Email odbiorcy",
+    "recipientEmailPlaceholder": "anna@example.com",
+    "recipientEmailHint": "Na ten adres wyślemy kartę podarunkową",
+    "yourEmail": "Twój email",
+    "yourEmailPlaceholder": "twoj@email.com",
+    "yourEmailHint": "Otrzymasz potwierdzenie zakupu",
+    "personalMessage": "Osobista wiadomość (opcjonalnie)",
+    "personalMessagePlaceholder": "np. Wszystkiego najlepszego z okazji urodzin! 🎂",
+    "giftCardValue": "Wartość karty",
+    "total": "Do zapłaty",
+    "back": "Wstecz",
+    "processing": "Przetwarzanie...",
+    "payAndSend": "Zapłać i wyślij",
+    "successTitle": "Karta podarunkowa wysłana!",
+    "successDesc": "Odbiorca otrzyma ją na podany adres email",
+    "giftCardCode": "Kod karty",
+    "sentTo": "Wysłano do",
+    "for": "Dla",
+    "browseEvents": "Przeglądaj wydarzenia",
+    "buyAnother": "Kup kolejną kartę",
+    "howItWorks": "Jak to działa?",
+    "step1Title": "Wybierz kwotę",
+    "step1Desc": "Zdecyduj ile chcesz podarować",
+    "step2Title": "Podaj dane",
+    "step2Desc": "Wpisz email odbiorcy i swoją wiadomość",
+    "step3Title": "Zapłać",
+    "step3Desc": "Bezpieczna płatność kartą",
+    "step4Title": "Gotowe!",
+    "step4Desc": "Odbiorca otrzyma kartę mailem"
+  }
+}

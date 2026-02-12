@@ -1,0 +1,93 @@
+"use client";
+
+import { Link } from "@/i18n/navigation";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { BadgeDisplay } from "@/components/badges";
+import { FollowButton } from "@/components/homies";
+import { isFollowing, getFollowers } from "@/lib/mock-data";
+import { getInitials } from "@/lib/utils";
+import { CheckCircle, Star, Users } from "lucide-react";
+
+interface HostCardWithFollowProps {
+  host: {
+    id: string;
+    name: string;
+    avatar?: string;
+    rating: number;
+    reviewCount: number;
+    eventsHosted: number;
+    verified: boolean;
+    badges?: string[];
+  };
+}
+
+export function HostCardWithFollow({ host }: HostCardWithFollowProps) {
+  const currentUserId = "user-current";
+  const hostIsFollowing = isFollowing(currentUserId, host.id);
+  const hostFollowsBack = isFollowing(host.id, currentUserId);
+  const followersCount = getFollowers(host.id).length;
+
+  const initials = getInitials(host.name);
+
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <div className="flex items-start gap-4">
+          <Avatar className="h-16 w-16">
+            <AvatarFallback className="bg-amber-100 text-amber-700 text-xl">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <h3 className="font-semibold text-lg">{host.name}</h3>
+              {host.verified && (
+                <CheckCircle className="h-5 w-5 text-blue-500" />
+              )}
+              {hostIsFollowing && hostFollowsBack && (
+                <Badge variant="outline" className="border-green-200 text-green-700 text-xs">
+                  <Users className="h-3 w-3 mr-1" />
+                  Homie
+                </Badge>
+              )}
+            </div>
+            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2 flex-wrap">
+              <div className="flex items-center gap-1">
+                <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                <span className="font-medium text-foreground">{host.rating}</span>
+                <span>({host.reviewCount} opinii)</span>
+              </div>
+              <span>•</span>
+              <span>{host.eventsHosted} wydarzeń</span>
+              <span>•</span>
+              <span>{followersCount} obserwujących</span>
+            </div>
+
+            {/* Host badges */}
+            {host.badges && host.badges.length > 0 && (
+              <div className="mb-3">
+                <BadgeDisplay badgeIds={host.badges} size="sm" maxDisplay={5} />
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 flex-wrap">
+              <Button variant="outline" size="sm" asChild>
+                <Link href={`/profile/${host.id}`}>Zobacz profil</Link>
+              </Button>
+              <FollowButton
+                userId={host.id}
+                userName={host.name}
+                isFollowing={hostIsFollowing}
+                isFollowedBy={hostFollowsBack}
+                size="sm"
+              />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
