@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { getTranslations } from "next-intl/server";
 import {
   Search,
   CalendarCheck,
@@ -12,133 +13,94 @@ import {
   Heart,
   Shield,
   Clock,
+  LucideIcon,
 } from "lucide-react";
 
-const steps = [
+interface Step {
+  icon: LucideIcon;
+  titleKey: string;
+  descKey: string;
+  color: string;
+}
+
+const steps: Step[] = [
   {
     icon: Search,
-    title: "1. Znajdź wydarzenie",
-    description:
-      "Przeglądaj nasze wydarzenia kulinarne we Wrocławiu. Filtruj według typu kuchni, daty lub lokalizacji. Od kameralnych kolacji po warsztaty gotowania.",
+    titleKey: "step1",
+    descKey: "step1",
     color: "bg-amber-100 text-amber-600",
   },
   {
     icon: CalendarCheck,
-    title: "2. Zarezerwuj miejsce",
-    description:
-      "Wybierz dogodny termin i liczbę osób. Bezpieczna płatność online. Otrzymasz potwierdzenie i szczegóły wydarzenia na e-mail.",
+    titleKey: "step2",
+    descKey: "step2",
     color: "bg-green-100 text-green-600",
   },
   {
     icon: MapPin,
-    title: "3. Otrzymaj lokalizację",
-    description:
-      "24h przed wydarzeniem otrzymasz dokładny adres i instrukcje dojazdu. Większość wydarzeń odbywa się w prywatnych domach lub unikalnych lokalizacjach.",
+    titleKey: "step3",
+    descKey: "step3",
     color: "bg-blue-100 text-blue-600",
   },
   {
     icon: Utensils,
-    title: "4. Ciesz się doświadczeniem",
-    description:
-      "Poznaj nowych ludzi, odkryj niesamowite smaki i ciesz się wyjątkową atmosferą. To więcej niż jedzenie - to doświadczenie.",
+    titleKey: "step4",
+    descKey: "step4",
     color: "bg-purple-100 text-purple-600",
   },
   {
     icon: Star,
-    title: "5. Zostaw opinię",
-    description:
-      "Po wydarzeniu możesz ocenić hosta i podzielić się wrażeniami. Twoja opinia pomaga innym znaleźć najlepsze doświadczenia.",
+    titleKey: "step5",
+    descKey: "step5",
     color: "bg-pink-100 text-pink-600",
   },
 ];
 
-const features = [
-  {
-    icon: Shield,
-    title: "Bezpieczne płatności",
-    description:
-      "Wszystkie transakcje są szyfrowane i chronione. Płacisz dopiero po potwierdzeniu rezerwacji.",
-  },
-  {
-    icon: Users,
-    title: "Zweryfikowani hosty",
-    description:
-      "Każdy host przechodzi weryfikację. Sprawdzamy doświadczenie, certyfikaty i opinie.",
-  },
-  {
-    icon: Clock,
-    title: "Elastyczne anulowanie",
-    description:
-      "Możesz anulować rezerwację do 48h przed wydarzeniem i otrzymać pełny zwrot.",
-  },
-  {
-    icon: Heart,
-    title: "Społeczność foodie",
-    description:
-      "Dołącz do społeczności miłośników jedzenia. Śledź ulubionych hostów i odkrywaj nowe smaki.",
-  },
+interface Feature {
+  icon: LucideIcon;
+  key: string;
+}
+
+const features: Feature[] = [
+  { icon: Shield, key: "securePayments" },
+  { icon: Users, key: "verifiedHosts" },
+  { icon: Clock, key: "flexibleCancellation" },
+  { icon: Heart, key: "foodieCommunity" },
 ];
 
-const eventTypes = [
-  {
-    title: "Supper Club",
-    description: "Wielodaniowa kolacja w prywatnym domu hosta",
-    emoji: "🍽️",
-  },
-  {
-    title: "Chef's Table",
-    description: "Ekskluzywne menu degustacyjne od profesjonalnego szefa kuchni",
-    emoji: "👑",
-  },
-  {
-    title: "Warsztaty",
-    description: "Naucz się gotować od profesjonalistów",
-    emoji: "👨‍🍳",
-  },
-  {
-    title: "Degustacje",
-    description: "Odkryj wina, sery, kawę i inne specjały",
-    emoji: "🍷",
-  },
-  {
-    title: "Pop-up",
-    description: "Tymczasowe restauracje w nieoczekiwanych miejscach",
-    emoji: "🎪",
-  },
-  {
-    title: "Active + Food",
-    description: "Połączenie aktywności fizycznej z kulinarnym doświadczeniem",
-    emoji: "🏃",
-  },
-  {
-    title: "Farm Experience",
-    description: "Od pola do stołu - poznaj lokalne gospodarstwa",
-    emoji: "🌾",
-  },
+const eventTypeKeys = [
+  { key: "supperClub", emoji: "🍽️", slug: "supper-club" },
+  { key: "chefsTable", emoji: "👑", slug: "chefs-table" },
+  { key: "workshops", emoji: "👨‍🍳", slug: "warsztaty" },
+  { key: "tastings", emoji: "🍷", slug: "degustacje" },
+  { key: "popup", emoji: "🎪", slug: "popup" },
+  { key: "activeFood", emoji: "🏃", slug: "active-food" },
+  { key: "farmExperience", emoji: "🌾", slug: "farm" },
 ];
 
-export default function HowItWorksPage() {
+export default async function HowItWorksPage() {
+  const t = await getTranslations("howItWorksPage");
+
   return (
     <div className="min-h-screen bg-stone-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-amber-50 to-stone-50 py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-stone-900 mb-6">
-            Jak działa Seated?
+            {t("hero.title")}
           </h1>
           <p className="text-xl text-stone-600 mb-8 max-w-2xl mx-auto">
-            Odkryj unikalne doświadczenia kulinarne we Wrocławiu. Łączymy
-            pasjonatów jedzenia z utalentowanymi hostami w kameralnej atmosferze.
+            {t("hero.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/events">
               <Button size="lg" className="bg-amber-500 hover:bg-amber-600">
-                Przeglądaj wydarzenia
+                {t("hero.cta")}
               </Button>
             </Link>
             <Link href="/become-host">
               <Button size="lg" variant="outline">
-                Zostań hostem
+                {t("hero.ctaSecondary")}
               </Button>
             </Link>
           </div>
@@ -149,16 +111,16 @@ export default function HowItWorksPage() {
       <section className="py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-stone-900 mb-4">
-            5 prostych kroków
+            {t("steps.title")}
           </h2>
           <p className="text-stone-600 text-center mb-12 max-w-2xl mx-auto">
-            Od odkrycia do doświadczenia - cały proces jest prosty i intuicyjny
+            {t("steps.subtitle")}
           </p>
 
           <div className="space-y-8">
             {steps.map((step, index) => (
               <div
-                key={step.title}
+                key={step.titleKey}
                 className={`flex flex-col md:flex-row items-center gap-6 ${
                   index % 2 === 1 ? "md:flex-row-reverse" : ""
                 }`}
@@ -173,9 +135,11 @@ export default function HowItWorksPage() {
                 <Card className="flex-1 w-full">
                   <CardContent className="p-6">
                     <h3 className="text-xl font-bold text-stone-900 mb-2">
-                      {step.title}
+                      {t(`steps.${step.titleKey}.title`)}
                     </h3>
-                    <p className="text-stone-600">{step.description}</p>
+                    <p className="text-stone-600">
+                      {t(`steps.${step.descKey}.description`)}
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -188,25 +152,24 @@ export default function HowItWorksPage() {
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-stone-900 mb-4">
-            Rodzaje wydarzeń
+            {t("eventTypes.title")}
           </h2>
           <p className="text-stone-600 text-center mb-12 max-w-2xl mx-auto">
-            Wybierz doświadczenie, które Cię interesuje
+            {t("eventTypes.subtitle")}
           </p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {eventTypes.map((type) => (
-              <Link
-                key={type.title}
-                href={`/events?type=${type.title.toLowerCase().replace(/ /g, "-")}`}
-              >
+            {eventTypeKeys.map((type) => (
+              <Link key={type.key} href={`/events?type=${type.slug}`}>
                 <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
                   <CardContent className="p-6 text-center">
                     <span className="text-5xl mb-4 block">{type.emoji}</span>
                     <h3 className="text-lg font-bold text-stone-900 mb-2">
-                      {type.title}
+                      {t(`eventTypes.${type.key}.title`)}
                     </h3>
-                    <p className="text-stone-600 text-sm">{type.description}</p>
+                    <p className="text-stone-600 text-sm">
+                      {t(`eventTypes.${type.key}.description`)}
+                    </p>
                   </CardContent>
                 </Card>
               </Link>
@@ -219,23 +182,25 @@ export default function HowItWorksPage() {
       <section className="py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-stone-900 mb-4">
-            Dlaczego Seated?
+            {t("features.title")}
           </h2>
           <p className="text-stone-600 text-center mb-12 max-w-2xl mx-auto">
-            Bezpieczeństwo i jakość są dla nas najważniejsze
+            {t("features.subtitle")}
           </p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature) => (
-              <Card key={feature.title}>
+              <Card key={feature.key}>
                 <CardContent className="p-6 text-center">
                   <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
                     <feature.icon className="w-7 h-7 text-amber-600" />
                   </div>
                   <h3 className="font-bold text-stone-900 mb-2">
-                    {feature.title}
+                    {t(`features.${feature.key}.title`)}
                   </h3>
-                  <p className="text-stone-600 text-sm">{feature.description}</p>
+                  <p className="text-stone-600 text-sm">
+                    {t(`features.${feature.key}.description`)}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -247,10 +212,9 @@ export default function HowItWorksPage() {
       <section className="py-16 md:py-24 bg-stone-900 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <ChefHat className="w-16 h-16 mx-auto mb-6 text-amber-400" />
-          <h2 className="text-3xl font-bold mb-4">Jesteś pasjonatem gotowania?</h2>
+          <h2 className="text-3xl font-bold mb-4">{t("forHosts.title")}</h2>
           <p className="text-stone-300 mb-8 max-w-2xl mx-auto">
-            Dołącz do naszej społeczności hostów i podziel się swoją pasją z
-            innymi. Zarabiaj robiąc to, co kochasz, i poznawaj niesamowitych ludzi.
+            {t("forHosts.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/become-host">
@@ -258,7 +222,7 @@ export default function HowItWorksPage() {
                 size="lg"
                 className="bg-amber-500 hover:bg-amber-600 text-stone-900"
               >
-                Zostań hostem
+                {t("forHosts.cta")}
               </Button>
             </Link>
             <Link href="/faq/hosts">
@@ -267,7 +231,7 @@ export default function HowItWorksPage() {
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-stone-900"
               >
-                FAQ dla hostów
+                {t("forHosts.ctaSecondary")}
               </Button>
             </Link>
           </div>
@@ -278,14 +242,12 @@ export default function HowItWorksPage() {
       <section className="py-16 md:py-24 bg-gradient-to-b from-stone-50 to-amber-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-stone-900 mb-4">
-            Gotowy na kulinarne przygody?
+            {t("cta.title")}
           </h2>
-          <p className="text-stone-600 mb-8">
-            Dołącz do tysięcy osób, które odkrywają Wrocław przez smaki.
-          </p>
+          <p className="text-stone-600 mb-8">{t("cta.subtitle")}</p>
           <Link href="/register">
             <Button size="lg" className="bg-amber-500 hover:bg-amber-600">
-              Załóż darmowe konto
+              {t("cta.button")}
             </Button>
           </Link>
         </div>

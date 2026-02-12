@@ -34,44 +34,96 @@
   },
   "home": {
     "hero": {
-      "title": "Discover culinary experiences",
-      "titleHighlight": "in Wrocław",
-      "subtitle": "Supper clubs, cooking workshops, pop-ups and tastings. Meet passionate cooks and savor unique moments.",
+      "badge": "Wrocław",
+      "title": "Discover unique",
+      "titleHighlight": "culinary experiences",
+      "subtitle": "Supper clubs, pop-ups, cooking workshops and more. Join the food lovers community and experience unforgettable moments at the table.",
       "cta": "Browse events",
-      "ctaSecondary": "Become a host"
+      "ctaSecondary": "Become a host",
+      "stats": "Already {count}+ people discovered new flavors in Wrocław"
+    },
+    "categories": {
+      "title": "Choose your adventure",
+      "subtitle": "From intimate dinners to active meetups - find something for yourself",
+      "supperClub": "Supper Club",
+      "supperClubDesc": "Intimate home dinners",
+      "chefsTable": "Chef's Table",
+      "chefsTableDesc": "Exclusive menus from top chefs",
+      "popup": "Pop-up",
+      "popupDesc": "Temporary restaurants",
+      "workshops": "Workshops",
+      "workshopsDesc": "Learn to cook",
+      "tastings": "Tastings",
+      "tastingsDesc": "Wines, beers, whisky",
+      "activeFood": "Active + Food",
+      "activeFoodDesc": "Sports and food",
+      "farmExperience": "Farm Experience",
+      "farmExperienceDesc": "From field to table"
+    },
+    "featured": {
+      "title": "Upcoming events",
+      "subtitle": "Book your spot before they sell out",
+      "viewAll": "View all"
+    },
+    "benefits": {
+      "title": "Why Seated?",
+      "subtitle": "We create a safe space for culinary explorers",
+      "verified": {
+        "title": "Verified hosts",
+        "description": "Every host goes through verification. We check venues and skills."
+      },
+      "secure": {
+        "title": "Secure payments",
+        "description": "Pay through the platform. Full refund if the event is cancelled."
+      },
+      "transparent": {
+        "title": "Transparent prices",
+        "description": "You know exactly what you're paying for. No hidden fees or surprises."
+      }
     },
     "howItWorks": {
-      "title": "How it works",
-      "subtitle": "In three simple steps",
+      "title": "How it works?",
+      "subtitle": "Three simple steps to a culinary adventure",
       "step1": {
         "title": "Find an event",
-        "description": "Browse culinary events in your area. Filter by type, date or cuisine."
+        "description": "Browse culinary experiences in your city. Filter by type, date and price."
       },
       "step2": {
         "title": "Book your spot",
-        "description": "Select the number of guests and provide dietary preferences. The host will confirm your booking."
+        "description": "Securely pay for your reservation online. You'll receive the full address in confirmation."
       },
       "step3": {
-        "title": "Enjoy the experience",
-        "description": "You'll receive the address 24h before the event. Meet new people and discover amazing flavors!"
+        "title": "Enjoy!",
+        "description": "Meet new people, discover new flavors and experience unforgettable moments at the table."
       }
     },
-    "categories": {
-      "title": "Types of events",
-      "supperClub": "Supper Club",
-      "supperClubDesc": "Multi-course dinner in a private home",
-      "chefsTable": "Chef's Table",
-      "chefsTableDesc": "Exclusive menu by a professional chef",
-      "workshops": "Workshops",
-      "workshopsDesc": "Learn to cook from professionals",
-      "tastings": "Tastings",
-      "tastingsDesc": "Discover wines, cheeses and local specialties",
-      "popup": "Pop-up",
-      "popupDesc": "Temporary restaurants in unexpected places",
-      "activeFood": "Active + Food",
-      "activeFoodDesc": "Combining physical activity with food",
-      "farmExperience": "Farm Experience",
-      "farmExperienceDesc": "From field to table"
+    "testimonials": {
+      "title": "What guests say",
+      "subtitle": "Real reviews from real food lovers",
+      "items": [
+        {
+          "name": "Kasia M.",
+          "text": "Amazing experience! Dinner at Anna's was like visiting a friend who turned out to be a master chef.",
+          "event": "Italian Dinner"
+        },
+        {
+          "name": "Tomek W.",
+          "text": "The sushi workshop opened my eyes to how much there is to learn. I'll be back for more!",
+          "event": "Sushi Masterclass"
+        },
+        {
+          "name": "Anna K.",
+          "text": "The wine tasting was led by a true enthusiast. I learned stories I won't find in any store.",
+          "event": "Natural Wines"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Have culinary talent? Share it!",
+      "subtitle": "Become a host and start organizing your own culinary events. We'll help you get started - from planning to promotion.",
+      "button": "Become a host",
+      "learnMore": "Learn more",
+      "stats": "Join {count}+ hosts in Wrocław"
     },
     "upcomingEvents": "Upcoming events",
     "viewAll": "View all",
@@ -82,9 +134,6 @@
       "benefit2": "Meet food enthusiasts",
       "benefit3": "Join the community",
       "cta": "Learn more"
-    },
-    "testimonials": {
-      "title": "What our guests say"
     },
     "stats": {
       "events": "events",
@@ -316,6 +365,165 @@
       "step3": "Once approved, you can start creating events"
     }
   },
+  "becomeHostPage": {
+    "header": {
+      "title": "Become a Seated host",
+      "subtitle": "Share your passion for cooking and earn by organizing unique culinary events"
+    },
+    "progress": {
+      "data": "Data",
+      "address": "Address",
+      "experience": "Experience",
+      "photos": "Photos",
+      "schedule": "Schedule"
+    },
+    "hostType": {
+      "title": "Who are you?",
+      "subtitle": "Choose the type of host account",
+      "individual": "Individual",
+      "individualDesc": "Cook at home, organize dinners, workshops",
+      "restaurant": "Restaurant / Company",
+      "restaurantDesc": "Pop-ups, tastings, special events"
+    },
+    "personalInfo": {
+      "title": "Personal information",
+      "subtitle": "Basic information about you",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email address",
+      "phone": "Phone number",
+      "birthDate": "Date of birth",
+      "birthDateHint": "You must be at least 18 years old"
+    },
+    "restaurantInfo": {
+      "title": "Restaurant information",
+      "subtitle": "Information about your food business",
+      "name": "Restaurant / company name",
+      "nip": "Tax ID (optional)",
+      "website": "Website / Instagram",
+      "contactPerson": "Contact person",
+      "contactName": "Full name",
+      "contactEmail": "Contact email",
+      "contactPhone": "Phone",
+      "contactPosition": "Position (optional)",
+      "contactPositionPlaceholder": "e.g. Manager, Owner"
+    },
+    "address": {
+      "title": "Address",
+      "subtitle": "Where will you organize events? (This address will not be public)",
+      "street": "Street and number",
+      "apartment": "Apartment number (optional)",
+      "postalCode": "Postal code",
+      "city": "City",
+      "neighborhood": "Neighborhood",
+      "neighborhoodPlaceholder": "Select neighborhood",
+      "neighborhoods": {
+        "stare-miasto": "Old Town",
+        "nadodrze": "Nadodrze",
+        "srodmiescie": "City Center",
+        "krzyki": "Krzyki",
+        "fabryczna": "Fabryczna",
+        "psie-pole": "Psie Pole",
+        "biskupin": "Biskupin",
+        "olbin": "Ołbin",
+        "other": "Other"
+      },
+      "notice": "Note: The full address will only be shared with guests with confirmed reservations, 24h before the event."
+    },
+    "experience": {
+      "title": "Experience and cuisine",
+      "subtitle": "Tell us about your culinary skills",
+      "hasExperience": "Have you ever organized a supper club or similar event?",
+      "experienceYes": "Yes, I have experience",
+      "experienceNo": "No, this will be my first time",
+      "experiencePro": "I am a professional chef/pastry chef",
+      "experienceDetails": "Tell us more about your experience",
+      "experienceDetailsPlaceholder": "Where have you organized events? How many people have you hosted? What were the reactions?",
+      "cuisines": "What cuisines will you serve? (select at least 1)",
+      "cuisineTypes": {
+        "polish": "Polish",
+        "italian": "Italian",
+        "french": "French",
+        "asian": "Asian",
+        "japanese": "Japanese",
+        "indian": "Indian",
+        "mexican": "Mexican",
+        "mediterranean": "Mediterranean",
+        "middle-eastern": "Middle Eastern",
+        "american": "American",
+        "vegan": "Vegan",
+        "vegetarian": "Vegetarian",
+        "fusion": "Fusion",
+        "pastry": "Pastry",
+        "wine": "Wine and tastings",
+        "other": "Other"
+      },
+      "eventTypes": "What types of events do you want to organize? (select at least 1)",
+      "eventTypeOptions": {
+        "supper-club": {
+          "label": "Supper Club",
+          "description": "Home dinners"
+        },
+        "cooking-class": {
+          "label": "Workshops",
+          "description": "Cooking classes"
+        },
+        "tasting": {
+          "label": "Tastings",
+          "description": "Wine, beer, whisky"
+        },
+        "popup": {
+          "label": "Pop-up",
+          "description": "Temporary restaurant"
+        },
+        "active-food": {
+          "label": "Active + Food",
+          "description": "Sports and food"
+        }
+      },
+      "bio": "Short bio (min. 50 characters)",
+      "bioPlaceholder": "Tell guests about yourself, your passion for cooking, where it came from, what inspires you...",
+      "bioHint": "This will be visible on your profile",
+      "bioCounter": "{count}/50"
+    },
+    "photos": {
+      "title": "Photos",
+      "subtitleIndividual": "Show yourself and your culinary creations",
+      "subtitleRestaurant": "Restaurant logo and food photos",
+      "profilePhoto": "Your profile photo",
+      "logo": "Restaurant logo",
+      "addPhoto": "Add photo",
+      "changePhoto": "Change photo",
+      "addLogo": "Add logo",
+      "changeLogo": "Change logo",
+      "photoHint": "Bright, friendly face photo. JPG or PNG, max 5MB.",
+      "logoHint": "Square format logo. JPG or PNG, max 5MB.",
+      "foodPhotosIndividual": "Photos of your dishes (optional, max 5)",
+      "foodPhotosRestaurant": "Food / interior photos (optional, max 5)",
+      "add": "Add",
+      "foodPhotosHintIndividual": "Show your best dishes! Good photos attract more guests.",
+      "foodPhotosHintRestaurant": "Show the atmosphere and dishes! Add photos of interior or your specialties.",
+      "tip": "Tip",
+      "tipTextIndividual": "Hosts with professional food photos get on average 3x more bookings!",
+      "tipTextRestaurant": "Restaurants with interior and food photo galleries attract more guests to events!"
+    },
+    "schedule": {
+      "title": "Verification meeting",
+      "subtitle": "Select dates when you can meet with our team (online or in Wrocław)",
+      "selectDays": "Select available days (min. 1)",
+      "selectTimes": "Preferred times (min. 1)",
+      "terms": "I accept the <terms>terms of service</terms> and <privacy>privacy policy</privacy> of the Seated platform.",
+      "verification": "I understand that my application will be verified and may be rejected. I consent to a verification visit at my event location.",
+      "whatNext": "What's next?",
+      "whatNextText": "After submitting the form, we will contact you within 48h to schedule a verification meeting. During the meeting, we will discuss details and answer questions."
+    },
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "submit": "Submit application",
+      "submitting": "Submitting..."
+    }
+  },
   "admin": {
     "title": "Admin panel",
     "nav": {
@@ -379,6 +587,36 @@
       "uses": "uses",
       "disable": "Disable",
       "enable": "Enable"
+    }
+  },
+  "faqPage": {
+    "backToHome": "Back to home",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to the most common questions about Seated. Didn't find an answer?",
+    "contactLink": "Write to us",
+    "categories": {
+      "general": {
+        "label": "General",
+        "description": "Basic information about Seated"
+      },
+      "booking": {
+        "label": "Bookings",
+        "description": "How to book and cancel"
+      },
+      "hosts": {
+        "label": "For Hosts",
+        "description": "Information for organizers"
+      },
+      "payments": {
+        "label": "Payments",
+        "description": "How payments and refunds work"
+      }
+    },
+    "contact": {
+      "title": "Didn't find an answer?",
+      "subtitle": "Our support team is ready to answer all your questions.",
+      "writeToUs": "Write to us",
+      "howItWorks": "How does Seated work?"
     }
   },
   "errors": {
@@ -621,6 +859,101 @@
     "messageHost": "Message host",
     "messageGuest": "Message guest",
     "backToMessages": "Back to messages"
+  },
+  "howItWorksPage": {
+    "hero": {
+      "title": "How does Seated work?",
+      "subtitle": "Discover unique culinary experiences in Wrocław. We connect food lovers with talented hosts in an intimate atmosphere.",
+      "cta": "Browse events",
+      "ctaSecondary": "Become a host"
+    },
+    "steps": {
+      "title": "5 simple steps",
+      "subtitle": "From discovery to experience - the whole process is simple and intuitive",
+      "step1": {
+        "title": "1. Find an event",
+        "description": "Browse our culinary events in Wrocław. Filter by cuisine type, date or location. From intimate dinners to cooking workshops."
+      },
+      "step2": {
+        "title": "2. Book your spot",
+        "description": "Choose a convenient date and number of people. Secure online payment. You'll receive confirmation and event details by email."
+      },
+      "step3": {
+        "title": "3. Get the location",
+        "description": "24h before the event you'll receive the exact address and directions. Most events take place in private homes or unique locations."
+      },
+      "step4": {
+        "title": "4. Enjoy the experience",
+        "description": "Meet new people, discover amazing flavors and enjoy a unique atmosphere. It's more than food - it's an experience."
+      },
+      "step5": {
+        "title": "5. Leave a review",
+        "description": "After the event you can rate the host and share your impressions. Your opinion helps others find the best experiences."
+      }
+    },
+    "eventTypes": {
+      "title": "Types of events",
+      "subtitle": "Choose the experience that interests you",
+      "supperClub": {
+        "title": "Supper Club",
+        "description": "Multi-course dinner in a host's private home"
+      },
+      "chefsTable": {
+        "title": "Chef's Table",
+        "description": "Exclusive tasting menu from a professional chef"
+      },
+      "workshops": {
+        "title": "Workshops",
+        "description": "Learn to cook from professionals"
+      },
+      "tastings": {
+        "title": "Tastings",
+        "description": "Discover wines, cheeses, coffee and other specialties"
+      },
+      "popup": {
+        "title": "Pop-up",
+        "description": "Temporary restaurants in unexpected places"
+      },
+      "activeFood": {
+        "title": "Active + Food",
+        "description": "Combining physical activity with culinary experience"
+      },
+      "farmExperience": {
+        "title": "Farm Experience",
+        "description": "From field to table - discover local farms"
+      }
+    },
+    "features": {
+      "title": "Why Seated?",
+      "subtitle": "Safety and quality are our priorities",
+      "securePayments": {
+        "title": "Secure payments",
+        "description": "All transactions are encrypted and protected. You only pay after confirmation."
+      },
+      "verifiedHosts": {
+        "title": "Verified hosts",
+        "description": "Every host goes through verification. We check experience, certificates and reviews."
+      },
+      "flexibleCancellation": {
+        "title": "Flexible cancellation",
+        "description": "You can cancel your booking up to 48h before the event and get a full refund."
+      },
+      "foodieCommunity": {
+        "title": "Foodie community",
+        "description": "Join a community of food lovers. Follow favorite hosts and discover new flavors."
+      }
+    },
+    "forHosts": {
+      "title": "Are you passionate about cooking?",
+      "subtitle": "Join our host community and share your passion with others. Earn doing what you love and meet amazing people.",
+      "cta": "Become a host",
+      "ctaSecondary": "FAQ for hosts"
+    },
+    "cta": {
+      "title": "Ready for culinary adventures?",
+      "subtitle": "Join thousands of people discovering Wrocław through flavors.",
+      "button": "Create free account"
+    }
   },
   "giftCards": {
     "title": "Gift Cards",

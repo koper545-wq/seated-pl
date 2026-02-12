@@ -34,44 +34,96 @@
   },
   "home": {
     "hero": {
-      "title": "Odkryj kulinarne doświadczenia",
-      "titleHighlight": "we Wrocławiu",
-      "subtitle": "Supper clubs, warsztaty gotowania, pop-upy i degustacje. Poznaj pasjonatów gotowania i smakuj wyjątkowe chwile.",
+      "badge": "Wrocław",
+      "title": "Odkryj wyjątkowe",
+      "titleHighlight": "doświadczenia kulinarne",
+      "subtitle": "Supper clubs, pop-upy, warsztaty gotowania i więcej. Dołącz do społeczności food lovers i przeżyj niezapomniane chwile przy stole.",
       "cta": "Przeglądaj wydarzenia",
-      "ctaSecondary": "Zostań hostem"
+      "ctaSecondary": "Zostań hostem",
+      "stats": "Już {count}+ osób odkryło nowe smaki we Wrocławiu"
+    },
+    "categories": {
+      "title": "Wybierz swoją przygodę",
+      "subtitle": "Od intymnych kolacji po aktywne spotkania - znajdź coś dla siebie",
+      "supperClub": "Supper Club",
+      "supperClubDesc": "Intymne kolacje w domach",
+      "chefsTable": "Chef's Table",
+      "chefsTableDesc": "Ekskluzywne menu od szefów kuchni",
+      "popup": "Pop-up",
+      "popupDesc": "Tymczasowe restauracje",
+      "workshops": "Warsztaty",
+      "workshopsDesc": "Naucz się gotować",
+      "tastings": "Degustacje",
+      "tastingsDesc": "Wina, piwa, whisky",
+      "activeFood": "Active + Food",
+      "activeFoodDesc": "Sport i jedzenie",
+      "farmExperience": "Farm Experience",
+      "farmExperienceDesc": "Od pola do stołu"
+    },
+    "featured": {
+      "title": "Nadchodzące wydarzenia",
+      "subtitle": "Rezerwuj miejsca zanim się skończą",
+      "viewAll": "Zobacz wszystkie"
+    },
+    "benefits": {
+      "title": "Dlaczego Seated?",
+      "subtitle": "Tworzymy bezpieczne miejsce dla kulinarnych odkrywców",
+      "verified": {
+        "title": "Zweryfikowani hosty",
+        "description": "Każdy host przechodzi weryfikację. Sprawdzamy miejsca i umiejętności."
+      },
+      "secure": {
+        "title": "Bezpieczne płatności",
+        "description": "Płacisz przez platformę. Pełny zwrot jeśli wydarzenie się nie odbędzie."
+      },
+      "transparent": {
+        "title": "Transparentne ceny",
+        "description": "Wiesz dokładnie za co płacisz. Bez ukrytych opłat i niespodzianek."
+      }
     },
     "howItWorks": {
       "title": "Jak to działa?",
-      "subtitle": "W trzech prostych krokach",
+      "subtitle": "Trzy proste kroki do kulinarnej przygody",
       "step1": {
         "title": "Znajdź wydarzenie",
-        "description": "Przeglądaj wydarzenia kulinarne w Twojej okolicy. Filtruj po typie, dacie lub kuchni."
+        "description": "Przeglądaj kulinarne doświadczenia w Twoim mieście. Filtruj po typie, dacie i cenie."
       },
       "step2": {
         "title": "Zarezerwuj miejsce",
-        "description": "Wybierz liczbę osób i podaj preferencje dietetyczne. Host potwierdzi Twoją rezerwację."
+        "description": "Bezpiecznie opłać rezerwację online. Pełny adres otrzymasz w potwierdzeniu."
       },
       "step3": {
-        "title": "Ciesz się doświadczeniem",
-        "description": "Otrzymasz adres 24h przed wydarzeniem. Poznaj nowych ludzi i odkryj niesamowite smaki!"
+        "title": "Ciesz się!",
+        "description": "Poznaj nowych ludzi, odkryj nowe smaki i przeżyj niezapomniane chwile przy stole."
       }
     },
-    "categories": {
-      "title": "Rodzaje wydarzeń",
-      "supperClub": "Supper Club",
-      "supperClubDesc": "Wielodaniowa kolacja w prywatnym domu",
-      "chefsTable": "Chef's Table",
-      "chefsTableDesc": "Ekskluzywne menu od profesjonalnego szefa kuchni",
-      "workshops": "Warsztaty",
-      "workshopsDesc": "Naucz się gotować od profesjonalistów",
-      "tastings": "Degustacje",
-      "tastingsDesc": "Odkryj wina, sery i lokalne specjały",
-      "popup": "Pop-up",
-      "popupDesc": "Tymczasowe restauracje w nieoczekiwanych miejscach",
-      "activeFood": "Active + Food",
-      "activeFoodDesc": "Połączenie aktywności fizycznej z jedzeniem",
-      "farmExperience": "Farm Experience",
-      "farmExperienceDesc": "Od pola do stołu"
+    "testimonials": {
+      "title": "Co mówią uczestnicy",
+      "subtitle": "Prawdziwe opinie od prawdziwych food lovers",
+      "items": [
+        {
+          "name": "Kasia M.",
+          "text": "Niesamowite doświadczenie! Kolacja u Ani była jak wizyta u przyjaciela, który okazał się mistrzem kuchni.",
+          "event": "Włoska Kolacja"
+        },
+        {
+          "name": "Tomek W.",
+          "text": "Warsztaty sushi otworzyły mi oczy na to, jak dużo jest do nauczenia. Wrócę po więcej!",
+          "event": "Sushi Masterclass"
+        },
+        {
+          "name": "Anna K.",
+          "text": "Degustacja win była prowadzona przez prawdziwego pasjonata. Poznałam historie, których nie znajdę w żadnym sklepie.",
+          "event": "Wina Naturalne"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Masz talent kulinarny? Podziel się nim!",
+      "subtitle": "Zostań hostem i zacznij organizować własne wydarzenia kulinarne. Pomożemy Ci zacząć - od planowania po promocję.",
+      "button": "Zostań hostem",
+      "learnMore": "Dowiedz się więcej",
+      "stats": "Dołącz do {count}+ hostów we Wrocławiu"
     },
     "upcomingEvents": "Nadchodzące wydarzenia",
     "viewAll": "Zobacz wszystkie",
@@ -82,9 +134,6 @@
       "benefit2": "Poznaj pasjonatów jedzenia",
       "benefit3": "Dołącz do społeczności",
       "cta": "Dowiedz się więcej"
-    },
-    "testimonials": {
-      "title": "Co mówią nasi goście"
     },
     "stats": {
       "events": "wydarzeń",
@@ -316,6 +365,165 @@
       "step3": "Po akceptacji będziesz mógł tworzyć wydarzenia"
     }
   },
+  "becomeHostPage": {
+    "header": {
+      "title": "Zostań hostem Seated",
+      "subtitle": "Podziel się swoją pasją do gotowania i zarabiaj organizując wyjątkowe wydarzenia kulinarne"
+    },
+    "progress": {
+      "data": "Dane",
+      "address": "Adres",
+      "experience": "Doświadczenie",
+      "photos": "Zdjęcia",
+      "schedule": "Termin"
+    },
+    "hostType": {
+      "title": "Kim jesteś?",
+      "subtitle": "Wybierz typ konta hosta",
+      "individual": "Osoba prywatna",
+      "individualDesc": "Gotuj w domu, organizuj kolacje, warsztaty",
+      "restaurant": "Restauracja / Firma",
+      "restaurantDesc": "Pop-upy, degustacje, wydarzenia specjalne"
+    },
+    "personalInfo": {
+      "title": "Dane osobowe",
+      "subtitle": "Podstawowe informacje o Tobie",
+      "firstName": "Imię",
+      "lastName": "Nazwisko",
+      "email": "Adres email",
+      "phone": "Numer telefonu",
+      "birthDate": "Data urodzenia",
+      "birthDateHint": "Musisz mieć ukończone 18 lat"
+    },
+    "restaurantInfo": {
+      "title": "Dane restauracji",
+      "subtitle": "Informacje o Twojej firmie gastronomicznej",
+      "name": "Nazwa restauracji / firmy",
+      "nip": "NIP (opcjonalnie)",
+      "website": "Strona www / Instagram",
+      "contactPerson": "Osoba kontaktowa",
+      "contactName": "Imię i nazwisko",
+      "contactEmail": "Email kontaktowy",
+      "contactPhone": "Telefon",
+      "contactPosition": "Stanowisko (opcjonalnie)",
+      "contactPositionPlaceholder": "np. Manager, Właściciel"
+    },
+    "address": {
+      "title": "Adres",
+      "subtitle": "Gdzie będziesz organizować wydarzenia? (Ten adres nie będzie publiczny)",
+      "street": "Ulica i numer",
+      "apartment": "Numer mieszkania (opcjonalnie)",
+      "postalCode": "Kod pocztowy",
+      "city": "Miasto",
+      "neighborhood": "Dzielnica",
+      "neighborhoodPlaceholder": "Wybierz dzielnicę",
+      "neighborhoods": {
+        "stare-miasto": "Stare Miasto",
+        "nadodrze": "Nadodrze",
+        "srodmiescie": "Śródmieście",
+        "krzyki": "Krzyki",
+        "fabryczna": "Fabryczna",
+        "psie-pole": "Psie Pole",
+        "biskupin": "Biskupin",
+        "olbin": "Ołbin",
+        "other": "Inna"
+      },
+      "notice": "Uwaga: Pełny adres będzie udostępniany tylko gościom z potwierdzoną rezerwacją, 24h przed wydarzeniem."
+    },
+    "experience": {
+      "title": "Doświadczenie i kuchnia",
+      "subtitle": "Opowiedz nam o swoich kulinarnych umiejętnościach",
+      "hasExperience": "Czy organizowałeś/aś już kiedyś klub kolacyjny lub podobne wydarzenie?",
+      "experienceYes": "Tak, mam doświadczenie",
+      "experienceNo": "Nie, to będzie mój pierwszy raz",
+      "experiencePro": "Jestem profesjonalnym kucharzem/cukiernikiem",
+      "experienceDetails": "Opowiedz więcej o swoim doświadczeniu",
+      "experienceDetailsPlaceholder": "Gdzie organizowałeś wydarzenia? Ile osób gościłeś? Jakie były reakcje?",
+      "cuisines": "Jakie kuchnie będziesz serwować? (wybierz min. 1)",
+      "cuisineTypes": {
+        "polish": "Polska",
+        "italian": "Włoska",
+        "french": "Francuska",
+        "asian": "Azjatycka",
+        "japanese": "Japońska",
+        "indian": "Indyjska",
+        "mexican": "Meksykańska",
+        "mediterranean": "Śródziemnomorska",
+        "middle-eastern": "Bliskowschodnia",
+        "american": "Amerykańska",
+        "vegan": "Wegańska",
+        "vegetarian": "Wegetariańska",
+        "fusion": "Fusion",
+        "pastry": "Cukiernictwo",
+        "wine": "Wino i degustacje",
+        "other": "Inna"
+      },
+      "eventTypes": "Jakie typy wydarzeń chcesz organizować? (wybierz min. 1)",
+      "eventTypeOptions": {
+        "supper-club": {
+          "label": "Supper Club",
+          "description": "Kolacje w domu"
+        },
+        "cooking-class": {
+          "label": "Warsztaty",
+          "description": "Nauka gotowania"
+        },
+        "tasting": {
+          "label": "Degustacje",
+          "description": "Wino, piwo, whisky"
+        },
+        "popup": {
+          "label": "Pop-up",
+          "description": "Tymczasowa restauracja"
+        },
+        "active-food": {
+          "label": "Active + Food",
+          "description": "Sport i jedzenie"
+        }
+      },
+      "bio": "Krótkie bio (min. 50 znaków)",
+      "bioPlaceholder": "Opowiedz gościom o sobie, swojej pasji do gotowania, skąd się wzięła, co Cię inspiruje...",
+      "bioHint": "To będzie widoczne w Twoim profilu",
+      "bioCounter": "{count}/50"
+    },
+    "photos": {
+      "title": "Zdjęcia",
+      "subtitleIndividual": "Pokaż się i swoje kulinarne dzieła",
+      "subtitleRestaurant": "Logo restauracji i zdjęcia potraw",
+      "profilePhoto": "Twoje zdjęcie profilowe",
+      "logo": "Logo restauracji",
+      "addPhoto": "Dodaj zdjęcie",
+      "changePhoto": "Zmień zdjęcie",
+      "addLogo": "Dodaj logo",
+      "changeLogo": "Zmień logo",
+      "photoHint": "Jasne, przyjazne zdjęcie twarzy. JPG lub PNG, max 5MB.",
+      "logoHint": "Logo w formacie kwadratowym. JPG lub PNG, max 5MB.",
+      "foodPhotosIndividual": "Zdjęcia Twoich potraw (opcjonalne, max 5)",
+      "foodPhotosRestaurant": "Zdjęcia potraw / wnętrza (opcjonalne, max 5)",
+      "add": "Dodaj",
+      "foodPhotosHintIndividual": "Pokaż swoje najlepsze dania! Dobre zdjęcia przyciągają więcej gości.",
+      "foodPhotosHintRestaurant": "Pokaż atmosferę i dania! Dodaj zdjęcia wnętrza lub swoich specjalności.",
+      "tip": "Wskazówka",
+      "tipTextIndividual": "Hosty z profesjonalnymi zdjęciami jedzenia otrzymują średnio 3x więcej rezerwacji!",
+      "tipTextRestaurant": "Restauracje z galerią zdjęć wnętrza i potraw przyciągają więcej gości na wydarzenia!"
+    },
+    "schedule": {
+      "title": "Spotkanie weryfikacyjne",
+      "subtitle": "Wybierz terminy, w których możesz spotkać się z naszym zespołem (online lub w Wrocławiu)",
+      "selectDays": "Wybierz dostępne dni (min. 1)",
+      "selectTimes": "Preferowane godziny (min. 1)",
+      "terms": "Akceptuję <terms>regulamin</terms> i <privacy>politykę prywatności</privacy> platformy Seated.",
+      "verification": "Rozumiem, że moja aplikacja zostanie zweryfikowana i może zostać odrzucona. Wyrażam zgodę na wizytę weryfikacyjną w moim miejscu wydarzeń.",
+      "whatNext": "Co dalej?",
+      "whatNextText": "Po wysłaniu formularza skontaktujemy się z Tobą w ciągu 48h, aby umówić spotkanie weryfikacyjne. Podczas spotkania omówimy szczegóły i odpowiemy na pytania."
+    },
+    "buttons": {
+      "back": "Wstecz",
+      "next": "Dalej",
+      "submit": "Wyślij aplikację",
+      "submitting": "Wysyłanie..."
+    }
+  },
   "admin": {
     "title": "Panel administracyjny",
     "nav": {
@@ -379,6 +587,36 @@
       "uses": "użyć",
       "disable": "Wyłącz",
       "enable": "Włącz"
+    }
+  },
+  "faqPage": {
+    "backToHome": "Wróć na stronę główną",
+    "title": "Najczęściej zadawane pytania",
+    "subtitle": "Znajdź odpowiedzi na najczęstsze pytania o Seated. Nie znalazłeś odpowiedzi?",
+    "contactLink": "Napisz do nas",
+    "categories": {
+      "general": {
+        "label": "Ogólne",
+        "description": "Podstawowe informacje o Seated"
+      },
+      "booking": {
+        "label": "Rezerwacje",
+        "description": "Jak rezerwować i anulować"
+      },
+      "hosts": {
+        "label": "Dla Hostów",
+        "description": "Informacje dla organizatorów"
+      },
+      "payments": {
+        "label": "Płatności",
+        "description": "Jak działają płatności i zwroty"
+      }
+    },
+    "contact": {
+      "title": "Nie znalazłeś odpowiedzi?",
+      "subtitle": "Nasz zespół pomocy jest gotowy odpowiedzieć na wszystkie Twoje pytania.",
+      "writeToUs": "Napisz do nas",
+      "howItWorks": "Jak działa Seated?"
     }
   },
   "errors": {
@@ -621,6 +859,101 @@
     "messageHost": "Napisz do hosta",
     "messageGuest": "Napisz do gościa",
     "backToMessages": "Powrót do wiadomości"
+  },
+  "howItWorksPage": {
+    "hero": {
+      "title": "Jak działa Seated?",
+      "subtitle": "Odkryj unikalne doświadczenia kulinarne we Wrocławiu. Łączymy pasjonatów jedzenia z utalentowanymi hostami w kameralnej atmosferze.",
+      "cta": "Przeglądaj wydarzenia",
+      "ctaSecondary": "Zostań hostem"
+    },
+    "steps": {
+      "title": "5 prostych kroków",
+      "subtitle": "Od odkrycia do doświadczenia - cały proces jest prosty i intuicyjny",
+      "step1": {
+        "title": "1. Znajdź wydarzenie",
+        "description": "Przeglądaj nasze wydarzenia kulinarne we Wrocławiu. Filtruj według typu kuchni, daty lub lokalizacji. Od kameralnych kolacji po warsztaty gotowania."
+      },
+      "step2": {
+        "title": "2. Zarezerwuj miejsce",
+        "description": "Wybierz dogodny termin i liczbę osób. Bezpieczna płatność online. Otrzymasz potwierdzenie i szczegóły wydarzenia na e-mail."
+      },
+      "step3": {
+        "title": "3. Otrzymaj lokalizację",
+        "description": "24h przed wydarzeniem otrzymasz dokładny adres i instrukcje dojazdu. Większość wydarzeń odbywa się w prywatnych domach lub unikalnych lokalizacjach."
+      },
+      "step4": {
+        "title": "4. Ciesz się doświadczeniem",
+        "description": "Poznaj nowych ludzi, odkryj niesamowite smaki i ciesz się wyjątkową atmosferą. To więcej niż jedzenie - to doświadczenie."
+      },
+      "step5": {
+        "title": "5. Zostaw opinię",
+        "description": "Po wydarzeniu możesz ocenić hosta i podzielić się wrażeniami. Twoja opinia pomaga innym znaleźć najlepsze doświadczenia."
+      }
+    },
+    "eventTypes": {
+      "title": "Rodzaje wydarzeń",
+      "subtitle": "Wybierz doświadczenie, które Cię interesuje",
+      "supperClub": {
+        "title": "Supper Club",
+        "description": "Wielodaniowa kolacja w prywatnym domu hosta"
+      },
+      "chefsTable": {
+        "title": "Chef's Table",
+        "description": "Ekskluzywne menu degustacyjne od profesjonalnego szefa kuchni"
+      },
+      "workshops": {
+        "title": "Warsztaty",
+        "description": "Naucz się gotować od profesjonalistów"
+      },
+      "tastings": {
+        "title": "Degustacje",
+        "description": "Odkryj wina, sery, kawę i inne specjały"
+      },
+      "popup": {
+        "title": "Pop-up",
+        "description": "Tymczasowe restauracje w nieoczekiwanych miejscach"
+      },
+      "activeFood": {
+        "title": "Active + Food",
+        "description": "Połączenie aktywności fizycznej z kulinarnym doświadczeniem"
+      },
+      "farmExperience": {
+        "title": "Farm Experience",
+        "description": "Od pola do stołu - poznaj lokalne gospodarstwa"
+      }
+    },
+    "features": {
+      "title": "Dlaczego Seated?",
+      "subtitle": "Bezpieczeństwo i jakość są dla nas najważniejsze",
+      "securePayments": {
+        "title": "Bezpieczne płatności",
+        "description": "Wszystkie transakcje są szyfrowane i chronione. Płacisz dopiero po potwierdzeniu rezerwacji."
+      },
+      "verifiedHosts": {
+        "title": "Zweryfikowani hosty",
+        "description": "Każdy host przechodzi weryfikację. Sprawdzamy doświadczenie, certyfikaty i opinie."
+      },
+      "flexibleCancellation": {
+        "title": "Elastyczne anulowanie",
+        "description": "Możesz anulować rezerwację do 48h przed wydarzeniem i otrzymać pełny zwrot."
+      },
+      "foodieCommunity": {
+        "title": "Społeczność foodie",
+        "description": "Dołącz do społeczności miłośników jedzenia. Śledź ulubionych hostów i odkrywaj nowe smaki."
+      }
+    },
+    "forHosts": {
+      "title": "Jesteś pasjonatem gotowania?",
+      "subtitle": "Dołącz do naszej społeczności hostów i podziel się swoją pasją z innymi. Zarabiaj robiąc to, co kochasz, i poznawaj niesamowitych ludzi.",
+      "cta": "Zostań hostem",
+      "ctaSecondary": "FAQ dla hostów"
+    },
+    "cta": {
+      "title": "Gotowy na kulinarne przygody?",
+      "subtitle": "Dołącz do tysięcy osób, które odkrywają Wrocław przez smaki.",
+      "button": "Załóż darmowe konto"
+    }
   },
   "giftCards": {
     "title": "Karty podarunkowe",

@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EventCard } from "@/components/events";
 import { FAQSection } from "@/components/faq-section";
+import { getTranslations } from "next-intl/server";
 import {
   ChefHat,
   Wine,
@@ -15,76 +16,85 @@ import {
   Shield,
   CreditCard,
   Crown,
+  LucideIcon,
 } from "lucide-react";
 
-const categories = [
+interface Category {
+  nameKey: string;
+  descKey: string;
+  slug: string;
+  icon: LucideIcon;
+  color: string;
+}
+
+const categories: Category[] = [
   {
-    name: "Supper Club",
+    nameKey: "supperClub",
+    descKey: "supperClubDesc",
     slug: "supper-club",
     icon: Utensils,
     color: "bg-amber-100 text-amber-700 hover:bg-amber-200",
-    description: "Intymne kolacje w domach",
   },
   {
-    name: "Chef's Table",
+    nameKey: "chefsTable",
+    descKey: "chefsTableDesc",
     slug: "chefs-table",
     icon: Crown,
     color: "bg-slate-100 text-slate-700 hover:bg-slate-200",
-    description: "Ekskluzywne menu od szefów kuchni",
   },
   {
-    name: "Pop-up",
+    nameKey: "popup",
+    descKey: "popupDesc",
     slug: "popup",
     icon: ChefHat,
     color: "bg-rose-100 text-rose-700 hover:bg-rose-200",
-    description: "Tymczasowe restauracje",
   },
   {
-    name: "Warsztaty",
+    nameKey: "workshops",
+    descKey: "workshopsDesc",
     slug: "warsztaty",
     icon: GraduationCap,
     color: "bg-blue-100 text-blue-700 hover:bg-blue-200",
-    description: "Naucz się gotować",
   },
   {
-    name: "Degustacje",
+    nameKey: "tastings",
+    descKey: "tastingsDesc",
     slug: "degustacje",
     icon: Wine,
     color: "bg-purple-100 text-purple-700 hover:bg-purple-200",
-    description: "Wina, piwa, whisky",
   },
   {
-    name: "Active + Food",
+    nameKey: "activeFood",
+    descKey: "activeFoodDesc",
     slug: "active-food",
     icon: Bike,
     color: "bg-green-100 text-green-700 hover:bg-green-200",
-    description: "Sport i jedzenie",
   },
   {
-    name: "Farm Experience",
+    nameKey: "farmExperience",
+    descKey: "farmExperienceDesc",
     slug: "farm",
     icon: TreePine,
     color: "bg-emerald-100 text-emerald-700 hover:bg-emerald-200",
-    description: "Od pola do stołu",
   },
 ];
 
 const mockEvents = [
   {
     id: "1",
-    title: "Włoska Kolacja u Ani - Toskańskie Smaki",
+    title: "Italian Dinner at Anna's - Tuscan Flavors",
     type: "Supper Club",
-    date: "Sob, 15 Lut · 19:00",
-    location: "Stare Miasto, Wrocław",
+    date: "Sat, Feb 15 · 7:00 PM",
+    location: "Old Town, Wrocław",
     price: 150,
     spotsLeft: 4,
     imageGradient: "from-amber-200 to-orange-300",
   },
   {
     id: "2",
-    title: "Sushi Masterclass - Od Podstaw do Mistrza",
-    type: "Warsztaty",
-    date: "Wt, 18 Lut · 18:00",
+    title: "Sushi Masterclass - From Basics to Master",
+    type: "Workshops",
+    date: "Tue, Feb 18 · 6:00 PM",
     location: "Nadodrze, Wrocław",
     price: 200,
     spotsLeft: 6,
@@ -92,10 +102,10 @@ const mockEvents = [
   },
   {
     id: "3",
-    title: "Naturalne Wina Gruzji - Degustacja",
-    type: "Degustacje",
-    date: "Pt, 22 Lut · 20:00",
-    location: "Śródmieście, Wrocław",
+    title: "Georgian Natural Wines - Tasting",
+    type: "Tastings",
+    date: "Fri, Feb 22 · 8:00 PM",
+    location: "Downtown, Wrocław",
     price: 120,
     spotsLeft: 2,
     imageGradient: "from-purple-200 to-violet-300",
@@ -104,7 +114,7 @@ const mockEvents = [
     id: "4",
     title: "Thai Street Food Pop-up",
     type: "Pop-up",
-    date: "Sob, 1 Mar · 18:00",
+    date: "Sat, Mar 1 · 6:00 PM",
     location: "Przedmieście Oławskie",
     price: 89,
     spotsLeft: 0,
@@ -112,19 +122,19 @@ const mockEvents = [
   },
   {
     id: "5",
-    title: "Bieg + Brunch - Poranna Energia",
+    title: "Run + Brunch - Morning Energy",
     type: "Active + Food",
-    date: "Nd, 2 Mar · 09:00",
-    location: "Park Szczytnicki",
+    date: "Sun, Mar 2 · 9:00 AM",
+    location: "Szczytnicki Park",
     price: 75,
     spotsLeft: 12,
     imageGradient: "from-green-200 to-teal-300",
   },
   {
     id: "6",
-    title: "Gruzińskie Chinkali - Warsztat Lepienia",
-    type: "Warsztaty",
-    date: "Śr, 5 Mar · 18:30",
+    title: "Georgian Khinkali - Dumpling Workshop",
+    type: "Workshops",
+    date: "Wed, Mar 5 · 6:30 PM",
     location: "Ołbin, Wrocław",
     price: 160,
     spotsLeft: 8,
@@ -132,49 +142,51 @@ const mockEvents = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "Kasia M.",
-    text: "Niesamowite doświadczenie! Kolacja u Ani była jak wizyta u przyjaciela, który okazał się mistrzem kuchni.",
-    event: "Włoska Kolacja",
-    rating: 5,
-  },
-  {
-    name: "Tomek W.",
-    text: "Warsztaty sushi otworzyły mi oczy na to, jak dużo jest do nauczenia. Wrócę po więcej!",
-    event: "Sushi Masterclass",
-    rating: 5,
-  },
-  {
-    name: "Anna K.",
-    text: "Degustacja win była prowadzona przez prawdziwego pasjonata. Poznałam historie, których nie znajdę w żadnym sklepie.",
-    event: "Wina Naturalne",
-    rating: 5,
-  },
-];
+const benefitIcons = [Star, Shield, CreditCard];
+const benefitKeys = ["verified", "secure", "transparent"] as const;
 
-const benefits = [
-  {
-    icon: Star,
-    title: "Zweryfikowani hosty",
-    description:
-      "Każdy host przechodzi weryfikację. Sprawdzamy miejsca i umiejętności.",
-  },
-  {
-    icon: Shield,
-    title: "Bezpieczne płatności",
-    description:
-      "Płacisz przez platformę. Pełny zwrot jeśli wydarzenie się nie odbędzie.",
-  },
-  {
-    icon: CreditCard,
-    title: "Transparentne ceny",
-    description:
-      "Wiesz dokładnie za co płacisz. Bez ukrytych opłat i niespodzianek.",
-  },
-];
+export default async function Home() {
+  const t = await getTranslations("home");
 
-export default function Home() {
+  const testimonials = [
+    {
+      name: t("testimonials.items.0.name"),
+      text: t("testimonials.items.0.text"),
+      event: t("testimonials.items.0.event"),
+      rating: 5,
+    },
+    {
+      name: t("testimonials.items.1.name"),
+      text: t("testimonials.items.1.text"),
+      event: t("testimonials.items.1.event"),
+      rating: 5,
+    },
+    {
+      name: t("testimonials.items.2.name"),
+      text: t("testimonials.items.2.text"),
+      event: t("testimonials.items.2.event"),
+      rating: 5,
+    },
+  ];
+
+  const steps = [
+    {
+      step: "1",
+      title: t("howItWorks.step1.title"),
+      description: t("howItWorks.step1.description"),
+    },
+    {
+      step: "2",
+      title: t("howItWorks.step2.title"),
+      description: t("howItWorks.step2.description"),
+    },
+    {
+      step: "3",
+      title: t("howItWorks.step3.title"),
+      description: t("howItWorks.step3.description"),
+    },
+  ];
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -183,16 +195,14 @@ export default function Home() {
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto text-center">
             <Badge className="mb-4 bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200">
-              Wrocław
+              {t("hero.badge")}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
-              Odkryj wyjątkowe{" "}
-              <span className="text-amber-600">doświadczenia kulinarne</span>
+              {t("hero.title")}{" "}
+              <span className="text-amber-600">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Supper clubs, pop-upy, warsztaty gotowania i więcej. Dołącz do
-              społeczności food lovers i przeżyj niezapomniane chwile przy
-              stole.
+              {t("hero.subtitle")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -200,7 +210,7 @@ export default function Home() {
                 className="bg-amber-600 hover:bg-amber-700 text-base h-12 px-8"
                 asChild
               >
-                <Link href="/events">Przeglądaj wydarzenia</Link>
+                <Link href="/events">{t("hero.cta")}</Link>
               </Button>
               <Button
                 size="lg"
@@ -208,12 +218,11 @@ export default function Home() {
                 className="text-base h-12 px-8"
                 asChild
               >
-                <Link href="/become-host">Zostań hostem</Link>
+                <Link href="/become-host">{t("hero.ctaSecondary")}</Link>
               </Button>
             </div>
             <p className="mt-6 text-sm text-muted-foreground">
-              Już <span className="font-semibold text-foreground">500+</span>{" "}
-              osób odkryło nowe smaki we Wrocławiu
+              {t("hero.stats", { count: "500" })}
             </p>
           </div>
         </div>
@@ -223,11 +232,9 @@ export default function Home() {
       <section className="py-16 container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">
-            Wybierz swoją przygodę
+            {t("categories.title")}
           </h2>
-          <p className="text-muted-foreground">
-            Od intymnych kolacji po aktywne spotkania - znajdź coś dla siebie
-          </p>
+          <p className="text-muted-foreground">{t("categories.subtitle")}</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {categories.map((category) => (
@@ -241,9 +248,11 @@ export default function Home() {
                   >
                     <category.icon className="h-6 w-6" />
                   </div>
-                  <span className="font-medium text-sm">{category.name}</span>
+                  <span className="font-medium text-sm">
+                    {t(`categories.${category.nameKey}`)}
+                  </span>
                   <span className="text-xs text-muted-foreground mt-1 hidden md:block">
-                    {category.description}
+                    {t(`categories.${category.descKey}`)}
                   </span>
                 </CardContent>
               </Card>
@@ -258,14 +267,14 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold">
-                Nadchodzące wydarzenia
+                {t("featured.title")}
               </h2>
               <p className="text-muted-foreground mt-1">
-                Rezerwuj miejsca zanim się skończą
+                {t("featured.subtitle")}
               </p>
             </div>
             <Button variant="outline" asChild>
-              <Link href="/events">Zobacz wszystkie</Link>
+              <Link href="/events">{t("featured.viewAll")}</Link>
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -280,24 +289,27 @@ export default function Home() {
       <section className="py-16 container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">
-            Dlaczego Seated?
+            {t("benefits.title")}
           </h2>
-          <p className="text-muted-foreground">
-            Tworzymy bezpieczne miejsce dla kulinarnych odkrywców
-          </p>
+          <p className="text-muted-foreground">{t("benefits.subtitle")}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          {benefits.map((benefit) => (
-            <div key={benefit.title} className="text-center">
-              <div className="w-14 h-14 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-4">
-                <benefit.icon className="h-7 w-7" />
+          {benefitKeys.map((key, index) => {
+            const Icon = benefitIcons[index];
+            return (
+              <div key={key} className="text-center">
+                <div className="w-14 h-14 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-4">
+                  <Icon className="h-7 w-7" />
+                </div>
+                <h3 className="font-semibold text-lg mb-2">
+                  {t(`benefits.${key}.title`)}
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  {t(`benefits.${key}.description`)}
+                </p>
               </div>
-              <h3 className="font-semibold text-lg mb-2">{benefit.title}</h3>
-              <p className="text-muted-foreground text-sm">
-                {benefit.description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -306,33 +318,12 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold mb-3">
-              Jak to działa?
+              {t("howItWorks.title")}
             </h2>
-            <p className="text-muted-foreground">
-              Trzy proste kroki do kulinarnej przygody
-            </p>
+            <p className="text-muted-foreground">{t("howItWorks.subtitle")}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {[
-              {
-                step: "1",
-                title: "Znajdź wydarzenie",
-                description:
-                  "Przeglądaj kulinarne doświadczenia w Twoim mieście. Filtruj po typie, dacie i cenie.",
-              },
-              {
-                step: "2",
-                title: "Zarezerwuj miejsce",
-                description:
-                  "Bezpiecznie opłać rezerwację online. Pełny adres otrzymasz w potwierdzeniu.",
-              },
-              {
-                step: "3",
-                title: "Ciesz się!",
-                description:
-                  "Poznaj nowych ludzi, odkryj nowe smaki i przeżyj niezapomniane chwile przy stole.",
-              },
-            ].map((item, index) => (
+            {steps.map((item, index) => (
               <div key={item.step} className="relative text-center">
                 {index < 2 && (
                   <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-[2px] bg-amber-200" />
@@ -354,11 +345,9 @@ export default function Home() {
       <section className="py-16 container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">
-            Co mówią uczestnicy
+            {t("testimonials.title")}
           </h2>
-          <p className="text-muted-foreground">
-            Prawdziwe opinie od prawdziwych food lovers
-          </p>
+          <p className="text-muted-foreground">{t("testimonials.subtitle")}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {testimonials.map((testimonial, index) => (
@@ -392,11 +381,10 @@ export default function Home() {
       <section className="py-20 bg-amber-600 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Masz talent kulinarny? Podziel się nim!
+            {t("cta.title")}
           </h2>
           <p className="text-amber-100 mb-8 max-w-2xl mx-auto text-lg">
-            Zostań hostem i zacznij organizować własne wydarzenia kulinarne.
-            Pomożemy Ci zacząć - od planowania po promocję.
+            {t("cta.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -405,7 +393,7 @@ export default function Home() {
               className="text-base h-12 px-8"
               asChild
             >
-              <Link href="/become-host">Zostań hostem</Link>
+              <Link href="/become-host">{t("cta.button")}</Link>
             </Button>
             <Button
               size="lg"
@@ -413,12 +401,11 @@ export default function Home() {
               className="text-base h-12 px-8 bg-transparent border-white text-white hover:bg-white/10"
               asChild
             >
-              <Link href="/how-it-works">Dowiedz się więcej</Link>
+              <Link href="/how-it-works">{t("cta.learnMore")}</Link>
             </Button>
           </div>
           <p className="mt-6 text-sm text-amber-200">
-            Dołącz do <span className="font-semibold">50+</span> hostów we
-            Wrocławiu
+            {t("cta.stats", { count: "50" })}
           </p>
         </div>
       </section>

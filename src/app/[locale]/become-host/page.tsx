@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,35 +41,22 @@ import {
   Clock,
   Star,
   Building2,
-  Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const cuisineTypes = [
-  { value: "polish", label: "Polska" },
-  { value: "italian", label: "Włoska" },
-  { value: "french", label: "Francuska" },
-  { value: "asian", label: "Azjatycka" },
-  { value: "japanese", label: "Japońska" },
-  { value: "indian", label: "Indyjska" },
-  { value: "mexican", label: "Meksykańska" },
-  { value: "mediterranean", label: "Śródziemnomorska" },
-  { value: "middle-eastern", label: "Bliskowschodnia" },
-  { value: "american", label: "Amerykańska" },
-  { value: "vegan", label: "Wegańska" },
-  { value: "vegetarian", label: "Wegetariańska" },
-  { value: "fusion", label: "Fusion" },
-  { value: "pastry", label: "Cukiernictwo" },
-  { value: "wine", label: "Wino i degustacje" },
-  { value: "other", label: "Inna" },
+const cuisineKeys = [
+  "polish", "italian", "french", "asian", "japanese", "indian",
+  "mexican", "mediterranean", "middle-eastern", "american",
+  "vegan", "vegetarian", "fusion", "pastry", "wine", "other"
 ];
 
-const eventTypes = [
-  { value: "supper-club", label: "Supper Club", description: "Kolacje w domu" },
-  { value: "cooking-class", label: "Warsztaty", description: "Nauka gotowania" },
-  { value: "tasting", label: "Degustacje", description: "Wino, piwo, whisky" },
-  { value: "popup", label: "Pop-up", description: "Tymczasowa restauracja" },
-  { value: "active-food", label: "Active + Food", description: "Sport i jedzenie" },
+const eventTypeKeys = [
+  "supper-club", "cooking-class", "tasting", "popup", "active-food"
+];
+
+const neighborhoodKeys = [
+  "stare-miasto", "nadodrze", "srodmiescie", "krzyki",
+  "fabryczna", "psie-pole", "biskupin", "olbin", "other"
 ];
 
 const timeSlots = [
@@ -77,6 +65,7 @@ const timeSlots = [
 ];
 
 export default function BecomeHostPage() {
+  const t = useTranslations("becomeHostPage");
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -237,10 +226,9 @@ export default function BecomeHostPage() {
             <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
               <ChefHat className="h-8 w-8 text-amber-600" />
             </div>
-            <h1 className="text-2xl font-bold mb-2">Zostań hostem Seated</h1>
+            <h1 className="text-2xl font-bold mb-2">{t("header.title")}</h1>
             <p className="text-muted-foreground">
-              Podziel się swoją pasją do gotowania i zarabiaj organizując
-              wyjątkowe wydarzenia kulinarne
+              {t("header.subtitle")}
             </p>
           </div>
 
@@ -273,11 +261,11 @@ export default function BecomeHostPage() {
               ))}
             </div>
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Dane</span>
-              <span>Adres</span>
-              <span>Doświadczenie</span>
-              <span>Zdjęcia</span>
-              <span>Termin</span>
+              <span>{t("progress.data")}</span>
+              <span>{t("progress.address")}</span>
+              <span>{t("progress.experience")}</span>
+              <span>{t("progress.photos")}</span>
+              <span>{t("progress.schedule")}</span>
             </div>
           </div>
 
@@ -289,10 +277,10 @@ export default function BecomeHostPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <ChefHat className="h-5 w-5 text-amber-600" />
-                    Kim jesteś?
+                    {t("hostType.title")}
                   </CardTitle>
                   <CardDescription>
-                    Wybierz typ konta hosta
+                    {t("hostType.subtitle")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -316,11 +304,11 @@ export default function BecomeHostPage() {
                           <div className="flex items-center gap-2 mb-1">
                             <User className="h-5 w-5 text-amber-600" />
                             <Label htmlFor="individual" className="font-semibold cursor-pointer">
-                              Osoba prywatna
+                              {t("hostType.individual")}
                             </Label>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            Gotuj w domu, organizuj kolacje, warsztaty
+                            {t("hostType.individualDesc")}
                           </p>
                         </div>
                       </div>
@@ -341,11 +329,11 @@ export default function BecomeHostPage() {
                           <div className="flex items-center gap-2 mb-1">
                             <Building2 className="h-5 w-5 text-amber-600" />
                             <Label htmlFor="restaurant" className="font-semibold cursor-pointer">
-                              Restauracja / Firma
+                              {t("hostType.restaurant")}
                             </Label>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            Pop-upy, degustacje, wydarzenia specjalne
+                            {t("hostType.restaurantDesc")}
                           </p>
                         </div>
                       </div>
@@ -360,16 +348,16 @@ export default function BecomeHostPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <User className="h-5 w-5 text-amber-600" />
-                      Dane osobowe
+                      {t("personalInfo.title")}
                     </CardTitle>
                     <CardDescription>
-                      Podstawowe informacje o Tobie
+                      {t("personalInfo.subtitle")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="firstName">Imię *</Label>
+                        <Label htmlFor="firstName">{t("personalInfo.firstName")} *</Label>
                         <Input
                           id="firstName"
                           placeholder="Jan"
@@ -378,7 +366,7 @@ export default function BecomeHostPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="lastName">Nazwisko *</Label>
+                        <Label htmlFor="lastName">{t("personalInfo.lastName")} *</Label>
                         <Input
                           id="lastName"
                           placeholder="Kowalski"
@@ -389,7 +377,7 @@ export default function BecomeHostPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email">Adres email *</Label>
+                      <Label htmlFor="email">{t("personalInfo.email")} *</Label>
                       <Input
                         id="email"
                         type="email"
@@ -400,7 +388,7 @@ export default function BecomeHostPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Numer telefonu *</Label>
+                      <Label htmlFor="phone">{t("personalInfo.phone")} *</Label>
                       <Input
                         id="phone"
                         type="tel"
@@ -411,7 +399,7 @@ export default function BecomeHostPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="birthDate">Data urodzenia *</Label>
+                      <Label htmlFor="birthDate">{t("personalInfo.birthDate")} *</Label>
                       <Input
                         id="birthDate"
                         type="date"
@@ -419,7 +407,7 @@ export default function BecomeHostPage() {
                         onChange={(e) => setBirthDate(e.target.value)}
                       />
                       <p className="text-xs text-muted-foreground">
-                        Musisz mieć ukończone 18 lat
+                        {t("personalInfo.birthDateHint")}
                       </p>
                     </div>
                   </CardContent>
@@ -432,15 +420,15 @@ export default function BecomeHostPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Building2 className="h-5 w-5 text-amber-600" />
-                      Dane restauracji
+                      {t("restaurantInfo.title")}
                     </CardTitle>
                     <CardDescription>
-                      Informacje o Twojej firmie gastronomicznej
+                      {t("restaurantInfo.subtitle")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="restaurantName">Nazwa restauracji / firmy *</Label>
+                      <Label htmlFor="restaurantName">{t("restaurantInfo.name")} *</Label>
                       <Input
                         id="restaurantName"
                         placeholder="Restauracja Smaki Świata"
@@ -451,7 +439,7 @@ export default function BecomeHostPage() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="nip">NIP (opcjonalnie)</Label>
+                        <Label htmlFor="nip">{t("restaurantInfo.nip")}</Label>
                         <Input
                           id="nip"
                           placeholder="123-456-78-90"
@@ -460,7 +448,7 @@ export default function BecomeHostPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="website">Strona www / Instagram</Label>
+                        <Label htmlFor="website">{t("restaurantInfo.website")}</Label>
                         <Input
                           id="website"
                           placeholder="www.restauracja.pl"
@@ -475,12 +463,12 @@ export default function BecomeHostPage() {
                     <div className="flex items-center gap-2 mb-2">
                       <User className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-medium text-muted-foreground">
-                        Osoba kontaktowa
+                        {t("restaurantInfo.contactPerson")}
                       </span>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="contactPersonName">Imię i nazwisko *</Label>
+                      <Label htmlFor="contactPersonName">{t("restaurantInfo.contactName")} *</Label>
                       <Input
                         id="contactPersonName"
                         placeholder="Anna Nowak"
@@ -491,7 +479,7 @@ export default function BecomeHostPage() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="contactEmail">Email kontaktowy *</Label>
+                        <Label htmlFor="contactEmail">{t("restaurantInfo.contactEmail")} *</Label>
                         <Input
                           id="contactEmail"
                           type="email"
@@ -501,7 +489,7 @@ export default function BecomeHostPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="contactPhone">Telefon *</Label>
+                        <Label htmlFor="contactPhone">{t("restaurantInfo.contactPhone")} *</Label>
                         <Input
                           id="contactPhone"
                           type="tel"
@@ -513,10 +501,10 @@ export default function BecomeHostPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="contactPosition">Stanowisko (opcjonalnie)</Label>
+                      <Label htmlFor="contactPosition">{t("restaurantInfo.contactPosition")}</Label>
                       <Input
                         id="contactPosition"
-                        placeholder="np. Manager, Właściciel"
+                        placeholder={t("restaurantInfo.contactPositionPlaceholder")}
                         value={contactPosition}
                         onChange={(e) => setContactPosition(e.target.value)}
                       />
@@ -533,16 +521,15 @@ export default function BecomeHostPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-amber-600" />
-                  Adres
+                  {t("address.title")}
                 </CardTitle>
                 <CardDescription>
-                  Gdzie będziesz organizować wydarzenia? (Ten adres nie będzie
-                  publiczny)
+                  {t("address.subtitle")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="street">Ulica i numer *</Label>
+                  <Label htmlFor="street">{t("address.street")} *</Label>
                   <Input
                     id="street"
                     placeholder="ul. Przykładowa 12"
@@ -552,7 +539,7 @@ export default function BecomeHostPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="apartment">Numer mieszkania (opcjonalnie)</Label>
+                  <Label htmlFor="apartment">{t("address.apartment")}</Label>
                   <Input
                     id="apartment"
                     placeholder="np. 4A"
@@ -563,7 +550,7 @@ export default function BecomeHostPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="postalCode">Kod pocztowy *</Label>
+                    <Label htmlFor="postalCode">{t("address.postalCode")} *</Label>
                     <Input
                       id="postalCode"
                       placeholder="50-000"
@@ -572,7 +559,7 @@ export default function BecomeHostPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="city">Miasto *</Label>
+                    <Label htmlFor="city">{t("address.city")} *</Label>
                     <Input
                       id="city"
                       value={city}
@@ -582,30 +569,25 @@ export default function BecomeHostPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="neighborhood">Dzielnica *</Label>
+                  <Label htmlFor="neighborhood">{t("address.neighborhood")} *</Label>
                   <Select value={neighborhood} onValueChange={setNeighborhood}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Wybierz dzielnicę" />
+                      <SelectValue placeholder={t("address.neighborhoodPlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="stare-miasto">Stare Miasto</SelectItem>
-                      <SelectItem value="nadodrze">Nadodrze</SelectItem>
-                      <SelectItem value="srodmiescie">Śródmieście</SelectItem>
-                      <SelectItem value="krzyki">Krzyki</SelectItem>
-                      <SelectItem value="fabryczna">Fabryczna</SelectItem>
-                      <SelectItem value="psie-pole">Psie Pole</SelectItem>
-                      <SelectItem value="biskupin">Biskupin</SelectItem>
-                      <SelectItem value="olbin">Ołbin</SelectItem>
-                      <SelectItem value="other">Inna</SelectItem>
+                      {neighborhoodKeys.map((key) => (
+                        <SelectItem key={key} value={key}>
+                          {t(`address.neighborhoods.${key}`)}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
                   <p>
-                    <strong>Uwaga:</strong> Pełny adres będzie udostępniany
-                    tylko gościom z potwierdzoną rezerwacją, 24h przed
-                    wydarzeniem.
+                    <strong>{t("address.notice").split(":")[0]}:</strong>
+                    {t("address.notice").split(":").slice(1).join(":")}
                   </p>
                 </div>
               </CardContent>
@@ -618,33 +600,33 @@ export default function BecomeHostPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Utensils className="h-5 w-5 text-amber-600" />
-                  Doświadczenie i kuchnia
+                  {t("experience.title")}
                 </CardTitle>
                 <CardDescription>
-                  Opowiedz nam o swoich kulinarnych umiejętnościach
+                  {t("experience.subtitle")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Experience question */}
                 <div className="space-y-3">
-                  <Label>Czy organizowałeś/aś już kiedyś klub kolacyjny lub podobne wydarzenie? *</Label>
+                  <Label>{t("experience.hasExperience")} *</Label>
                   <RadioGroup value={hasExperience} onValueChange={setHasExperience}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="exp-yes" />
                       <Label htmlFor="exp-yes" className="font-normal cursor-pointer">
-                        Tak, mam doświadczenie
+                        {t("experience.experienceYes")}
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="exp-no" />
                       <Label htmlFor="exp-no" className="font-normal cursor-pointer">
-                        Nie, to będzie mój pierwszy raz
+                        {t("experience.experienceNo")}
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="professional" id="exp-pro" />
                       <Label htmlFor="exp-pro" className="font-normal cursor-pointer">
-                        Jestem profesjonalnym kucharzem/cukiernikiem
+                        {t("experience.experiencePro")}
                       </Label>
                     </div>
                   </RadioGroup>
@@ -652,10 +634,10 @@ export default function BecomeHostPage() {
 
                 {hasExperience === "yes" && (
                   <div className="space-y-2">
-                    <Label htmlFor="expDetails">Opowiedz więcej o swoim doświadczeniu</Label>
+                    <Label htmlFor="expDetails">{t("experience.experienceDetails")}</Label>
                     <Textarea
                       id="expDetails"
-                      placeholder="Gdzie organizowałeś wydarzenia? Ile osób gościłeś? Jakie były reakcje?"
+                      placeholder={t("experience.experienceDetailsPlaceholder")}
                       value={experienceDetails}
                       onChange={(e) => setExperienceDetails(e.target.value)}
                       rows={3}
@@ -667,21 +649,21 @@ export default function BecomeHostPage() {
 
                 {/* Cuisine types */}
                 <div className="space-y-3">
-                  <Label>Jakie kuchnie będziesz serwować? * (wybierz min. 1)</Label>
+                  <Label>{t("experience.cuisines")}</Label>
                   <div className="flex flex-wrap gap-2">
-                    {cuisineTypes.map((cuisine) => (
+                    {cuisineKeys.map((cuisine) => (
                       <Badge
-                        key={cuisine.value}
-                        variant={selectedCuisines.includes(cuisine.value) ? "default" : "outline"}
+                        key={cuisine}
+                        variant={selectedCuisines.includes(cuisine) ? "default" : "outline"}
                         className={cn(
                           "cursor-pointer transition-all",
-                          selectedCuisines.includes(cuisine.value)
+                          selectedCuisines.includes(cuisine)
                             ? "bg-amber-600 hover:bg-amber-700"
                             : "hover:bg-amber-50"
                         )}
-                        onClick={() => handleCuisineToggle(cuisine.value)}
+                        onClick={() => handleCuisineToggle(cuisine)}
                       >
-                        {cuisine.label}
+                        {t(`experience.cuisineTypes.${cuisine}`)}
                       </Badge>
                     ))}
                   </div>
@@ -691,27 +673,27 @@ export default function BecomeHostPage() {
 
                 {/* Event types */}
                 <div className="space-y-3">
-                  <Label>Jakie typy wydarzeń chcesz organizować? * (wybierz min. 1)</Label>
+                  <Label>{t("experience.eventTypes")}</Label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {eventTypes.map((type) => (
+                    {eventTypeKeys.map((type) => (
                       <div
-                        key={type.value}
+                        key={type}
                         className={cn(
                           "border rounded-lg p-3 cursor-pointer transition-all",
-                          selectedEventTypes.includes(type.value)
+                          selectedEventTypes.includes(type)
                             ? "border-amber-600 bg-amber-50"
                             : "hover:border-amber-300"
                         )}
-                        onClick={() => handleEventTypeToggle(type.value)}
+                        onClick={() => handleEventTypeToggle(type)}
                       >
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="font-medium">{type.label}</p>
+                            <p className="font-medium">{t(`experience.eventTypeOptions.${type}.label`)}</p>
                             <p className="text-xs text-muted-foreground">
-                              {type.description}
+                              {t(`experience.eventTypeOptions.${type}.description`)}
                             </p>
                           </div>
-                          {selectedEventTypes.includes(type.value) && (
+                          {selectedEventTypes.includes(type) && (
                             <CheckCircle className="h-5 w-5 text-amber-600" />
                           )}
                         </div>
@@ -725,17 +707,17 @@ export default function BecomeHostPage() {
                 {/* Bio */}
                 <div className="space-y-2">
                   <Label htmlFor="bio">
-                    Krótkie bio * (min. 50 znaków)
+                    {t("experience.bio")} *
                   </Label>
                   <Textarea
                     id="bio"
-                    placeholder="Opowiedz gościom o sobie, swojej pasji do gotowania, skąd się wzięła, co Cię inspiruje..."
+                    placeholder={t("experience.bioPlaceholder")}
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     rows={4}
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>To będzie widoczne w Twoim profilu</span>
+                    <span>{t("experience.bioHint")}</span>
                     <span className={bio.length >= 50 ? "text-green-600" : ""}>
                       {bio.length}/50
                     </span>
@@ -751,19 +733,19 @@ export default function BecomeHostPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Camera className="h-5 w-5 text-amber-600" />
-                  Zdjęcia
+                  {t("photos.title")}
                 </CardTitle>
                 <CardDescription>
                   {hostType === "individual"
-                    ? "Pokaż się i swoje kulinarne dzieła"
-                    : "Logo restauracji i zdjęcia potraw"}
+                    ? t("photos.subtitleIndividual")
+                    : t("photos.subtitleRestaurant")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Profile photo (Individual) */}
                 {hostType === "individual" && (
                   <div className="space-y-3">
-                    <Label>Twoje zdjęcie profilowe *</Label>
+                    <Label>{t("photos.profilePhoto")} *</Label>
                     <div className="flex items-center gap-4">
                       <div
                         className={cn(
@@ -787,10 +769,10 @@ export default function BecomeHostPage() {
                           disabled={profilePhoto !== null}
                         >
                           <Upload className="h-4 w-4 mr-2" />
-                          {profilePhoto ? "Zmień zdjęcie" : "Dodaj zdjęcie"}
+                          {profilePhoto ? t("photos.changePhoto") : t("photos.addPhoto")}
                         </Button>
                         <p className="text-xs text-muted-foreground mt-2">
-                          Jasne, przyjazne zdjęcie twarzy. JPG lub PNG, max 5MB.
+                          {t("photos.photoHint")}
                         </p>
                       </div>
                     </div>
@@ -800,7 +782,7 @@ export default function BecomeHostPage() {
                 {/* Logo (Restaurant) */}
                 {hostType === "restaurant" && (
                   <div className="space-y-3">
-                    <Label>Logo restauracji *</Label>
+                    <Label>{t("photos.logo")} *</Label>
                     <div className="flex items-center gap-4">
                       <div
                         className={cn(
@@ -824,10 +806,10 @@ export default function BecomeHostPage() {
                           disabled={logo !== null}
                         >
                           <Upload className="h-4 w-4 mr-2" />
-                          {logo ? "Zmień logo" : "Dodaj logo"}
+                          {logo ? t("photos.changeLogo") : t("photos.addLogo")}
                         </Button>
                         <p className="text-xs text-muted-foreground mt-2">
-                          Logo w formacie kwadratowym. JPG lub PNG, max 5MB.
+                          {t("photos.logoHint")}
                         </p>
                       </div>
                     </div>
@@ -841,8 +823,8 @@ export default function BecomeHostPage() {
                   <div className="flex items-center justify-between">
                     <Label>
                       {hostType === "individual"
-                        ? "Zdjęcia Twoich potraw (opcjonalne, max 5)"
-                        : "Zdjęcia potraw / wnętrza (opcjonalne, max 5)"}
+                        ? t("photos.foodPhotosIndividual")
+                        : t("photos.foodPhotosRestaurant")}
                     </Label>
                     <span className="text-sm text-muted-foreground">
                       {foodPhotos.length}/5
@@ -873,14 +855,14 @@ export default function BecomeHostPage() {
                         className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-amber-500 hover:bg-amber-50 transition-colors"
                       >
                         <Upload className="h-6 w-6 text-muted-foreground/50 mb-1" />
-                        <span className="text-xs text-muted-foreground">Dodaj</span>
+                        <span className="text-xs text-muted-foreground">{t("photos.add")}</span>
                       </button>
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {hostType === "individual"
-                      ? "Pokaż swoje najlepsze dania! Dobre zdjęcia przyciągają więcej gości."
-                      : "Pokaż atmosferę i dania! Dodaj zdjęcia wnętrza lub swoich specjalności."}
+                      ? t("photos.foodPhotosHintIndividual")
+                      : t("photos.foodPhotosHintRestaurant")}
                   </p>
                 </div>
 
@@ -888,11 +870,11 @@ export default function BecomeHostPage() {
                   <div className="flex gap-3">
                     <Star className="h-5 w-5 text-amber-600 flex-shrink-0" />
                     <div className="text-sm text-amber-800">
-                      <p className="font-medium mb-1">Wskazówka</p>
+                      <p className="font-medium mb-1">{t("photos.tip")}</p>
                       <p>
                         {hostType === "individual"
-                          ? "Hosty z profesjonalnymi zdjęciami jedzenia otrzymują średnio 3x więcej rezerwacji!"
-                          : "Restauracje z galerią zdjęć wnętrza i potraw przyciągają więcej gości na wydarzenia!"}
+                          ? t("photos.tipTextIndividual")
+                          : t("photos.tipTextRestaurant")}
                       </p>
                     </div>
                   </div>
@@ -907,17 +889,16 @@ export default function BecomeHostPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CalendarDays className="h-5 w-5 text-amber-600" />
-                  Spotkanie weryfikacyjne
+                  {t("schedule.title")}
                 </CardTitle>
                 <CardDescription>
-                  Wybierz terminy, w których możesz spotkać się z naszym zespołem
-                  (online lub w Wrocławiu)
+                  {t("schedule.subtitle")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Calendar */}
                 <div className="space-y-3">
-                  <Label>Wybierz dostępne dni * (min. 1)</Label>
+                  <Label>{t("schedule.selectDays")}</Label>
                   <div className="flex justify-center">
                     <Calendar
                       mode="multiple"
@@ -958,7 +939,7 @@ export default function BecomeHostPage() {
 
                 {/* Time slots */}
                 <div className="space-y-3">
-                  <Label>Preferowane godziny * (min. 1)</Label>
+                  <Label>{t("schedule.selectTimes")}</Label>
                   <div className="flex flex-wrap gap-2">
                     {timeSlots.map((time) => (
                       <Badge
@@ -992,15 +973,10 @@ export default function BecomeHostPage() {
                       }
                     />
                     <label htmlFor="terms" className="text-sm cursor-pointer">
-                      Akceptuję{" "}
-                      <a href="/terms" className="text-amber-600 underline">
-                        regulamin
-                      </a>{" "}
-                      i{" "}
-                      <a href="/privacy" className="text-amber-600 underline">
-                        politykę prywatności
-                      </a>{" "}
-                      platformy Seated. *
+                      {t.rich("schedule.terms", {
+                        terms: (chunks) => <a href="/terms" className="text-amber-600 underline">{chunks}</a>,
+                        privacy: (chunks) => <a href="/privacy" className="text-amber-600 underline">{chunks}</a>
+                      })} *
                     </label>
                   </div>
 
@@ -1013,9 +989,7 @@ export default function BecomeHostPage() {
                       }
                     />
                     <label htmlFor="verification" className="text-sm cursor-pointer">
-                      Rozumiem, że moja aplikacja zostanie zweryfikowana i może
-                      zostać odrzucona. Wyrażam zgodę na wizytę weryfikacyjną w
-                      moim miejscu wydarzeń. *
+                      {t("schedule.verification")} *
                     </label>
                   </div>
                 </div>
@@ -1024,11 +998,9 @@ export default function BecomeHostPage() {
                   <div className="flex gap-3">
                     <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
                     <div className="text-sm text-green-800">
-                      <p className="font-medium mb-1">Co dalej?</p>
+                      <p className="font-medium mb-1">{t("schedule.whatNext")}</p>
                       <p>
-                        Po wysłaniu formularza skontaktujemy się z Tobą w ciągu
-                        48h, aby umówić spotkanie weryfikacyjne. Podczas
-                        spotkania omówimy szczegóły i odpowiemy na pytania.
+                        {t("schedule.whatNextText")}
                       </p>
                     </div>
                   </div>
@@ -1045,7 +1017,7 @@ export default function BecomeHostPage() {
               disabled={step === 1}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Wstecz
+              {t("buttons.back")}
             </Button>
 
             {step < totalSteps ? (
@@ -1054,7 +1026,7 @@ export default function BecomeHostPage() {
                 disabled={!canProceed()}
                 className="bg-amber-600 hover:bg-amber-700"
               >
-                Dalej
+                {t("buttons.next")}
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             ) : (
@@ -1066,11 +1038,11 @@ export default function BecomeHostPage() {
                 {isSubmitting ? (
                   <>
                     <span className="animate-spin mr-2">⏳</span>
-                    Wysyłanie...
+                    {t("buttons.submitting")}
                   </>
                 ) : (
                   <>
-                    Wyślij aplikację
+                    {t("buttons.submit")}
                     <CheckCircle className="h-4 w-4 ml-2" />
                   </>
                 )}
