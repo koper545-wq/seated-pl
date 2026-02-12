@@ -233,7 +233,7 @@ export default function Home() {
           {categories.map((category) => (
             <Link key={category.slug} href={`/events?type=${category.slug}`}>
               <Card
-                className={`hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-amber-200`}
+                className={`h-full hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-amber-200`}
               >
                 <CardContent className="flex flex-col items-center justify-center p-6 text-center">
                   <div
