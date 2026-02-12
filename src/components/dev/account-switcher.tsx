@@ -66,8 +66,9 @@ export function DevAccountSwitcher() {
       .slice(0, 2);
   };
 
-  // Only show in development
-  if (process.env.NODE_ENV === "production") return null;
+  // Show in development and on Vercel preview/production for testing
+  // Remove this condition or set NEXT_PUBLIC_SHOW_DEV_TOOLS=true to enable
+  // if (process.env.NODE_ENV === "production") return null;
 
   return (
     <div className="fixed bottom-4 left-4 z-50">
