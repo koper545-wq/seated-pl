@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter as useIntlRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,9 +94,22 @@ const durationOptions = [
 
 export default function CreateEventPage() {
   const router = useRouter();
-  const { user: mockUser } = useMockUser();
+  const intlRouter = useIntlRouter();
+  const { user: mockUser, isLoading } = useMockUser();
   const { addEvent } = useEvents();
   const [step, setStep] = useState(1);
+
+  // Redirect guests to guest dashboard
+  useEffect(() => {
+    if (!isLoading && mockUser && mockUser.role !== "host") {
+      intlRouter.push("/dashboard");
+    }
+  }, [isLoading, mockUser, intlRouter]);
+
+  // If guest or loading, show nothing
+  if (isLoading || (mockUser && mockUser.role !== "host")) {
+    return null;
+  }
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Step 1: Basic info

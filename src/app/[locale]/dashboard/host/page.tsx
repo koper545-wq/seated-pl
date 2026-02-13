@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Link } from "@/i18n/navigation";
+import { useEffect } from "react";
+import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,6 +38,14 @@ import { useEvents } from "@/contexts/events-context";
 export default function HostDashboardPage() {
   const { user: mockUser, isLoading } = useMockUser();
   const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
+  const router = useRouter();
+
+  // Redirect guests to guest dashboard
+  useEffect(() => {
+    if (!isLoading && mockUser && mockUser.role !== "host") {
+      router.push("/dashboard");
+    }
+  }, [isLoading, mockUser, router]);
 
   // Show loading while checking user or events
   if (isLoading || !eventsLoaded) {
@@ -49,6 +57,11 @@ export default function HostDashboardPage() {
         </div>
       </div>
     );
+  }
+
+  // If guest, show nothing (redirect will happen)
+  if (mockUser && mockUser.role !== "host") {
+    return null;
   }
 
   const hostProfile = mockUser ? getHostProfileByMockUserId(mockUser.id) : null;

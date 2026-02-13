@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Link } from "@/i18n/navigation";
+import { useState, useMemo, useEffect } from "react";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -113,9 +113,17 @@ export default function HostCalendarPage() {
   const [view, setView] = useState<"month" | "list">("month");
   const { user: mockUser, isLoading } = useMockUser();
   const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
+  const router = useRouter();
 
   const hostId = mockUser?.id || "host-1";
   const hostEvents = getHostEvents(hostId);
+
+  // Redirect guests to guest dashboard
+  useEffect(() => {
+    if (!isLoading && mockUser && mockUser.role !== "host") {
+      router.push("/dashboard");
+    }
+  }, [isLoading, mockUser, router]);
 
   if (isLoading || !eventsLoaded) {
     return (
@@ -126,6 +134,11 @@ export default function HostCalendarPage() {
         </div>
       </div>
     );
+  }
+
+  // If guest, show nothing (redirect will happen)
+  if (mockUser && mockUser.role !== "host") {
+    return null;
   }
 
   const year = currentDate.getFullYear();

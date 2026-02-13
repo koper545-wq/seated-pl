@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -43,6 +43,7 @@ import { useMockUser } from "@/components/dev/account-switcher";
 
 export default function HostBookingsPage() {
   const { user: mockUser, isLoading } = useMockUser();
+  const router = useRouter();
   const hostId = mockUser?.id || "host-1";
 
   const [bookings, setBookings] = useState<MockBooking[]>([]);
@@ -50,6 +51,13 @@ export default function HostBookingsPage() {
     booking: MockBooking;
     action: "approve" | "decline";
   } | null>(null);
+
+  // Redirect guests to guest dashboard
+  useEffect(() => {
+    if (!isLoading && mockUser && mockUser.role !== "host") {
+      router.push("/dashboard");
+    }
+  }, [isLoading, mockUser, router]);
 
   // Initialize bookings when mock user loads
   useEffect(() => {
@@ -67,6 +75,11 @@ export default function HostBookingsPage() {
         </div>
       </div>
     );
+  }
+
+  // If guest, show nothing (redirect will happen)
+  if (mockUser && mockUser.role !== "host") {
+    return null;
   }
 
   // Separate bookings
