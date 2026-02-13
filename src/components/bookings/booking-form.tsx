@@ -50,6 +50,9 @@ interface BookingFormProps {
   spotsLeft: number;
   maxTickets?: number;
   hostName: string;
+  // Waitlist booking props
+  isWaitlistBooking?: boolean;
+  waitlistEntryId?: string;
 }
 
 export interface BookingFormData {
@@ -74,6 +77,8 @@ export function BookingForm({
   spotsLeft,
   maxTickets = 4,
   hostName,
+  isWaitlistBooking = false,
+  waitlistEntryId,
 }: BookingFormProps) {
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -176,8 +181,31 @@ export function BookingForm({
       agreeToTerms,
     };
 
+    // If this is a waitlist booking, mark it as converted
+    if (isWaitlistBooking && waitlistEntryId) {
+      try {
+        await fetch("/api/waitlist/convert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            entryId: waitlistEntryId,
+            bookingId: `booking-${Date.now()}`, // In real app, this would be the actual booking ID
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to convert waitlist entry:", error);
+      }
+    }
+
     // Redirect to confirmation page
-    router.push(`/bookings/confirmation?eventId=${eventId}&tickets=${ticketCount}`);
+    const params = new URLSearchParams({
+      eventId,
+      tickets: ticketCount.toString(),
+    });
+    if (isWaitlistBooking) {
+      params.set("fromWaitlist", "true");
+    }
+    router.push(`/bookings/confirmation?${params.toString()}`);
   };
 
   return (

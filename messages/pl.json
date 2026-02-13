@@ -29,6 +29,7 @@
     "terms": "Regulamin",
     "privacy": "Polityka prywatności",
     "contact": "Kontakt",
+    "rewards": "XP i Nagrody",
     "copyright": "© {year} Seated. Wszystkie prawa zastrzeżone.",
     "madeWith": "Stworzone z ❤️ we Wrocławiu"
   },
@@ -159,8 +160,42 @@
       "eventType": "Typ wydarzenia",
       "location": "Lokalizacja",
       "priceRange": "Zakres cen",
-      "date": "Data"
+      "date": "Data",
+      "budget": "Budżet",
+      "groupSize": "Wielkość grupy",
+      "language": "Język wydarzenia",
+      "experienceLevel": "Poziom doświadczenia",
+      "accessibility": "Dostępność"
     },
+    "advancedFilters": "Zaawansowane filtry",
+    "groupSizeOptions": {
+      "all": "Dowolna wielkość",
+      "intimate": "Kameralne (2-6 osób)",
+      "small": "Małe (7-12 osób)",
+      "medium": "Średnie (13-20 osób)",
+      "large": "Duże (21+ osób)"
+    },
+    "languageOptions": {
+      "all": "Dowolny język",
+      "pl": "Polski",
+      "en": "Angielski",
+      "es": "Hiszpański",
+      "ja": "Japoński"
+    },
+    "experienceLevels": {
+      "all": "Każdy poziom",
+      "beginner": "Początkujący",
+      "intermediate": "Średniozaawansowany",
+      "advanced": "Zaawansowany"
+    },
+    "accessibilityOptions": {
+      "wheelchairAccessible": "Dostęp dla wózków",
+      "noStairs": "Bez schodów",
+      "serviceAnimalsAllowed": "Psy asystujące",
+      "hearingAssistance": "Dla słabosłyszących"
+    },
+    "mapView": "Mapa",
+    "listView": "Lista",
     "activeFilters": "Aktywne:",
     "clearFilters": "Wyczyść filtry",
     "clearAll": "Wyczyść wszystkie",
@@ -316,7 +351,31 @@
       "upcomingEvents": "Nadchodzące wydarzenia",
       "createEvent": "Stwórz wydarzenie",
       "pendingBookings": "Oczekujące rezerwacje",
-      "recentReviews": "Ostatnie opinie"
+      "recentReviews": "Ostatnie opinie",
+      "events": {
+        "duplicate": "Duplikuj",
+        "duplicateEvent": "Duplikuj wydarzenie",
+        "duplicating": "Tworzysz kopię wydarzenia",
+        "duplicateSelectDate": "Wybierz nową datę",
+        "moreActions": "Więcej",
+        "preview": "Podgląd",
+        "guests": "Goście",
+        "edit": "Edytuj"
+      },
+      "recurring": {
+        "title": "Wydarzenie cykliczne",
+        "pattern": "Częstotliwość",
+        "weekly": "Co tydzień",
+        "biweekly": "Co 2 tygodnie",
+        "monthly": "Co miesiąc",
+        "endBy": "Zakończ serię",
+        "endByOccurrences": "Po liczbie wydarzeń",
+        "endByDate": "W dniu",
+        "occurrences": "Liczba wydarzeń",
+        "preview": "Podgląd terminów",
+        "andMore": "... i {count} więcej",
+        "created": "Utworzono {count} wydarzeń!"
+      }
     },
     "bookings": {
       "title": "Moje rezerwacje",
@@ -953,6 +1012,181 @@
       "title": "Gotowy na kulinarne przygody?",
       "subtitle": "Dołącz do tysięcy osób, które odkrywają Wrocław przez smaki.",
       "button": "Załóż darmowe konto"
+    }
+  },
+  "reports": {
+    "report": "Zgłoś",
+    "submitReport": "Zgłoś problem",
+    "reportEvent": "Zgłoś wydarzenie",
+    "reportHost": "Zgłoś hosta",
+    "reportGuest": "Zgłoś gościa",
+    "reportEventDescription": "Zgłoś problem z tym wydarzeniem. Nasz zespół przejrzy Twoje zgłoszenie.",
+    "reportHostDescription": "Zgłoś problem z tym hostem. Nasz zespół przejrzy Twoje zgłoszenie.",
+    "reportGuestDescription": "Zgłoś problem z tym gościem. Informacje są poufne.",
+    "relatedToEvent": "Dotyczy wydarzenia",
+    "category": "Kategoria problemu",
+    "selectCategory": "Wybierz kategorię",
+    "description": "Opis problemu",
+    "descriptionPlaceholder": "Opisz szczegółowo co się stało, kiedy i jakie były okoliczności...",
+    "descriptionHint": "Podaj jak najwięcej szczegółów, aby ułatwić nam ocenę sytuacji.",
+    "evidence": "Dowody (linki)",
+    "evidencePlaceholder": "https://example.com/screenshot.png",
+    "evidenceHint": "Jeśli masz zrzuty ekranu lub inne dowody, podaj link.",
+    "optional": "opcjonalne",
+    "falseReportWarning": "Składanie fałszywych zgłoszeń może skutkować zablokowaniem konta. Upewnij się, że Twoje zgłoszenie jest prawdziwe.",
+    "cancel": "Anuluj",
+    "submit": "Wyślij zgłoszenie",
+    "submitting": "Wysyłanie...",
+    "reportSubmitted": "Zgłoszenie wysłane!",
+    "reportSubmittedDescription": "Dziękujemy za zgłoszenie. Nasz zespół przejrzy je w ciągu 48 godzin.",
+    "reportId": "Numer zgłoszenia",
+    "reviewPromise": "Przejrzymy Twoje zgłoszenie w ciągu 48 godzin",
+    "notificationPromise": "Poinformujemy Cię o podjętych działaniach",
+    "close": "Zamknij",
+    "admin": {
+      "title": "Zgłoszenia",
+      "subtitle": "Zarządzaj zgłoszeniami użytkowników",
+      "allReports": "Wszystkie",
+      "pending": "Oczekujące",
+      "underReview": "W trakcie",
+      "resolved": "Rozwiązane",
+      "dismissed": "Odrzucone",
+      "noReports": "Brak zgłoszeń",
+      "viewDetails": "Szczegóły",
+      "assignToMe": "Przypisz do mnie",
+      "changeStatus": "Zmień status",
+      "addNote": "Dodaj notatkę",
+      "resolve": "Rozwiąż",
+      "dismiss": "Odrzuć",
+      "reporter": "Zgłaszający",
+      "reported": "Zgłoszony",
+      "category": "Kategoria",
+      "status": "Status",
+      "date": "Data",
+      "actions": "Akcje",
+      "resolution": "Rozwiązanie",
+      "resolutions": {
+        "warningIssued": "Ostrzeżenie",
+        "accountSuspended": "Zawieszenie konta",
+        "refundIssued": "Zwrot pieniędzy",
+        "noAction": "Brak działania",
+        "escalated": "Eskalacja"
+      }
+    }
+  },
+  "communication": {
+    "title": "Automatyzacja komunikacji",
+    "subtitle": "Zarządzaj szablonami wiadomości i automatycznymi powiadomieniami",
+    "saveSettings": "Zapisz ustawienia",
+    "saving": "Zapisywanie...",
+    "saved": "Zapisano!",
+    "tabs": {
+      "reminders": "Przypomnienia",
+      "followups": "Follow-up",
+      "templates": "Szablony",
+      "settings": "Ustawienia"
+    },
+    "reminders": {
+      "title": "Automatyczne przypomnienia",
+      "description": "Wysyłaj przypomnienia do gości przed wydarzeniem",
+      "timing": {
+        "7_days": "7 dni przed",
+        "7_days_desc": "Tydzień przed wydarzeniem",
+        "48_hours": "48 godzin przed",
+        "48_hours_desc": "Dwa dni przed wydarzeniem",
+        "24_hours": "24 godziny przed",
+        "24_hours_desc": "Dzień przed wydarzeniem",
+        "2_hours": "2 godziny przed",
+        "2_hours_desc": "Krótko przed rozpoczęciem"
+      },
+      "editTemplate": "Edytuj szablon",
+      "tip": "Badania pokazują, że dwa przypomnienia (24h i 2h przed) znacząco zwiększają frekwencję na wydarzeniach."
+    },
+    "followups": {
+      "title": "Sekwencja follow-up",
+      "description": "Automatyczne wiadomości po wydarzeniu",
+      "timing": {
+        "same_day": "Tego samego dnia",
+        "same_day_desc": "Wieczorem po wydarzeniu",
+        "1_day": "1 dzień po",
+        "1_day_desc": "Następnego dnia",
+        "3_days": "3 dni po",
+        "3_days_desc": "Po kilku dniach",
+        "7_days": "7 dni po",
+        "7_days_desc": "Tydzień później",
+        "14_days": "14 dni po",
+        "14_days_desc": "Dwa tygodnie później"
+      },
+      "timeline": "Oś czasu automatycznych wiadomości"
+    },
+    "reviews": {
+      "title": "Prośby o opinie",
+      "description": "Automatycznie proś gości o pozostawienie opinii",
+      "sendAfter": "Wyślij prośbę o opinię"
+    },
+    "rebooking": {
+      "title": "Oferty powrotu",
+      "description": "Zachęć gości do ponownych rezerwacji zniżką",
+      "discountLabel": "Wysokość zniżki",
+      "discountRecommendation": "Rekomendowane: 10-20%",
+      "validityLabel": "Ważność oferty",
+      "days": "dni"
+    },
+    "templates": {
+      "title": "Szablony wiadomości",
+      "subtitle": "Personalizuj treść automatycznych wiadomości",
+      "newTemplate": "Nowy szablon",
+      "editTemplate": "Edytuj szablon",
+      "default": "Domyślny",
+      "types": {
+        "booking_confirmation": "Potwierdzenie zapytania",
+        "booking_approved": "Rezerwacja potwierdzona",
+        "booking_declined": "Rezerwacja odrzucona",
+        "reminder_week": "Przypomnienie - tydzień",
+        "reminder_day": "Przypomnienie - 24h",
+        "reminder_hours": "Przypomnienie - 2h",
+        "post_event_thanks": "Podziękowanie",
+        "review_request": "Prośba o opinię",
+        "rebooking_offer": "Oferta powrotu",
+        "custom": "Własny szablon"
+      },
+      "variables": {
+        "title": "Dostępne zmienne",
+        "description": "Użyj tych zmiennych w szablonach - zostaną automatycznie wypełnione",
+        "guest": "Gość",
+        "event": "Wydarzenie",
+        "booking": "Rezerwacja",
+        "host": "Host",
+        "special": "Specjalne"
+      },
+      "form": {
+        "name": "Nazwa szablonu",
+        "namePlaceholder": "np. Moje potwierdzenie rezerwacji",
+        "subject": "Temat wiadomości",
+        "subjectPlaceholder": "np. ✅ Rezerwacja potwierdzona - {{event_title}}",
+        "body": "Treść wiadomości",
+        "bodyPlaceholder": "Treść wiadomości...",
+        "quickInsert": "Szybkie wstawianie zmiennych",
+        "cancel": "Anuluj",
+        "save": "Zapisz szablon"
+      }
+    },
+    "channels": {
+      "title": "Kanały komunikacji",
+      "description": "Wybierz jak chcesz komunikować się z gośćmi",
+      "email": "Email",
+      "emailDescription": "Szczegółowe wiadomości z pełną treścią",
+      "sms": "SMS",
+      "smsDescription": "Krótkie przypomnienia (98% otwarć!)",
+      "comingSoon": "Wkrótce"
+    },
+    "personalization": {
+      "title": "Personalizacja",
+      "description": "Dodatkowe elementy w wiadomościach",
+      "hostPhoto": "Dołączaj swoje zdjęcie",
+      "hostPhotoDescription": "Twoje zdjęcie profilowe w nagłówku wiadomości",
+      "personalMessage": "Pole na osobistą wiadomość",
+      "personalMessageDescription": "Możliwość dodania własnej notatki przy każdej rezerwacji"
     }
   },
   "giftCards": {

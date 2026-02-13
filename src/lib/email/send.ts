@@ -282,3 +282,63 @@ export async function notifyHostApplicationApproved(data: {
     template: templates.hostApplicationApproved(data),
   });
 }
+
+// ============================================
+// WAITLIST EMAIL NOTIFICATIONS
+// ============================================
+
+/**
+ * Notify user they've been added to waitlist
+ */
+export async function notifyWaitlistJoined(data: {
+  guestEmail: string;
+  guestName?: string;
+  eventTitle: string;
+  eventDate: string;
+  eventTime: string;
+  hostName: string;
+  position: number;
+  ticketsWanted: number;
+}) {
+  return sendEmail({
+    to: data.guestEmail,
+    template: templates.waitlistJoined(data),
+  });
+}
+
+/**
+ * Notify waitlist user that a spot is available
+ */
+export async function notifyWaitlistSpotAvailable(data: {
+  guestEmail: string;
+  guestName?: string;
+  eventTitle: string;
+  eventDate: string;
+  eventTime: string;
+  eventLocation: string;
+  hostName: string;
+  availableSpots: number;
+  price: number;
+  bookingUrl: string;
+  expiresAt: string;
+}) {
+  return sendEmail({
+    to: data.guestEmail,
+    template: templates.waitlistSpotAvailable(data),
+  });
+}
+
+/**
+ * Notify user their waitlist reservation has expired
+ */
+export async function notifyWaitlistExpired(data: {
+  guestEmail: string;
+  guestName?: string;
+  eventTitle: string;
+  eventDate: string;
+}) {
+  return sendEmail({
+    to: data.guestEmail,
+    template: templates.waitlistExpired(data),
+  });
+}

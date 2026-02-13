@@ -88,6 +88,30 @@ const sampleData = {
     hostName: 'Marta Wiśniewska',
     dashboardLink: 'https://seated.pl/dashboard/host',
   },
+  reportSubmittedConfirmation: {
+    reporterName: 'Jan Kowalski',
+    reportId: 'RPT-2025-0042',
+    reportedEntityName: 'Anna Nowak',
+    reportType: 'host',
+    category: 'Nieodpowiednie zachowanie',
+  },
+  newReportNotificationAdmin: {
+    reportId: 'RPT-2025-0042',
+    reporterName: 'Jan Kowalski',
+    reporterRole: 'guest',
+    reportedEntityName: 'Anna Nowak',
+    reportType: 'host',
+    category: 'Nieodpowiednie zachowanie',
+    description: 'Host zachowywał się nieodpowiednio podczas wydarzenia. Wielokrotnie komentował wygląd gości i zadawał niestosowne pytania osobiste.',
+    adminDashboardLink: 'https://seated.pl/admin/reports/RPT-2025-0042',
+  },
+  reportResolved: {
+    reporterName: 'Jan Kowalski',
+    reportId: 'RPT-2025-0042',
+    reportedEntityName: 'Anna Nowak',
+    resolution: 'Ostrzeżenie wydane',
+    adminMessage: 'Skontaktowaliśmy się z hostem i wyjaśniliśmy sytuację. Host zobowiązał się do zachowania profesjonalizmu w przyszłości.',
+  },
 };
 
 export async function GET(request: NextRequest) {

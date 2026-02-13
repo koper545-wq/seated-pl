@@ -8,6 +8,8 @@ import {
   currentGuestProfile,
   getGuestBadges,
   getGuestLevel,
+  getXPProgress,
+  guestLevels,
   guestWrittenReviews,
 } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
@@ -33,6 +35,7 @@ export default function PublicProfilePage({
   const profile = currentGuestProfile;
   const badges = getGuestBadges(profile.badges);
   const levelInfo = getGuestLevel(profile.xp);
+  const xpProgress = getXPProgress(profile.xp, guestLevels);
 
   // Check if profile is public
   if (!profile.isPublic) {
@@ -131,7 +134,7 @@ export default function PublicProfilePage({
                     <p className="font-bold text-stone-900">
                       Poziom {levelInfo.level}
                     </p>
-                    <p className="text-sm text-stone-600">{levelInfo.name}</p>
+                    <p className="text-sm text-stone-600">{levelInfo.namePl}</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -141,9 +144,9 @@ export default function PublicProfilePage({
                   <p className="text-xs text-stone-500">punktów XP</p>
                 </div>
               </div>
-              <Progress value={levelInfo.progress} className="h-2" />
+              <Progress value={xpProgress.percent} className="h-2" />
               <p className="text-xs text-stone-500 text-center mt-2">
-                {levelInfo.progress}% do następnego poziomu
+                {xpProgress.percent}% do następnego poziomu
               </p>
             </div>
 

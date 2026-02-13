@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Link, useRouter as useIntlRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,7 +42,14 @@ import {
   Eye,
   Save,
   Send,
+  Copy,
 } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  generateRecurringDates,
+  type RecurrencePattern,
+  type EndCondition,
+} from "@/lib/recurring-events";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
@@ -92,11 +99,35 @@ const durationOptions = [
   { value: 300, label: "5 godzin" },
 ];
 
+// Default coordinates for neighborhoods (with slight randomization for multiple events)
+const neighborhoodCoordinates: Record<string, { lat: number; lng: number }> = {
+  "stare-miasto": { lat: 51.1107, lng: 17.0286 },
+  "nadodrze": { lat: 51.1175, lng: 17.0442 },
+  "srodmiescie": { lat: 51.1045, lng: 17.0310 },
+  "krzyki": { lat: 51.0850, lng: 17.0150 },
+  "fabryczna": { lat: 51.1000, lng: 16.9800 },
+  "psie-pole": { lat: 51.1450, lng: 17.0650 },
+};
+
+// Get coordinates for a neighborhood with slight randomization
+const getCoordinatesForNeighborhood = (neighborhood: string) => {
+  const baseCoords = neighborhoodCoordinates[neighborhood] || neighborhoodCoordinates["stare-miasto"];
+  // Add small random offset (up to ~200m) to prevent markers from overlapping
+  const latOffset = (Math.random() - 0.5) * 0.004;
+  const lngOffset = (Math.random() - 0.5) * 0.004;
+  return {
+    lat: baseCoords.lat + latOffset,
+    lng: baseCoords.lng + lngOffset,
+  };
+};
+
 export default function CreateEventPage() {
   const router = useRouter();
   const intlRouter = useIntlRouter();
+  const searchParams = useSearchParams();
+  const duplicateFromId = searchParams.get("duplicate");
   const { user: mockUser, isLoading, effectiveRole } = useMockUser();
-  const { addEvent } = useEvents();
+  const { addEvent, getEventById } = useEvents();
   const [step, setStep] = useState(1);
 
   // Redirect to guest dashboard if in guest mode
@@ -126,6 +157,45 @@ export default function CreateEventPage() {
   const [useDefaultAddress, setUseDefaultAddress] = useState(true);
   const [customAddress, setCustomAddress] = useState("");
   const [neighborhood, setNeighborhood] = useState("stare-miasto");
+
+  // Recurring events
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [recurrencePattern, setRecurrencePattern] = useState<RecurrencePattern>("weekly");
+  const [endCondition, setEndCondition] = useState<EndCondition>("occurrences");
+  const [recurrenceEndDate, setRecurrenceEndDate] = useState<Date | undefined>();
+  const [recurrenceCount, setRecurrenceCount] = useState(4);
+
+  // Generated dates for recurring events
+  const generatedDates = useMemo(() => {
+    if (!isRecurring || !eventDate) return [eventDate].filter(Boolean) as Date[];
+    return generateRecurringDates({
+      startDate: eventDate,
+      pattern: recurrencePattern,
+      endCondition,
+      endDate: recurrenceEndDate,
+      occurrences: recurrenceCount,
+    });
+  }, [isRecurring, eventDate, recurrencePattern, endCondition, recurrenceEndDate, recurrenceCount]);
+
+  // Pre-fill form when duplicating an event
+  useEffect(() => {
+    if (duplicateFromId && getEventById) {
+      const sourceEvent = getEventById(duplicateFromId);
+      if (sourceEvent) {
+        setTitle(sourceEvent.title);
+        setEventType(sourceEvent.typeSlug);
+        setDescription(sourceEvent.description);
+        setStartTime(sourceEvent.startTime);
+        setDuration(sourceEvent.duration);
+        setCapacity(sourceEvent.capacity);
+        setPrice(sourceEvent.price);
+        setMenuDescription(sourceEvent.menuDescription);
+        setSelectedDietary(sourceEvent.dietaryOptions);
+        // Do NOT set: eventDate (user must select new date)
+        // Do NOT set: photos (need to re-add)
+      }
+    }
+  }, [duplicateFromId, getEventById]);
 
   // Step 3: Capacity & price
   const [capacity, setCapacity] = useState(8);
@@ -203,35 +273,56 @@ export default function CreateEventPage() {
 
     const hostId = mockUser?.id || "host-1";
 
-    // Create the event using the context
-    const eventDateValue = eventDate || new Date();
-    const slug = title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+    // For recurring events, use all generated dates; otherwise just the single date
+    const datesToCreate = isRecurring ? generatedDates : [eventDate || new Date()];
 
-    addEvent(hostId, {
-      title,
-      slug,
-      type: eventTypes.find((t) => t.value === eventType)?.label || eventType,
-      typeSlug: eventType,
-      date: eventDateValue,
-      dateFormatted: format(eventDateValue, "d MMM yyyy, HH:mm", { locale: pl }),
-      startTime,
-      duration,
-      location: neighborhood === "stare-miasto" ? "Stare Miasto" : neighborhood,
-      fullAddress: useDefaultAddress ? "ul. Ruska 46/3, Wrocław" : customAddress,
-      price,
-      capacity,
-      spotsLeft: capacity,
-      bookingsCount: 0,
-      pendingBookings: 0,
-      confirmedGuests: 0,
-      revenue: 0,
-      imageGradient: "from-amber-400 to-orange-500",
-      status: asDraft ? "draft" : "pending_review",
-      description,
-      menuDescription,
-      dietaryOptions: selectedDietary,
-      createdAt: new Date(),
-    });
+    // Map neighborhood slug to display name
+    const neighborhoodNames: Record<string, string> = {
+      "stare-miasto": "Stare Miasto, Wrocław",
+      "nadodrze": "Nadodrze, Wrocław",
+      "srodmiescie": "Śródmieście, Wrocław",
+      "krzyki": "Krzyki, Wrocław",
+      "fabryczna": "Fabryczna, Wrocław",
+      "psie-pole": "Psie Pole, Wrocław",
+    };
+
+    // Create an event for each date
+    for (const date of datesToCreate) {
+      const slug = title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") + "-" + Date.now();
+
+      addEvent(hostId, {
+        title,
+        slug,
+        type: eventTypes.find((t) => t.value === eventType)?.label || eventType,
+        typeSlug: eventType,
+        date,
+        dateFormatted: format(date, "d MMM yyyy, HH:mm", { locale: pl }),
+        startTime,
+        duration,
+        location: neighborhoodNames[neighborhood] || neighborhood,
+        locationSlug: neighborhood,
+        fullAddress: useDefaultAddress ? "ul. Ruska 46/3, Wrocław" : customAddress,
+        coordinates: getCoordinatesForNeighborhood(neighborhood),
+        price,
+        capacity,
+        spotsLeft: capacity,
+        bookingsCount: 0,
+        pendingBookings: 0,
+        confirmedGuests: 0,
+        revenue: 0,
+        imageGradient: "from-amber-400 to-orange-500",
+        status: asDraft ? "draft" : "pending_review",
+        description,
+        menuDescription,
+        dietaryOptions: selectedDietary,
+        createdAt: new Date(),
+      });
+    }
+
+    // Show message if multiple events created
+    if (datesToCreate.length > 1) {
+      console.log(`Utworzono ${datesToCreate.length} wydarzeń!`);
+    }
 
     router.push("/dashboard/host?created=true");
   };
@@ -249,11 +340,23 @@ export default function CreateEventPage() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Wróć do panelu
             </Link>
-            <h1 className="text-2xl font-bold">Stwórz nowe wydarzenie</h1>
+            <h1 className="text-2xl font-bold">
+              {duplicateFromId ? "Duplikuj wydarzenie" : "Stwórz nowe wydarzenie"}
+            </h1>
             <p className="text-muted-foreground">
               Wypełnij formularz krok po kroku
             </p>
           </div>
+
+          {/* Duplicate info banner */}
+          {duplicateFromId && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
+              <p className="text-sm text-blue-700 flex items-center gap-2">
+                <Copy className="h-4 w-4" />
+                Tworzysz kopię wydarzenia. Wybierz nową datę.
+              </p>
+            </div>
+          )}
 
           {/* Progress */}
           <div className="mb-8">
@@ -493,6 +596,133 @@ export default function CreateEventPage() {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                <Separator />
+
+                {/* Recurring events section */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="recurring"
+                      checked={isRecurring}
+                      onCheckedChange={(checked) => setIsRecurring(!!checked)}
+                      disabled={!eventDate}
+                    />
+                    <label htmlFor="recurring" className="text-sm font-medium cursor-pointer">
+                      Wydarzenie cykliczne
+                    </label>
+                  </div>
+
+                  {isRecurring && eventDate && (
+                    <div className="pl-6 space-y-4 border-l-2 border-amber-200 ml-2">
+                      {/* Pattern selector */}
+                      <div className="space-y-2">
+                        <Label>Częstotliwość</Label>
+                        <Select
+                          value={recurrencePattern}
+                          onValueChange={(v) => setRecurrencePattern(v as RecurrencePattern)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="weekly">Co tydzień</SelectItem>
+                            <SelectItem value="biweekly">Co 2 tygodnie</SelectItem>
+                            <SelectItem value="monthly">Co miesiąc</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* End condition */}
+                      <div className="space-y-2">
+                        <Label>Zakończ serię</Label>
+                        <RadioGroup
+                          value={endCondition}
+                          onValueChange={(v) => setEndCondition(v as EndCondition)}
+                          className="flex gap-4"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="occurrences" id="end-occurrences" />
+                            <label htmlFor="end-occurrences" className="text-sm cursor-pointer">
+                              Po liczbie wydarzeń
+                            </label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="date" id="end-date" />
+                            <label htmlFor="end-date" className="text-sm cursor-pointer">
+                              W dniu
+                            </label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+
+                      {endCondition === "occurrences" && (
+                        <div className="space-y-2">
+                          <Label>Liczba wydarzeń (2-52)</Label>
+                          <Input
+                            type="number"
+                            min={2}
+                            max={52}
+                            value={recurrenceCount}
+                            onChange={(e) =>
+                              setRecurrenceCount(
+                                Math.min(52, Math.max(2, Number(e.target.value)))
+                              )
+                            }
+                            className="w-24"
+                          />
+                        </div>
+                      )}
+
+                      {endCondition === "date" && (
+                        <div className="space-y-2">
+                          <Label>Data zakończenia</Label>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className="w-full justify-start text-left"
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {recurrenceEndDate
+                                  ? format(recurrenceEndDate, "d MMMM yyyy", { locale: pl })
+                                  : "Wybierz datę"}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={recurrenceEndDate}
+                                onSelect={setRecurrenceEndDate}
+                                disabled={(date) => date <= eventDate}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                      )}
+
+                      {/* Preview */}
+                      <div className="bg-amber-50 rounded-lg p-3">
+                        <p className="font-medium text-sm mb-2 text-amber-800">
+                          Podgląd terminów ({generatedDates.length}):
+                        </p>
+                        <div className="max-h-32 overflow-y-auto text-sm text-amber-700 space-y-1">
+                          {generatedDates.slice(0, 10).map((date, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <span className="text-amber-500">{i + 1}.</span>
+                              {format(date, "EEEE, d MMMM yyyy", { locale: pl })}
+                            </div>
+                          ))}
+                          {generatedDates.length > 10 && (
+                            <div className="text-amber-600 italic">
+                              ... i {generatedDates.length - 10} więcej
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <Separator />

@@ -30,7 +30,17 @@ import {
   History,
   MessageSquare,
   Loader2,
+  MoreVertical,
+  Copy,
+  Zap,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn, formatPrice } from "@/lib/utils";
 import { useMockUser } from "@/components/dev/account-switcher";
 import { useEvents } from "@/contexts/events-context";
@@ -97,7 +107,7 @@ export default function HostDashboardPage() {
                 Zarządzaj swoimi wydarzeniami i gośćmi
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Button asChild variant="outline">
                 <Link href="/dashboard/host/calendar">
                   <CalendarDays className="h-4 w-4 mr-2" />
@@ -108,6 +118,12 @@ export default function HostDashboardPage() {
                 <Link href="/dashboard/host/messages">
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Wiadomości
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/dashboard/host/communication">
+                  <Zap className="h-4 w-4 mr-2" />
+                  Automatyzacja
                 </Link>
               </Button>
               <Button asChild className="bg-amber-600 hover:bg-amber-700">
@@ -356,20 +372,36 @@ function HostEventCard({ event, showActions = true }: HostEventCardProps) {
                     )}
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="sm">
-                  <Link href={`/events/${event.id}`}>
-                    <Eye className="h-4 w-4 mr-1" />
-                    Podgląd
-                  </Link>
-                </Button>
-                {event.status === "draft" && (
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`/dashboard/host/events/${event.id}/edit`}>
-                      <Edit className="h-4 w-4 mr-1" />
-                      Edytuj
-                    </Link>
-                  </Button>
-                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href={`/events/${event.id}`} className="flex items-center">
+                        <Eye className="h-4 w-4 mr-2" />
+                        Podgląd
+                      </Link>
+                    </DropdownMenuItem>
+                    {event.status === "draft" && (
+                      <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/host/events/${event.id}/edit`} className="flex items-center">
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edytuj
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href={`/dashboard/host/events/new?duplicate=${event.id}`} className="flex items-center">
+                        <Copy className="h-4 w-4 mr-2" />
+                        Duplikuj
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             )}
           </div>

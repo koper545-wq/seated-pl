@@ -8,6 +8,8 @@ import {
   currentGuestProfile,
   getGuestBadges,
   getGuestLevel,
+  getXPProgress,
+  guestLevels,
   getBookingsByGuestId,
   bookingStatusLabels,
   guestWrittenReviews,
@@ -60,6 +62,7 @@ export default function GuestDashboardPage() {
     : currentGuestProfile;
   const badges = getGuestBadges(profile.badges);
   const levelInfo = getGuestLevel(profile.xp);
+  const xpProgress = getXPProgress(profile.xp, guestLevels);
   const bookings = getBookingsByGuestId(profile.id);
   const upcomingBookings = bookings.filter(
     (b) => b.status === "approved" && b.event.date > new Date()
@@ -120,17 +123,17 @@ export default function GuestDashboardPage() {
                     <p className="font-semibold text-stone-900">
                       Poziom {levelInfo.level}
                     </p>
-                    <p className="text-xs text-stone-500">{levelInfo.name}</p>
+                    <p className="text-xs text-stone-500">{levelInfo.namePl}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="font-bold text-amber-600">{profile.xp} XP</p>
                   <p className="text-xs text-stone-500">
-                    {levelInfo.progress}% do następnego
+                    {xpProgress.percent}% do następnego
                   </p>
                 </div>
               </div>
-              <Progress value={levelInfo.progress} className="h-2" />
+              <Progress value={xpProgress.percent} className="h-2" />
             </div>
 
             {/* Stats */}

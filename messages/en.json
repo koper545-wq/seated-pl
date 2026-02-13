@@ -29,6 +29,7 @@
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
     "contact": "Contact",
+    "rewards": "XP & Rewards",
     "copyright": "© {year} Seated. All rights reserved.",
     "madeWith": "Made with ❤️ in Wrocław"
   },
@@ -159,8 +160,42 @@
       "eventType": "Event type",
       "location": "Location",
       "priceRange": "Price range",
-      "date": "Date"
+      "date": "Date",
+      "budget": "Budget",
+      "groupSize": "Group size",
+      "language": "Event language",
+      "experienceLevel": "Experience level",
+      "accessibility": "Accessibility"
     },
+    "advancedFilters": "Advanced filters",
+    "groupSizeOptions": {
+      "all": "Any size",
+      "intimate": "Intimate (2-6 people)",
+      "small": "Small (7-12 people)",
+      "medium": "Medium (13-20 people)",
+      "large": "Large (21+ people)"
+    },
+    "languageOptions": {
+      "all": "Any language",
+      "pl": "Polish",
+      "en": "English",
+      "es": "Spanish",
+      "ja": "Japanese"
+    },
+    "experienceLevels": {
+      "all": "All levels",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "accessibilityOptions": {
+      "wheelchairAccessible": "Wheelchair accessible",
+      "noStairs": "No stairs",
+      "serviceAnimalsAllowed": "Service animals allowed",
+      "hearingAssistance": "Hearing assistance"
+    },
+    "mapView": "Map",
+    "listView": "List",
     "activeFilters": "Active:",
     "clearFilters": "Clear filters",
     "clearAll": "Clear all",
@@ -316,7 +351,31 @@
       "upcomingEvents": "Upcoming events",
       "createEvent": "Create event",
       "pendingBookings": "Pending bookings",
-      "recentReviews": "Recent reviews"
+      "recentReviews": "Recent reviews",
+      "events": {
+        "duplicate": "Duplicate",
+        "duplicateEvent": "Duplicate event",
+        "duplicating": "Creating a copy of the event",
+        "duplicateSelectDate": "Select a new date",
+        "moreActions": "More",
+        "preview": "Preview",
+        "guests": "Guests",
+        "edit": "Edit"
+      },
+      "recurring": {
+        "title": "Recurring event",
+        "pattern": "Frequency",
+        "weekly": "Weekly",
+        "biweekly": "Every 2 weeks",
+        "monthly": "Monthly",
+        "endBy": "End series",
+        "endByOccurrences": "After number of events",
+        "endByDate": "On date",
+        "occurrences": "Number of events",
+        "preview": "Preview dates",
+        "andMore": "... and {count} more",
+        "created": "Created {count} events!"
+      }
     },
     "bookings": {
       "title": "My bookings",
@@ -953,6 +1012,181 @@
       "title": "Ready for culinary adventures?",
       "subtitle": "Join thousands of people discovering Wrocław through flavors.",
       "button": "Create free account"
+    }
+  },
+  "reports": {
+    "report": "Report",
+    "submitReport": "Submit report",
+    "reportEvent": "Report event",
+    "reportHost": "Report host",
+    "reportGuest": "Report guest",
+    "reportEventDescription": "Report an issue with this event. Our team will review your report.",
+    "reportHostDescription": "Report an issue with this host. Our team will review your report.",
+    "reportGuestDescription": "Report an issue with this guest. Information is confidential.",
+    "relatedToEvent": "Related to event",
+    "category": "Issue category",
+    "selectCategory": "Select category",
+    "description": "Problem description",
+    "descriptionPlaceholder": "Describe in detail what happened, when and what were the circumstances...",
+    "descriptionHint": "Provide as much detail as possible to help us assess the situation.",
+    "evidence": "Evidence (links)",
+    "evidencePlaceholder": "https://example.com/screenshot.png",
+    "evidenceHint": "If you have screenshots or other evidence, provide a link.",
+    "optional": "optional",
+    "falseReportWarning": "Submitting false reports may result in account suspension. Make sure your report is accurate.",
+    "cancel": "Cancel",
+    "submit": "Submit report",
+    "submitting": "Submitting...",
+    "reportSubmitted": "Report submitted!",
+    "reportSubmittedDescription": "Thank you for your report. Our team will review it within 48 hours.",
+    "reportId": "Report ID",
+    "reviewPromise": "We will review your report within 48 hours",
+    "notificationPromise": "We will notify you about actions taken",
+    "close": "Close",
+    "admin": {
+      "title": "Reports",
+      "subtitle": "Manage user reports",
+      "allReports": "All",
+      "pending": "Pending",
+      "underReview": "Under review",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed",
+      "noReports": "No reports",
+      "viewDetails": "Details",
+      "assignToMe": "Assign to me",
+      "changeStatus": "Change status",
+      "addNote": "Add note",
+      "resolve": "Resolve",
+      "dismiss": "Dismiss",
+      "reporter": "Reporter",
+      "reported": "Reported",
+      "category": "Category",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions",
+      "resolution": "Resolution",
+      "resolutions": {
+        "warningIssued": "Warning issued",
+        "accountSuspended": "Account suspended",
+        "refundIssued": "Refund issued",
+        "noAction": "No action",
+        "escalated": "Escalated"
+      }
+    }
+  },
+  "communication": {
+    "title": "Communication Automation",
+    "subtitle": "Manage message templates and automatic notifications",
+    "saveSettings": "Save settings",
+    "saving": "Saving...",
+    "saved": "Saved!",
+    "tabs": {
+      "reminders": "Reminders",
+      "followups": "Follow-up",
+      "templates": "Templates",
+      "settings": "Settings"
+    },
+    "reminders": {
+      "title": "Automatic reminders",
+      "description": "Send reminders to guests before the event",
+      "timing": {
+        "7_days": "7 days before",
+        "7_days_desc": "One week before the event",
+        "48_hours": "48 hours before",
+        "48_hours_desc": "Two days before the event",
+        "24_hours": "24 hours before",
+        "24_hours_desc": "Day before the event",
+        "2_hours": "2 hours before",
+        "2_hours_desc": "Shortly before start"
+      },
+      "editTemplate": "Edit template",
+      "tip": "Studies show that two reminders (24h and 2h before) significantly increase event attendance."
+    },
+    "followups": {
+      "title": "Follow-up sequence",
+      "description": "Automatic messages after the event",
+      "timing": {
+        "same_day": "Same day",
+        "same_day_desc": "Evening after the event",
+        "1_day": "1 day after",
+        "1_day_desc": "Next day",
+        "3_days": "3 days after",
+        "3_days_desc": "After a few days",
+        "7_days": "7 days after",
+        "7_days_desc": "One week later",
+        "14_days": "14 days after",
+        "14_days_desc": "Two weeks later"
+      },
+      "timeline": "Automatic messages timeline"
+    },
+    "reviews": {
+      "title": "Review requests",
+      "description": "Automatically ask guests to leave a review",
+      "sendAfter": "Send review request"
+    },
+    "rebooking": {
+      "title": "Return offers",
+      "description": "Encourage guests to rebook with a discount",
+      "discountLabel": "Discount amount",
+      "discountRecommendation": "Recommended: 10-20%",
+      "validityLabel": "Offer validity",
+      "days": "days"
+    },
+    "templates": {
+      "title": "Message templates",
+      "subtitle": "Personalize automatic message content",
+      "newTemplate": "New template",
+      "editTemplate": "Edit template",
+      "default": "Default",
+      "types": {
+        "booking_confirmation": "Booking request confirmation",
+        "booking_approved": "Booking approved",
+        "booking_declined": "Booking declined",
+        "reminder_week": "Reminder - 1 week",
+        "reminder_day": "Reminder - 24h",
+        "reminder_hours": "Reminder - 2h",
+        "post_event_thanks": "Thank you",
+        "review_request": "Review request",
+        "rebooking_offer": "Return offer",
+        "custom": "Custom template"
+      },
+      "variables": {
+        "title": "Available variables",
+        "description": "Use these variables in templates - they will be automatically filled",
+        "guest": "Guest",
+        "event": "Event",
+        "booking": "Booking",
+        "host": "Host",
+        "special": "Special"
+      },
+      "form": {
+        "name": "Template name",
+        "namePlaceholder": "e.g. My booking confirmation",
+        "subject": "Message subject",
+        "subjectPlaceholder": "e.g. ✅ Booking confirmed - {{event_title}}",
+        "body": "Message body",
+        "bodyPlaceholder": "Message content...",
+        "quickInsert": "Quick variable insert",
+        "cancel": "Cancel",
+        "save": "Save template"
+      }
+    },
+    "channels": {
+      "title": "Communication channels",
+      "description": "Choose how you want to communicate with guests",
+      "email": "Email",
+      "emailDescription": "Detailed messages with full content",
+      "sms": "SMS",
+      "smsDescription": "Short reminders (98% open rate!)",
+      "comingSoon": "Coming soon"
+    },
+    "personalization": {
+      "title": "Personalization",
+      "description": "Additional elements in messages",
+      "hostPhoto": "Include your photo",
+      "hostPhotoDescription": "Your profile photo in message header",
+      "personalMessage": "Personal message field",
+      "personalMessageDescription": "Option to add your own note with each booking"
     }
   },
   "giftCards": {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Heart, Share2 } from "lucide-react";
+import { Heart, Share2, Flag } from "lucide-react";
 import { isEventSaved } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import {
@@ -11,13 +11,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ReportDialog } from "@/components/reports";
 
 interface EventActionButtonsProps {
   eventId: string;
   eventTitle: string;
+  hostId?: string;
+  hostName?: string;
 }
 
-export function EventActionButtons({ eventId, eventTitle }: EventActionButtonsProps) {
+export function EventActionButtons({
+  eventId,
+  eventTitle,
+  hostId,
+  hostName,
+}: EventActionButtonsProps) {
   const currentUserId = "user-current";
   const [isSaved, setIsSaved] = useState(isEventSaved(currentUserId, eventId));
   const [showCopied, setShowCopied] = useState(false);
@@ -84,6 +92,29 @@ export function EventActionButtons({ eventId, eventTitle }: EventActionButtonsPr
           <TooltipContent>
             {showCopied ? "Link skopiowany!" : "Udostępnij"}
           </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <ReportDialog
+              reportType="event"
+              reportedEntityId={eventId}
+              reportedEntityName={eventTitle}
+              eventId={eventId}
+              eventTitle={eventTitle}
+              reporterRole="guest"
+              trigger={
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="bg-white/90 backdrop-blur-sm hover:bg-white rounded-full hover:text-red-600"
+                >
+                  <Flag className="h-5 w-5" />
+                </Button>
+              }
+            />
+          </TooltipTrigger>
+          <TooltipContent>Zgłoś problem</TooltipContent>
         </Tooltip>
       </div>
     </TooltipProvider>

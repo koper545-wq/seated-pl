@@ -23,7 +23,10 @@ import { EmptyState } from "@/components/ui/empty-state";
 import {
   getHostEventById,
   getBookingsByEventId,
+  getWaitlistByEventId,
+  removeFromWaitlist,
   MockBooking,
+  WaitlistEntry,
   bookingStatusLabels,
   HostEvent,
 } from "@/lib/mock-data";
@@ -47,7 +50,11 @@ import {
   UserX,
   Eye,
   Star,
+  Bell,
+  Trash2,
+  Flag,
 } from "lucide-react";
+import { ReportDialog } from "@/components/reports";
 import { cn, formatPrice } from "@/lib/utils";
 
 interface EventGuestsPageProps {
@@ -65,10 +72,14 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
   const [bookings, setBookings] = useState<MockBooking[]>(
     getBookingsByEventId(id)
   );
+  const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>(
+    getWaitlistByEventId(id)
+  );
   const [actionBooking, setActionBooking] = useState<{
     booking: MockBooking;
     action: "approve" | "decline";
   } | null>(null);
+  const [entryToRemove, setEntryToRemove] = useState<WaitlistEntry | null>(null);
 
   // Separate bookings
   const pendingBookings = bookings.filter((b) => b.status === "pending");
@@ -114,6 +125,18 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
           : b
       )
     );
+  };
+
+  const handleRemoveFromWaitlist = (entry: WaitlistEntry) => {
+    setEntryToRemove(entry);
+  };
+
+  const confirmRemoveFromWaitlist = () => {
+    if (entryToRemove) {
+      removeFromWaitlist(entryToRemove.id);
+      setWaitlistEntries((prev) => prev.filter((e) => e.id !== entryToRemove.id));
+      setEntryToRemove(null);
+    }
   };
 
   // Collect dietary info from confirmed bookings
@@ -261,6 +284,15 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                   <UserX className="h-4 w-4" />
                   Odrzucone
                 </TabsTrigger>
+                <TabsTrigger value="waitlist" className="flex items-center gap-2">
+                  <Bell className="h-4 w-4" />
+                  Lista oczekujących
+                  {waitlistEntries.filter(e => e.status === "waiting").length > 0 && (
+                    <Badge variant="secondary">
+                      {waitlistEntries.filter(e => e.status === "waiting").length}
+                    </Badge>
+                  )}
+                </TabsTrigger>
               </TabsList>
 
               {/* Pending */}
@@ -270,6 +302,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                     <GuestCard
                       key={booking.id}
                       booking={booking}
+                      event={event}
                       onApprove={() => handleAction(booking, "approve")}
                       onDecline={() => handleAction(booking, "decline")}
                       showActions
@@ -289,7 +322,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
               <TabsContent value="confirmed" className="space-y-3">
                 {confirmedBookings.length > 0 ? (
                   confirmedBookings.map((booking) => (
-                    <GuestCard key={booking.id} booking={booking} />
+                    <GuestCard key={booking.id} booking={booking} event={event} />
                   ))
                 ) : (
                   <EmptyState
@@ -305,13 +338,43 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
               <TabsContent value="declined" className="space-y-3">
                 {declinedBookings.length > 0 ? (
                   declinedBookings.map((booking) => (
-                    <GuestCard key={booking.id} booking={booking} />
+                    <GuestCard key={booking.id} booking={booking} event={event} />
                   ))
                 ) : (
                   <EmptyState
                     icon={UserX}
                     title="Brak odrzuconych"
                     description="Nie odrzuciłeś jeszcze żadnych rezerwacji."
+                    compact
+                  />
+                )}
+              </TabsContent>
+
+              {/* Waitlist */}
+              <TabsContent value="waitlist" className="space-y-3">
+                {waitlistEntries.length > 0 ? (
+                  <>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 mb-4">
+                      <p>
+                        Osoby na liście oczekujących zostaną automatycznie powiadomione emailem,
+                        gdy zwolni się miejsce. Będą mieć 12 godzin na dokonanie rezerwacji.
+                      </p>
+                    </div>
+                    {waitlistEntries
+                      .sort((a, b) => a.position - b.position)
+                      .map((entry) => (
+                        <WaitlistEntryCard
+                          key={entry.id}
+                          entry={entry}
+                          onRemove={() => handleRemoveFromWaitlist(entry)}
+                        />
+                      ))}
+                  </>
+                ) : (
+                  <EmptyState
+                    icon={Bell}
+                    title="Brak osób na liście oczekujących"
+                    description="Gdy wydarzenie będzie wyprzedane, goście będą mogli zapisać się na listę."
                     compact
                   />
                 )}
@@ -458,6 +521,32 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Remove from waitlist confirmation */}
+      <AlertDialog
+        open={entryToRemove !== null}
+        onOpenChange={(open) => !open && setEntryToRemove(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Usunąć z listy oczekujących?</AlertDialogTitle>
+            <AlertDialogDescription>
+              <strong>{entryToRemove?.name || entryToRemove?.email}</strong> zostanie
+              usunięty z listy oczekujących. Ta osoba nie będzie już powiadamiana
+              o wolnych miejscach.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Anuluj</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmRemoveFromWaitlist}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Usuń
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -465,6 +554,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
 // Guest card component
 interface GuestCardProps {
   booking: MockBooking;
+  event: HostEvent;
   onApprove?: () => void;
   onDecline?: () => void;
   showActions?: boolean;
@@ -472,6 +562,7 @@ interface GuestCardProps {
 
 function GuestCard({
   booking,
+  event,
   onApprove,
   onDecline,
   showActions = false,
@@ -544,24 +635,143 @@ function GuestCard({
           </div>
 
           {/* Actions */}
-          {showActions && (
-            <div className="flex flex-col gap-2">
-              <Button
-                size="sm"
-                className="bg-green-600 hover:bg-green-700"
-                onClick={onApprove}
-              >
-                <Check className="h-4 w-4" />
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="text-red-600 border-red-200 hover:bg-red-50"
-                onClick={onDecline}
-              >
-                <X className="h-4 w-4" />
-              </Button>
+          <div className="flex flex-col gap-2">
+            {showActions && (
+              <>
+                <Button
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700"
+                  onClick={onApprove}
+                >
+                  <Check className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-red-600 border-red-200 hover:bg-red-50"
+                  onClick={onDecline}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+            <ReportDialog
+              reportType="guest"
+              reportedEntityId={booking.guestId || booking.id}
+              reportedEntityName={booking.guestName}
+              eventId={event.id}
+              eventTitle={event.title}
+              bookingId={booking.id}
+              reporterRole="host"
+              trigger={
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-muted-foreground hover:text-red-600"
+                >
+                  <Flag className="h-4 w-4" />
+                </Button>
+              }
+            />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// Waitlist entry card component
+interface WaitlistEntryCardProps {
+  entry: WaitlistEntry;
+  onRemove: () => void;
+}
+
+const waitlistStatusLabels: Record<WaitlistEntry["status"], { label: string; color: string }> = {
+  waiting: { label: "Oczekuje", color: "bg-blue-100 text-blue-700" },
+  notified: { label: "Powiadomiony", color: "bg-amber-100 text-amber-700" },
+  expired: { label: "Wygasło", color: "bg-gray-100 text-gray-700" },
+  converted: { label: "Zarezerwował", color: "bg-green-100 text-green-700" },
+};
+
+function WaitlistEntryCard({ entry, onRemove }: WaitlistEntryCardProps) {
+  const statusInfo = waitlistStatusLabels[entry.status];
+  const displayName = entry.name || entry.email.split("@")[0];
+
+  return (
+    <Card>
+      <CardContent className="p-4">
+        <div className="flex items-start gap-4">
+          {/* Position number */}
+          <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-lg">
+            #{entry.position}
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h4 className="font-semibold truncate">{displayName}</h4>
+              <Badge className={cn(statusInfo.color, "text-xs")} variant="secondary">
+                {statusInfo.label}
+              </Badge>
+              <Badge variant="outline" className="text-xs">
+                {entry.ticketsWanted}{" "}
+                {entry.ticketsWanted === 1 ? "miejsce" : entry.ticketsWanted < 5 ? "miejsca" : "miejsc"}
+              </Badge>
             </div>
+
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground mb-2">
+              <a
+                href={`mailto:${entry.email}`}
+                className="flex items-center gap-1 hover:text-foreground"
+              >
+                <Mail className="h-3 w-3" />
+                {entry.email}
+              </a>
+              {entry.phone && (
+                <a
+                  href={`tel:${entry.phone}`}
+                  className="flex items-center gap-1 hover:text-foreground"
+                >
+                  <Phone className="h-3 w-3" />
+                  {entry.phone}
+                </a>
+              )}
+            </div>
+
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                Zapisano: {entry.createdAt.toLocaleDateString("pl-PL")}
+              </span>
+              {entry.notifiedAt && (
+                <span className="flex items-center gap-1">
+                  <Bell className="h-3 w-3" />
+                  Powiadomiono: {entry.notifiedAt.toLocaleDateString("pl-PL")}
+                </span>
+              )}
+              {entry.expiresAt && entry.status === "notified" && (
+                <span className="flex items-center gap-1 text-amber-600">
+                  <Clock className="h-3 w-3" />
+                  Wygasa: {entry.expiresAt.toLocaleString("pl-PL", {
+                    day: "numeric",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  })}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Remove button - only for waiting/notified statuses */}
+          {(entry.status === "waiting" || entry.status === "notified") && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              onClick={onRemove}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
           )}
         </div>
       </CardContent>

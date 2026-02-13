@@ -8,6 +8,8 @@ const STORAGE_KEY = "seated-custom-events";
 interface EventsContextType {
   // Get events for a specific host (combines mock + custom)
   getHostEvents: (hostId: string) => HostEvent[];
+  // Get a single event by ID (from any host)
+  getEventById: (eventId: string) => HostEvent | null;
   // Add a new event
   addEvent: (hostId: string, event: Omit<HostEvent, "id">) => HostEvent;
   // Update an event
@@ -70,6 +72,25 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
     [customEvents]
   );
 
+  const getEventById = useCallback(
+    (eventId: string): HostEvent | null => {
+      // Check custom events first
+      for (const hostId of Object.keys(customEvents)) {
+        const event = customEvents[hostId].find((e) => e.id === eventId);
+        if (event) return event;
+      }
+      // Check mock events for known hosts
+      const hostIds = ["host-1", "host-anna", "host-karolina"];
+      for (const hostId of hostIds) {
+        const mockEvents = getMockEvents(hostId);
+        const event = mockEvents.find((e) => e.id === eventId);
+        if (event) return event;
+      }
+      return null;
+    },
+    [customEvents]
+  );
+
   const addEvent = useCallback(
     (hostId: string, eventData: Omit<HostEvent, "id">): HostEvent => {
       const newEvent: HostEvent = {
@@ -113,6 +134,7 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
     <EventsContext.Provider
       value={{
         getHostEvents,
+        getEventById,
         addEvent,
         updateEvent,
         deleteEvent,

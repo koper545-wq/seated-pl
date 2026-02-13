@@ -10,6 +10,7 @@ const navItems = [
   { href: "/admin/hosts", label: "Hosty", icon: "👨‍🍳" },
   { href: "/admin/events", label: "Wydarzenia", icon: "🎉" },
   { href: "/admin/users", label: "Użytkownicy", icon: "👥" },
+  { href: "/admin/reports", label: "Zgłoszenia", icon: "🚨" },
   { href: "/admin/badges", label: "Odznaki", icon: "🏅" },
   { href: "/admin/vouchers", label: "Kupony", icon: "🎟️" },
   { href: "/admin/settings", label: "Ustawienia", icon: "⚙️" },

@@ -73,7 +73,219 @@ export const mockUsers: MockUser[] = [
 ];
 
 // ============================================
-// BADGES
+// GAMIFICATION - LEVELS & XP
+// ============================================
+
+export type GuestTier = "explorer" | "regular" | "insider" | "vip" | "ambassador";
+export type HostTier = "rising" | "featured" | "star" | "superhost";
+export type BadgeTier = "bronze" | "silver" | "gold";
+export type BadgeCategory = "activity" | "cuisine" | "social" | "seasonal" | "special" | "host_activity" | "host_quality" | "host_community";
+
+export interface LevelInfo {
+  level: number;
+  tier: GuestTier | HostTier;
+  name: string;
+  namePl: string;
+  minXP: number;
+  maxXP: number;
+  icon: string;
+  color: string;
+  benefits: string[];
+  benefitsPl: string[];
+}
+
+// Guest levels (XP-based)
+export const guestLevels: LevelInfo[] = [
+  {
+    level: 1,
+    tier: "explorer",
+    name: "Explorer",
+    namePl: "Odkrywca",
+    minXP: 0,
+    maxXP: 199,
+    icon: "🌱",
+    color: "from-green-400 to-green-600",
+    benefits: ["Access to all public events", "Basic profile"],
+    benefitsPl: ["Dostęp do wszystkich wydarzeń", "Podstawowy profil"],
+  },
+  {
+    level: 2,
+    tier: "explorer",
+    name: "Foodie",
+    namePl: "Smakosz",
+    minXP: 200,
+    maxXP: 499,
+    icon: "🍴",
+    color: "from-green-500 to-emerald-600",
+    benefits: ["Profile badge", "Event recommendations"],
+    benefitsPl: ["Odznaka na profilu", "Rekomendacje wydarzeń"],
+  },
+  {
+    level: 3,
+    tier: "regular",
+    name: "Regular",
+    namePl: "Stały Bywalec",
+    minXP: 500,
+    maxXP: 999,
+    icon: "⭐",
+    color: "from-blue-400 to-blue-600",
+    benefits: ["Priority booking queue", "Early access to popular events"],
+    benefitsPl: ["Priorytet w kolejce rezerwacji", "Wcześniejszy dostęp do popularnych wydarzeń"],
+  },
+  {
+    level: 4,
+    tier: "regular",
+    name: "Enthusiast",
+    namePl: "Entuzjasta",
+    minXP: 1000,
+    maxXP: 1999,
+    icon: "🌟",
+    color: "from-blue-500 to-indigo-600",
+    benefits: ["Exclusive community access", "Monthly newsletter"],
+    benefitsPl: ["Dostęp do ekskluzywnej społeczności", "Miesięczny newsletter"],
+  },
+  {
+    level: 5,
+    tier: "insider",
+    name: "Insider",
+    namePl: "Wtajemniczony",
+    minXP: 2000,
+    maxXP: 3999,
+    icon: "💎",
+    color: "from-purple-400 to-purple-600",
+    benefits: ["VIP events access", "Host meet & greets", "Special profile frame"],
+    benefitsPl: ["Dostęp do wydarzeń VIP", "Spotkania z hostami", "Specjalna ramka profilu"],
+  },
+  {
+    level: 6,
+    tier: "insider",
+    name: "Connoisseur",
+    namePl: "Koneser",
+    minXP: 4000,
+    maxXP: 7999,
+    icon: "👑",
+    color: "from-purple-500 to-violet-600",
+    benefits: ["Beta features", "Personal event recommendations", "Priority support"],
+    benefitsPl: ["Funkcje beta", "Osobiste rekomendacje", "Priorytetowe wsparcie"],
+  },
+  {
+    level: 7,
+    tier: "vip",
+    name: "VIP",
+    namePl: "VIP",
+    minXP: 8000,
+    maxXP: 14999,
+    icon: "🏆",
+    color: "from-amber-400 to-orange-600",
+    benefits: ["Exclusive annual event", "Featured in community spotlight", "Special perks from hosts"],
+    benefitsPl: ["Ekskluzywne wydarzenie roczne", "Wyróżnienie w społeczności", "Specjalne benefity od hostów"],
+  },
+  {
+    level: 8,
+    tier: "ambassador",
+    name: "Ambassador",
+    namePl: "Ambasador",
+    minXP: 15000,
+    maxXP: 999999,
+    icon: "🎖️",
+    color: "from-amber-500 to-red-600",
+    benefits: ["Ambassador status", "Invitation to host events", "All platform benefits"],
+    benefitsPl: ["Status ambasadora", "Zaproszenie do hostowania", "Wszystkie benefity platformy"],
+  },
+];
+
+// Host levels (based on events + rating)
+export const hostLevels: LevelInfo[] = [
+  {
+    level: 1,
+    tier: "rising",
+    name: "Rising Host",
+    namePl: "Wschodzący Host",
+    minXP: 0,
+    maxXP: 499,
+    icon: "🌱",
+    color: "from-green-400 to-green-600",
+    benefits: ["Create events", "Basic analytics", "Community support"],
+    benefitsPl: ["Tworzenie wydarzeń", "Podstawowe statystyki", "Wsparcie społeczności"],
+  },
+  {
+    level: 2,
+    tier: "featured",
+    name: "Featured Host",
+    namePl: "Wyróżniony Host",
+    minXP: 500,
+    maxXP: 1499,
+    icon: "⭐",
+    color: "from-blue-400 to-blue-600",
+    benefits: ["Featured badge", "Higher search ranking", "Advanced analytics"],
+    benefitsPl: ["Odznaka wyróżnienia", "Wyższa pozycja w wyszukiwaniu", "Zaawansowane statystyki"],
+  },
+  {
+    level: 3,
+    tier: "star",
+    name: "Star Host",
+    namePl: "Gwiazda",
+    minXP: 1500,
+    maxXP: 3999,
+    icon: "🌟",
+    color: "from-purple-400 to-purple-600",
+    benefits: ["Star badge", "Priority in recommendations", "Host community access", "Lower platform fee"],
+    benefitsPl: ["Odznaka gwiazdy", "Priorytet w rekomendacjach", "Społeczność hostów", "Niższa prowizja"],
+  },
+  {
+    level: 4,
+    tier: "superhost",
+    name: "Superhost",
+    namePl: "Superhost",
+    minXP: 4000,
+    maxXP: 999999,
+    icon: "👑",
+    color: "from-amber-400 to-orange-600",
+    benefits: ["Superhost badge", "Top search placement", "Lowest platform fee", "Exclusive Superhost events", "Dedicated support"],
+    benefitsPl: ["Odznaka Superhost", "Najwyższa pozycja w wyszukiwaniu", "Najniższa prowizja", "Ekskluzywne wydarzenia Superhost", "Dedykowane wsparcie"],
+  },
+];
+
+// XP actions - how users earn XP
+export interface XPAction {
+  id: string;
+  action: string;
+  actionPl: string;
+  xp: number;
+  category: "attendance" | "engagement" | "social" | "quality" | "hosting";
+  description: string;
+  descriptionPl: string;
+  maxPerDay?: number;
+  maxPerEvent?: number;
+}
+
+export const xpActions: XPAction[] = [
+  // Guest XP actions
+  { id: "attend_event", action: "Attend an event", actionPl: "Udział w wydarzeniu", xp: 50, category: "attendance", description: "Earn XP for each event you attend", descriptionPl: "Zdobądź XP za każde wydarzenie", maxPerDay: 2 },
+  { id: "first_event", action: "Attend first event", actionPl: "Pierwsze wydarzenie", xp: 100, category: "attendance", description: "Bonus XP for your first event ever", descriptionPl: "Bonus za pierwsze wydarzenie" },
+  { id: "leave_review", action: "Leave a review", actionPl: "Zostaw opinię", xp: 25, category: "engagement", description: "Write a review after attending", descriptionPl: "Napisz opinię po wydarzeniu", maxPerEvent: 1 },
+  { id: "detailed_review", action: "Write detailed review (100+ words)", actionPl: "Szczegółowa opinia (100+ słów)", xp: 15, category: "engagement", description: "Bonus for helpful reviews", descriptionPl: "Bonus za pomocne opinie", maxPerEvent: 1 },
+  { id: "add_photos", action: "Add photos to review", actionPl: "Dodaj zdjęcia do opinii", xp: 10, category: "engagement", description: "Share photos from the event", descriptionPl: "Podziel się zdjęciami", maxPerEvent: 1 },
+  { id: "answer_question", action: "Answer a question in Q&A", actionPl: "Odpowiedz na pytanie", xp: 10, category: "social", description: "Help others by answering questions", descriptionPl: "Pomóż innym odpowiadając na pytania", maxPerDay: 5 },
+  { id: "refer_friend", action: "Refer a friend", actionPl: "Polecenie znajomemu", xp: 100, category: "social", description: "Earn XP when friend attends first event", descriptionPl: "XP gdy znajomy weźmie udział w pierwszym wydarzeniu" },
+  { id: "complete_profile", action: "Complete profile", actionPl: "Uzupełnij profil", xp: 50, category: "engagement", description: "Fill out all profile fields", descriptionPl: "Wypełnij wszystkie pola profilu" },
+  { id: "join_waitlist", action: "Join event waitlist", actionPl: "Dołącz do listy oczekujących", xp: 5, category: "engagement", description: "Show interest in sold-out events", descriptionPl: "Wyraź zainteresowanie wyprzedanymi wydarzeniami" },
+  { id: "early_booking", action: "Book within 24h of publication", actionPl: "Rezerwacja w ciągu 24h", xp: 20, category: "attendance", description: "Be quick to reserve your spot", descriptionPl: "Szybko zarezerwuj miejsce" },
+  { id: "try_new_cuisine", action: "Try new cuisine type", actionPl: "Nowa kuchnia", xp: 30, category: "attendance", description: "Explore different cuisines", descriptionPl: "Odkrywaj różne kuchnie" },
+  { id: "streak_week", action: "Weekly streak (event each week)", actionPl: "Seria tygodniowa", xp: 50, category: "attendance", description: "Attend events consistently", descriptionPl: "Regularnie bierz udział w wydarzeniach" },
+
+  // Host XP actions
+  { id: "host_event", action: "Host an event", actionPl: "Zorganizuj wydarzenie", xp: 100, category: "hosting", description: "Earn XP for each completed event", descriptionPl: "XP za każde ukończone wydarzenie" },
+  { id: "first_host_event", action: "Host first event", actionPl: "Pierwsze wydarzenie hosta", xp: 200, category: "hosting", description: "Bonus for your first event as host", descriptionPl: "Bonus za pierwsze wydarzenie" },
+  { id: "receive_5star", action: "Receive 5-star review", actionPl: "Opinia 5 gwiazdek", xp: 30, category: "quality", description: "Get rewarded for excellence", descriptionPl: "Nagroda za doskonałość" },
+  { id: "sold_out_event", action: "Sold out event", actionPl: "Wyprzedane wydarzenie", xp: 50, category: "hosting", description: "Fill all available spots", descriptionPl: "Zapełnij wszystkie miejsca" },
+  { id: "quick_response", action: "Respond within 2 hours", actionPl: "Odpowiedź w 2h", xp: 10, category: "quality", description: "Reply quickly to inquiries", descriptionPl: "Szybko odpowiadaj na pytania", maxPerDay: 5 },
+  { id: "no_cancellation", action: "Complete 5 events without cancellation", actionPl: "5 wydarzeń bez anulacji", xp: 100, category: "quality", description: "Maintain reliability", descriptionPl: "Bądź niezawodny" },
+  { id: "repeat_guest", action: "Guest returns to your event", actionPl: "Powracający gość", xp: 25, category: "quality", description: "Build loyal following", descriptionPl: "Buduj lojalnych gości" },
+];
+
+// ============================================
+// BADGES (EXPANDED)
 // ============================================
 
 export interface MockBadge {
@@ -84,123 +296,1122 @@ export interface MockBadge {
   descriptionPl: string;
   icon: string;
   category: "guest" | "host";
+  badgeCategory: BadgeCategory;
+  tier: BadgeTier;
   color: string;
+  requirement: string;
+  requirementPl: string;
+  xpReward: number;
+  rarity: "common" | "uncommon" | "rare" | "epic" | "legendary";
 }
 
 export const badges: MockBadge[] = [
-  // Guest badges
+  // ==========================================
+  // GUEST BADGES - Activity
+  // ==========================================
   {
-    id: "badge-1",
+    id: "badge-first-event",
     name: "Foodie Newbie",
     namePl: "Świeży Smakosz",
     description: "Attended your first event",
     descriptionPl: "Uczestniczyłeś w pierwszym wydarzeniu",
     icon: "🍽️",
     category: "guest",
+    badgeCategory: "activity",
+    tier: "bronze",
     color: "bg-green-100 text-green-700",
+    requirement: "Attend 1 event",
+    requirementPl: "Weź udział w 1 wydarzeniu",
+    xpReward: 50,
+    rarity: "common",
   },
   {
-    id: "badge-2",
-    name: "Explorer",
-    namePl: "Odkrywca",
-    description: "Attended 5 different event types",
-    descriptionPl: "Uczestniczyłeś w 5 różnych typach wydarzeń",
-    icon: "🧭",
+    id: "badge-5-events",
+    name: "Regular Guest",
+    namePl: "Stały Gość",
+    description: "Attended 5 events",
+    descriptionPl: "Uczestniczyłeś w 5 wydarzeniach",
+    icon: "🎟️",
     category: "guest",
-    color: "bg-blue-100 text-blue-700",
+    badgeCategory: "activity",
+    tier: "bronze",
+    color: "bg-green-100 text-green-700",
+    requirement: "Attend 5 events",
+    requirementPl: "Weź udział w 5 wydarzeniach",
+    xpReward: 100,
+    rarity: "common",
   },
   {
-    id: "badge-3",
+    id: "badge-10-events",
     name: "Culinary Adventurer",
     namePl: "Kulinarny Podróżnik",
     description: "Attended 10 events",
     descriptionPl: "Uczestniczyłeś w 10 wydarzeniach",
     icon: "🌍",
     category: "guest",
-    color: "bg-purple-100 text-purple-700",
+    badgeCategory: "activity",
+    tier: "silver",
+    color: "bg-blue-100 text-blue-700",
+    requirement: "Attend 10 events",
+    requirementPl: "Weź udział w 10 wydarzeniach",
+    xpReward: 200,
+    rarity: "uncommon",
   },
   {
-    id: "badge-4",
+    id: "badge-25-events",
+    name: "Seated Veteran",
+    namePl: "Weteran Seated",
+    description: "Attended 25 events",
+    descriptionPl: "Uczestniczyłeś w 25 wydarzeniach",
+    icon: "🏅",
+    category: "guest",
+    badgeCategory: "activity",
+    tier: "gold",
+    color: "bg-amber-100 text-amber-700",
+    requirement: "Attend 25 events",
+    requirementPl: "Weź udział w 25 wydarzeniach",
+    xpReward: 500,
+    rarity: "rare",
+  },
+  {
+    id: "badge-50-events",
+    name: "Culinary Legend",
+    namePl: "Kulinarna Legenda",
+    description: "Attended 50 events",
+    descriptionPl: "Uczestniczyłeś w 50 wydarzeniach",
+    icon: "👑",
+    category: "guest",
+    badgeCategory: "activity",
+    tier: "gold",
+    color: "bg-purple-100 text-purple-700",
+    requirement: "Attend 50 events",
+    requirementPl: "Weź udział w 50 wydarzeniach",
+    xpReward: 1000,
+    rarity: "epic",
+  },
+
+  // ==========================================
+  // GUEST BADGES - Cuisine exploration
+  // ==========================================
+  {
+    id: "badge-explorer-3",
+    name: "Taste Explorer",
+    namePl: "Odkrywca Smaków",
+    description: "Tried 3 different cuisine types",
+    descriptionPl: "Spróbowałeś 3 różnych typów kuchni",
+    icon: "🧭",
+    category: "guest",
+    badgeCategory: "cuisine",
+    tier: "bronze",
+    color: "bg-teal-100 text-teal-700",
+    requirement: "Attend events of 3 different cuisine types",
+    requirementPl: "Weź udział w wydarzeniach 3 różnych kuchni",
+    xpReward: 75,
+    rarity: "common",
+  },
+  {
+    id: "badge-explorer-5",
+    name: "World Traveler",
+    namePl: "Światowy Podróżnik",
+    description: "Tried 5 different cuisine types",
+    descriptionPl: "Spróbowałeś 5 różnych typów kuchni",
+    icon: "✈️",
+    category: "guest",
+    badgeCategory: "cuisine",
+    tier: "silver",
+    color: "bg-blue-100 text-blue-700",
+    requirement: "Attend events of 5 different cuisine types",
+    requirementPl: "Weź udział w wydarzeniach 5 różnych kuchni",
+    xpReward: 150,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-explorer-10",
+    name: "Global Gourmet",
+    namePl: "Globalny Smakosz",
+    description: "Tried 10 different cuisine types",
+    descriptionPl: "Spróbowałeś 10 różnych typów kuchni",
+    icon: "🌐",
+    category: "guest",
+    badgeCategory: "cuisine",
+    tier: "gold",
+    color: "bg-amber-100 text-amber-700",
+    requirement: "Attend events of 10 different cuisine types",
+    requirementPl: "Weź udział w wydarzeniach 10 różnych kuchni",
+    xpReward: 300,
+    rarity: "rare",
+  },
+  {
+    id: "badge-italian-fan",
+    name: "Italian Lover",
+    namePl: "Miłośnik Italii",
+    description: "Attended 5 Italian cuisine events",
+    descriptionPl: "Uczestniczyłeś w 5 wydarzeniach kuchni włoskiej",
+    icon: "🇮🇹",
+    category: "guest",
+    badgeCategory: "cuisine",
+    tier: "silver",
+    color: "bg-green-100 text-green-700",
+    requirement: "Attend 5 Italian cuisine events",
+    requirementPl: "Weź udział w 5 wydarzeniach kuchni włoskiej",
+    xpReward: 100,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-asian-fan",
+    name: "Asian Explorer",
+    namePl: "Odkrywca Azji",
+    description: "Attended 5 Asian cuisine events",
+    descriptionPl: "Uczestniczyłeś w 5 wydarzeniach kuchni azjatyckiej",
+    icon: "🥢",
+    category: "guest",
+    badgeCategory: "cuisine",
+    tier: "silver",
+    color: "bg-red-100 text-red-700",
+    requirement: "Attend 5 Asian cuisine events",
+    requirementPl: "Weź udział w 5 wydarzeniach kuchni azjatyckiej",
+    xpReward: 100,
+    rarity: "uncommon",
+  },
+
+  // ==========================================
+  // GUEST BADGES - Social
+  // ==========================================
+  {
+    id: "badge-first-review",
+    name: "First Opinion",
+    namePl: "Pierwsza Opinia",
+    description: "Left your first review",
+    descriptionPl: "Zostawiłeś pierwszą opinię",
+    icon: "✍️",
+    category: "guest",
+    badgeCategory: "social",
+    tier: "bronze",
+    color: "bg-blue-100 text-blue-700",
+    requirement: "Leave 1 review",
+    requirementPl: "Zostaw 1 opinię",
+    xpReward: 25,
+    rarity: "common",
+  },
+  {
+    id: "badge-10-reviews",
     name: "Review Master",
     namePl: "Mistrz Opinii",
-    description: "Left 10 reviews",
-    descriptionPl: "Zostawiłeś 10 opinii",
+    description: "Left 10 detailed reviews",
+    descriptionPl: "Zostawiłeś 10 szczegółowych opinii",
     icon: "⭐",
     category: "guest",
+    badgeCategory: "social",
+    tier: "silver",
     color: "bg-amber-100 text-amber-700",
+    requirement: "Leave 10 reviews",
+    requirementPl: "Zostaw 10 opinii",
+    xpReward: 150,
+    rarity: "uncommon",
   },
   {
-    id: "badge-5",
-    name: "Early Bird",
-    namePl: "Ranny Ptaszek",
-    description: "Booked an event within 1 hour of publication",
-    descriptionPl: "Zarezerwowałeś wydarzenie w ciągu godziny od publikacji",
-    icon: "🐦",
+    id: "badge-photo-contributor",
+    name: "Photo Contributor",
+    namePl: "Fotograf Wydarzeń",
+    description: "Added photos to 5 reviews",
+    descriptionPl: "Dodałeś zdjęcia do 5 opinii",
+    icon: "📸",
     category: "guest",
-    color: "bg-orange-100 text-orange-700",
+    badgeCategory: "social",
+    tier: "silver",
+    color: "bg-pink-100 text-pink-700",
+    requirement: "Add photos to 5 reviews",
+    requirementPl: "Dodaj zdjęcia do 5 opinii",
+    xpReward: 100,
+    rarity: "uncommon",
   },
   {
-    id: "badge-6",
+    id: "badge-helpful-reviewer",
+    name: "Helpful Reviewer",
+    namePl: "Pomocny Recenzent",
+    description: "Your reviews received 50 helpful votes",
+    descriptionPl: "Twoje opinie otrzymały 50 głosów 'pomocne'",
+    icon: "👍",
+    category: "guest",
+    badgeCategory: "social",
+    tier: "gold",
+    color: "bg-green-100 text-green-700",
+    requirement: "Receive 50 helpful votes on reviews",
+    requirementPl: "Otrzymaj 50 głosów 'pomocne' na opiniach",
+    xpReward: 250,
+    rarity: "rare",
+  },
+  {
+    id: "badge-social-butterfly",
     name: "Social Butterfly",
     namePl: "Dusza Towarzystwa",
     description: "Attended 3 events in one week",
     descriptionPl: "Uczestniczyłeś w 3 wydarzeniach w jednym tygodniu",
     icon: "🦋",
     category: "guest",
+    badgeCategory: "social",
+    tier: "silver",
     color: "bg-pink-100 text-pink-700",
+    requirement: "Attend 3 events in a single week",
+    requirementPl: "Weź udział w 3 wydarzeniach w jednym tygodniu",
+    xpReward: 100,
+    rarity: "uncommon",
   },
-  // Host badges
   {
-    id: "badge-10",
+    id: "badge-referral-starter",
+    name: "Friend Connector",
+    namePl: "Łącznik Przyjaciół",
+    description: "Referred a friend who attended an event",
+    descriptionPl: "Poleciłeś znajomego, który wziął udział w wydarzeniu",
+    icon: "🤝",
+    category: "guest",
+    badgeCategory: "social",
+    tier: "bronze",
+    color: "bg-indigo-100 text-indigo-700",
+    requirement: "Refer 1 friend who attends an event",
+    requirementPl: "Polec 1 znajomego, który weźmie udział w wydarzeniu",
+    xpReward: 100,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-referral-master",
+    name: "Community Builder",
+    namePl: "Budowniczy Społeczności",
+    description: "Referred 10 friends who attended events",
+    descriptionPl: "Poleciłeś 10 znajomych, którzy wzięli udział w wydarzeniach",
+    icon: "🏘️",
+    category: "guest",
+    badgeCategory: "social",
+    tier: "gold",
+    color: "bg-purple-100 text-purple-700",
+    requirement: "Refer 10 friends who attend events",
+    requirementPl: "Polec 10 znajomych, którzy wezmą udział w wydarzeniach",
+    xpReward: 500,
+    rarity: "epic",
+  },
+
+  // ==========================================
+  // GUEST BADGES - Special/Timing
+  // ==========================================
+  {
+    id: "badge-early-bird",
+    name: "Early Bird",
+    namePl: "Ranny Ptaszek",
+    description: "Booked an event within 1 hour of publication",
+    descriptionPl: "Zarezerwowałeś wydarzenie w ciągu godziny od publikacji",
+    icon: "🐦",
+    category: "guest",
+    badgeCategory: "special",
+    tier: "bronze",
+    color: "bg-orange-100 text-orange-700",
+    requirement: "Book event within 1 hour of publication",
+    requirementPl: "Zarezerwuj wydarzenie w ciągu 1 godziny od publikacji",
+    xpReward: 50,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-streak-4weeks",
+    name: "Consistent Foodie",
+    namePl: "Konsekwentny Smakosz",
+    description: "Attended at least 1 event for 4 consecutive weeks",
+    descriptionPl: "Uczestniczyłeś w co najmniej 1 wydarzeniu przez 4 kolejne tygodnie",
+    icon: "🔥",
+    category: "guest",
+    badgeCategory: "special",
+    tier: "silver",
+    color: "bg-orange-100 text-orange-700",
+    requirement: "Maintain 4-week attendance streak",
+    requirementPl: "Utrzymaj serię 4 tygodni z wydarzeniami",
+    xpReward: 200,
+    rarity: "rare",
+  },
+  {
+    id: "badge-streak-12weeks",
+    name: "Dedicated Foodie",
+    namePl: "Oddany Smakosz",
+    description: "Attended at least 1 event for 12 consecutive weeks",
+    descriptionPl: "Uczestniczyłeś w co najmniej 1 wydarzeniu przez 12 kolejnych tygodni",
+    icon: "💎",
+    category: "guest",
+    badgeCategory: "special",
+    tier: "gold",
+    color: "bg-purple-100 text-purple-700",
+    requirement: "Maintain 12-week attendance streak",
+    requirementPl: "Utrzymaj serię 12 tygodni z wydarzeniami",
+    xpReward: 500,
+    rarity: "epic",
+  },
+  {
+    id: "badge-loyal-guest",
+    name: "Loyal Guest",
+    namePl: "Lojalny Gość",
+    description: "Attended 3 events with the same host",
+    descriptionPl: "Uczestniczyłeś w 3 wydarzeniach tego samego hosta",
+    icon: "💛",
+    category: "guest",
+    badgeCategory: "special",
+    tier: "silver",
+    color: "bg-amber-100 text-amber-700",
+    requirement: "Attend 3 events from the same host",
+    requirementPl: "Weź udział w 3 wydarzeniach tego samego hosta",
+    xpReward: 100,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-super-fan",
+    name: "Super Fan",
+    namePl: "Super Fan",
+    description: "Attended 10 events with the same host",
+    descriptionPl: "Uczestniczyłeś w 10 wydarzeniach tego samego hosta",
+    icon: "🌟",
+    category: "guest",
+    badgeCategory: "special",
+    tier: "gold",
+    color: "bg-yellow-100 text-yellow-700",
+    requirement: "Attend 10 events from the same host",
+    requirementPl: "Weź udział w 10 wydarzeniach tego samego hosta",
+    xpReward: 300,
+    rarity: "rare",
+  },
+
+  // ==========================================
+  // GUEST BADGES - Seasonal
+  // ==========================================
+  {
+    id: "badge-summer-2025",
+    name: "Summer Foodie 2025",
+    namePl: "Letni Smakosz 2025",
+    description: "Attended 3 events during Summer 2025",
+    descriptionPl: "Uczestniczyłeś w 3 wydarzeniach latem 2025",
+    icon: "☀️",
+    category: "guest",
+    badgeCategory: "seasonal",
+    tier: "bronze",
+    color: "bg-yellow-100 text-yellow-700",
+    requirement: "Attend 3 events between June-August 2025",
+    requirementPl: "Weź udział w 3 wydarzeniach czerwiec-sierpień 2025",
+    xpReward: 75,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-founding-member",
+    name: "Founding Member",
+    namePl: "Założyciel",
+    description: "Joined Seated in its first year",
+    descriptionPl: "Dołączyłeś do Seated w pierwszym roku działania",
+    icon: "🏆",
+    category: "guest",
+    badgeCategory: "seasonal",
+    tier: "gold",
+    color: "bg-purple-100 text-purple-700",
+    requirement: "Create account in 2025",
+    requirementPl: "Załóż konto w 2025 roku",
+    xpReward: 200,
+    rarity: "legendary",
+  },
+
+  // ==========================================
+  // HOST BADGES - Activity
+  // ==========================================
+  {
+    id: "badge-host-first",
     name: "Rising Star",
     namePl: "Wschodząca Gwiazda",
     description: "Hosted your first event",
     descriptionPl: "Zorganizowałeś pierwsze wydarzenie",
     icon: "⭐",
     category: "host",
+    badgeCategory: "host_activity",
+    tier: "bronze",
     color: "bg-yellow-100 text-yellow-700",
+    requirement: "Host 1 event",
+    requirementPl: "Zorganizuj 1 wydarzenie",
+    xpReward: 100,
+    rarity: "common",
   },
   {
-    id: "badge-11",
+    id: "badge-host-5",
+    name: "Experienced Host",
+    namePl: "Doświadczony Host",
+    description: "Hosted 5 events",
+    descriptionPl: "Zorganizowałeś 5 wydarzeń",
+    icon: "🎪",
+    category: "host",
+    badgeCategory: "host_activity",
+    tier: "silver",
+    color: "bg-blue-100 text-blue-700",
+    requirement: "Host 5 events",
+    requirementPl: "Zorganizuj 5 wydarzeń",
+    xpReward: 200,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-host-20",
+    name: "Pro Host",
+    namePl: "Profesjonalny Host",
+    description: "Hosted 20 events",
+    descriptionPl: "Zorganizowałeś 20 wydarzeń",
+    icon: "🏅",
+    category: "host",
+    badgeCategory: "host_activity",
+    tier: "gold",
+    color: "bg-amber-100 text-amber-700",
+    requirement: "Host 20 events",
+    requirementPl: "Zorganizuj 20 wydarzeń",
+    xpReward: 500,
+    rarity: "rare",
+  },
+  {
+    id: "badge-host-50",
+    name: "Legendary Host",
+    namePl: "Legendarny Host",
+    description: "Hosted 50 events",
+    descriptionPl: "Zorganizowałeś 50 wydarzeń",
+    icon: "👑",
+    category: "host",
+    badgeCategory: "host_activity",
+    tier: "gold",
+    color: "bg-purple-100 text-purple-700",
+    requirement: "Host 50 events",
+    requirementPl: "Zorganizuj 50 wydarzeń",
+    xpReward: 1000,
+    rarity: "legendary",
+  },
+  {
+    id: "badge-sold-out-5",
+    name: "Sold Out Pro",
+    namePl: "Mistrz Wyprzedaży",
+    description: "Had 5 sold out events",
+    descriptionPl: "Miałeś 5 wyprzedanych wydarzeń",
+    icon: "🔥",
+    category: "host",
+    badgeCategory: "host_activity",
+    tier: "silver",
+    color: "bg-red-100 text-red-700",
+    requirement: "Have 5 sold out events",
+    requirementPl: "Miej 5 wyprzedanych wydarzeń",
+    xpReward: 200,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-sold-out-20",
+    name: "Sold Out Legend",
+    namePl: "Legenda Wyprzedaży",
+    description: "Had 20 sold out events",
+    descriptionPl: "Miałeś 20 wyprzedanych wydarzeń",
+    icon: "💥",
+    category: "host",
+    badgeCategory: "host_activity",
+    tier: "gold",
+    color: "bg-orange-100 text-orange-700",
+    requirement: "Have 20 sold out events",
+    requirementPl: "Miej 20 wyprzedanych wydarzeń",
+    xpReward: 500,
+    rarity: "epic",
+  },
+
+  // ==========================================
+  // HOST BADGES - Quality
+  // ==========================================
+  {
+    id: "badge-top-rated-5",
     name: "Top Rated",
     namePl: "Najlepiej Oceniany",
     description: "Maintained 4.8+ rating for 5 events",
     descriptionPl: "Utrzymałeś ocenę 4.8+ przez 5 wydarzeń",
     icon: "🏆",
     category: "host",
+    badgeCategory: "host_quality",
+    tier: "silver",
     color: "bg-amber-100 text-amber-700",
+    requirement: "Maintain 4.8+ rating for 5 events",
+    requirementPl: "Utrzymaj ocenę 4.8+ przez 5 wydarzeń",
+    xpReward: 200,
+    rarity: "uncommon",
   },
   {
-    id: "badge-12",
-    name: "Super Host",
-    namePl: "Super Host",
-    description: "Hosted 20+ events with 4.5+ rating",
-    descriptionPl: "Zorganizowałeś 20+ wydarzeń z oceną 4.5+",
-    icon: "👑",
+    id: "badge-perfect-score",
+    name: "Perfect Score",
+    namePl: "Perfekcyjna Ocena",
+    description: "Received 10 five-star reviews",
+    descriptionPl: "Otrzymałeś 10 recenzji na 5 gwiazdek",
+    icon: "✨",
     category: "host",
-    color: "bg-purple-100 text-purple-700",
+    badgeCategory: "host_quality",
+    tier: "gold",
+    color: "bg-yellow-100 text-yellow-700",
+    requirement: "Receive 10 five-star reviews",
+    requirementPl: "Otrzymaj 10 recenzji na 5 gwiazdek",
+    xpReward: 300,
+    rarity: "rare",
   },
   {
-    id: "badge-13",
+    id: "badge-quick-responder",
     name: "Quick Responder",
     namePl: "Szybka Odpowiedź",
     description: "Average response time under 2 hours",
     descriptionPl: "Średni czas odpowiedzi poniżej 2 godzin",
     icon: "⚡",
     category: "host",
+    badgeCategory: "host_quality",
+    tier: "silver",
     color: "bg-blue-100 text-blue-700",
+    requirement: "Maintain average response time under 2 hours",
+    requirementPl: "Utrzymaj średni czas odpowiedzi poniżej 2 godzin",
+    xpReward: 100,
+    rarity: "uncommon",
   },
   {
-    id: "badge-14",
-    name: "Sold Out Master",
-    namePl: "Mistrz Wyprzedaży",
-    description: "Had 10 sold out events",
-    descriptionPl: "Miałeś 10 wyprzedanych wydarzeń",
-    icon: "🔥",
+    id: "badge-reliable-host",
+    name: "Reliable Host",
+    namePl: "Niezawodny Host",
+    description: "Completed 10 events without cancellation",
+    descriptionPl: "Ukończył 10 wydarzeń bez anulowania",
+    icon: "✅",
     category: "host",
-    color: "bg-red-100 text-red-700",
+    badgeCategory: "host_quality",
+    tier: "gold",
+    color: "bg-green-100 text-green-700",
+    requirement: "Complete 10 events without cancellation",
+    requirementPl: "Ukończ 10 wydarzeń bez anulowania",
+    xpReward: 300,
+    rarity: "rare",
+  },
+  {
+    id: "badge-superhost",
+    name: "Superhost",
+    namePl: "Superhost",
+    description: "Achieved Superhost status",
+    descriptionPl: "Osiągnąłeś status Superhost",
+    icon: "🌟",
+    category: "host",
+    badgeCategory: "host_quality",
+    tier: "gold",
+    color: "bg-amber-100 text-amber-700",
+    requirement: "Reach Superhost tier (4000+ XP, 4.8+ rating)",
+    requirementPl: "Osiągnij poziom Superhost (4000+ XP, ocena 4.8+)",
+    xpReward: 500,
+    rarity: "epic",
+  },
+
+  // ==========================================
+  // HOST BADGES - Community
+  // ==========================================
+  {
+    id: "badge-repeat-guests-10",
+    name: "Guest Magnet",
+    namePl: "Magnes na Gości",
+    description: "10 guests returned for another event",
+    descriptionPl: "10 gości wróciło na kolejne wydarzenie",
+    icon: "🧲",
+    category: "host",
+    badgeCategory: "host_community",
+    tier: "silver",
+    color: "bg-purple-100 text-purple-700",
+    requirement: "Have 10 repeat guests",
+    requirementPl: "Miej 10 powracających gości",
+    xpReward: 200,
+    rarity: "uncommon",
+  },
+  {
+    id: "badge-community-builder",
+    name: "Community Leader",
+    namePl: "Lider Społeczności",
+    description: "Hosted guests from 5 different cities",
+    descriptionPl: "Gościłeś osoby z 5 różnych miast",
+    icon: "🌐",
+    category: "host",
+    badgeCategory: "host_community",
+    tier: "gold",
+    color: "bg-indigo-100 text-indigo-700",
+    requirement: "Host guests from 5 different cities",
+    requirementPl: "Gość osoby z 5 różnych miast",
+    xpReward: 300,
+    rarity: "rare",
+  },
+  {
+    id: "badge-mentor",
+    name: "Host Mentor",
+    namePl: "Mentor Hostów",
+    description: "Helped onboard 3 new hosts",
+    descriptionPl: "Pomógłeś wdrożyć 3 nowych hostów",
+    icon: "🎓",
+    category: "host",
+    badgeCategory: "host_community",
+    tier: "gold",
+    color: "bg-green-100 text-green-700",
+    requirement: "Refer 3 hosts who complete their first event",
+    requirementPl: "Polec 3 hostów, którzy ukończą pierwsze wydarzenie",
+    xpReward: 500,
+    rarity: "epic",
   },
 ];
+
+// ============================================
+// REWARDS SYSTEM
+// ============================================
+
+export type RewardType = "discount" | "voucher" | "positioning" | "feature" | "merch" | "access" | "badge_boost";
+
+export interface Reward {
+  id: string;
+  name: string;
+  namePl: string;
+  description: string;
+  descriptionPl: string;
+  icon: string;
+  type: RewardType;
+  forRole: "guest" | "host" | "both";
+  // Requirements
+  minLevel?: number;
+  minTier?: GuestTier | HostTier;
+  requiredBadgeId?: string;
+  xpCost?: number; // If it's purchasable with XP
+  // Value
+  discountPercent?: number;
+  voucherValue?: number; // in PLN
+  durationDays?: number;
+  // Availability
+  isOneTime: boolean;
+  isActive: boolean;
+}
+
+export const rewards: Reward[] = [
+  // ==========================================
+  // GUEST REWARDS - Platform Perks (free)
+  // ==========================================
+  {
+    id: "reward-priority-booking",
+    name: "Priority Booking",
+    namePl: "Priorytetowa Rezerwacja",
+    description: "Get 15 minutes head start on new event bookings",
+    descriptionPl: "Uzyskaj 15 minut przewagi przy rezerwacji nowych wydarzeń",
+    icon: "⚡",
+    type: "access",
+    forRole: "guest",
+    minLevel: 3,
+    minTier: "regular",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-vip-events-access",
+    name: "VIP Events Access",
+    namePl: "Dostęp do Wydarzeń VIP",
+    description: "Access exclusive VIP-only events from top hosts",
+    descriptionPl: "Dostęp do ekskluzywnych wydarzeń VIP od najlepszych hostów",
+    icon: "👑",
+    type: "access",
+    forRole: "guest",
+    minLevel: 5,
+    minTier: "insider",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-early-access",
+    name: "Early Event Access",
+    namePl: "Wczesny Dostęp",
+    description: "See and book new events 24h before public release",
+    descriptionPl: "Zobacz i zarezerwuj nowe wydarzenia 24h przed publiczną premierą",
+    icon: "🎯",
+    type: "access",
+    forRole: "guest",
+    minLevel: 4,
+    minTier: "regular",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-profile-frame",
+    name: "Special Profile Frame",
+    namePl: "Specjalna Ramka Profilu",
+    description: "Stand out with an exclusive profile border",
+    descriptionPl: "Wyróżnij się ekskluzywną ramką profilu",
+    icon: "🖼️",
+    type: "feature",
+    forRole: "guest",
+    minLevel: 5,
+    minTier: "insider",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-community-access",
+    name: "Community Forum Access",
+    namePl: "Dostęp do Forum Społeczności",
+    description: "Join the exclusive Seated community forum",
+    descriptionPl: "Dołącz do ekskluzywnego forum społeczności Seated",
+    icon: "💬",
+    type: "access",
+    forRole: "guest",
+    minLevel: 4,
+    minTier: "regular",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-beta-features",
+    name: "Beta Tester Access",
+    namePl: "Dostęp do Funkcji Beta",
+    description: "Be the first to try new platform features",
+    descriptionPl: "Testuj nowe funkcje platformy jako pierwszy",
+    icon: "🧪",
+    type: "access",
+    forRole: "guest",
+    minLevel: 6,
+    minTier: "insider",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-host-meetup",
+    name: "Host Meet & Greet",
+    namePl: "Spotkanie z Hostami",
+    description: "Invitation to exclusive host meet & greet events",
+    descriptionPl: "Zaproszenie na ekskluzywne spotkania z hostami",
+    icon: "🤝",
+    type: "access",
+    forRole: "guest",
+    minLevel: 5,
+    minTier: "insider",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-annual-event",
+    name: "Annual VIP Event",
+    namePl: "Roczne Wydarzenie VIP",
+    description: "Free ticket to Seated annual community celebration",
+    descriptionPl: "Darmowy bilet na roczną uroczystość społeczności Seated",
+    icon: "🎉",
+    type: "access",
+    forRole: "guest",
+    minLevel: 7,
+    minTier: "vip",
+    isOneTime: true,
+    isActive: true,
+  },
+
+  // ==========================================
+  // GUEST REWARDS - XP Purchasable
+  // ==========================================
+  {
+    id: "reward-5percent-discount",
+    name: "5% Discount Voucher",
+    namePl: "Voucher -5%",
+    description: "Get 5% off your next event booking",
+    descriptionPl: "Zniżka 5% na kolejną rezerwację",
+    icon: "🏷️",
+    type: "discount",
+    forRole: "guest",
+    xpCost: 500,
+    discountPercent: 5,
+    isOneTime: true,
+    isActive: true,
+  },
+  {
+    id: "reward-10percent-discount",
+    name: "10% Discount Voucher",
+    namePl: "Voucher -10%",
+    description: "Get 10% off your next event booking",
+    descriptionPl: "Zniżka 10% na kolejną rezerwację",
+    icon: "💰",
+    type: "discount",
+    forRole: "guest",
+    xpCost: 1000,
+    discountPercent: 10,
+    isOneTime: true,
+    isActive: true,
+  },
+  {
+    id: "reward-free-event-voucher",
+    name: "Free Event Voucher (up to 100 PLN)",
+    namePl: "Voucher na Darmowe Wydarzenie (do 100 PLN)",
+    description: "Attend any event up to 100 PLN for free",
+    descriptionPl: "Weź udział w dowolnym wydarzeniu do 100 PLN za darmo",
+    icon: "🎟️",
+    type: "voucher",
+    forRole: "guest",
+    xpCost: 3000,
+    voucherValue: 100,
+    isOneTime: true,
+    isActive: true,
+  },
+  {
+    id: "reward-xp-boost",
+    name: "Double XP Weekend",
+    namePl: "Podwójne XP na Weekend",
+    description: "Earn double XP for all activities this weekend",
+    descriptionPl: "Zdobywaj podwójne XP za wszystkie aktywności w weekend",
+    icon: "⚡",
+    type: "badge_boost",
+    forRole: "guest",
+    xpCost: 200,
+    durationDays: 3,
+    isOneTime: true,
+    isActive: true,
+  },
+
+  // ==========================================
+  // HOST REWARDS - Platform Perks (free)
+  // ==========================================
+  {
+    id: "reward-featured-badge",
+    name: "Featured Host Badge",
+    namePl: "Odznaka Wyróżnionego Hosta",
+    description: "Display a special badge on your profile and events",
+    descriptionPl: "Wyświetlaj specjalną odznakę na profilu i wydarzeniach",
+    icon: "⭐",
+    type: "feature",
+    forRole: "host",
+    minLevel: 2,
+    minTier: "featured",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-higher-ranking",
+    name: "Higher Search Ranking",
+    namePl: "Wyższa Pozycja w Wyszukiwaniu",
+    description: "Your events appear higher in search results",
+    descriptionPl: "Twoje wydarzenia pojawiają się wyżej w wynikach wyszukiwania",
+    icon: "📈",
+    type: "positioning",
+    forRole: "host",
+    minLevel: 2,
+    minTier: "featured",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-priority-recommendations",
+    name: "Priority in Recommendations",
+    namePl: "Priorytet w Rekomendacjach",
+    description: "Get featured in personalized recommendations",
+    descriptionPl: "Bądź polecany w spersonalizowanych rekomendacjach",
+    icon: "🎯",
+    type: "positioning",
+    forRole: "host",
+    minLevel: 3,
+    minTier: "star",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-advanced-analytics",
+    name: "Advanced Analytics",
+    namePl: "Zaawansowane Statystyki",
+    description: "Access detailed analytics about your events and guests",
+    descriptionPl: "Dostęp do szczegółowych statystyk wydarzeń i gości",
+    icon: "📊",
+    type: "feature",
+    forRole: "host",
+    minLevel: 2,
+    minTier: "featured",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-lower-fee-star",
+    name: "Reduced Platform Fee",
+    namePl: "Niższa Prowizja",
+    description: "Pay 8% instead of 10% platform fee",
+    descriptionPl: "Płać 8% zamiast 10% prowizji",
+    icon: "💸",
+    type: "discount",
+    forRole: "host",
+    minLevel: 3,
+    minTier: "star",
+    discountPercent: 20, // 20% off the 10% fee = 8%
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-lowest-fee",
+    name: "Lowest Platform Fee",
+    namePl: "Najniższa Prowizja",
+    description: "Pay only 5% platform fee",
+    descriptionPl: "Płać tylko 5% prowizji",
+    icon: "💰",
+    type: "discount",
+    forRole: "host",
+    minLevel: 4,
+    minTier: "superhost",
+    discountPercent: 50, // 50% off the 10% fee = 5%
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-dedicated-support",
+    name: "Dedicated Support",
+    namePl: "Dedykowane Wsparcie",
+    description: "Access priority customer support channel",
+    descriptionPl: "Dostęp do priorytetowego kanału wsparcia",
+    icon: "🎧",
+    type: "access",
+    forRole: "host",
+    minLevel: 4,
+    minTier: "superhost",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-host-community",
+    name: "Host Community Access",
+    namePl: "Społeczność Hostów",
+    description: "Join exclusive host networking community",
+    descriptionPl: "Dołącz do ekskluzywnej społeczności hostów",
+    icon: "👥",
+    type: "access",
+    forRole: "host",
+    minLevel: 3,
+    minTier: "star",
+    isOneTime: false,
+    isActive: true,
+  },
+  {
+    id: "reward-superhost-events",
+    name: "Superhost Events",
+    namePl: "Wydarzenia Superhost",
+    description: "Invitation to exclusive Superhost networking events",
+    descriptionPl: "Zaproszenie na ekskluzywne wydarzenia networkingowe Superhost",
+    icon: "🌟",
+    type: "access",
+    forRole: "host",
+    minLevel: 4,
+    minTier: "superhost",
+    isOneTime: false,
+    isActive: true,
+  },
+
+  // ==========================================
+  // HOST REWARDS - XP Purchasable
+  // ==========================================
+  {
+    id: "reward-event-boost",
+    name: "Event Boost (7 days)",
+    namePl: "Boost Wydarzenia (7 dni)",
+    description: "Promote your event to the top of search results for 7 days",
+    descriptionPl: "Wypromuj wydarzenie na górę wyników wyszukiwania przez 7 dni",
+    icon: "🚀",
+    type: "positioning",
+    forRole: "host",
+    xpCost: 500,
+    durationDays: 7,
+    isOneTime: true,
+    isActive: true,
+  },
+  {
+    id: "reward-homepage-feature",
+    name: "Homepage Feature",
+    namePl: "Wyróżnienie na Stronie Głównej",
+    description: "Get featured on the homepage for 3 days",
+    descriptionPl: "Wyróżnienie na stronie głównej przez 3 dni",
+    icon: "🏠",
+    type: "positioning",
+    forRole: "host",
+    xpCost: 1000,
+    durationDays: 3,
+    isOneTime: true,
+    isActive: true,
+  },
+  {
+    id: "reward-social-shoutout",
+    name: "Social Media Shoutout",
+    namePl: "Wzmianka w Social Media",
+    description: "Get featured on Seated's social media channels",
+    descriptionPl: "Wyróżnienie na kanałach social media Seated",
+    icon: "📱",
+    type: "feature",
+    forRole: "host",
+    xpCost: 800,
+    isOneTime: true,
+    isActive: true,
+  },
+
+  // ==========================================
+  // MERCH REWARDS
+  // ==========================================
+  {
+    id: "reward-merch-stickers",
+    name: "Seated Sticker Pack",
+    namePl: "Pakiet Naklejek Seated",
+    description: "Exclusive Seated sticker pack (5 stickers)",
+    descriptionPl: "Ekskluzywny pakiet naklejek Seated (5 sztuk)",
+    icon: "🎨",
+    type: "merch",
+    forRole: "both",
+    xpCost: 300,
+    isOneTime: true,
+    isActive: true,
+  },
+  {
+    id: "reward-merch-tote",
+    name: "Seated Tote Bag",
+    namePl: "Torba Seated",
+    description: "Stylish Seated branded tote bag",
+    descriptionPl: "Stylowa torba z logo Seated",
+    icon: "👜",
+    type: "merch",
+    forRole: "both",
+    xpCost: 1500,
+    isOneTime: true,
+    isActive: true,
+  },
+  {
+    id: "reward-merch-apron",
+    name: "Host Apron",
+    namePl: "Fartuch Hosta",
+    description: "Premium Seated apron for hosts",
+    descriptionPl: "Premium fartuch Seated dla hostów",
+    icon: "👨‍🍳",
+    type: "merch",
+    forRole: "host",
+    xpCost: 2000,
+    isOneTime: true,
+    isActive: true,
+  },
+];
+
+// Helper functions
+export function getGuestLevel(xp: number): LevelInfo {
+  return guestLevels.find(l => xp >= l.minXP && xp <= l.maxXP) || guestLevels[0];
+}
+
+export function getHostLevel(xp: number): LevelInfo {
+  return hostLevels.find(l => xp >= l.minXP && xp <= l.maxXP) || hostLevels[0];
+}
+
+export function getXPProgress(xp: number, levels: LevelInfo[]): { current: number; max: number; percent: number } {
+  const level = levels.find(l => xp >= l.minXP && xp <= l.maxXP) || levels[0];
+  const current = xp - level.minXP;
+  const max = level.maxXP - level.minXP + 1;
+  return { current, max, percent: Math.round((current / max) * 100) };
+}
+
+export function getAvailableRewards(role: "guest" | "host", level: number, tier: string): Reward[] {
+  return rewards.filter(r => {
+    if (r.forRole !== "both" && r.forRole !== role) return false;
+    if (r.minLevel && level < r.minLevel) return false;
+    // Simplified tier check - in real app would compare tier hierarchy
+    return r.isActive;
+  });
+}
+
+export function getBadgesByCategory(category: "guest" | "host"): Record<BadgeCategory, MockBadge[]> {
+  const categoryBadges = badges.filter(b => b.category === category);
+  const grouped: Record<string, MockBadge[]> = {};
+
+  categoryBadges.forEach(badge => {
+    if (!grouped[badge.badgeCategory]) {
+      grouped[badge.badgeCategory] = [];
+    }
+    grouped[badge.badgeCategory].push(badge);
+  });
+
+  return grouped as Record<BadgeCategory, MockBadge[]>;
+}
 
 // ============================================
 // REVIEWS
@@ -416,6 +1627,10 @@ export interface MockEvent {
   location: string;
   locationSlug: string;
   fullAddress: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   price: number;
   capacity: number;
   spotsLeft: number;
@@ -424,6 +1639,15 @@ export interface MockEvent {
   menuDescription: string;
   dietaryOptions: string[];
   whatToBring: string;
+  // Advanced filter fields
+  languages?: string[];           // ["pl", "en"] - event languages
+  experienceLevel?: "beginner" | "intermediate" | "advanced" | "all";
+  accessibility?: {
+    wheelchairAccessible?: boolean;
+    noStairs?: boolean;
+    serviceAnimalsAllowed?: boolean;
+    hearingAssistance?: boolean;
+  };
   host: {
     id: string;
     name: string;
@@ -435,6 +1659,40 @@ export interface MockEvent {
     badges?: string[];
   };
 }
+
+// Experience level options
+export const experienceLevels = [
+  { value: "all", label: "Każdy poziom" },
+  { value: "beginner", label: "Początkujący" },
+  { value: "intermediate", label: "Średniozaawansowany" },
+  { value: "advanced", label: "Zaawansowany" },
+];
+
+// Accessibility options for filtering
+export const accessibilityOptions = [
+  { value: "wheelchairAccessible", label: "Dostęp dla wózków", icon: "♿" },
+  { value: "noStairs", label: "Bez schodów", icon: "🚷" },
+  { value: "serviceAnimalsAllowed", label: "Psy asystujące", icon: "🐕‍🦺" },
+  { value: "hearingAssistance", label: "Dla słabosłyszących", icon: "🦻" },
+];
+
+// Group size options
+export const groupSizeOptions = [
+  { value: "all", label: "Dowolna wielkość", min: 0, max: 100 },
+  { value: "intimate", label: "Kameralne (2-6 osób)", min: 2, max: 6 },
+  { value: "small", label: "Małe (7-12 osób)", min: 7, max: 12 },
+  { value: "medium", label: "Średnie (13-20 osób)", min: 13, max: 20 },
+  { value: "large", label: "Duże (21+ osób)", min: 21, max: 100 },
+];
+
+// Language options for filtering
+export const languageOptions = [
+  { value: "all", label: "Dowolny język", flag: "🌍" },
+  { value: "pl", label: "Polski", flag: "🇵🇱" },
+  { value: "en", label: "Angielski", flag: "🇬🇧" },
+  { value: "es", label: "Hiszpański", flag: "🇪🇸" },
+  { value: "ja", label: "Japoński", flag: "🇯🇵" },
+];
 
 // Helper to get badges for a host
 export function getHostBadges(badgeIds: string[]): MockBadge[] {
@@ -455,6 +1713,7 @@ export const mockEvents: MockEvent[] = [
     location: "Stare Miasto, Wrocław",
     locationSlug: "stare-miasto",
     fullAddress: "ul. Ruska 46/3, 50-079 Wrocław",
+    coordinates: { lat: 51.1107, lng: 17.0286 }, // Stare Miasto
     price: 150,
     capacity: 12,
     spotsLeft: 4,
@@ -465,6 +1724,14 @@ export const mockEvents: MockEvent[] = [
       "Antipasti misti, Pappardelle al ragù di cinghiale, Bistecca alla fiorentina (opcja wegetariańska dostępna), Tiramisu",
     dietaryOptions: ["Wegetariańska opcja", "Bezglutenowe na życzenie"],
     whatToBring: "Dobry humor i apetyt!",
+    languages: ["pl"],
+    experienceLevel: "all",
+    accessibility: {
+      wheelchairAccessible: false,
+      noStairs: false,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: false,
+    },
     host: {
       id: "host-1",
       name: "Anna Kowalska",
@@ -489,6 +1756,7 @@ export const mockEvents: MockEvent[] = [
     location: "Nadodrze, Wrocław",
     locationSlug: "nadodrze",
     fullAddress: "ul. Łąkowa 12, 50-036 Wrocław",
+    coordinates: { lat: 51.1175, lng: 17.0442 }, // Nadodrze
     price: 200,
     capacity: 8,
     spotsLeft: 6,
@@ -499,6 +1767,14 @@ export const mockEvents: MockEvent[] = [
       "Maki, Uramaki, Nigiri, California Roll, Sashimi - wszystko do samodzielnego przygotowania",
     dietaryOptions: ["Opcja wegańska z warzywami"],
     whatToBring: "Fartuch (mamy zapasowe), notes do zapisków",
+    languages: ["pl", "en"],
+    experienceLevel: "beginner",
+    accessibility: {
+      wheelchairAccessible: true,
+      noStairs: true,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: false,
+    },
     host: {
       id: "host-2",
       name: "Kenji Tanaka",
@@ -523,6 +1799,7 @@ export const mockEvents: MockEvent[] = [
     location: "Śródmieście, Wrocław",
     locationSlug: "srodmiescie",
     fullAddress: "ul. Świdnicka 28/2, 50-067 Wrocław",
+    coordinates: { lat: 51.1045, lng: 17.0310 }, // Śródmieście
     price: 120,
     capacity: 16,
     spotsLeft: 2,
@@ -533,6 +1810,14 @@ export const mockEvents: MockEvent[] = [
       "6 win naturalnych z Gruzji, Khachapuri, Churchkhela, sery gruzińskie",
     dietaryOptions: ["Wegetariańskie przekąski"],
     whatToBring: "Otwartość na nowe smaki",
+    languages: ["pl", "en"],
+    experienceLevel: "beginner",
+    accessibility: {
+      wheelchairAccessible: true,
+      noStairs: true,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: false,
+    },
     host: {
       id: "host-3",
       name: "Giorgi Beridze",
@@ -557,6 +1842,7 @@ export const mockEvents: MockEvent[] = [
     location: "Przedmieście Oławskie",
     locationSlug: "srodmiescie",
     fullAddress: "ul. Traugutta 45, 50-416 Wrocław",
+    coordinates: { lat: 51.0980, lng: 17.0385 }, // Przedmieście Oławskie
     price: 89,
     capacity: 30,
     spotsLeft: 0,
@@ -567,6 +1853,14 @@ export const mockEvents: MockEvent[] = [
       "Pad Thai, Som Tam (sałatka z papai), Satay z sosem orzechowym, Tom Yum, Mango Sticky Rice",
     dietaryOptions: ["Wegańskie opcje", "Bez orzechów na życzenie"],
     whatToBring: "Tolerancja na ostrość :)",
+    languages: ["pl", "en"],
+    experienceLevel: "all",
+    accessibility: {
+      wheelchairAccessible: true,
+      noStairs: true,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: false,
+    },
     host: {
       id: "host-4",
       name: "Mai & Tom Kitchen",
@@ -591,6 +1885,7 @@ export const mockEvents: MockEvent[] = [
     location: "Park Szczytnicki",
     locationSlug: "krzyki",
     fullAddress: "Hala Stulecia, Park Szczytnicki, Wrocław",
+    coordinates: { lat: 51.1069, lng: 17.0772 }, // Park Szczytnicki
     price: 75,
     capacity: 20,
     spotsLeft: 12,
@@ -601,6 +1896,14 @@ export const mockEvents: MockEvent[] = [
       "Smoothie bowl, Jajka benedykt lub opcja wegańska, Świeże soki, Kawa/herbata",
     dietaryOptions: ["Wegańskie opcje", "Bezglutenowe opcje"],
     whatToBring: "Strój do biegania, dobry nastrój",
+    languages: ["pl"],
+    experienceLevel: "intermediate",
+    accessibility: {
+      wheelchairAccessible: false,
+      noStairs: true,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: false,
+    },
     host: {
       id: "host-5",
       name: "Run & Eat Wrocław",
@@ -625,6 +1928,7 @@ export const mockEvents: MockEvent[] = [
     location: "Ołbin, Wrocław",
     locationSlug: "nadodrze",
     fullAddress: "ul. Jedności Narodowej 72, 50-260 Wrocław",
+    coordinates: { lat: 51.1215, lng: 17.0510 }, // Ołbin
     price: 160,
     capacity: 10,
     spotsLeft: 8,
@@ -635,6 +1939,14 @@ export const mockEvents: MockEvent[] = [
       "Chinkali z mięsem, Chinkali z serem (wegetariańskie), Pkhali, Gruzińskie wino",
     dietaryOptions: ["Opcja wegetariańska"],
     whatToBring: "Fartuch, chęć do nauki",
+    languages: ["pl", "en"],
+    experienceLevel: "beginner",
+    accessibility: {
+      wheelchairAccessible: false,
+      noStairs: false,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: false,
+    },
     host: {
       id: "host-3",
       name: "Giorgi Beridze",
@@ -659,6 +1971,7 @@ export const mockEvents: MockEvent[] = [
     location: "Stare Miasto, Wrocław",
     locationSlug: "stare-miasto",
     fullAddress: "ul. Ruska 46/3, 50-079 Wrocław",
+    coordinates: { lat: 51.1107, lng: 17.0286 }, // Stare Miasto
     price: 180,
     capacity: 8,
     spotsLeft: 5,
@@ -669,6 +1982,14 @@ export const mockEvents: MockEvent[] = [
       "Tagliatelle al ragù, Ravioli ricotta e spinaci, Orecchiette con cime di rapa",
     dietaryOptions: ["Możliwa opcja wegańska"],
     whatToBring: "Fartuch",
+    languages: ["pl"],
+    experienceLevel: "beginner",
+    accessibility: {
+      wheelchairAccessible: false,
+      noStairs: false,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: false,
+    },
     host: {
       id: "host-1",
       name: "Anna Kowalska",
@@ -693,6 +2014,7 @@ export const mockEvents: MockEvent[] = [
     location: "Nadodrze, Wrocław",
     locationSlug: "nadodrze",
     fullAddress: "ul. Roosevelta 5/2, 50-236 Wrocław",
+    coordinates: { lat: 51.1168, lng: 17.0395 }, // Nadodrze
     price: 135,
     capacity: 14,
     spotsLeft: 9,
@@ -703,6 +2025,14 @@ export const mockEvents: MockEvent[] = [
       "Patatas bravas, Gambas al ajillo, Jamón ibérico, Tortilla española, Pimientos de padrón, Croquetas, Manchego, Pan con tomate",
     dietaryOptions: ["Opcje wegetariańskie dostępne"],
     whatToBring: "Nastrój do zabawy",
+    languages: ["pl", "es"],
+    experienceLevel: "all",
+    accessibility: {
+      wheelchairAccessible: true,
+      noStairs: true,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: false,
+    },
     host: {
       id: "host-6",
       name: "Casa Español",
@@ -727,6 +2057,7 @@ export const mockEvents: MockEvent[] = [
     location: "Stare Miasto, Wrocław",
     locationSlug: "stare-miasto",
     fullAddress: "ul. Ofiar Oświęcimskich 17, 50-069 Wrocław",
+    coordinates: { lat: 51.1095, lng: 17.0320 }, // Stare Miasto
     price: 350,
     capacity: 8,
     spotsLeft: 3,
@@ -737,6 +2068,14 @@ export const mockEvents: MockEvent[] = [
       "7-daniowe menu degustacyjne: Amuse-bouche, Foie gras z jabłkiem i brioche, Tartar z tuńczyka z awokado, Ravioli z homara, Polędwica wołowa sous-vide, Selekcja serów, Deser: Czekoladowa kula. Parowanie win w cenie.",
     dietaryOptions: ["Menu dostosowywane do alergii po wcześniejszym kontakcie"],
     whatToBring: "Apetyt na wyjątkowe doznania",
+    languages: ["pl", "en"],
+    experienceLevel: "advanced",
+    accessibility: {
+      wheelchairAccessible: true,
+      noStairs: true,
+      serviceAnimalsAllowed: false,
+      hearingAssistance: true,
+    },
     host: {
       id: "host-7",
       name: "Chef Michał Nowak",
@@ -761,6 +2100,7 @@ export const mockEvents: MockEvent[] = [
     location: "Śródmieście, Wrocław",
     locationSlug: "srodmiescie",
     fullAddress: "ul. Świdnicka 8, 50-067 Wrocław",
+    coordinates: { lat: 51.1052, lng: 17.0300 }, // Śródmieście
     price: 280,
     capacity: 12,
     spotsLeft: 7,
@@ -771,6 +2111,14 @@ export const mockEvents: MockEvent[] = [
       "5-daniowe menu fusion: Pierogi gyoza z kaszanką i sosem ponzu, Zupa miso z polskimi grzybami, Łosoś teriyaki z kaszą jaglaną, Kacze piersi z glazurą z polskich jabłek, Deser: Sernik matcha z białą czekoladą",
     dietaryOptions: ["Opcja pescetariańska", "Bez glutenu po uzgodnieniu"],
     whatToBring: "Otwartość na nowe smaki",
+    languages: ["pl", "en", "ja"],
+    experienceLevel: "intermediate",
+    accessibility: {
+      wheelchairAccessible: true,
+      noStairs: true,
+      serviceAnimalsAllowed: true,
+      hearingAssistance: true,
+    },
     host: {
       id: "host-8",
       name: "Restauracja Umami",
@@ -797,6 +2145,11 @@ export function filterEvents(params: {
   dateTo?: Date;
   search?: string;
   sort?: string;
+  // Advanced filters
+  groupSize?: string;
+  language?: string;
+  experienceLevel?: string;
+  accessibility?: string[];
 }): MockEvent[] {
   let filtered = [...mockEvents];
 
@@ -816,6 +2169,42 @@ export function filterEvents(params: {
   }
   if (params.maxPrice !== undefined) {
     filtered = filtered.filter((e) => e.price <= params.maxPrice!);
+  }
+
+  // Filter by group size
+  if (params.groupSize && params.groupSize !== "all") {
+    const sizeOption = groupSizeOptions.find((o) => o.value === params.groupSize);
+    if (sizeOption) {
+      filtered = filtered.filter(
+        (e) => e.capacity >= sizeOption.min && e.capacity <= sizeOption.max
+      );
+    }
+  }
+
+  // Filter by language
+  if (params.language && params.language !== "all") {
+    filtered = filtered.filter(
+      (e) => e.languages && e.languages.includes(params.language!)
+    );
+  }
+
+  // Filter by experience level
+  if (params.experienceLevel && params.experienceLevel !== "all") {
+    filtered = filtered.filter(
+      (e) =>
+        e.experienceLevel === params.experienceLevel ||
+        e.experienceLevel === "all"
+    );
+  }
+
+  // Filter by accessibility requirements
+  if (params.accessibility && params.accessibility.length > 0) {
+    filtered = filtered.filter((e) => {
+      if (!e.accessibility) return false;
+      return params.accessibility!.every((requirement) => {
+        return e.accessibility![requirement as keyof typeof e.accessibility] === true;
+      });
+    });
   }
 
   // Filter by search
@@ -1118,7 +2507,12 @@ export interface HostEvent {
   startTime: string;
   duration: number;
   location: string;
+  locationSlug?: string;
   fullAddress: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   price: number;
   capacity: number;
   spotsLeft: number;
@@ -1352,22 +2746,7 @@ export interface GuestProfile {
   }[];
 }
 
-export const guestLevels = [
-  { level: 1, name: "Smakosz Początkujący", minXp: 0, maxXp: 100 },
-  { level: 2, name: "Kulinarny Odkrywca", minXp: 100, maxXp: 300 },
-  { level: 3, name: "Podróżnik Smaków", minXp: 300, maxXp: 600 },
-  { level: 4, name: "Ekspert Gastronomii", minXp: 600, maxXp: 1000 },
-  { level: 5, name: "Mistrz Kulinarny", minXp: 1000, maxXp: 2000 },
-  { level: 6, name: "Legenda Seated", minXp: 2000, maxXp: Infinity },
-];
-
-export function getGuestLevel(xp: number): { level: number; name: string; progress: number } {
-  const levelInfo = guestLevels.find((l) => xp >= l.minXp && xp < l.maxXp) || guestLevels[guestLevels.length - 1];
-  const progress = levelInfo.maxXp === Infinity
-    ? 100
-    : Math.round(((xp - levelInfo.minXp) / (levelInfo.maxXp - levelInfo.minXp)) * 100);
-  return { level: levelInfo.level, name: levelInfo.name, progress };
-}
+// Legacy guestLevels and getGuestLevel moved to expanded gamification section above
 
 // ============================================
 // MOCK GUEST PROFILES (linked to mockUsers)
@@ -1715,6 +3094,183 @@ export const guestWrittenReviews = [
     createdAt: new Date("2024-12-15"),
   },
 ];
+
+// ============================================
+// WAITLIST SYSTEM
+// ============================================
+
+export type WaitlistStatus = "waiting" | "notified" | "expired" | "converted";
+
+export interface WaitlistEntry {
+  id: string;
+  eventId: string;
+  email: string;
+  name?: string;
+  phone?: string;
+  ticketsWanted: number;
+  position: number;
+  status: WaitlistStatus;
+  createdAt: Date;
+  notifiedAt?: Date;
+  expiresAt?: Date;
+  token?: string;
+  convertedToBookingId?: string;
+}
+
+// In-memory waitlist storage (would be database in production)
+let waitlistEntries: WaitlistEntry[] = [
+  {
+    id: "wl-1",
+    eventId: "1",
+    email: "anna.waitlist@example.com",
+    name: "Anna Nowak",
+    ticketsWanted: 2,
+    position: 1,
+    status: "waiting",
+    createdAt: new Date("2026-02-10T14:00:00"),
+  },
+  {
+    id: "wl-2",
+    eventId: "1",
+    email: "tomek.waitlist@example.com",
+    name: "Tomasz Kowalski",
+    phone: "+48 600 111 222",
+    ticketsWanted: 1,
+    position: 2,
+    status: "waiting",
+    createdAt: new Date("2026-02-11T09:30:00"),
+  },
+  {
+    id: "wl-3",
+    eventId: "1",
+    email: "kasia.waitlist@example.com",
+    ticketsWanted: 3,
+    position: 3,
+    status: "waiting",
+    createdAt: new Date("2026-02-12T16:45:00"),
+  },
+];
+
+// Waitlist helper functions
+export function getWaitlistByEventId(eventId: string): WaitlistEntry[] {
+  return waitlistEntries
+    .filter((e) => e.eventId === eventId)
+    .sort((a, b) => a.position - b.position);
+}
+
+export function getWaitlistEntry(entryId: string): WaitlistEntry | null {
+  return waitlistEntries.find((e) => e.id === entryId) || null;
+}
+
+export function getWaitlistEntryByEmail(eventId: string, email: string): WaitlistEntry | null {
+  return waitlistEntries.find(
+    (e) => e.eventId === eventId && e.email.toLowerCase() === email.toLowerCase()
+  ) || null;
+}
+
+export function getNextWaitlistEntry(eventId: string): WaitlistEntry | null {
+  const waiting = waitlistEntries
+    .filter((e) => e.eventId === eventId && e.status === "waiting")
+    .sort((a, b) => a.position - b.position);
+  return waiting[0] || null;
+}
+
+export function getWaitlistCount(eventId: string): number {
+  return waitlistEntries.filter(
+    (e) => e.eventId === eventId && e.status === "waiting"
+  ).length;
+}
+
+export function addToWaitlist(
+  entry: Omit<WaitlistEntry, "id" | "position" | "status" | "createdAt">
+): WaitlistEntry {
+  // Check if already on waitlist
+  const existing = getWaitlistEntryByEmail(entry.eventId, entry.email);
+  if (existing) {
+    throw new Error("Already on waitlist");
+  }
+
+  // Get next position
+  const eventWaitlist = getWaitlistByEventId(entry.eventId);
+  const maxPosition = eventWaitlist.length > 0
+    ? Math.max(...eventWaitlist.map((e) => e.position))
+    : 0;
+
+  const newEntry: WaitlistEntry = {
+    ...entry,
+    id: `wl-${Date.now()}`,
+    position: maxPosition + 1,
+    status: "waiting",
+    createdAt: new Date(),
+  };
+
+  waitlistEntries.push(newEntry);
+  return newEntry;
+}
+
+export function removeFromWaitlist(entryId: string): boolean {
+  const index = waitlistEntries.findIndex((e) => e.id === entryId);
+  if (index === -1) return false;
+
+  const entry = waitlistEntries[index];
+  waitlistEntries.splice(index, 1);
+
+  // Reorder positions for remaining entries
+  waitlistEntries
+    .filter((e) => e.eventId === entry.eventId && e.position > entry.position)
+    .forEach((e) => {
+      e.position -= 1;
+    });
+
+  return true;
+}
+
+export function markWaitlistNotified(entryId: string, token: string): WaitlistEntry | null {
+  const entry = waitlistEntries.find((e) => e.id === entryId);
+  if (!entry) return null;
+
+  entry.status = "notified";
+  entry.notifiedAt = new Date();
+  entry.token = token;
+  // 12 hours to book
+  entry.expiresAt = new Date(Date.now() + 12 * 60 * 60 * 1000);
+
+  return entry;
+}
+
+export function markWaitlistExpired(entryId: string): WaitlistEntry | null {
+  const entry = waitlistEntries.find((e) => e.id === entryId);
+  if (!entry) return null;
+
+  entry.status = "expired";
+  return entry;
+}
+
+export function markWaitlistConverted(entryId: string, bookingId: string): WaitlistEntry | null {
+  const entry = waitlistEntries.find((e) => e.id === entryId);
+  if (!entry) return null;
+
+  entry.status = "converted";
+  entry.convertedToBookingId = bookingId;
+  return entry;
+}
+
+export function validateWaitlistToken(entryId: string, token: string): WaitlistEntry | null {
+  const entry = waitlistEntries.find((e) => e.id === entryId);
+  if (!entry) return null;
+  if (entry.token !== token) return null;
+  if (entry.status !== "notified") return null;
+  if (entry.expiresAt && entry.expiresAt < new Date()) return null;
+
+  return entry;
+}
+
+export function getExpiredWaitlistEntries(): WaitlistEntry[] {
+  const now = new Date();
+  return waitlistEntries.filter(
+    (e) => e.status === "notified" && e.expiresAt && e.expiresAt < now
+  );
+}
 
 // ============================================
 // ADMIN PANEL DATA
@@ -3190,3 +4746,777 @@ export function getConversationById(conversationId: string): MockConversation | 
 export function getMessagesByConversationId(conversationId: string): MockMessage[] {
   return mockMessages.filter(m => m.conversationId === conversationId);
 }
+
+// ============================================
+// REPORTS & DISPUTES SYSTEM
+// ============================================
+
+export type ReportType = "event" | "host" | "guest";
+export type ReportStatus = "pending" | "under_review" | "resolved" | "dismissed";
+export type ReportCategory =
+  // For events/hosts
+  | "misleading_description"
+  | "safety_concern"
+  | "inappropriate_behavior"
+  | "no_show"
+  | "quality_issue"
+  | "payment_issue"
+  | "harassment"
+  | "discrimination"
+  // For guests
+  | "guest_no_show"
+  | "guest_disruptive"
+  | "guest_damage"
+  | "guest_harassment"
+  | "fake_booking"
+  | "other";
+
+export interface Report {
+  id: string;
+  type: ReportType;
+  category: ReportCategory;
+  status: ReportStatus;
+  // Reporter info
+  reporterId: string;
+  reporterName: string;
+  reporterEmail: string;
+  reporterRole: "guest" | "host";
+  // Reported entity
+  reportedEntityId: string; // eventId, hostId, or guestId
+  reportedEntityName: string;
+  // Related context
+  eventId?: string;
+  eventTitle?: string;
+  bookingId?: string;
+  // Report content
+  description: string;
+  evidence?: string[]; // URLs or descriptions of evidence
+  // Resolution
+  adminNotes?: string;
+  resolvedAt?: Date;
+  resolvedBy?: string;
+  resolution?: "warning_issued" | "account_suspended" | "refund_issued" | "no_action" | "escalated";
+  // Timestamps
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Report category labels
+export const reportCategoryLabels: Record<ReportCategory, { label: string; description: string }> = {
+  // Event/Host issues
+  misleading_description: {
+    label: "Mylący opis",
+    description: "Wydarzenie znacząco różniło się od opisu",
+  },
+  safety_concern: {
+    label: "Problemy z bezpieczeństwem",
+    description: "Niebezpieczne warunki lub obawy dotyczące higieny",
+  },
+  inappropriate_behavior: {
+    label: "Nieodpowiednie zachowanie",
+    description: "Nieodpowiednie zachowanie hosta podczas wydarzenia",
+  },
+  no_show: {
+    label: "Niestawienie się",
+    description: "Host nie pojawił się lub odwołał w ostatniej chwili",
+  },
+  quality_issue: {
+    label: "Problemy z jakością",
+    description: "Jakość jedzenia lub doświadczenia poniżej oczekiwań",
+  },
+  payment_issue: {
+    label: "Problem z płatnością",
+    description: "Problemy z płatnością lub nieautoryzowane opłaty",
+  },
+  harassment: {
+    label: "Nękanie",
+    description: "Nękanie lub niepożądane zachowanie",
+  },
+  discrimination: {
+    label: "Dyskryminacja",
+    description: "Dyskryminacyjne traktowanie",
+  },
+  // Guest issues
+  guest_no_show: {
+    label: "Niestawienie się gościa",
+    description: "Gość nie pojawił się na wydarzeniu",
+  },
+  guest_disruptive: {
+    label: "Zakłócanie wydarzenia",
+    description: "Gość zakłócał przebieg wydarzenia",
+  },
+  guest_damage: {
+    label: "Uszkodzenie mienia",
+    description: "Gość uszkodził mienie lub wyposażenie",
+  },
+  guest_harassment: {
+    label: "Nękanie przez gościa",
+    description: "Gość nękał innych uczestników lub hosta",
+  },
+  fake_booking: {
+    label: "Fałszywa rezerwacja",
+    description: "Podejrzenie fałszywej rezerwacji lub oszustwa",
+  },
+  other: {
+    label: "Inne",
+    description: "Inny problem nie wymieniony powyżej",
+  },
+};
+
+// Report status labels
+export const reportStatusLabels: Record<ReportStatus, { label: string; color: string }> = {
+  pending: { label: "Oczekuje", color: "bg-yellow-100 text-yellow-800" },
+  under_review: { label: "W trakcie rozpatrywania", color: "bg-blue-100 text-blue-800" },
+  resolved: { label: "Rozwiązane", color: "bg-green-100 text-green-800" },
+  dismissed: { label: "Odrzucone", color: "bg-gray-100 text-gray-800" },
+};
+
+// Mock reports data
+export const mockReports: Report[] = [
+  {
+    id: "report-1",
+    type: "event",
+    category: "misleading_description",
+    status: "pending",
+    reporterId: "guest-active",
+    reporterName: "Jan Kowalski",
+    reporterEmail: "jan@example.com",
+    reporterRole: "guest",
+    reportedEntityId: "host-1",
+    reportedEntityName: "Anna Kowalska",
+    eventId: "1",
+    eventTitle: "Włoska Kolacja u Ani - Toskańskie Smaki",
+    bookingId: "booking-1",
+    description: "Menu było znacząco różne od opisanego. Zamiast 4-daniowej kolacji otrzymaliśmy tylko 2 dania. Brak obiecanego tiramisu.",
+    createdAt: new Date("2025-02-10T14:30:00"),
+    updatedAt: new Date("2025-02-10T14:30:00"),
+  },
+  {
+    id: "report-2",
+    type: "guest",
+    category: "guest_no_show",
+    status: "resolved",
+    reporterId: "host-1",
+    reporterName: "Anna Kowalska",
+    reporterEmail: "anna@example.com",
+    reporterRole: "host",
+    reportedEntityId: "guest-new",
+    reportedEntityName: "Marta Nowak",
+    eventId: "2",
+    eventTitle: "Sushi Masterclass",
+    bookingId: "booking-5",
+    description: "Gość zarezerwował 2 miejsca i nie pojawił się bez żadnego uprzedzenia. Straciłam potencjalnych gości z listy oczekujących.",
+    adminNotes: "Zweryfikowano - gość nie pojawił się. Wydano ostrzeżenie.",
+    resolvedAt: new Date("2025-02-08T10:00:00"),
+    resolvedBy: "admin-1",
+    resolution: "warning_issued",
+    createdAt: new Date("2025-02-05T20:00:00"),
+    updatedAt: new Date("2025-02-08T10:00:00"),
+  },
+  {
+    id: "report-3",
+    type: "host",
+    category: "safety_concern",
+    status: "under_review",
+    reporterId: "guest-active",
+    reporterName: "Jan Kowalski",
+    reporterEmail: "jan@example.com",
+    reporterRole: "guest",
+    reportedEntityId: "host-3",
+    reportedEntityName: "Giorgi Beridze",
+    eventId: "3",
+    eventTitle: "Naturalne Wina Gruzji",
+    description: "Kuchnia nie wyglądała na czystą. Zauważyłem brak odpowiedniej segregacji produktów surowych od gotowanych.",
+    evidence: ["Zdjęcie kuchni", "Zdjęcie blatów"],
+    createdAt: new Date("2025-02-12T09:15:00"),
+    updatedAt: new Date("2025-02-12T11:00:00"),
+  },
+];
+
+// Helper functions for reports
+export function getReportById(reportId: string): Report | undefined {
+  return mockReports.find(r => r.id === reportId);
+}
+
+export function getReportsByReporter(reporterId: string): Report[] {
+  return mockReports.filter(r => r.reporterId === reporterId);
+}
+
+export function getReportsByReportedEntity(entityId: string): Report[] {
+  return mockReports.filter(r => r.reportedEntityId === entityId);
+}
+
+export function getReportsByStatus(status: ReportStatus): Report[] {
+  return mockReports.filter(r => r.status === status);
+}
+
+export function getPendingReportsCount(): number {
+  return mockReports.filter(r => r.status === "pending" || r.status === "under_review").length;
+}
+
+export function addReport(report: Omit<Report, "id" | "createdAt" | "updatedAt">): Report {
+  const newReport: Report = {
+    ...report,
+    id: `report-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+  mockReports.push(newReport);
+  return newReport;
+}
+
+export function updateReportStatus(
+  reportId: string,
+  status: ReportStatus,
+  adminNotes?: string,
+  resolution?: Report["resolution"]
+): Report | undefined {
+  const report = mockReports.find(r => r.id === reportId);
+  if (report) {
+    report.status = status;
+    report.updatedAt = new Date();
+    if (adminNotes) report.adminNotes = adminNotes;
+    if (resolution) {
+      report.resolution = resolution;
+      report.resolvedAt = new Date();
+    }
+  }
+  return report;
+}
+
+// Categories grouped by reporter type
+export const guestReportCategories: ReportCategory[] = [
+  "misleading_description",
+  "safety_concern",
+  "inappropriate_behavior",
+  "no_show",
+  "quality_issue",
+  "payment_issue",
+  "harassment",
+  "discrimination",
+  "other",
+];
+
+export const hostReportCategories: ReportCategory[] = [
+  "guest_no_show",
+  "guest_disruptive",
+  "guest_damage",
+  "guest_harassment",
+  "fake_booking",
+  "other",
+];
+
+// ============================================
+// MESSAGE TEMPLATES & AUTOMATION
+// ============================================
+
+export type MessageTemplateType =
+  | "booking_confirmation"
+  | "booking_approved"
+  | "booking_declined"
+  | "reminder_week"
+  | "reminder_day"
+  | "reminder_hours"
+  | "post_event_thanks"
+  | "review_request"
+  | "rebooking_offer"
+  | "custom";
+
+export type ReminderTiming = "7_days" | "48_hours" | "24_hours" | "2_hours";
+export type FollowUpTiming = "same_day" | "1_day" | "3_days" | "7_days" | "14_days";
+
+export interface MessageTemplate {
+  id: string;
+  hostId: string;
+  type: MessageTemplateType;
+  name: string;
+  subject: string;
+  body: string;
+  isDefault: boolean;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AutomationRule {
+  id: string;
+  hostId: string;
+  type: "reminder" | "follow_up";
+  timing: ReminderTiming | FollowUpTiming;
+  templateId: string;
+  isActive: boolean;
+  channels: ("email" | "sms")[];
+  createdAt: Date;
+}
+
+export interface CommunicationSettings {
+  hostId: string;
+  // Reminders
+  enableReminders: boolean;
+  reminderTimings: ReminderTiming[];
+  // Follow-ups
+  enableFollowUps: boolean;
+  followUpSequence: {
+    timing: FollowUpTiming;
+    templateType: MessageTemplateType;
+    enabled: boolean;
+  }[];
+  // Review requests
+  enableReviewRequests: boolean;
+  reviewRequestDelay: FollowUpTiming;
+  // Rebooking offers
+  enableRebookingOffers: boolean;
+  rebookingDiscountPercent: number;
+  rebookingOfferValidDays: number;
+  // Channels
+  preferredChannels: ("email" | "sms")[];
+  // Personalization
+  includeHostPhoto: boolean;
+  includePersonalMessage: boolean;
+}
+
+// Available template variables for personalization
+export const templateVariables = {
+  guest: [
+    { key: "{{guest_name}}", label: "Imię gościa", example: "Jan" },
+    { key: "{{guest_full_name}}", label: "Pełne imię gościa", example: "Jan Kowalski" },
+    { key: "{{guest_email}}", label: "Email gościa", example: "jan@example.com" },
+  ],
+  event: [
+    { key: "{{event_title}}", label: "Tytuł wydarzenia", example: "Włoska Kolacja" },
+    { key: "{{event_date}}", label: "Data wydarzenia", example: "15 lutego 2025" },
+    { key: "{{event_time}}", label: "Godzina rozpoczęcia", example: "19:00" },
+    { key: "{{event_duration}}", label: "Czas trwania", example: "3 godziny" },
+    { key: "{{event_location}}", label: "Lokalizacja", example: "Stare Miasto, Wrocław" },
+    { key: "{{event_address}}", label: "Pełny adres", example: "ul. Ruska 46/3" },
+    { key: "{{event_price}}", label: "Cena", example: "150 zł" },
+  ],
+  booking: [
+    { key: "{{ticket_count}}", label: "Liczba biletów", example: "2" },
+    { key: "{{total_price}}", label: "Całkowita kwota", example: "300 zł" },
+    { key: "{{booking_id}}", label: "Numer rezerwacji", example: "BK-2025-001" },
+  ],
+  host: [
+    { key: "{{host_name}}", label: "Imię hosta", example: "Anna" },
+    { key: "{{host_phone}}", label: "Telefon hosta", example: "+48 123 456 789" },
+  ],
+  special: [
+    { key: "{{menu_description}}", label: "Opis menu", example: "Antipasti, pasta, tiramisu..." },
+    { key: "{{dietary_options}}", label: "Opcje dietetyczne", example: "Wegetariańskie, bezglutenowe" },
+    { key: "{{what_to_bring}}", label: "Co zabrać", example: "Dobry humor i apetyt!" },
+    { key: "{{special_instructions}}", label: "Specjalne instrukcje", example: "Wejście od podwórka" },
+    { key: "{{review_link}}", label: "Link do opinii", example: "https://seated.pl/review/..." },
+    { key: "{{rebooking_link}}", label: "Link do ponownej rezerwacji", example: "https://seated.pl/rebook/..." },
+    { key: "{{discount_code}}", label: "Kod rabatowy", example: "POWROT15" },
+    { key: "{{discount_percent}}", label: "Procent zniżki", example: "15%" },
+  ],
+};
+
+// Default message templates (Polish)
+export const defaultMessageTemplates: Omit<MessageTemplate, "id" | "hostId" | "createdAt" | "updatedAt">[] = [
+  {
+    type: "booking_confirmation",
+    name: "Potwierdzenie rezerwacji",
+    subject: "Potwierdzenie zapytania - {{event_title}}",
+    body: `Cześć {{guest_name}}! 👋
+
+Dziękuję za zainteresowanie wydarzeniem "{{event_title}}"!
+
+Twoje zapytanie o rezerwację zostało wysłane. Przejrzę je i dam Ci znać w ciągu 24-48 godzin.
+
+📅 Data: {{event_date}}
+⏰ Godzina: {{event_time}}
+👥 Liczba osób: {{ticket_count}}
+💰 Kwota: {{total_price}}
+
+W razie pytań, pisz śmiało!
+
+Do zobaczenia,
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+  {
+    type: "booking_approved",
+    name: "Rezerwacja potwierdzona",
+    subject: "✅ Rezerwacja potwierdzona - {{event_title}}",
+    body: `Świetna wiadomość, {{guest_name}}! 🎉
+
+Twoja rezerwacja na "{{event_title}}" została potwierdzona!
+
+📅 Data: {{event_date}}
+⏰ Godzina: {{event_time}}
+📍 Adres: {{event_address}}
+👥 Liczba osób: {{ticket_count}}
+
+🍽️ MENU:
+{{menu_description}}
+
+🥗 OPCJE DIETETYCZNE:
+{{dietary_options}}
+
+📝 CO ZABRAĆ:
+{{what_to_bring}}
+
+📞 Kontakt do mnie: {{host_phone}}
+
+{{special_instructions}}
+
+Nie mogę się doczekać spotkania!
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+  {
+    type: "booking_declined",
+    name: "Rezerwacja odrzucona",
+    subject: "Informacja o rezerwacji - {{event_title}}",
+    body: `Cześć {{guest_name}},
+
+Niestety muszę odmówić rezerwacji na "{{event_title}}" ({{event_date}}).
+
+Bardzo mi przykro, ale wszystkie miejsca zostały już zajęte przez wcześniejsze rezerwacje.
+
+Zachęcam do sprawdzenia moich innych wydarzeń lub zapisania się na listę oczekujących!
+
+Pozdrawiam,
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+  {
+    type: "reminder_week",
+    name: "Przypomnienie - 7 dni przed",
+    subject: "📅 Za tydzień: {{event_title}}",
+    body: `Cześć {{guest_name}}! 👋
+
+Przypominam, że za tydzień spotykamy się na "{{event_title}}"!
+
+📅 Data: {{event_date}}
+⏰ Godzina: {{event_time}}
+📍 Lokalizacja: {{event_location}}
+
+Jeśli masz jakieś pytania lub potrzebujesz zmienić rezerwację, daj mi znać!
+
+Do zobaczenia,
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+  {
+    type: "reminder_day",
+    name: "Przypomnienie - 24 godziny przed",
+    subject: "⏰ Jutro! {{event_title}}",
+    body: `Cześć {{guest_name}}! 🍽️
+
+Już jutro spotykamy się na "{{event_title}}"!
+
+📅 {{event_date}}
+⏰ {{event_time}}
+📍 {{event_address}}
+
+🍽️ Menu: {{menu_description}}
+
+📝 Pamiętaj: {{what_to_bring}}
+
+{{special_instructions}}
+
+📞 W razie problemów: {{host_phone}}
+
+Nie mogę się doczekać!
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+  {
+    type: "reminder_hours",
+    name: "Przypomnienie - 2 godziny przed",
+    subject: "🔔 Za 2 godziny: {{event_title}}",
+    body: `Cześć {{guest_name}}!
+
+Nasze wydarzenie "{{event_title}}" zaczyna się za 2 godziny!
+
+⏰ {{event_time}}
+📍 {{event_address}}
+
+{{special_instructions}}
+
+📞 Telefon: {{host_phone}}
+
+Do zobaczenia niedługo!
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+  {
+    type: "post_event_thanks",
+    name: "Podziękowanie po wydarzeniu",
+    subject: "🙏 Dziękuję za wspólny wieczór!",
+    body: `Cześć {{guest_name}}! 🌟
+
+Chciałam/em bardzo podziękować za udział w "{{event_title}}"!
+
+Mam nadzieję, że jedzenie i atmosfera przypadły Ci do gustu. To była dla mnie przyjemność gościć Cię przy moim stole.
+
+Jeśli masz jakieś uwagi lub sugestie - chętnie posłucham. Twoja opinia pomaga mi tworzyć jeszcze lepsze wydarzenia!
+
+Do zobaczenia na kolejnych wydarzeniach? 🍽️
+
+Pozdrawiam serdecznie,
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+  {
+    type: "review_request",
+    name: "Prośba o opinię",
+    subject: "⭐ Jak Ci się podobało? Twoja opinia ma znaczenie!",
+    body: `Cześć {{guest_name}}! 👋
+
+Cieszę się, że mogłam/em Cię gościć na "{{event_title}}"!
+
+Czy mógłbyś/mogłabyś poświęcić chwilę na zostawienie opinii? Twoja recenzja pomoże innym gościom odkryć moje wydarzenia i pomoże mi stawać się jeszcze lepszym hostem.
+
+👉 Zostaw opinię: {{review_link}}
+
+Każda opinia jest dla mnie bardzo cenna! ⭐
+
+Dziękuję i do zobaczenia,
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+  {
+    type: "rebooking_offer",
+    name: "Oferta powrotu",
+    subject: "🎁 Specjalna oferta dla Ciebie - {{discount_percent}} zniżki!",
+    body: `Cześć {{guest_name}}! 🍽️
+
+Dziękuję raz jeszcze za udział w "{{event_title}}"!
+
+Jako podziękowanie za bycie moim gościem, mam dla Ciebie specjalną ofertę:
+
+🎁 **{{discount_percent}} ZNIŻKI** na kolejną rezerwację!
+
+Użyj kodu: **{{discount_code}}**
+
+👉 Zarezerwuj: {{rebooking_link}}
+
+Oferta ważna przez 30 dni. Nie przegap okazji!
+
+Do zobaczenia,
+{{host_name}}`,
+    isDefault: true,
+    isActive: true,
+  },
+];
+
+// Default communication settings
+export const defaultCommunicationSettings: Omit<CommunicationSettings, "hostId"> = {
+  enableReminders: true,
+  reminderTimings: ["24_hours", "2_hours"],
+  enableFollowUps: true,
+  followUpSequence: [
+    { timing: "same_day", templateType: "post_event_thanks", enabled: true },
+    { timing: "3_days", templateType: "review_request", enabled: true },
+    { timing: "14_days", templateType: "rebooking_offer", enabled: true },
+  ],
+  enableReviewRequests: true,
+  reviewRequestDelay: "3_days",
+  enableRebookingOffers: true,
+  rebookingDiscountPercent: 15,
+  rebookingOfferValidDays: 30,
+  preferredChannels: ["email"],
+  includeHostPhoto: true,
+  includePersonalMessage: true,
+};
+
+// Mock data for specific hosts
+export const mockMessageTemplates: MessageTemplate[] = [
+  // Anna's custom templates
+  {
+    id: "tpl-anna-1",
+    hostId: "host-anna",
+    type: "booking_approved",
+    name: "Moje potwierdzenie rezerwacji",
+    subject: "🍝 Twoje miejsce przy stole jest zarezerwowane!",
+    body: `Ciao {{guest_name}}! 🇮🇹
+
+Super wiadomość - będziesz moim gościem na "{{event_title}}"!
+
+Przygotowuję dla Ciebie prawdziwe włoskie smaki:
+{{menu_description}}
+
+📅 {{event_date}} o {{event_time}}
+📍 {{event_address}}
+
+Kilka ważnych info:
+- Przyjdź 10 minut wcześniej
+- Wejście od podwórka (zadzwoń domofonem 3)
+- Parking za rogiem na ul. Oławskiej
+
+Mój telefon: {{host_phone}}
+
+A presto!
+Anna 👩‍🍳`,
+    isDefault: false,
+    isActive: true,
+    createdAt: new Date("2024-01-15"),
+    updatedAt: new Date("2024-01-15"),
+  },
+  {
+    id: "tpl-anna-2",
+    hostId: "host-anna",
+    type: "reminder_day",
+    name: "Moje przypomnienie dzień przed",
+    subject: "🍕 Jutro! Wieczór włoski u Ani",
+    body: `Ciao {{guest_name}}!
+
+Jutro o {{event_time}} zaczynamy nasze kulinarne włoskie przygody!
+
+📍 Adres: {{event_address}}
+(Pamiętaj: wejście od podwórka, domofon 3)
+
+Menu które przygotowuję:
+{{menu_description}}
+
+Weź ze sobą dobry apetyt! 😋
+
+Gdyby coś - mój telefon: {{host_phone}}
+
+A domani!
+Anna`,
+    isDefault: false,
+    isActive: true,
+    createdAt: new Date("2024-01-15"),
+    updatedAt: new Date("2024-01-15"),
+  },
+];
+
+export const mockCommunicationSettings: CommunicationSettings[] = [
+  {
+    hostId: "host-anna",
+    enableReminders: true,
+    reminderTimings: ["48_hours", "24_hours", "2_hours"],
+    enableFollowUps: true,
+    followUpSequence: [
+      { timing: "same_day", templateType: "post_event_thanks", enabled: true },
+      { timing: "3_days", templateType: "review_request", enabled: true },
+      { timing: "7_days", templateType: "rebooking_offer", enabled: true },
+    ],
+    enableReviewRequests: true,
+    reviewRequestDelay: "3_days",
+    enableRebookingOffers: true,
+    rebookingDiscountPercent: 15,
+    rebookingOfferValidDays: 30,
+    preferredChannels: ["email"],
+    includeHostPhoto: true,
+    includePersonalMessage: true,
+  },
+];
+
+// Helper functions
+export function getHostMessageTemplates(hostId: string): MessageTemplate[] {
+  const hostTemplates = mockMessageTemplates.filter(t => t.hostId === hostId);
+
+  // Return host's custom templates + defaults for missing types
+  const customTypes = new Set(hostTemplates.map(t => t.type));
+  const defaultTemplatesForHost = defaultMessageTemplates
+    .filter(t => !customTypes.has(t.type))
+    .map((t, index) => ({
+      ...t,
+      id: `default-${hostId}-${index}`,
+      hostId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+
+  return [...hostTemplates, ...defaultTemplatesForHost];
+}
+
+export function getHostCommunicationSettings(hostId: string): CommunicationSettings {
+  const settings = mockCommunicationSettings.find(s => s.hostId === hostId);
+  return settings || { ...defaultCommunicationSettings, hostId };
+}
+
+export function updateHostCommunicationSettings(
+  hostId: string,
+  updates: Partial<CommunicationSettings>
+): CommunicationSettings {
+  const index = mockCommunicationSettings.findIndex(s => s.hostId === hostId);
+  const current = getHostCommunicationSettings(hostId);
+  const updated = { ...current, ...updates };
+
+  if (index >= 0) {
+    mockCommunicationSettings[index] = updated;
+  } else {
+    mockCommunicationSettings.push(updated);
+  }
+
+  return updated;
+}
+
+export function saveMessageTemplate(template: Omit<MessageTemplate, "id" | "createdAt" | "updatedAt">): MessageTemplate {
+  const newTemplate: MessageTemplate = {
+    ...template,
+    id: `tpl-${Date.now()}`,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+  mockMessageTemplates.push(newTemplate);
+  return newTemplate;
+}
+
+export function updateMessageTemplate(
+  templateId: string,
+  updates: Partial<MessageTemplate>
+): MessageTemplate | undefined {
+  const index = mockMessageTemplates.findIndex(t => t.id === templateId);
+  if (index >= 0) {
+    mockMessageTemplates[index] = {
+      ...mockMessageTemplates[index],
+      ...updates,
+      updatedAt: new Date(),
+    };
+    return mockMessageTemplates[index];
+  }
+  return undefined;
+}
+
+export function deleteMessageTemplate(templateId: string): boolean {
+  const index = mockMessageTemplates.findIndex(t => t.id === templateId);
+  if (index >= 0 && !mockMessageTemplates[index].isDefault) {
+    mockMessageTemplates.splice(index, 1);
+    return true;
+  }
+  return false;
+}
+
+// Timing labels for UI
+export const reminderTimingLabels: Record<ReminderTiming, { label: string; description: string }> = {
+  "7_days": { label: "7 dni przed", description: "Tydzień przed wydarzeniem" },
+  "48_hours": { label: "48 godzin przed", description: "Dwa dni przed wydarzeniem" },
+  "24_hours": { label: "24 godziny przed", description: "Dzień przed wydarzeniem" },
+  "2_hours": { label: "2 godziny przed", description: "Krótko przed rozpoczęciem" },
+};
+
+export const followUpTimingLabels: Record<FollowUpTiming, { label: string; description: string }> = {
+  "same_day": { label: "Tego samego dnia", description: "Wieczorem po wydarzeniu" },
+  "1_day": { label: "1 dzień po", description: "Następnego dnia" },
+  "3_days": { label: "3 dni po", description: "Po kilku dniach" },
+  "7_days": { label: "7 dni po", description: "Tydzień później" },
+  "14_days": { label: "14 dni po", description: "Dwa tygodnie później" },
+};
+
+export const messageTemplateTypeLabels: Record<MessageTemplateType, { label: string; icon: string }> = {
+  booking_confirmation: { label: "Potwierdzenie zapytania", icon: "📋" },
+  booking_approved: { label: "Rezerwacja potwierdzona", icon: "✅" },
+  booking_declined: { label: "Rezerwacja odrzucona", icon: "❌" },
+  reminder_week: { label: "Przypomnienie - tydzień", icon: "📅" },
+  reminder_day: { label: "Przypomnienie - 24h", icon: "⏰" },
+  reminder_hours: { label: "Przypomnienie - 2h", icon: "🔔" },
+  post_event_thanks: { label: "Podziękowanie", icon: "🙏" },
+  review_request: { label: "Prośba o opinię", icon: "⭐" },
+  rebooking_offer: { label: "Oferta powrotu", icon: "🎁" },
+  custom: { label: "Własny szablon", icon: "✏️" },
+};

@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BadgeDisplay } from "@/components/badges";
 import { FollowButton } from "@/components/homies";
+import { ReportDialog } from "@/components/reports";
 import { isFollowing, getFollowers } from "@/lib/mock-data";
 import { getInitials } from "@/lib/utils";
-import { CheckCircle, Star, Users } from "lucide-react";
+import { CheckCircle, Star, Users, Flag } from "lucide-react";
 
 interface HostCardWithFollowProps {
   host: {
@@ -83,6 +84,22 @@ export function HostCardWithFollow({ host }: HostCardWithFollowProps) {
                 isFollowing={hostIsFollowing}
                 isFollowedBy={hostFollowsBack}
                 size="sm"
+              />
+              <ReportDialog
+                reportType="host"
+                reportedEntityId={host.id}
+                reportedEntityName={host.name}
+                reporterRole="guest"
+                trigger={
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-red-600"
+                  >
+                    <Flag className="h-4 w-4 mr-1" />
+                    Zgłoś
+                  </Button>
+                }
               />
             </div>
           </div>

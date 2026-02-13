@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { badges, MockBadge } from "@/lib/mock-data";
+import { badges, MockBadge, BadgeCategory, BadgeTier } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -155,7 +155,13 @@ export default function AdminBadgesPage() {
       descriptionPl: formData.descriptionPl,
       icon: formData.icon,
       category: formData.category,
+      badgeCategory: formData.category === "guest" ? "activity" : "host_activity",
+      tier: "bronze",
       color: formData.color,
+      requirement: formData.description,
+      requirementPl: formData.descriptionPl,
+      xpReward: 50,
+      rarity: "common",
       trigger: formData.triggerType !== "manual" ? {
         type: formData.triggerType,
         value: formData.triggerValue,

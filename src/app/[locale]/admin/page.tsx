@@ -9,6 +9,9 @@ import {
   hostEvents,
   adminUsers,
   hostApplicationStatusLabels,
+  mockReports,
+  reportCategoryLabels,
+  reportStatusLabels,
 } from "@/lib/mock-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,6 +26,9 @@ export default function AdminDashboardPage() {
   const recentUsers = adminUsers
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     .slice(0, 5);
+  const pendingReports = mockReports.filter(
+    (report) => report.status === "pending" || report.status === "under_review"
+  );
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -104,6 +110,28 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Pending Reports Alert */}
+      {pendingReports.length > 0 && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div className="flex gap-3">
+            <span className="text-2xl">🚨</span>
+            <div>
+              <p className="font-medium text-red-800">
+                {pendingReports.length} zgłoszeń wymaga uwagi
+              </p>
+              <p className="text-sm text-red-700">
+                Przejrzyj zgłoszenia od użytkowników
+              </p>
+            </div>
+          </div>
+          <Link href="/admin/reports">
+            <Button className="bg-red-600 hover:bg-red-700">
+              Przejdź do zgłoszeń
+            </Button>
+          </Link>
+        </div>
+      )}
 
       {/* Action Items */}
       <div className="grid md:grid-cols-2 gap-6 mb-8">
