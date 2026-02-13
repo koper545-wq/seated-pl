@@ -3789,6 +3789,26 @@ export interface UserWithHomieStats {
   isFollowedBy: boolean; // is this person following current user
 }
 
+// Mock homies (users who can be followed)
+export interface MockHomie {
+  id: string;
+  name: string;
+  avatar?: string;
+  bio?: string;
+  mutualEventsCount: number;
+}
+
+export const mockHomies: MockHomie[] = [
+  { id: "user-5", name: "Anna Kowalska", mutualEventsCount: 3 },
+  { id: "user-6", name: "Piotr Nowak", mutualEventsCount: 2 },
+  { id: "user-7", name: "Maria Wiśniewska", mutualEventsCount: 5 },
+  { id: "user-8", name: "Jan Kamiński", mutualEventsCount: 1 },
+  { id: "user-9", name: "Katarzyna Zielińska", mutualEventsCount: 4 },
+  { id: "user-10", name: "Tomasz Lewandowski", mutualEventsCount: 2 },
+  { id: "user-11", name: "Agnieszka Dąbrowska", mutualEventsCount: 6 },
+  { id: "user-12", name: "Michał Szymański", mutualEventsCount: 3 },
+];
+
 // Mock homie relations
 export const homieRelations: HomieRelation[] = [
   // Current user follows some hosts
@@ -3933,6 +3953,778 @@ export function getHomieActivityFeed(userId: string, limit: number = 10): HomieA
     .filter((activity) => following.includes(activity.userId))
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     .slice(0, limit);
+}
+
+// ============================================
+// HOMIE CHAT (Direct Messaging)
+// ============================================
+
+export interface HomieConversation {
+  id: string;
+  participants: string[];
+  participantNames: string[];
+  participantAvatars: (string | undefined)[];
+  lastMessage?: string;
+  lastMessageAt?: Date;
+  unreadCount: Record<string, number>; // userId -> count
+  createdAt: Date;
+}
+
+export interface HomieMessage {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar?: string;
+  text: string;
+  type: "text" | "event_share" | "planning_invite";
+  eventId?: string;
+  eventTitle?: string;
+  planningSessionId?: string;
+  isRead: boolean;
+  createdAt: Date;
+}
+
+export const homieConversations: HomieConversation[] = [
+  {
+    id: "hc-1",
+    participants: ["user-current", "user-5"],
+    participantNames: ["Ja", "Ola S."],
+    participantAvatars: [undefined, undefined],
+    lastMessage: "Super, to widzimy się w sobotę!",
+    lastMessageAt: new Date("2025-02-12T14:30:00"),
+    unreadCount: { "user-current": 0, "user-5": 0 },
+    createdAt: new Date("2025-02-01"),
+  },
+  {
+    id: "hc-2",
+    participants: ["user-current", "user-6"],
+    participantNames: ["Ja", "Paweł N."],
+    participantAvatars: [undefined, undefined],
+    lastMessage: "Widziałeś to nowe wydarzenie?",
+    lastMessageAt: new Date("2025-02-11T10:15:00"),
+    unreadCount: { "user-current": 2, "user-6": 0 },
+    createdAt: new Date("2025-01-20"),
+  },
+  {
+    id: "hc-3",
+    participants: ["user-current", "host-1"],
+    participantNames: ["Ja", "Anna Kowalska"],
+    participantAvatars: [undefined, undefined],
+    lastMessage: "Dziękuję za polecenie!",
+    lastMessageAt: new Date("2025-02-08T16:45:00"),
+    unreadCount: { "user-current": 0, "host-1": 0 },
+    createdAt: new Date("2025-01-15"),
+  },
+];
+
+export const homieMessages: HomieMessage[] = [
+  // Conversation hc-1 (user-current <-> user-5)
+  {
+    id: "hm-1",
+    conversationId: "hc-1",
+    senderId: "user-5",
+    senderName: "Ola S.",
+    text: "Hej! Widziałaś to wydarzenie z sushi?",
+    type: "text",
+    isRead: true,
+    createdAt: new Date("2025-02-12T10:00:00"),
+  },
+  {
+    id: "hm-2",
+    conversationId: "hc-1",
+    senderId: "user-current",
+    senderName: "Ja",
+    text: "Tak! Właśnie chciałam Ci napisać",
+    type: "text",
+    isRead: true,
+    createdAt: new Date("2025-02-12T10:05:00"),
+  },
+  {
+    id: "hm-3",
+    conversationId: "hc-1",
+    senderId: "user-5",
+    senderName: "Ola S.",
+    text: "Sushi Masterclass - Od Podstaw do Mistrza",
+    type: "event_share",
+    eventId: "2",
+    eventTitle: "Sushi Masterclass - Od Podstaw do Mistrza",
+    isRead: true,
+    createdAt: new Date("2025-02-12T10:10:00"),
+  },
+  {
+    id: "hm-4",
+    conversationId: "hc-1",
+    senderId: "user-current",
+    senderName: "Ja",
+    text: "Idealne! Idziemy razem?",
+    type: "text",
+    isRead: true,
+    createdAt: new Date("2025-02-12T14:20:00"),
+  },
+  {
+    id: "hm-5",
+    conversationId: "hc-1",
+    senderId: "user-5",
+    senderName: "Ola S.",
+    text: "Super, to widzimy się w sobotę!",
+    type: "text",
+    isRead: true,
+    createdAt: new Date("2025-02-12T14:30:00"),
+  },
+  // Conversation hc-2 (user-current <-> user-6)
+  {
+    id: "hm-6",
+    conversationId: "hc-2",
+    senderId: "user-6",
+    senderName: "Paweł N.",
+    text: "Hej, co słychać?",
+    type: "text",
+    isRead: true,
+    createdAt: new Date("2025-02-10T09:00:00"),
+  },
+  {
+    id: "hm-7",
+    conversationId: "hc-2",
+    senderId: "user-6",
+    senderName: "Paweł N.",
+    text: "Widziałeś to nowe wydarzenie?",
+    type: "text",
+    isRead: false,
+    createdAt: new Date("2025-02-11T10:15:00"),
+  },
+];
+
+// Helper functions for homie chat
+export function getHomieConversations(userId: string): HomieConversation[] {
+  return homieConversations
+    .filter((c) => c.participants.includes(userId))
+    .sort((a, b) => (b.lastMessageAt?.getTime() || 0) - (a.lastMessageAt?.getTime() || 0));
+}
+
+export function getHomieConversationById(conversationId: string): HomieConversation | undefined {
+  return homieConversations.find((c) => c.id === conversationId);
+}
+
+export function getHomieMessagesByConversation(conversationId: string): HomieMessage[] {
+  return homieMessages
+    .filter((m) => m.conversationId === conversationId)
+    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+}
+
+export function getConversationWithUser(currentUserId: string, otherUserId: string): HomieConversation | undefined {
+  return homieConversations.find(
+    (c) => c.participants.includes(currentUserId) && c.participants.includes(otherUserId)
+  );
+}
+
+export function getTotalUnreadHomieMessages(userId: string): number {
+  return homieConversations.reduce((sum, c) => sum + (c.unreadCount[userId] || 0), 0);
+}
+
+// ============================================
+// SHARED WISHLISTS
+// ============================================
+
+export interface SharedWishlist {
+  id: string;
+  name: string;
+  description?: string;
+  ownerId: string;
+  ownerName: string;
+  collaboratorIds: string[];
+  collaboratorNames: string[];
+  eventIds: string[];
+  visibility: "private" | "collaborators" | "public";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface WishlistVote {
+  id: string;
+  wishlistId: string;
+  eventId: string;
+  userId: string;
+  userName: string;
+  vote: "interested" | "going" | "skip";
+  createdAt: Date;
+}
+
+export interface WishlistActivity {
+  id: string;
+  wishlistId: string;
+  userId: string;
+  userName: string;
+  type: "event_added" | "event_removed" | "vote" | "comment" | "collaborator_joined";
+  eventId?: string;
+  eventTitle?: string;
+  comment?: string;
+  createdAt: Date;
+}
+
+export const sharedWishlists: SharedWishlist[] = [
+  {
+    id: "sw-1",
+    name: "Weekendowe wypady",
+    description: "Wydarzenia na które chcemy iść razem w weekendy",
+    ownerId: "user-current",
+    ownerName: "Ja",
+    collaboratorIds: ["user-5", "user-6"],
+    collaboratorNames: ["Ola S.", "Paweł N."],
+    eventIds: ["1", "2", "5"],
+    visibility: "collaborators",
+    createdAt: new Date("2025-01-15"),
+    updatedAt: new Date("2025-02-10"),
+  },
+  {
+    id: "sw-2",
+    name: "Azjatyckie smaki",
+    description: "Wszystko co azjatyckie!",
+    ownerId: "user-5",
+    ownerName: "Ola S.",
+    collaboratorIds: ["user-current"],
+    collaboratorNames: ["Ja"],
+    eventIds: ["2", "3"],
+    visibility: "collaborators",
+    createdAt: new Date("2025-02-01"),
+    updatedAt: new Date("2025-02-08"),
+  },
+];
+
+export const wishlistVotes: WishlistVote[] = [
+  {
+    id: "wv-1",
+    wishlistId: "sw-1",
+    eventId: "1",
+    userId: "user-current",
+    userName: "Ja",
+    vote: "going",
+    createdAt: new Date("2025-02-08"),
+  },
+  {
+    id: "wv-2",
+    wishlistId: "sw-1",
+    eventId: "1",
+    userId: "user-5",
+    userName: "Ola S.",
+    vote: "interested",
+    createdAt: new Date("2025-02-09"),
+  },
+  {
+    id: "wv-3",
+    wishlistId: "sw-1",
+    eventId: "2",
+    userId: "user-current",
+    userName: "Ja",
+    vote: "going",
+    createdAt: new Date("2025-02-10"),
+  },
+  {
+    id: "wv-4",
+    wishlistId: "sw-1",
+    eventId: "2",
+    userId: "user-5",
+    userName: "Ola S.",
+    vote: "going",
+    createdAt: new Date("2025-02-10"),
+  },
+  {
+    id: "wv-5",
+    wishlistId: "sw-1",
+    eventId: "5",
+    userId: "user-6",
+    userName: "Paweł N.",
+    vote: "skip",
+    createdAt: new Date("2025-02-07"),
+  },
+];
+
+export const wishlistActivities: WishlistActivity[] = [
+  {
+    id: "wa-1",
+    wishlistId: "sw-1",
+    userId: "user-5",
+    userName: "Ola S.",
+    type: "event_added",
+    eventId: "2",
+    eventTitle: "Sushi Masterclass",
+    createdAt: new Date("2025-02-10"),
+  },
+  {
+    id: "wa-2",
+    wishlistId: "sw-1",
+    userId: "user-current",
+    userName: "Ja",
+    type: "vote",
+    eventId: "2",
+    createdAt: new Date("2025-02-10"),
+  },
+];
+
+// Shared wishlist helper functions
+export function getSharedWishlists(userId: string): SharedWishlist[] {
+  return sharedWishlists.filter(
+    (w) => w.ownerId === userId || w.collaboratorIds.includes(userId)
+  );
+}
+
+export function getSharedWishlistById(wishlistId: string): SharedWishlist | undefined {
+  return sharedWishlists.find((w) => w.id === wishlistId);
+}
+
+export function getWishlistVotes(wishlistId: string): WishlistVote[] {
+  return wishlistVotes.filter((v) => v.wishlistId === wishlistId);
+}
+
+export function getWishlistVotesForEvent(wishlistId: string, eventId: string): WishlistVote[] {
+  return wishlistVotes.filter((v) => v.wishlistId === wishlistId && v.eventId === eventId);
+}
+
+export function getWishlistActivity(wishlistId: string, limit: number = 10): WishlistActivity[] {
+  return wishlistActivities
+    .filter((a) => a.wishlistId === wishlistId)
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .slice(0, limit);
+}
+
+// ============================================
+// EVENT PLANNING SESSIONS
+// ============================================
+
+export interface EventPlanningSession {
+  id: string;
+  name: string;
+  description?: string;
+  creatorId: string;
+  creatorName: string;
+  participantIds: string[];
+  participantNames: string[];
+  participantStatuses: Record<string, "invited" | "confirmed" | "declined">;
+  wishlistId?: string;
+  proposedDates: Date[];
+  dateVotes: Record<string, string[]>; // ISO date string -> userId[]
+  selectedEventId?: string;
+  selectedDate?: Date;
+  status: "planning" | "date_selected" | "event_selected" | "booked" | "completed";
+  conversationId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const planingSessions: EventPlanningSession[] = [
+  {
+    id: "ps-1",
+    name: "Urodziny Oli",
+    description: "Szukamy fajnego miejsca na urodziny!",
+    creatorId: "user-current",
+    creatorName: "Ja",
+    participantIds: ["user-5", "user-6"],
+    participantNames: ["Ola S.", "Paweł N."],
+    participantStatuses: {
+      "user-current": "confirmed",
+      "user-5": "confirmed",
+      "user-6": "invited",
+    },
+    wishlistId: "sw-1",
+    proposedDates: [
+      new Date("2025-02-22"),
+      new Date("2025-02-23"),
+      new Date("2025-03-01"),
+    ],
+    dateVotes: {
+      "2025-02-22": ["user-current", "user-5"],
+      "2025-02-23": ["user-5"],
+      "2025-03-01": ["user-current"],
+    },
+    status: "planning",
+    conversationId: "hc-1",
+    createdAt: new Date("2025-02-05"),
+    updatedAt: new Date("2025-02-12"),
+  },
+];
+
+// Planning session helper functions
+export function getPlanningSessions(userId: string): EventPlanningSession[] {
+  return planingSessions.filter(
+    (s) => s.creatorId === userId || s.participantIds.includes(userId)
+  );
+}
+
+export function getPlanningSessionById(sessionId: string): EventPlanningSession | undefined {
+  return planingSessions.find((s) => s.id === sessionId);
+}
+
+// ============================================
+// SOCIAL FEED
+// ============================================
+
+export type SocialPostType =
+  | "attended_event"
+  | "reviewed"
+  | "recommended"
+  | "going_to_event"
+  | "earned_badge"
+  | "hosted_event";
+
+export type SocialSentiment = "loved_it" | "great" | "good" | "okay" | "not_for_me";
+
+export interface SocialPost {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  userLevel?: number;
+  userLevelIcon?: string;
+  type: SocialPostType;
+  // Event-related
+  eventId?: string;
+  eventTitle?: string;
+  eventDate?: string;
+  eventImage?: string;
+  eventType?: string;
+  hostName?: string;
+  // Review-related
+  rating?: number;
+  reviewText?: string;
+  reviewPhotos?: string[];
+  // Sentiment (DoorDash-style)
+  sentiment?: SocialSentiment;
+  // Badge-related
+  badgeId?: string;
+  badgeName?: string;
+  badgeIcon?: string;
+  // Engagement
+  likesCount: number;
+  commentsCount: number;
+  likedByCurrentUser: boolean;
+  // Location for nearby feed
+  city?: string;
+  createdAt: Date;
+}
+
+export interface SocialComment {
+  id: string;
+  postId: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  text: string;
+  createdAt: Date;
+}
+
+export const socialPosts: SocialPost[] = [
+  {
+    id: "sp-1",
+    userId: "user-5",
+    userName: "Ola S.",
+    userLevel: 4,
+    userLevelIcon: "🌟",
+    type: "attended_event",
+    eventId: "5",
+    eventTitle: "Bieg + Brunch - Poranna Energia",
+    eventDate: "2 lutego 2025",
+    eventType: "active-food",
+    hostName: "Run & Eat Wrocław",
+    sentiment: "loved_it",
+    reviewText: "Niesamowite połączenie sportu i jedzenia! Atmosfera była świetna, a brunch po biegu smakował jak nigdy!",
+    likesCount: 12,
+    commentsCount: 3,
+    likedByCurrentUser: true,
+    city: "Wrocław",
+    createdAt: new Date("2025-02-03T10:00:00"),
+  },
+  {
+    id: "sp-2",
+    userId: "user-6",
+    userName: "Paweł N.",
+    userLevel: 3,
+    userLevelIcon: "⭐",
+    type: "reviewed",
+    eventId: "1",
+    eventTitle: "Włoska Kolacja u Ani - Toskańskie Smaki",
+    eventDate: "25 stycznia 2025",
+    eventType: "supper-club",
+    hostName: "Anna Kowalska",
+    rating: 5,
+    sentiment: "great",
+    reviewText: "Anna jest niesamowitą gospodynią! Jedzenie było przepyszne, a atmosfera bardzo ciepła.",
+    reviewPhotos: [],
+    likesCount: 8,
+    commentsCount: 1,
+    likedByCurrentUser: false,
+    city: "Wrocław",
+    createdAt: new Date("2025-01-26T14:30:00"),
+  },
+  {
+    id: "sp-3",
+    userId: "host-1",
+    userName: "Anna Kowalska",
+    userLevel: 4,
+    userLevelIcon: "👑",
+    type: "hosted_event",
+    eventId: "1",
+    eventTitle: "Włoska Kolacja u Ani - Toskańskie Smaki",
+    eventDate: "25 stycznia 2025",
+    eventType: "supper-club",
+    likesCount: 24,
+    commentsCount: 5,
+    likedByCurrentUser: true,
+    city: "Wrocław",
+    createdAt: new Date("2025-01-25T22:00:00"),
+  },
+  {
+    id: "sp-4",
+    userId: "user-5",
+    userName: "Ola S.",
+    userLevel: 4,
+    userLevelIcon: "🌟",
+    type: "going_to_event",
+    eventId: "2",
+    eventTitle: "Sushi Masterclass - Od Podstaw do Mistrza",
+    eventDate: "15 lutego 2025",
+    eventType: "warsztaty",
+    hostName: "Kenji Tanaka",
+    likesCount: 5,
+    commentsCount: 2,
+    likedByCurrentUser: false,
+    city: "Wrocław",
+    createdAt: new Date("2025-02-10T09:00:00"),
+  },
+  {
+    id: "sp-5",
+    userId: "host-2",
+    userName: "Kenji Tanaka",
+    userLevel: 4,
+    userLevelIcon: "👑",
+    type: "earned_badge",
+    badgeId: "badge-sold-out-5",
+    badgeName: "Mistrz Wyprzedaży",
+    badgeIcon: "🔥",
+    likesCount: 18,
+    commentsCount: 4,
+    likedByCurrentUser: false,
+    city: "Wrocław",
+    createdAt: new Date("2025-01-28T12:00:00"),
+  },
+  {
+    id: "sp-6",
+    userId: "user-current",
+    userName: "Marta Nowak",
+    userLevel: 2,
+    userLevelIcon: "🍴",
+    type: "recommended",
+    eventId: "3",
+    eventTitle: "Naturalnie Wino - Degustacja z Winiarką",
+    eventDate: "20 lutego 2025",
+    eventType: "degustacje",
+    hostName: "Magda Winnica",
+    sentiment: "loved_it",
+    reviewText: "Polecam każdemu kto chce poznać świat naturalnych win!",
+    likesCount: 6,
+    commentsCount: 0,
+    likedByCurrentUser: false,
+    city: "Wrocław",
+    createdAt: new Date("2025-02-08T18:00:00"),
+  },
+];
+
+export const socialComments: SocialComment[] = [
+  {
+    id: "sc-1",
+    postId: "sp-1",
+    userId: "user-current",
+    userName: "Marta Nowak",
+    text: "Brzmi świetnie! Muszę spróbować!",
+    createdAt: new Date("2025-02-03T11:30:00"),
+  },
+  {
+    id: "sc-2",
+    postId: "sp-1",
+    userId: "user-6",
+    userName: "Paweł N.",
+    text: "Widzę że warto wstać wcześnie!",
+    createdAt: new Date("2025-02-03T12:15:00"),
+  },
+  {
+    id: "sc-3",
+    postId: "sp-1",
+    userId: "host-5",
+    userName: "Run & Eat Wrocław",
+    text: "Dziękujemy za super słowa! Do zobaczenia na kolejnym biegu!",
+    createdAt: new Date("2025-02-03T14:00:00"),
+  },
+];
+
+// Social feed helper functions
+export type FeedType = "friends" | "nearby" | "global";
+
+export function getSocialFeed(userId: string, feedType: FeedType, limit: number = 20): SocialPost[] {
+  let posts = [...socialPosts];
+
+  if (feedType === "friends") {
+    const following = getFollowing(userId).map((hr) => hr.followingId);
+    posts = posts.filter((p) => following.includes(p.userId) || p.userId === userId);
+  } else if (feedType === "nearby") {
+    // For demo, filter by Wrocław
+    posts = posts.filter((p) => p.city === "Wrocław");
+  }
+  // "global" returns all posts
+
+  return posts
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .slice(0, limit);
+}
+
+export function getPostComments(postId: string): SocialComment[] {
+  return socialComments
+    .filter((c) => c.postId === postId)
+    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+}
+
+export function getSentimentLabel(sentiment: SocialSentiment): { pl: string; en: string; emoji: string; color: string } {
+  const labels: Record<SocialSentiment, { pl: string; en: string; emoji: string; color: string }> = {
+    loved_it: { pl: "Super!", en: "Loved it!", emoji: "😍", color: "bg-pink-100 text-pink-700" },
+    great: { pl: "Świetne", en: "Great", emoji: "🔥", color: "bg-orange-100 text-orange-700" },
+    good: { pl: "Dobre", en: "Good", emoji: "👍", color: "bg-green-100 text-green-700" },
+    okay: { pl: "OK", en: "Okay", emoji: "😐", color: "bg-stone-100 text-stone-700" },
+    not_for_me: { pl: "Nie dla mnie", en: "Not for me", emoji: "👎", color: "bg-stone-100 text-stone-600" },
+  };
+  return labels[sentiment];
+}
+
+// ============================================
+// WHO'S GOING (Event Attendees)
+// ============================================
+
+export interface EventAttendee {
+  id: string;
+  eventId: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  userLevel?: number;
+  isHomie: boolean;
+  isMutualHomie: boolean;
+  status: "confirmed" | "interested" | "wishlist";
+  showOnGuestList: boolean;
+  createdAt: Date;
+}
+
+export const eventAttendees: EventAttendee[] = [
+  // Event 1 attendees
+  {
+    id: "ea-1",
+    eventId: "1",
+    userId: "user-5",
+    userName: "Ola S.",
+    userLevel: 4,
+    isHomie: true,
+    isMutualHomie: true,
+    status: "confirmed",
+    showOnGuestList: true,
+    createdAt: new Date("2025-01-20"),
+  },
+  {
+    id: "ea-2",
+    eventId: "1",
+    userId: "user-6",
+    userName: "Paweł N.",
+    userLevel: 3,
+    isHomie: true,
+    isMutualHomie: false,
+    status: "confirmed",
+    showOnGuestList: true,
+    createdAt: new Date("2025-01-21"),
+  },
+  {
+    id: "ea-3",
+    eventId: "1",
+    userId: "user-7",
+    userName: "Kasia M.",
+    userLevel: 2,
+    isHomie: false,
+    isMutualHomie: false,
+    status: "confirmed",
+    showOnGuestList: true,
+    createdAt: new Date("2025-01-22"),
+  },
+  {
+    id: "ea-4",
+    eventId: "1",
+    userId: "user-8",
+    userName: "Tomek W.",
+    userLevel: 5,
+    isHomie: false,
+    isMutualHomie: false,
+    status: "interested",
+    showOnGuestList: true,
+    createdAt: new Date("2025-01-23"),
+  },
+  // Event 2 attendees
+  {
+    id: "ea-5",
+    eventId: "2",
+    userId: "user-5",
+    userName: "Ola S.",
+    userLevel: 4,
+    isHomie: true,
+    isMutualHomie: true,
+    status: "confirmed",
+    showOnGuestList: true,
+    createdAt: new Date("2025-02-10"),
+  },
+  {
+    id: "ea-6",
+    eventId: "2",
+    userId: "user-current",
+    userName: "Marta Nowak",
+    userLevel: 2,
+    isHomie: false,
+    isMutualHomie: false,
+    status: "interested",
+    showOnGuestList: true,
+    createdAt: new Date("2025-02-11"),
+  },
+];
+
+// Event attendees helper functions
+export function getEventAttendees(eventId: string, currentUserId: string): EventAttendee[] {
+  const attendees = eventAttendees.filter((a) => a.eventId === eventId && a.showOnGuestList);
+  const following = getFollowing(currentUserId).map((hr) => hr.followingId);
+  const followers = getFollowers(currentUserId).map((hr) => hr.followerId);
+
+  return attendees.map((a) => ({
+    ...a,
+    isHomie: following.includes(a.userId),
+    isMutualHomie: following.includes(a.userId) && followers.includes(a.userId),
+  }));
+}
+
+export function getHomiesGoingToEvent(eventId: string, currentUserId: string): EventAttendee[] {
+  const attendees = getEventAttendees(eventId, currentUserId);
+  return attendees.filter((a) => a.isHomie && a.status === "confirmed");
+}
+
+export function getHomiesInterestedInEvent(eventId: string, currentUserId: string): EventAttendee[] {
+  const attendees = getEventAttendees(eventId, currentUserId);
+  return attendees.filter((a) => a.isHomie && (a.status === "interested" || a.status === "wishlist"));
+}
+
+export function getEventAttendeeStats(eventId: string, currentUserId: string): {
+  total: number;
+  confirmed: number;
+  interested: number;
+  homiesGoing: number;
+  homiesInterested: number;
+} {
+  const attendees = getEventAttendees(eventId, currentUserId);
+  return {
+    total: attendees.length,
+    confirmed: attendees.filter((a) => a.status === "confirmed").length,
+    interested: attendees.filter((a) => a.status === "interested" || a.status === "wishlist").length,
+    homiesGoing: attendees.filter((a) => a.isHomie && a.status === "confirmed").length,
+    homiesInterested: attendees.filter((a) => a.isHomie && (a.status === "interested" || a.status === "wishlist")).length,
+  };
 }
 
 // ============================================

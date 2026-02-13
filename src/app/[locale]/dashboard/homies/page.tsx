@@ -20,10 +20,12 @@ import {
   getHomieActivityFeed,
   getSuggestedHomies,
   getMutualHomies,
+  getHomieConversations,
+  getSharedWishlists,
   mockEvents,
   adminUsers,
 } from "@/lib/mock-data";
-import { Search, Users, UserCheck, Activity, ChefHat, Star } from "lucide-react";
+import { Search, Users, UserCheck, Activity, ChefHat, Star, MessageCircle, ListPlus } from "lucide-react";
 import { getInitials } from "@/lib/utils";
 
 export default function HomiesPage() {
@@ -37,6 +39,13 @@ export default function HomiesPage() {
   const mutualHomies = getMutualHomies(currentUserId);
   const activityFeed = getHomieActivityFeed(currentUserId);
   const suggestions = getSuggestedHomies(currentUserId);
+  const conversations = getHomieConversations(currentUserId);
+  const wishlists = getSharedWishlists(currentUserId);
+
+  // Count unread messages
+  const unreadCount = conversations.reduce((sum, conv) => {
+    return sum + (conv.unreadCount[currentUserId] || 0);
+  }, 0);
 
   // Map IDs to user/host data
   const getPersonData = (id: string) => {
@@ -109,23 +118,40 @@ export default function HomiesPage() {
         </div>
 
         {/* Stats cards */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <Card>
             <CardContent className="p-4 text-center">
-              <p className="text-3xl font-bold text-amber-600">{following.length}</p>
-              <p className="text-sm text-muted-foreground">Obserwujesz</p>
+              <p className="text-2xl font-bold text-amber-600">{following.length}</p>
+              <p className="text-xs text-muted-foreground">Obserwujesz</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <p className="text-3xl font-bold text-amber-600">{followers.length}</p>
-              <p className="text-sm text-muted-foreground">Obserwujących</p>
+              <p className="text-2xl font-bold text-amber-600">{followers.length}</p>
+              <p className="text-xs text-muted-foreground">Obserwujących</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <p className="text-3xl font-bold text-green-600">{mutualHomies.length}</p>
-              <p className="text-sm text-muted-foreground">Mutual Homies</p>
+              <p className="text-2xl font-bold text-green-600">{mutualHomies.length}</p>
+              <p className="text-xs text-muted-foreground">Mutual Homies</p>
+            </CardContent>
+          </Card>
+          <Card className="relative">
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-blue-600">{conversations.length}</p>
+              <p className="text-xs text-muted-foreground">Rozmów</p>
+              {unreadCount > 0 && (
+                <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5">
+                  {unreadCount}
+                </Badge>
+              )}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-purple-600">{wishlists.length}</p>
+              <p className="text-xs text-muted-foreground">Wspólnych list</p>
             </CardContent>
           </Card>
         </div>
@@ -135,18 +161,31 @@ export default function HomiesPage() {
           <div className="lg:col-span-2">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <div className="flex items-center justify-between mb-4">
-                <TabsList>
-                  <TabsTrigger value="activity" className="gap-2">
+                <TabsList className="flex flex-wrap h-auto gap-1">
+                  <TabsTrigger value="activity" className="gap-1.5 text-xs md:text-sm">
                     <Activity className="h-4 w-4" />
-                    Aktywność
+                    <span className="hidden sm:inline">Aktywność</span>
                   </TabsTrigger>
-                  <TabsTrigger value="following" className="gap-2">
+                  <TabsTrigger value="following" className="gap-1.5 text-xs md:text-sm">
                     <UserCheck className="h-4 w-4" />
-                    Obserwujesz ({following.length})
+                    <span className="hidden sm:inline">Obserwujesz</span> ({following.length})
                   </TabsTrigger>
-                  <TabsTrigger value="followers" className="gap-2">
+                  <TabsTrigger value="followers" className="gap-1.5 text-xs md:text-sm">
                     <Users className="h-4 w-4" />
-                    Obserwujący ({followers.length})
+                    <span className="hidden sm:inline">Obserwujący</span> ({followers.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="chat" className="gap-1.5 text-xs md:text-sm relative">
+                    <MessageCircle className="h-4 w-4" />
+                    <span className="hidden sm:inline">Chat</span>
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </TabsTrigger>
+                  <TabsTrigger value="wishlists" className="gap-1.5 text-xs md:text-sm">
+                    <ListPlus className="h-4 w-4" />
+                    <span className="hidden sm:inline">Listy</span> ({wishlists.length})
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -231,6 +270,109 @@ export default function HomiesPage() {
                     />
                   ))
                 )}
+              </TabsContent>
+
+              <TabsContent value="chat" className="mt-0">
+                <Card>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">Rozmowy</CardTitle>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href="/dashboard/homies/chat">
+                          Zobacz wszystkie
+                        </Link>
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {conversations.length === 0 ? (
+                      <div className="text-center py-8">
+                        <MessageCircle className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                        <p className="text-muted-foreground">
+                          Brak rozmów. Rozpocznij czat z homies!
+                        </p>
+                      </div>
+                    ) : (
+                      conversations.slice(0, 5).map((conv) => (
+                        <Link
+                          key={conv.id}
+                          href={`/dashboard/homies/chat/${conv.id}`}
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                        >
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback className="bg-amber-100 text-amber-700">
+                              {conv.participantNames[0]?.[0] || "?"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm truncate">
+                              {conv.participantNames.join(", ")}
+                            </p>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {conv.lastMessage || "Brak wiadomości"}
+                            </p>
+                          </div>
+                          {conv.unreadCount[currentUserId] > 0 && (
+                            <Badge className="bg-amber-600 text-white text-xs">
+                              {conv.unreadCount[currentUserId]}
+                            </Badge>
+                          )}
+                        </Link>
+                      ))
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="wishlists" className="mt-0">
+                <Card>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">Wspólne listy życzeń</CardTitle>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href="/dashboard/homies/wishlists">
+                          Zobacz wszystkie
+                        </Link>
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {wishlists.length === 0 ? (
+                      <div className="text-center py-8">
+                        <ListPlus className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                        <p className="text-muted-foreground mb-4">
+                          Brak wspólnych list. Utwórz pierwszą!
+                        </p>
+                        <Button asChild className="bg-amber-600 hover:bg-amber-700">
+                          <Link href="/dashboard/homies/wishlists">
+                            Utwórz listę
+                          </Link>
+                        </Button>
+                      </div>
+                    ) : (
+                      wishlists.slice(0, 3).map((wishlist) => (
+                        <Link
+                          key={wishlist.id}
+                          href={`/dashboard/homies/wishlists/${wishlist.id}`}
+                          className="block p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="font-medium text-sm">{wishlist.name}</p>
+                            <Badge variant="secondary" className="text-xs">
+                              {wishlist.eventIds.length} wydarzeń
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <Users className="h-3 w-3" />
+                            <span>{wishlist.collaboratorIds.length + 1} osób</span>
+                            <span>•</span>
+                            <span>Autor: {wishlist.ownerName}</span>
+                          </div>
+                        </Link>
+                      ))
+                    )}
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
           </div>

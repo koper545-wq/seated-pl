@@ -9,6 +9,7 @@ import { EventCard, QASection, HostCardWithFollow, EventActionButtons } from "@/
 import { BadgeDisplay } from "@/components/badges";
 import { ReviewsSection } from "@/components/reviews";
 import { WaitlistDialog } from "@/components/waitlist";
+import { WhosGoingSection } from "@/components/whos-going";
 import { getEventById, mockEvents, getReviewsByHostId, getQuestionsByEventId } from "@/lib/mock-data";
 import {
   Calendar,
@@ -146,6 +147,11 @@ export default async function EventPage({ params }: EventPageProps) {
               <h2 className="text-xl font-semibold mb-4">Co zabrać?</h2>
               <p className="text-muted-foreground">{event.whatToBring}</p>
             </div>
+
+            <Separator />
+
+            {/* Who's Going section */}
+            <WhosGoingSection eventId={event.id} />
 
             <Separator />
 
