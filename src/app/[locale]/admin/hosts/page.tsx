@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Shield } from "lucide-react";
 
 export default function AdminHostsPage() {
   const [search, setSearch] = useState("");
@@ -40,11 +41,19 @@ export default function AdminHostsPage() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-stone-900">Aplikacje Hostów</h1>
-        <p className="text-stone-500 mt-1">
-          Zarządzaj aplikacjami na hostów platformy
-        </p>
+      <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-stone-900">Aplikacje Hostów</h1>
+          <p className="text-stone-500 mt-1">
+            Zarządzaj aplikacjami na hostów platformy
+          </p>
+        </div>
+        <Link href="/admin/hosts/verification">
+          <Button className="bg-blue-600 hover:bg-blue-700 gap-2">
+            <Shield className="h-4 w-4" />
+            Weryfikacja aktywnych hostów
+          </Button>
+        </Link>
       </div>
 
       {/* Stats Cards */}

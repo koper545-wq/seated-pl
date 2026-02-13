@@ -7,6 +7,224 @@
 export type MockUserRole = "guest" | "host" | "admin";
 export type MockHostType = "individual" | "restaurant";
 
+// Host verification status
+export type HostVerificationStatus = "pending" | "verified" | "premium" | "rejected" | "suspended";
+
+export interface HostVerification {
+  status: HostVerificationStatus;
+  verifiedAt?: Date;
+  verifiedBy?: string; // admin user id
+  identityVerified: boolean; // ID check
+  locationVerified: boolean; // venue visit
+  foodSafetyVerified: boolean; // certificates
+  backgroundCheckPassed: boolean;
+  notes?: string; // admin notes
+}
+
+// Mock host profiles with verification data
+export interface MockHostProfile {
+  id: string;
+  userId: string;
+  name: string;
+  avatar?: string;
+  bio?: string;
+  type: MockHostType;
+  verification: HostVerification;
+  rating: number;
+  reviewCount: number;
+  eventsHosted: number;
+  joinedAt: Date;
+  responseRate: number; // percentage
+  responseTime: string; // e.g. "within 1 hour"
+  languages: string[];
+  specialties: string[];
+}
+
+export const mockHostVerificationProfiles: MockHostProfile[] = [
+  {
+    id: "host-1",
+    userId: "host-active",
+    name: "Anna Kowalska",
+    bio: "Pasjonatka kuchni włoskiej z 15-letnim doświadczeniem. Uwielbiam dzielić się moimi przepisami rodzinnymi z Toskanii.",
+    type: "individual",
+    verification: {
+      status: "premium",
+      verifiedAt: new Date("2024-06-15"),
+      verifiedBy: "admin-1",
+      identityVerified: true,
+      locationVerified: true,
+      foodSafetyVerified: true,
+      backgroundCheckPassed: true,
+    },
+    rating: 4.9,
+    reviewCount: 23,
+    eventsHosted: 15,
+    joinedAt: new Date("2024-01-10"),
+    responseRate: 98,
+    responseTime: "w ciągu 1 godziny",
+    languages: ["pl", "en", "it"],
+    specialties: ["Kuchnia włoska", "Pasta", "Desery"],
+  },
+  {
+    id: "host-2",
+    userId: "host-new",
+    name: "Karolina Wiśniewska",
+    bio: "Mistrzyni sushi z wieloletnim doświadczeniem w restauracjach japońskich.",
+    type: "individual",
+    verification: {
+      status: "verified",
+      verifiedAt: new Date("2024-11-20"),
+      verifiedBy: "admin-1",
+      identityVerified: true,
+      locationVerified: true,
+      foodSafetyVerified: true,
+      backgroundCheckPassed: true,
+    },
+    rating: 4.8,
+    reviewCount: 18,
+    eventsHosted: 8,
+    joinedAt: new Date("2024-08-05"),
+    responseRate: 95,
+    responseTime: "w ciągu 2 godzin",
+    languages: ["pl", "en", "ja"],
+    specialties: ["Kuchnia japońska", "Sushi", "Ramen"],
+  },
+  {
+    id: "host-3",
+    userId: "host-restaurant",
+    name: "Restauracja Meksyk",
+    bio: "Autentyczne smaki Meksyku w sercu Wrocławia. Organizujemy warsztaty i degustacje tequili.",
+    type: "restaurant",
+    verification: {
+      status: "verified",
+      verifiedAt: new Date("2024-09-10"),
+      verifiedBy: "admin-1",
+      identityVerified: true,
+      locationVerified: true,
+      foodSafetyVerified: true,
+      backgroundCheckPassed: true,
+    },
+    rating: 4.7,
+    reviewCount: 42,
+    eventsHosted: 25,
+    joinedAt: new Date("2024-03-15"),
+    responseRate: 92,
+    responseTime: "w ciągu 3 godzin",
+    languages: ["pl", "en", "es"],
+    specialties: ["Kuchnia meksykańska", "Tacos", "Tequila"],
+  },
+  {
+    id: "host-4",
+    userId: "user-pending-host",
+    name: "Piotr Nowak",
+    bio: "Pasjonat kuchni polskiej i tradycyjnych przepisów babcinych.",
+    type: "individual",
+    verification: {
+      status: "pending",
+      identityVerified: true,
+      locationVerified: false,
+      foodSafetyVerified: false,
+      backgroundCheckPassed: false,
+      notes: "Oczekuje na wizytę weryfikacyjną",
+    },
+    rating: 0,
+    reviewCount: 0,
+    eventsHosted: 0,
+    joinedAt: new Date("2025-01-20"),
+    responseRate: 0,
+    responseTime: "brak danych",
+    languages: ["pl"],
+    specialties: ["Kuchnia polska", "Pierogi"],
+  },
+  {
+    id: "host-5",
+    userId: "user-suspended-host",
+    name: "Tomasz Zieliński",
+    bio: "Były host - konto zawieszone.",
+    type: "individual",
+    verification: {
+      status: "suspended",
+      verifiedAt: new Date("2024-05-01"),
+      identityVerified: true,
+      locationVerified: true,
+      foodSafetyVerified: false,
+      backgroundCheckPassed: true,
+      notes: "Konto zawieszone z powodu naruszenia regulaminu",
+    },
+    rating: 3.2,
+    reviewCount: 5,
+    eventsHosted: 3,
+    joinedAt: new Date("2024-04-01"),
+    responseRate: 50,
+    responseTime: "ponad 24 godziny",
+    languages: ["pl"],
+    specialties: ["Kuchnia fusion"],
+  },
+];
+
+// Helper to get host profile
+export function getHostProfile(hostId: string): MockHostProfile | undefined {
+  return mockHostVerificationProfiles.find((h) => h.id === hostId);
+}
+
+// Helper to get verification badge info
+export function getVerificationBadgeInfo(status: HostVerificationStatus): {
+  label: string;
+  labelEn: string;
+  color: string;
+  icon: string;
+  description: string;
+  descriptionEn: string;
+} {
+  switch (status) {
+    case "premium":
+      return {
+        label: "Premium Host",
+        labelEn: "Premium Host",
+        color: "bg-gradient-to-r from-amber-500 to-yellow-400 text-white",
+        icon: "⭐",
+        description: "Najwyższy poziom weryfikacji. Sprawdzony host z doskonałymi opiniami.",
+        descriptionEn: "Highest verification level. Trusted host with excellent reviews.",
+      };
+    case "verified":
+      return {
+        label: "Zweryfikowany",
+        labelEn: "Verified",
+        color: "bg-green-100 text-green-700 border-green-200",
+        icon: "✓",
+        description: "Tożsamość i lokalizacja potwierdzone przez zespół Seated.",
+        descriptionEn: "Identity and location confirmed by Seated team.",
+      };
+    case "pending":
+      return {
+        label: "Oczekuje",
+        labelEn: "Pending",
+        color: "bg-yellow-100 text-yellow-700 border-yellow-200",
+        icon: "⏳",
+        description: "Weryfikacja w toku. Host oczekuje na sprawdzenie.",
+        descriptionEn: "Verification in progress. Host awaiting review.",
+      };
+    case "rejected":
+      return {
+        label: "Odrzucony",
+        labelEn: "Rejected",
+        color: "bg-red-100 text-red-700 border-red-200",
+        icon: "✗",
+        description: "Aplikacja hosta została odrzucona.",
+        descriptionEn: "Host application was rejected.",
+      };
+    case "suspended":
+      return {
+        label: "Zawieszony",
+        labelEn: "Suspended",
+        color: "bg-stone-100 text-stone-600 border-stone-200",
+        icon: "⚠",
+        description: "Konto hosta jest tymczasowo zawieszone.",
+        descriptionEn: "Host account is temporarily suspended.",
+      };
+  }
+}
+
 export interface MockUser {
   id: string;
   email: string;

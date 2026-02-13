@@ -8,9 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { BadgeDisplay } from "@/components/badges";
 import { FollowButton } from "@/components/homies";
 import { ReportDialog } from "@/components/reports";
-import { isFollowing, getFollowers } from "@/lib/mock-data";
+import { HostVerificationBadge } from "@/components/hosts";
+import { isFollowing, getFollowers, getHostProfile, HostVerificationStatus } from "@/lib/mock-data";
 import { getInitials } from "@/lib/utils";
-import { CheckCircle, Star, Users, Flag } from "lucide-react";
+import { Star, Users, Flag } from "lucide-react";
 
 interface HostCardWithFollowProps {
   host: {
@@ -21,6 +22,7 @@ interface HostCardWithFollowProps {
     reviewCount: number;
     eventsHosted: number;
     verified: boolean;
+    verificationStatus?: HostVerificationStatus;
     badges?: string[];
   };
 }
@@ -30,6 +32,10 @@ export function HostCardWithFollow({ host }: HostCardWithFollowProps) {
   const hostIsFollowing = isFollowing(currentUserId, host.id);
   const hostFollowsBack = isFollowing(host.id, currentUserId);
   const followersCount = getFollowers(host.id).length;
+
+  // Get host profile for detailed verification info
+  const hostProfile = getHostProfile(host.id);
+  const verificationStatus = host.verificationStatus || hostProfile?.verification.status || (host.verified ? "verified" : "pending");
 
   const initials = getInitials(host.name);
 
@@ -45,8 +51,14 @@ export function HostCardWithFollow({ host }: HostCardWithFollowProps) {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h3 className="font-semibold text-lg">{host.name}</h3>
-              {host.verified && (
-                <CheckCircle className="h-5 w-5 text-blue-500" />
+              {(verificationStatus === "verified" || verificationStatus === "premium") && (
+                <HostVerificationBadge
+                  status={verificationStatus}
+                  verification={hostProfile?.verification}
+                  size="sm"
+                  showLabel={false}
+                  showDetails={true}
+                />
               )}
               {hostIsFollowing && hostFollowsBack && (
                 <Badge variant="outline" className="border-green-200 text-green-700 text-xs">

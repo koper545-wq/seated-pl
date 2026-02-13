@@ -1319,6 +1319,27 @@
     "createListDesc": "Create your first shared list!",
     "createList": "Create list"
   },
+  "hostVerification": {
+    "premium": "Premium Host",
+    "premiumDesc": "Distinguished host with highest standards",
+    "verified": "Verified",
+    "verifiedDesc": "Host has completed full Seated verification",
+    "pending": "Pending Verification",
+    "pendingDesc": "Verification in progress - some details are being checked",
+    "rejected": "Not Verified",
+    "rejectedDesc": "Host did not pass the verification process",
+    "suspended": "Suspended",
+    "suspendedDesc": "Account temporarily suspended",
+    "verificationIncludes": "Verification includes",
+    "identity": "Identity",
+    "location": "Location",
+    "foodSafety": "Food Safety",
+    "backgroundCheck": "Background Check",
+    "verifiedAt": "Verified on",
+    "verificationStatus": "Verification Status",
+    "trustedHost": "Trusted Host",
+    "trustedHostDesc": "This host has passed full verification, has great reviews and regularly hosts events."
+  },
   "giftCards": {
     "title": "Gift Cards",
     "subtitle": "Give the gift of a unique culinary experience",

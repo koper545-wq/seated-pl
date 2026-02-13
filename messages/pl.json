@@ -1319,6 +1319,27 @@
     "createListDesc": "Utwórz pierwszą wspólną listę!",
     "createList": "Utwórz listę"
   },
+  "hostVerification": {
+    "premium": "Premium Host",
+    "premiumDesc": "Wyróżniony host z najwyższymi standardami",
+    "verified": "Zweryfikowany",
+    "verifiedDesc": "Host przeszedł pełną weryfikację Seated",
+    "pending": "Oczekuje na weryfikację",
+    "pendingDesc": "Weryfikacja w trakcie - niektóre dane są sprawdzane",
+    "rejected": "Niezweryfikowany",
+    "rejectedDesc": "Host nie przeszedł procesu weryfikacji",
+    "suspended": "Zawieszony",
+    "suspendedDesc": "Konto tymczasowo zawieszone",
+    "verificationIncludes": "Weryfikacja obejmuje",
+    "identity": "Tożsamość",
+    "location": "Lokalizacja",
+    "foodSafety": "Bezpieczeństwo żywności",
+    "backgroundCheck": "Weryfikacja osoby",
+    "verifiedAt": "Zweryfikowano",
+    "verificationStatus": "Status weryfikacji",
+    "trustedHost": "Zaufany host",
+    "trustedHostDesc": "Ten host przeszedł pełną weryfikację, ma świetne opinie i regularnie organizuje wydarzenia."
+  },
   "giftCards": {
     "title": "Karty podarunkowe",
     "subtitle": "Podaruj wyjątkowe doświadczenie kulinarne bliskiej osobie",
