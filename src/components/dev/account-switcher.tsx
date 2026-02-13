@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { mockUsers, MockUser } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,27 +13,52 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User, ChefHat, Store, LogOut, Bug } from "lucide-react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const MOCK_USER_KEY = "seated-mock-user";
+const ACTIVE_MODE_KEY = "seated-active-mode";
+
+export type ActiveMode = "host" | "guest";
+
+export interface MockUserState {
+  user: MockUser | null;
+  activeMode: ActiveMode;
+  isLoading: boolean;
+  canSwitchMode: boolean;
+}
 
 export function DevAccountSwitcher() {
   const { data: session } = useSession();
   const [currentMockUser, setCurrentMockUser] = useState<MockUser | null>(null);
+  const [activeMode, setActiveMode] = useState<ActiveMode>("guest");
   const [isOpen, setIsOpen] = useState(false);
 
-  // Load mock user from localStorage on mount
+  // Load mock user and active mode from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem(MOCK_USER_KEY);
+    const storedMode = localStorage.getItem(ACTIVE_MODE_KEY) as ActiveMode | null;
+
     if (stored) {
       const user = mockUsers.find((u) => u.id === stored);
-      if (user) setCurrentMockUser(user);
+      if (user) {
+        setCurrentMockUser(user);
+        // Set default mode based on user type
+        if (storedMode && (storedMode === "host" || storedMode === "guest")) {
+          setActiveMode(storedMode);
+        } else {
+          setActiveMode(user.role === "host" ? "host" : "guest");
+        }
+      }
     }
   }, []);
 
   const handleSelectUser = (user: MockUser) => {
     localStorage.setItem(MOCK_USER_KEY, user.id);
+    // Set default mode for new user
+    const defaultMode: ActiveMode = user.role === "host" ? "host" : "guest";
+    localStorage.setItem(ACTIVE_MODE_KEY, defaultMode);
     setCurrentMockUser(user);
+    setActiveMode(defaultMode);
     setIsOpen(false);
     // Reload to apply changes
     window.location.reload();
@@ -41,6 +66,7 @@ export function DevAccountSwitcher() {
 
   const handleLogout = () => {
     localStorage.removeItem(MOCK_USER_KEY);
+    localStorage.removeItem(ACTIVE_MODE_KEY);
     setCurrentMockUser(null);
     signOut({ callbackUrl: "/" });
   };
@@ -65,10 +91,6 @@ export function DevAccountSwitcher() {
       .toUpperCase()
       .slice(0, 2);
   };
-
-  // Show in development and on Vercel preview/production for testing
-  // Remove this condition or set NEXT_PUBLIC_SHOW_DEV_TOOLS=true to enable
-  // if (process.env.NODE_ENV === "production") return null;
 
   return (
     <div className="fixed bottom-4 left-4 z-50">
@@ -156,6 +178,7 @@ export function DevAccountSwitcher() {
                   </div>
                   <p className="text-xs text-muted-foreground truncate">
                     {user.description}
+                    {user.canSwitchMode && " • może być też gościem"}
                   </p>
                 </div>
                 {getRoleIcon(user)}
@@ -180,25 +203,72 @@ export function DevAccountSwitcher() {
   );
 }
 
-// Hook to get current mock user with loading state
-export function useMockUser(): { user: MockUser | null; isLoading: boolean } {
+// Hook to get current mock user with loading state and mode switching
+export function useMockUser(): MockUserState & {
+  switchMode: (mode: ActiveMode) => void;
+  effectiveRole: "host" | "guest";
+} {
   const [mockUser, setMockUser] = useState<MockUser | null>(null);
+  const [activeMode, setActiveMode] = useState<ActiveMode>("guest");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem(MOCK_USER_KEY);
+    const storedMode = localStorage.getItem(ACTIVE_MODE_KEY) as ActiveMode | null;
+
     if (stored) {
       const user = mockUsers.find((u) => u.id === stored);
-      if (user) setMockUser(user);
+      if (user) {
+        setMockUser(user);
+        // Set mode from storage or default
+        if (storedMode && (storedMode === "host" || storedMode === "guest")) {
+          setActiveMode(storedMode);
+        } else {
+          setActiveMode(user.role === "host" ? "host" : "guest");
+        }
+      }
     }
     setIsLoading(false);
   }, []);
 
-  return { user: mockUser, isLoading };
+  const switchMode = useCallback((mode: ActiveMode) => {
+    localStorage.setItem(ACTIVE_MODE_KEY, mode);
+    setActiveMode(mode);
+    // Reload to apply changes
+    window.location.reload();
+  }, []);
+
+  // Can only switch if user is an individual host with canSwitchMode flag
+  const canSwitchMode = Boolean(
+    mockUser?.role === "host" &&
+    mockUser?.hostType === "individual" &&
+    mockUser?.canSwitchMode
+  );
+
+  // Effective role considers active mode for switchable users
+  const effectiveRole: "host" | "guest" =
+    canSwitchMode ? activeMode :
+    mockUser?.role === "host" ? "host" : "guest";
+
+  return {
+    user: mockUser,
+    activeMode,
+    isLoading,
+    canSwitchMode,
+    switchMode,
+    effectiveRole,
+  };
 }
 
 // Get mock user ID from localStorage (for server-side compatible usage)
 export function getMockUserId(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem(MOCK_USER_KEY);
+}
+
+// Get active mode from localStorage
+export function getActiveMode(): ActiveMode {
+  if (typeof window === "undefined") return "guest";
+  const mode = localStorage.getItem(ACTIVE_MODE_KEY);
+  return mode === "host" ? "host" : "guest";
 }

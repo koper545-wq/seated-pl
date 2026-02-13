@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { Menu, User, LogOut, Settings, Calendar, Users, Heart, ChefHat } from "lucide-react";
+import { Menu, User, LogOut, Settings, Calendar, Users, Heart, ChefHat, ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -14,19 +14,21 @@ import {
 } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useSession, signOut } from "next-auth/react";
-import { useMockUser } from "@/components/dev/account-switcher";
+import { useMockUser, type ActiveMode } from "@/components/dev/account-switcher";
 
 export function Header() {
   const t = useTranslations("nav");
   const { data: session, status } = useSession();
-  const { user: mockUser } = useMockUser();
+  const { user: mockUser, effectiveRole, canSwitchMode, switchMode, activeMode } = useMockUser();
   const isLoading = status === "loading";
 
   // Use mock user if set, otherwise use real session
   const currentUser = mockUser
     ? { name: mockUser.name, email: mockUser.email, image: mockUser.image }
     : session?.user;
-  const isHost = mockUser?.role === "host";
+
+  // Use effective role for determining what to show
+  const isHost = effectiveRole === "host";
   const dashboardHref = isHost ? "/dashboard/host" : "/dashboard";
 
   const navigation = [
@@ -44,6 +46,11 @@ export function Header() {
         .toUpperCase()
         .slice(0, 2)
     : "U";
+
+  const handleSwitchMode = () => {
+    const newMode: ActiveMode = activeMode === "host" ? "guest" : "host";
+    switchMode(newMode);
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -117,13 +124,46 @@ export function Header() {
                         <p className="text-sm text-muted-foreground">
                           {currentUser.email}
                         </p>
-                        {isHost && (
-                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
-                            Host
-                          </span>
-                        )}
+                        <div className="flex items-center gap-2 mt-1">
+                          {isHost ? (
+                            <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
+                              Tryb hosta
+                            </span>
+                          ) : (
+                            <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                              Tryb gościa
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
+
+                    {/* Mode switcher for individual hosts */}
+                    {canSwitchMode && (
+                      <div className="py-3 border-b">
+                        <button
+                          onClick={handleSwitchMode}
+                          className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-gradient-to-r from-amber-50 to-purple-50 hover:from-amber-100 hover:to-purple-100 transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <ArrowLeftRight className="h-4 w-4 text-amber-600" />
+                            <span className="text-sm font-medium">
+                              Przełącz na tryb {activeMode === "host" ? "gościa" : "hosta"}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className={`text-xs px-1.5 py-0.5 rounded ${activeMode === "host" ? "bg-purple-100 text-purple-700" : "bg-amber-100 text-amber-700"}`}>
+                              {activeMode === "host" ? "Host" : "Gość"}
+                            </span>
+                            <span className="text-muted-foreground">→</span>
+                            <span className={`text-xs px-1.5 py-0.5 rounded ${activeMode === "host" ? "bg-amber-100 text-amber-700" : "bg-purple-100 text-purple-700"}`}>
+                              {activeMode === "host" ? "Gość" : "Host"}
+                            </span>
+                          </div>
+                        </button>
+                      </div>
+                    )}
+
                     <nav className="flex flex-col space-y-1 mt-4">
                       {isHost ? (
                         <>
@@ -185,6 +225,7 @@ export function Header() {
                       <button
                         onClick={() => {
                           localStorage.removeItem("seated-mock-user");
+                          localStorage.removeItem("seated-active-mode");
                           signOut({ callbackUrl: "/" });
                         }}
                         className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors text-red-600 w-full text-left"
@@ -241,12 +282,31 @@ export function Header() {
                       <p className="text-xs text-muted-foreground">
                         {currentUser.email}
                       </p>
-                      {isHost && (
+                      {isHost ? (
                         <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
-                          Host
+                          Tryb hosta
                         </span>
-                      )}
+                      ) : canSwitchMode ? (
+                        <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                          Tryb gościa
+                        </span>
+                      ) : null}
                     </div>
+                  </div>
+                )}
+
+                {/* Mode switcher for mobile */}
+                {canSwitchMode && currentUser && (
+                  <div className="py-3 border-b">
+                    <button
+                      onClick={handleSwitchMode}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gradient-to-r from-amber-50 to-purple-50"
+                    >
+                      <ArrowLeftRight className="h-4 w-4 text-amber-600" />
+                      <span className="text-sm font-medium">
+                        Przełącz na tryb {activeMode === "host" ? "gościa" : "hosta"}
+                      </span>
+                    </button>
                   </div>
                 )}
 
@@ -299,6 +359,7 @@ export function Header() {
                       <button
                         onClick={() => {
                           localStorage.removeItem("seated-mock-user");
+                          localStorage.removeItem("seated-active-mode");
                           signOut({ callbackUrl: "/" });
                         }}
                         className="text-lg font-medium text-red-600 hover:text-red-700 transition-colors text-left"

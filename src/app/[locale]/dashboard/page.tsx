@@ -26,15 +26,15 @@ import { useMockUser } from "@/components/dev/account-switcher";
 import { Loader2 } from "lucide-react";
 
 export default function GuestDashboardPage() {
-  const { user: mockUser, isLoading } = useMockUser();
+  const { user: mockUser, isLoading, effectiveRole } = useMockUser();
   const router = useRouter();
 
-  // Redirect hosts to host dashboard
+  // Redirect to host dashboard if in host mode
   useEffect(() => {
-    if (!isLoading && mockUser?.role === "host") {
+    if (!isLoading && effectiveRole === "host") {
       router.push("/dashboard/host");
     }
-  }, [isLoading, mockUser, router]);
+  }, [isLoading, effectiveRole, router]);
 
   // Show loading while checking user
   if (isLoading) {
@@ -48,12 +48,13 @@ export default function GuestDashboardPage() {
     );
   }
 
-  // If host, show nothing (redirect will happen)
-  if (mockUser?.role === "host") {
+  // If in host mode, show nothing (redirect will happen)
+  if (effectiveRole === "host") {
     return null;
   }
 
   // Get profile based on mock user or fallback to default
+  // For hosts in guest mode, get their guest profile
   const profile = mockUser
     ? (getGuestProfileByMockUserId(mockUser.id) || currentGuestProfile)
     : currentGuestProfile;

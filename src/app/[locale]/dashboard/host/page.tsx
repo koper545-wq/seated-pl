@@ -36,16 +36,16 @@ import { useMockUser } from "@/components/dev/account-switcher";
 import { useEvents } from "@/contexts/events-context";
 
 export default function HostDashboardPage() {
-  const { user: mockUser, isLoading } = useMockUser();
+  const { user: mockUser, isLoading, effectiveRole } = useMockUser();
   const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
   const router = useRouter();
 
-  // Redirect guests to guest dashboard
+  // Redirect to guest dashboard if in guest mode
   useEffect(() => {
-    if (!isLoading && mockUser && mockUser.role !== "host") {
+    if (!isLoading && effectiveRole === "guest") {
       router.push("/dashboard");
     }
-  }, [isLoading, mockUser, router]);
+  }, [isLoading, effectiveRole, router]);
 
   // Show loading while checking user or events
   if (isLoading || !eventsLoaded) {
@@ -59,15 +59,15 @@ export default function HostDashboardPage() {
     );
   }
 
-  // If guest, show nothing (redirect will happen)
-  if (mockUser && mockUser.role !== "host") {
+  // If in guest mode, show nothing (redirect will happen)
+  if (effectiveRole === "guest") {
     return null;
   }
 
   const hostProfile = mockUser ? getHostProfileByMockUserId(mockUser.id) : null;
 
-  // Use mock user's host ID or default to host-1
-  const hostId = mockUser?.role === "host" ? mockUser.id : "host-1";
+  // Use mock user's ID (they're a host in host mode)
+  const hostId = mockUser?.id || "host-1";
   const hostEvents = getHostEvents(hostId);
 
   // Separate events by status/time

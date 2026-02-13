@@ -15,6 +15,10 @@ export interface MockUser {
   role: MockUserRole;
   hostType?: MockHostType;
   description: string; // Short description for dev switcher
+  // Individual hosts can switch between host and guest mode
+  canSwitchMode?: boolean;
+  // Guest profile ID for hosts that can also be guests
+  guestProfileId?: string;
 }
 
 export const mockUsers: MockUser[] = [
@@ -42,6 +46,8 @@ export const mockUsers: MockUser[] = [
     role: "host",
     hostType: "individual",
     description: "Nowy host prywatny - 1 wydarzenie",
+    canSwitchMode: true,
+    guestProfileId: "guest-karolina",
   },
   {
     id: "host-experienced",
@@ -51,6 +57,8 @@ export const mockUsers: MockUser[] = [
     role: "host",
     hostType: "individual",
     description: "Doświadczony host - 15 wydarzeń, 4.9⭐",
+    canSwitchMode: true,
+    guestProfileId: "guest-anna",
   },
   {
     id: "host-restaurant",
@@ -60,6 +68,7 @@ export const mockUsers: MockUser[] = [
     role: "host",
     hostType: "restaurant",
     description: "Restauracja - 25 wydarzeń, verified",
+    // Restaurants cannot switch to guest mode
   },
 ];
 
@@ -1450,6 +1459,79 @@ export const mockGuestProfiles: Record<string, GuestProfile> = {
       },
     ],
   },
+  // Guest profiles for hosts who can switch modes
+  "guest-karolina": {
+    id: "guest-karolina",
+    email: "host.nowy@test.pl",
+    firstName: "Karolina",
+    lastName: "Wiśniewska",
+    avatar: "",
+    bio: "Pasjonatka kuchni i gotowania. Sama organizuję wydarzenia kulinarne, ale uwielbiam też uczestniczyć w wydarzeniach innych hostów!",
+    city: "Wrocław",
+    memberSince: new Date("2025-01-15"),
+    isPublic: true,
+    eventsAttended: 2,
+    reviewsWritten: 1,
+    xp: 150,
+    level: 2,
+    dietaryRestrictions: [],
+    favoriteCategories: ["warsztaty", "degustacje"],
+    socialLinks: {
+      instagram: "karolina_gotuje",
+    },
+    badges: ["badge-1"],
+    photos: [],
+    attendedEvents: [
+      {
+        eventId: "2",
+        eventTitle: "Sushi Masterclass",
+        eventDate: new Date("2025-01-20T18:00:00"),
+        eventType: "Warsztaty",
+        hostName: "Kenji Tanaka",
+        imageGradient: "from-rose-200 to-pink-300",
+      },
+    ],
+  },
+  "guest-anna": {
+    id: "guest-anna",
+    email: "host.pro@test.pl",
+    firstName: "Anna",
+    lastName: "Kowalska",
+    avatar: "",
+    bio: "Doświadczona hostka Supper Clubów, ale też miłośniczka odkrywania nowych smaków u innych kucharzy. Chętnie uczę się od najlepszych!",
+    city: "Wrocław",
+    memberSince: new Date("2023-06-15"),
+    isPublic: true,
+    eventsAttended: 12,
+    reviewsWritten: 8,
+    xp: 720,
+    level: 4,
+    dietaryRestrictions: [],
+    favoriteCategories: ["supper-club", "chefs-table", "degustacje"],
+    socialLinks: {
+      instagram: "anna_foodie_wroclaw",
+    },
+    badges: ["badge-1", "badge-2", "badge-4", "badge-5", "badge-6"],
+    photos: [],
+    attendedEvents: [
+      {
+        eventId: "3",
+        eventTitle: "Naturalne Wina Gruzji",
+        eventDate: new Date("2025-01-25T19:00:00"),
+        eventType: "Degustacje",
+        hostName: "Wine Club Wrocław",
+        imageGradient: "from-purple-200 to-violet-300",
+      },
+      {
+        eventId: "6",
+        eventTitle: "Thai Street Food Pop-up",
+        eventDate: new Date("2025-01-18T18:00:00"),
+        eventType: "Pop-up",
+        hostName: "Mai & Tom Kitchen",
+        imageGradient: "from-orange-200 to-red-300",
+      },
+    ],
+  },
 };
 
 // ============================================
@@ -1577,8 +1659,18 @@ export function getProfileByMockUserId(mockUserId: string): GuestProfile | HostP
 }
 
 // Helper function to get guest profile by mock user ID
+// For hosts that can switch modes, returns their guest profile
 export function getGuestProfileByMockUserId(mockUserId: string): GuestProfile | null {
-  return mockGuestProfiles[mockUserId] || null;
+  // Direct match
+  if (mockGuestProfiles[mockUserId]) {
+    return mockGuestProfiles[mockUserId];
+  }
+  // Check if this is a host with a guest profile
+  const mockUser = mockUsers.find(u => u.id === mockUserId);
+  if (mockUser?.guestProfileId && mockGuestProfiles[mockUser.guestProfileId]) {
+    return mockGuestProfiles[mockUser.guestProfileId];
+  }
+  return null;
 }
 
 // Helper function to get host profile by mock user ID

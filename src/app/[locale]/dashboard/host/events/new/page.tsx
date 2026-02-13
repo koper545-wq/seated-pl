@@ -95,19 +95,19 @@ const durationOptions = [
 export default function CreateEventPage() {
   const router = useRouter();
   const intlRouter = useIntlRouter();
-  const { user: mockUser, isLoading } = useMockUser();
+  const { user: mockUser, isLoading, effectiveRole } = useMockUser();
   const { addEvent } = useEvents();
   const [step, setStep] = useState(1);
 
-  // Redirect guests to guest dashboard
+  // Redirect to guest dashboard if in guest mode
   useEffect(() => {
-    if (!isLoading && mockUser && mockUser.role !== "host") {
+    if (!isLoading && effectiveRole === "guest") {
       intlRouter.push("/dashboard");
     }
-  }, [isLoading, mockUser, intlRouter]);
+  }, [isLoading, effectiveRole, intlRouter]);
 
-  // If guest or loading, show nothing
-  if (isLoading || (mockUser && mockUser.role !== "host")) {
+  // If in guest mode or loading, show nothing
+  if (isLoading || effectiveRole === "guest") {
     return null;
   }
   const [isSubmitting, setIsSubmitting] = useState(false);

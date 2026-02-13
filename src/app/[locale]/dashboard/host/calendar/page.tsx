@@ -111,19 +111,19 @@ export default function HostCalendarPage() {
   const t = useTranslations("calendar");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<"month" | "list">("month");
-  const { user: mockUser, isLoading } = useMockUser();
+  const { user: mockUser, isLoading, effectiveRole } = useMockUser();
   const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
   const router = useRouter();
 
   const hostId = mockUser?.id || "host-1";
   const hostEvents = getHostEvents(hostId);
 
-  // Redirect guests to guest dashboard
+  // Redirect to guest dashboard if in guest mode
   useEffect(() => {
-    if (!isLoading && mockUser && mockUser.role !== "host") {
+    if (!isLoading && effectiveRole === "guest") {
       router.push("/dashboard");
     }
-  }, [isLoading, mockUser, router]);
+  }, [isLoading, effectiveRole, router]);
 
   if (isLoading || !eventsLoaded) {
     return (
@@ -136,8 +136,8 @@ export default function HostCalendarPage() {
     );
   }
 
-  // If guest, show nothing (redirect will happen)
-  if (mockUser && mockUser.role !== "host") {
+  // If in guest mode, show nothing (redirect will happen)
+  if (effectiveRole === "guest") {
     return null;
   }
 
