@@ -7,8 +7,9 @@ import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { Header, Footer } from "@/components/layout";
 import { SessionProvider } from "@/components/providers";
-import { DevAccountSwitcher } from "@/components/dev/account-switcher";
+import { DevAccountSwitcher, MVPModeSwitcher } from "@/components/dev";
 import { EventsProvider } from "@/contexts/events-context";
+import { MVPModeProvider } from "@/contexts/mvp-mode-context";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -86,14 +87,17 @@ export default async function LocaleLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <SessionProvider>
           <NextIntlClientProvider messages={messages}>
-            <EventsProvider>
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </div>
-              <DevAccountSwitcher />
-            </EventsProvider>
+            <MVPModeProvider>
+              <EventsProvider>
+                <div className="flex min-h-screen flex-col">
+                  <Header />
+                  <main className="flex-1">{children}</main>
+                  <Footer />
+                </div>
+                <DevAccountSwitcher />
+                <MVPModeSwitcher />
+              </EventsProvider>
+            </MVPModeProvider>
           </NextIntlClientProvider>
         </SessionProvider>
       </body>

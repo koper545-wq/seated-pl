@@ -25,10 +25,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useMockUser } from "@/components/dev/account-switcher";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 import { Loader2 } from "lucide-react";
 
 export default function GuestDashboardPage() {
   const { user: mockUser, isLoading, effectiveRole } = useMockUser();
+  const { mvpMode } = useMVPMode();
   const router = useRouter();
 
   // Redirect to host dashboard if in host mode
@@ -114,30 +116,32 @@ export default function GuestDashboardPage() {
               </div>
             </div>
 
-            {/* Level & XP */}
-            <div className="bg-stone-50 rounded-xl p-4 mb-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🏅</span>
-                  <div>
-                    <p className="font-semibold text-stone-900">
-                      Poziom {levelInfo.level}
+            {/* Level & XP - hidden in MVP mode */}
+            {!mvpMode && (
+              <div className="bg-stone-50 rounded-xl p-4 mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">🏅</span>
+                    <div>
+                      <p className="font-semibold text-stone-900">
+                        Poziom {levelInfo.level}
+                      </p>
+                      <p className="text-xs text-stone-500">{levelInfo.namePl}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-amber-600">{profile.xp} XP</p>
+                    <p className="text-xs text-stone-500">
+                      {xpProgress.percent}% do następnego
                     </p>
-                    <p className="text-xs text-stone-500">{levelInfo.namePl}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-amber-600">{profile.xp} XP</p>
-                  <p className="text-xs text-stone-500">
-                    {xpProgress.percent}% do następnego
-                  </p>
-                </div>
+                <Progress value={xpProgress.percent} className="h-2" />
               </div>
-              <Progress value={xpProgress.percent} className="h-2" />
-            </div>
+            )}
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-3 mb-4">
+            <div className={`grid ${mvpMode ? "grid-cols-2" : "grid-cols-3"} gap-3 mb-4`}>
               <div className="text-center p-3 bg-stone-50 rounded-xl">
                 <p className="text-2xl font-bold text-stone-900">
                   {profile.eventsAttended}
@@ -150,16 +154,18 @@ export default function GuestDashboardPage() {
                 </p>
                 <p className="text-xs text-stone-500">Opinie</p>
               </div>
-              <div className="text-center p-3 bg-stone-50 rounded-xl">
-                <p className="text-2xl font-bold text-stone-900">
-                  {badges.length}
-                </p>
-                <p className="text-xs text-stone-500">Odznaki</p>
-              </div>
+              {!mvpMode && (
+                <div className="text-center p-3 bg-stone-50 rounded-xl">
+                  <p className="text-2xl font-bold text-stone-900">
+                    {badges.length}
+                  </p>
+                  <p className="text-xs text-stone-500">Odznaki</p>
+                </div>
+              )}
             </div>
 
-            {/* Badges */}
-            {badges.length > 0 && (
+            {/* Badges - hidden in MVP mode */}
+            {!mvpMode && badges.length > 0 && (
               <div className="mb-4">
                 <p className="text-sm font-medium text-stone-700 mb-2">
                   Twoje odznaki
@@ -316,23 +322,25 @@ export default function GuestDashboardPage() {
           </section>
         )}
 
-        {/* Become a Host CTA */}
-        <Card className="bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
-          <CardContent className="p-6 text-center">
-            <span className="text-4xl mb-3 block">👨‍🍳</span>
-            <h3 className="font-semibold text-stone-900 mb-1">
-              Chcesz gotować dla innych?
-            </h3>
-            <p className="text-sm text-stone-600 mb-4">
-              Zostań hostem i zarabiaj dzieląc się swoją pasją do jedzenia
-            </p>
-            <Link href="/become-host">
-              <Button className="bg-amber-500 hover:bg-amber-600">
-                Zostań hostem
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+        {/* Become a Host CTA - hidden in MVP mode */}
+        {!mvpMode && (
+          <Card className="bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
+            <CardContent className="p-6 text-center">
+              <span className="text-4xl mb-3 block">👨‍🍳</span>
+              <h3 className="font-semibold text-stone-900 mb-1">
+                Chcesz gotować dla innych?
+              </h3>
+              <p className="text-sm text-stone-600 mb-4">
+                Zostań hostem i zarabiaj dzieląc się swoją pasją do jedzenia
+              </p>
+              <Link href="/become-host">
+                <Button className="bg-amber-500 hover:bg-amber-600">
+                  Zostań hostem
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
       </main>
 
       {/* Bottom Navigation */}
@@ -353,13 +361,15 @@ export default function GuestDashboardPage() {
               <span className="text-xl">🔍</span>
               <span className="text-xs mt-1">Szukaj</span>
             </Link>
-            <Link
-              href="/dashboard/messages"
-              className="flex flex-col items-center py-2 px-3 text-stone-400 relative"
-            >
-              <span className="text-xl">💬</span>
-              <span className="text-xs mt-1">Wiadomości</span>
-            </Link>
+            {!mvpMode && (
+              <Link
+                href="/dashboard/messages"
+                className="flex flex-col items-center py-2 px-3 text-stone-400 relative"
+              >
+                <span className="text-xl">💬</span>
+                <span className="text-xs mt-1">Wiadomości</span>
+              </Link>
+            )}
             <Link
               href="/dashboard/bookings"
               className="flex flex-col items-center py-2 px-3 text-stone-400"

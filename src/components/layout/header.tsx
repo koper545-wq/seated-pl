@@ -15,11 +15,13 @@ import {
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useSession, signOut } from "next-auth/react";
 import { useMockUser, type ActiveMode } from "@/components/dev/account-switcher";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 
 export function Header() {
   const t = useTranslations("nav");
   const { data: session, status } = useSession();
   const { user: mockUser, effectiveRole, canSwitchMode, switchMode, activeMode } = useMockUser();
+  const { mvpMode } = useMVPMode();
   const isLoading = status === "loading";
 
   // Use mock user if set, otherwise use real session
@@ -31,12 +33,17 @@ export function Header() {
   const isHost = effectiveRole === "host";
   const dashboardHref = isHost ? "/dashboard/host" : "/dashboard";
 
-  const navigation = [
-    { name: t("events"), href: "/events" },
-    { name: t("howItWorks"), href: "/how-it-works" },
-    { name: t("becomeHost"), href: "/become-host" },
-    { name: t("giftCards"), href: "/gift-cards" },
+  // Navigation items - filter based on MVP mode
+  const allNavigation = [
+    { name: t("events"), href: "/events", mvpHidden: false },
+    { name: t("howItWorks"), href: "/how-it-works", mvpHidden: false },
+    { name: t("becomeHost"), href: "/become-host", mvpHidden: true },
+    { name: t("giftCards"), href: "/gift-cards", mvpHidden: true },
   ];
+
+  const navigation = mvpMode
+    ? allNavigation.filter((item) => !item.mvpHidden)
+    : allNavigation;
 
   const userInitials = currentUser?.name
     ? currentUser.name
@@ -198,20 +205,24 @@ export function Header() {
                             <Calendar className="h-4 w-4" />
                             <span>{t("myBookings")}</span>
                           </Link>
-                          <Link
-                            href="/dashboard/homies"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                          >
-                            <Users className="h-4 w-4" />
-                            <span>{t("homies")}</span>
-                          </Link>
-                          <Link
-                            href="/dashboard/wishlist"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                          >
-                            <Heart className="h-4 w-4" />
-                            <span>{t("wishlist")}</span>
-                          </Link>
+                          {!mvpMode && (
+                            <>
+                              <Link
+                                href="/dashboard/homies"
+                                className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                              >
+                                <Users className="h-4 w-4" />
+                                <span>{t("homies")}</span>
+                              </Link>
+                              <Link
+                                href="/dashboard/wishlist"
+                                className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                              >
+                                <Heart className="h-4 w-4" />
+                                <span>{t("wishlist")}</span>
+                              </Link>
+                            </>
+                          )}
                         </>
                       )}
                       <Link
