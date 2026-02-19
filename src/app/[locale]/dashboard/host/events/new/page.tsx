@@ -99,28 +99,6 @@ const durationOptions = [
   { value: 300, label: "5 godzin" },
 ];
 
-// Default coordinates for neighborhoods (with slight randomization for multiple events)
-const neighborhoodCoordinates: Record<string, { lat: number; lng: number }> = {
-  "stare-miasto": { lat: 51.1107, lng: 17.0286 },
-  "nadodrze": { lat: 51.1175, lng: 17.0442 },
-  "srodmiescie": { lat: 51.1045, lng: 17.0310 },
-  "krzyki": { lat: 51.0850, lng: 17.0150 },
-  "fabryczna": { lat: 51.1000, lng: 16.9800 },
-  "psie-pole": { lat: 51.1450, lng: 17.0650 },
-};
-
-// Get coordinates for a neighborhood with slight randomization
-const getCoordinatesForNeighborhood = (neighborhood: string) => {
-  const baseCoords = neighborhoodCoordinates[neighborhood] || neighborhoodCoordinates["stare-miasto"];
-  // Add small random offset (up to ~200m) to prevent markers from overlapping
-  const latOffset = (Math.random() - 0.5) * 0.004;
-  const lngOffset = (Math.random() - 0.5) * 0.004;
-  return {
-    lat: baseCoords.lat + latOffset,
-    lng: baseCoords.lng + lngOffset,
-  };
-};
-
 export default function CreateEventPage() {
   const router = useRouter();
   const intlRouter = useIntlRouter();
@@ -147,7 +125,6 @@ export default function CreateEventPage() {
   const [duration, setDuration] = useState<number>(180);
   const [useDefaultAddress, setUseDefaultAddress] = useState(true);
   const [customAddress, setCustomAddress] = useState("");
-  const [neighborhood, setNeighborhood] = useState("stare-miasto");
 
   // Recurring events
   const [isRecurring, setIsRecurring] = useState(false);
@@ -279,15 +256,7 @@ export default function CreateEventPage() {
     // For recurring events, use all generated dates; otherwise just the single date
     const datesToCreate = isRecurring ? generatedDates : [eventDate || new Date()];
 
-    // Map neighborhood slug to display name
-    const neighborhoodNames: Record<string, string> = {
-      "stare-miasto": "Stare Miasto, Wrocław",
-      "nadodrze": "Nadodrze, Wrocław",
-      "srodmiescie": "Śródmieście, Wrocław",
-      "krzyki": "Krzyki, Wrocław",
-      "fabryczna": "Fabryczna, Wrocław",
-      "psie-pole": "Psie Pole, Wrocław",
-    };
+    const eventAddress = useDefaultAddress ? "ul. Ruska 46/3, Wrocław" : customAddress;
 
     // Create an event for each date
     for (const date of datesToCreate) {
@@ -302,10 +271,10 @@ export default function CreateEventPage() {
         dateFormatted: format(date, "d MMM yyyy, HH:mm", { locale: pl }),
         startTime,
         duration,
-        location: neighborhoodNames[neighborhood] || neighborhood,
-        locationSlug: neighborhood,
-        fullAddress: useDefaultAddress ? "ul. Ruska 46/3, Wrocław" : customAddress,
-        coordinates: getCoordinatesForNeighborhood(neighborhood),
+        location: "Wrocław",
+        locationSlug: "wroclaw",
+        fullAddress: eventAddress,
+        coordinates: { lat: 51.1079, lng: 17.0385 }, // Default Wrocław center
         price,
         capacity,
         spotsLeft: capacity,
@@ -802,22 +771,6 @@ export default function CreateEventPage() {
                       />
                     </div>
                   )}
-
-                  <div className="space-y-2">
-                    <Label>Dzielnica (widoczna publicznie) *</Label>
-                    <Select value={neighborhood} onValueChange={setNeighborhood}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="stare-miasto">Stare Miasto</SelectItem>
-                        <SelectItem value="nadodrze">Nadodrze</SelectItem>
-                        <SelectItem value="srodmiescie">Śródmieście</SelectItem>
-                        <SelectItem value="krzyki">Krzyki</SelectItem>
-                        <SelectItem value="fabryczna">Fabryczna</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
               </CardContent>
             </Card>
