@@ -22,92 +22,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Bell, BellOff, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useMockUser } from "@/components/dev/account-switcher";
-
-function NotificationToggle() {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [permission, setPermission] = useState<NotificationPermission>("default");
-
-  // Check notification permission on mount
-  useEffect(() => {
-    if (typeof window !== "undefined" && "Notification" in window) {
-      setPermission(Notification.permission);
-      setIsEnabled(Notification.permission === "granted");
-    }
-  }, []);
-
-  const handleToggle = async () => {
-    if (!("Notification" in window)) {
-      alert("Twoja przeglądarka nie wspiera powiadomień push");
-      return;
-    }
-
-    setIsLoading(true);
-
-    if (permission === "denied") {
-      alert("Powiadomienia są zablokowane. Zmień ustawienia przeglądarki.");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!isEnabled) {
-      const result = await Notification.requestPermission();
-      setPermission(result);
-      setIsEnabled(result === "granted");
-
-      if (result === "granted") {
-        // Show test notification
-        new Notification("Seated", {
-          body: "Powiadomienia zostały włączone!",
-          icon: "/icons/icon-192x192.png",
-        });
-      }
-    } else {
-      setIsEnabled(false);
-    }
-
-    setIsLoading(false);
-  };
-
-  return (
-    <div className="flex items-center justify-between p-4 bg-stone-50 rounded-lg">
-      <div className="flex items-center gap-3">
-        {isEnabled ? (
-          <Bell className="h-5 w-5 text-amber-600" />
-        ) : (
-          <BellOff className="h-5 w-5 text-stone-400" />
-        )}
-        <div>
-          <p className="font-medium text-stone-700">
-            {isEnabled ? "Powiadomienia włączone" : "Włącz powiadomienia"}
-          </p>
-          <p className="text-sm text-stone-500">
-            {permission === "denied"
-              ? "Zablokowane w przeglądarce"
-              : "Otrzymuj powiadomienia o ważnych aktualizacjach"}
-          </p>
-        </div>
-      </div>
-      <Button
-        variant={isEnabled ? "outline" : "default"}
-        size="sm"
-        onClick={handleToggle}
-        disabled={isLoading || permission === "denied"}
-        className={isEnabled ? "" : "bg-amber-500 hover:bg-amber-600"}
-      >
-        {isLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : isEnabled ? (
-          "Wyłącz"
-        ) : (
-          "Włącz"
-        )}
-      </Button>
-    </div>
-  );
-}
 
 function LanguageSelector() {
   const pathname = usePathname();
@@ -399,6 +315,30 @@ export default function SettingsPage() {
                 placeholder="Link do profilu Facebook"
               />
             </div>
+
+            <div>
+              <Label htmlFor="tiktok">TikTok</Label>
+              <div className="flex">
+                <span className="inline-flex items-center px-3 bg-stone-100 border border-r-0 rounded-l-md text-stone-500 text-sm">
+                  @
+                </span>
+                <Input
+                  id="tiktok"
+                  value={profile.socialLinks?.tiktok || ""}
+                  onChange={(e) =>
+                    setProfile({
+                      ...profile,
+                      socialLinks: {
+                        ...profile.socialLinks,
+                        tiktok: e.target.value,
+                      },
+                    })
+                  }
+                  className="rounded-l-none"
+                  placeholder="twoj_tiktok"
+                />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -628,60 +568,6 @@ export default function SettingsPage() {
               <Button variant="outline" size="sm">
                 Połącz
               </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Notifications */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <span>🔔</span> Powiadomienia push
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <NotificationToggle />
-
-            <div className="space-y-4 pt-4 border-t">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-stone-700">Rezerwacje</p>
-                  <p className="text-sm text-stone-500">
-                    Potwierdzenia i przypomnienia
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-stone-700">Wiadomości</p>
-                  <p className="text-sm text-stone-500">
-                    Nowe wiadomości od hostów
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-stone-700">Nowe wydarzenia</p>
-                  <p className="text-sm text-stone-500">
-                    Od obserwowanych hostów
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-stone-700">Marketing</p>
-                  <p className="text-sm text-stone-500">
-                    Promocje i nowości
-                  </p>
-                </div>
-                <Switch />
-              </div>
             </div>
           </CardContent>
         </Card>

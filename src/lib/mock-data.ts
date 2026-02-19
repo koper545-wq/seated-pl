@@ -2948,6 +2948,7 @@ export interface GuestProfile {
   socialLinks?: {
     instagram?: string;
     facebook?: string;
+    tiktok?: string;
   };
   // Badges earned
   badges: string[];
