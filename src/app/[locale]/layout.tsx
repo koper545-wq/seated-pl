@@ -10,6 +10,7 @@ import { SessionProvider } from "@/components/providers";
 import { DevAccountSwitcher, MVPModeSwitcher } from "@/components/dev";
 import { EventsProvider } from "@/contexts/events-context";
 import { MVPModeProvider } from "@/contexts/mvp-mode-context";
+import { BookingsProvider } from "@/contexts/bookings-context";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -89,13 +90,15 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={messages}>
             <MVPModeProvider>
               <EventsProvider>
-                <div className="flex min-h-screen flex-col">
-                  <Header />
-                  <main className="flex-1">{children}</main>
-                  <Footer />
-                </div>
-                <DevAccountSwitcher />
-                <MVPModeSwitcher />
+                <BookingsProvider>
+                  <div className="flex min-h-screen flex-col">
+                    <Header />
+                    <main className="flex-1">{children}</main>
+                    <Footer />
+                  </div>
+                  <DevAccountSwitcher />
+                  <MVPModeSwitcher />
+                </BookingsProvider>
               </EventsProvider>
             </MVPModeProvider>
           </NextIntlClientProvider>

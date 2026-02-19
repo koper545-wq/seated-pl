@@ -39,6 +39,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useBookings } from "@/contexts/bookings-context";
 
 interface BookingFormProps {
   eventId: string;
@@ -81,6 +82,7 @@ export function BookingForm({
   waitlistEntryId,
 }: BookingFormProps) {
   const router = useRouter();
+  const { createBooking } = useBookings();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -166,46 +168,52 @@ export function BookingForm({
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // Create booking with pending_payment status
+      const booking = createBooking({
+        eventId,
+        guestId: "guest-current", // TODO: get from auth context
+        guestName,
+        guestEmail,
+        guestPhone,
+        ticketCount,
+        totalPrice: totalPrice * 100, // in grosze
+        platformFee: platformFee * 100, // in grosze
+        voucherCode: appliedVoucher?.code,
+        voucherDiscount: voucherDiscount,
+        dietaryRestrictions,
+        otherDietary,
+        specialRequests,
+      });
 
-    const bookingData: BookingFormData = {
-      eventId,
-      ticketCount,
-      guestName,
-      guestEmail,
-      guestPhone,
-      dietaryRestrictions,
-      otherDietary,
-      specialRequests,
-      agreeToTerms,
-    };
-
-    // If this is a waitlist booking, mark it as converted
-    if (isWaitlistBooking && waitlistEntryId) {
-      try {
-        await fetch("/api/waitlist/convert", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            entryId: waitlistEntryId,
-            bookingId: `booking-${Date.now()}`, // In real app, this would be the actual booking ID
-          }),
-        });
-      } catch (error) {
-        console.error("Failed to convert waitlist entry:", error);
+      // If this is a waitlist booking, mark it as converted
+      if (isWaitlistBooking && waitlistEntryId) {
+        try {
+          await fetch("/api/waitlist/convert", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              entryId: waitlistEntryId,
+              bookingId: booking.id,
+            }),
+          });
+        } catch (error) {
+          console.error("Failed to convert waitlist entry:", error);
+        }
       }
-    }
 
-    // Redirect to confirmation page
-    const params = new URLSearchParams({
-      eventId,
-      tickets: ticketCount.toString(),
-    });
-    if (isWaitlistBooking) {
-      params.set("fromWaitlist", "true");
+      // Redirect to checkout page with booking ID
+      const params = new URLSearchParams({
+        bookingId: booking.id,
+      });
+      if (isWaitlistBooking) {
+        params.set("fromWaitlist", "true");
+      }
+      router.push(`/checkout?${params.toString()}`);
+    } catch (error) {
+      console.error("Failed to create booking:", error);
+      setIsSubmitting(false);
     }
-    router.push(`/bookings/confirmation?${params.toString()}`);
   };
 
   return (
