@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -174,64 +175,78 @@ export function Header() {
                     <nav className="flex flex-col space-y-1 mt-4">
                       {isHost ? (
                         <>
-                          <Link
-                            href="/dashboard/host"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                          >
-                            <ChefHat className="h-4 w-4" />
-                            <span>Panel hosta</span>
-                          </Link>
-                          <Link
-                            href="/dashboard/host/calendar"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                          >
-                            <Calendar className="h-4 w-4" />
-                            <span>Moje wydarzenia</span>
-                          </Link>
+                          <SheetClose asChild>
+                            <Link
+                              href="/dashboard/host"
+                              className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                            >
+                              <ChefHat className="h-4 w-4" />
+                              <span>Panel hosta</span>
+                            </Link>
+                          </SheetClose>
+                          <SheetClose asChild>
+                            <Link
+                              href="/dashboard/host/calendar"
+                              className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                            >
+                              <Calendar className="h-4 w-4" />
+                              <span>Moje wydarzenia</span>
+                            </Link>
+                          </SheetClose>
                         </>
                       ) : (
                         <>
-                          <Link
-                            href="/dashboard"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                          >
-                            <User className="h-4 w-4" />
-                            <span>{t("profile")}</span>
-                          </Link>
-                          <Link
-                            href="/dashboard/bookings"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                          >
-                            <Calendar className="h-4 w-4" />
-                            <span>{t("myBookings")}</span>
-                          </Link>
+                          <SheetClose asChild>
+                            <Link
+                              href="/dashboard"
+                              className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                            >
+                              <User className="h-4 w-4" />
+                              <span>{t("profile")}</span>
+                            </Link>
+                          </SheetClose>
+                          <SheetClose asChild>
+                            <Link
+                              href="/dashboard/bookings"
+                              className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                            >
+                              <Calendar className="h-4 w-4" />
+                              <span>{t("myBookings")}</span>
+                            </Link>
+                          </SheetClose>
                           {!mvpMode && (
                             <>
-                              <Link
-                                href="/dashboard/homies"
-                                className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                              >
-                                <Users className="h-4 w-4" />
-                                <span>{t("homies")}</span>
-                              </Link>
-                              <Link
-                                href="/dashboard/wishlist"
-                                className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                              >
-                                <Heart className="h-4 w-4" />
-                                <span>{t("wishlist")}</span>
-                              </Link>
+                              <SheetClose asChild>
+                                <Link
+                                  href="/dashboard/homies"
+                                  className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  <Users className="h-4 w-4" />
+                                  <span>{t("homies")}</span>
+                                </Link>
+                              </SheetClose>
+                              <SheetClose asChild>
+                                <Link
+                                  href="/dashboard/wishlist"
+                                  className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  <Heart className="h-4 w-4" />
+                                  <span>{t("wishlist")}</span>
+                                </Link>
+                              </SheetClose>
                             </>
                           )}
                         </>
                       )}
-                      <Link
-                        href="/dashboard/settings"
-                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
-                      >
-                        <Settings className="h-4 w-4" />
-                        <span>{t("settings")}</span>
-                      </Link>
+                      <SheetClose asChild>
+                        <Link
+                          href="/dashboard/settings"
+                          className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
+                        >
+                          <Settings className="h-4 w-4" />
+                          <span>{t("settings")}</span>
+                        </Link>
+                      </SheetClose>
                       <hr className="my-2" />
                       <button
                         onClick={() => {
@@ -323,13 +338,14 @@ export function Header() {
 
                 <nav className="flex flex-col space-y-4 mt-6">
                   {navigation.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
-                    >
-                      {item.name}
-                    </Link>
+                    <SheetClose key={item.href} asChild>
+                      <Link
+                        href={item.href}
+                        className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    </SheetClose>
                   ))}
 
                   <hr className="my-2" />
@@ -338,33 +354,41 @@ export function Header() {
                     <>
                       {isHost ? (
                         <>
-                          <Link
-                            href="/dashboard/host"
-                            className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
-                          >
-                            Panel hosta
-                          </Link>
-                          <Link
-                            href="/dashboard/host/calendar"
-                            className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
-                          >
-                            Moje wydarzenia
-                          </Link>
+                          <SheetClose asChild>
+                            <Link
+                              href="/dashboard/host"
+                              className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                            >
+                              Panel hosta
+                            </Link>
+                          </SheetClose>
+                          <SheetClose asChild>
+                            <Link
+                              href="/dashboard/host/calendar"
+                              className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                            >
+                              Moje wydarzenia
+                            </Link>
+                          </SheetClose>
                         </>
                       ) : (
                         <>
-                          <Link
-                            href="/dashboard"
-                            className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
-                          >
-                            {t("dashboard")}
-                          </Link>
-                          <Link
-                            href="/dashboard/bookings"
-                            className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
-                          >
-                            {t("myBookings")}
-                          </Link>
+                          <SheetClose asChild>
+                            <Link
+                              href="/dashboard"
+                              className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                            >
+                              {t("dashboard")}
+                            </Link>
+                          </SheetClose>
+                          <SheetClose asChild>
+                            <Link
+                              href="/dashboard/bookings"
+                              className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                            >
+                              {t("myBookings")}
+                            </Link>
+                          </SheetClose>
                         </>
                       )}
                       <button
@@ -380,18 +404,22 @@ export function Header() {
                     </>
                   ) : (
                     <>
-                      <Link
-                        href="/login"
-                        className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
-                      >
-                        {t("login")}
-                      </Link>
-                      <Button
-                        asChild
-                        className="bg-amber-600 hover:bg-amber-700 mt-2"
-                      >
-                        <Link href="/register">{t("register")}</Link>
-                      </Button>
+                      <SheetClose asChild>
+                        <Link
+                          href="/login"
+                          className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                        >
+                          {t("login")}
+                        </Link>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Button
+                          asChild
+                          className="bg-amber-600 hover:bg-amber-700 mt-2"
+                        >
+                          <Link href="/register">{t("register")}</Link>
+                        </Button>
+                      </SheetClose>
                     </>
                   )}
                 </nav>
