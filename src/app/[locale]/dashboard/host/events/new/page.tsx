@@ -166,6 +166,9 @@ export default function CreateEventPage() {
   const [whatToBring, setWhatToBring] = useState("");
   const [byob, setByob] = useState(false);
 
+  // Step 5: Photos
+  const [photos, setPhotos] = useState<string[]>([]);
+
   // Generated dates for recurring events
   const generatedDates = useMemo(() => {
     if (!isRecurring || !eventDate) return [eventDate].filter(Boolean) as Date[];
@@ -209,9 +212,6 @@ export default function CreateEventPage() {
   if (isLoading || effectiveRole === "guest") {
     return null;
   }
-
-  // Step 5: Photos
-  const [photos, setPhotos] = useState<string[]>([]);
 
   const totalSteps = 5;
 
