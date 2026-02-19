@@ -180,7 +180,7 @@ export default function HostBookingsPage() {
                   <TrendingUp className="h-5 w-5 text-amber-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">{formatPrice(totalRevenue)}</p>
+                  <p className="text-2xl font-bold">{formatPrice(totalRevenue * 100)}</p>
                   <p className="text-xs text-muted-foreground">Przychód</p>
                 </div>
               </div>
@@ -411,7 +411,7 @@ function HostBookingCard({
                 {booking.ticketCount === 1 ? "osoba" : "osoby"}
               </p>
               <p className="text-amber-600 font-semibold mt-1">
-                {formatPrice(booking.totalPrice - booking.platformFee)}
+                {formatPrice((booking.totalPrice - booking.platformFee) * 100)}
               </p>
             </div>
           </div>

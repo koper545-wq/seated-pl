@@ -2492,6 +2492,20 @@ export interface MockBooking {
   approvedAt?: Date;
   cancelledAt?: Date;
   cancelReason?: string;
+  // Messages between host and guest
+  messages?: BookingMessage[];
+}
+
+// Message between host and guest regarding a booking
+export interface BookingMessage {
+  id: string;
+  bookingId: string;
+  senderType: "host" | "guest";
+  senderId: string;
+  senderName: string;
+  message: string;
+  createdAt: Date;
+  readAt?: Date;
 }
 
 export const mockBookings: MockBooking[] = [
@@ -2590,6 +2604,27 @@ export const mockBookings: MockBooking[] = [
     specialRequests: "Urodziny - czy można przynieść tort?",
     createdAt: new Date("2026-02-08T11:00:00"),
     approvedAt: new Date("2026-02-08T14:00:00"),
+    messages: [
+      {
+        id: "msg-2",
+        bookingId: "booking-5",
+        senderType: "guest",
+        senderId: "user-3",
+        senderName: "Piotr Wiśniewski",
+        message: "Cześć! Będziemy świętować urodziny żony - czy moglibyśmy przynieść własny tort na deser?",
+        createdAt: new Date("2026-02-08T11:05:00"),
+      },
+      {
+        id: "msg-3",
+        bookingId: "booking-5",
+        senderType: "host",
+        senderId: "host-1",
+        senderName: "Anna Kowalska",
+        message: "Cześć Piotr! Jasne, możecie przynieść tort 🎂 Możemy go przechować w lodówce i podać na koniec kolacji. Wszystkiego najlepszego dla żony!",
+        createdAt: new Date("2026-02-08T13:30:00"),
+        readAt: new Date("2026-02-08T14:00:00"),
+      },
+    ],
   },
   {
     id: "booking-7",
@@ -2614,6 +2649,17 @@ export const mockBookings: MockBooking[] = [
     dietaryInfo: "Bez orzechów - alergia",
     specialRequests: "Czy jest dostęp dla wózka inwalidzkiego?",
     createdAt: new Date("2026-02-13T10:30:00"),
+    messages: [
+      {
+        id: "msg-1",
+        bookingId: "booking-7",
+        senderType: "guest",
+        senderId: "user-4",
+        senderName: "Katarzyna Mazur",
+        message: "Czy jest dostęp dla wózka inwalidzkiego? Moja mama używa wózka.",
+        createdAt: new Date("2026-02-13T10:31:00"),
+      },
+    ],
   },
   {
     id: "booking-8",
@@ -2686,6 +2732,78 @@ export function getBookingsByHostId(hostId: string): MockBooking[] {
 
 export function getBookingsByEventId(eventId: string): MockBooking[] {
   return mockBookings.filter((booking) => booking.eventId === eventId);
+}
+
+// Get bookings with inquiries (messages or special requests) for a specific event
+export function getBookingsWithInquiries(eventId: string): MockBooking[] {
+  return mockBookings.filter(
+    (booking) =>
+      booking.eventId === eventId &&
+      (booking.specialRequests || (booking.messages && booking.messages.length > 0))
+  );
+}
+
+// Get unread messages count for host (messages from guests that haven't been replied to)
+export function getUnreadInquiriesCount(eventId: string, hostId: string): number {
+  const bookings = getBookingsWithInquiries(eventId);
+  let count = 0;
+
+  for (const booking of bookings) {
+    // Check if there are guest messages without host reply
+    if (booking.messages && booking.messages.length > 0) {
+      const lastMessage = booking.messages[booking.messages.length - 1];
+      if (lastMessage.senderType === "guest") {
+        count++;
+      }
+    } else if (booking.specialRequests) {
+      // Special request without any messages counts as unread
+      count++;
+    }
+  }
+
+  return count;
+}
+
+// Add a message to a booking
+export function addBookingMessage(
+  bookingId: string,
+  senderType: "host" | "guest",
+  senderId: string,
+  senderName: string,
+  message: string
+): BookingMessage | null {
+  const booking = mockBookings.find((b) => b.id === bookingId);
+  if (!booking) return null;
+
+  const newMessage: BookingMessage = {
+    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    bookingId,
+    senderType,
+    senderId,
+    senderName,
+    message,
+    createdAt: new Date(),
+  };
+
+  if (!booking.messages) {
+    booking.messages = [];
+  }
+  booking.messages.push(newMessage);
+
+  return newMessage;
+}
+
+// Mark messages as read
+export function markMessagesAsRead(bookingId: string, readerType: "host" | "guest"): void {
+  const booking = mockBookings.find((b) => b.id === bookingId);
+  if (!booking || !booking.messages) return;
+
+  booking.messages.forEach((msg) => {
+    // Mark messages from the other party as read
+    if (msg.senderType !== readerType && !msg.readAt) {
+      msg.readAt = new Date();
+    }
+  });
 }
 
 export const bookingStatusLabels: Record<BookingStatus, { label: string; color: string }> = {

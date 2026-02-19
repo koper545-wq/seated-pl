@@ -92,7 +92,6 @@ export default function HostDashboardPage() {
 
   // Calculate totals
   const totalRevenue = hostEvents.reduce((sum, e) => sum + e.revenue, 0);
-  const totalGuests = hostEvents.reduce((sum, e) => sum + e.confirmedGuests, 0);
   const pendingBookings = hostEvents.reduce((sum, e) => sum + e.pendingBookings, 0);
 
   return (
@@ -139,7 +138,7 @@ export default function HostDashboardPage() {
 
       {/* Stats */}
       <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-3 gap-4 mb-8">
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -169,24 +168,11 @@ export default function HostDashboardPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-full bg-green-100">
-                  <Users className="h-5 w-5 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{totalGuests}</p>
-                  <p className="text-xs text-muted-foreground">Gości łącznie</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
                 <div className="p-2 rounded-full bg-emerald-100">
                   <TrendingUp className="h-5 w-5 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">{formatPrice(totalRevenue)}</p>
+                  <p className="text-2xl font-bold">{formatPrice(totalRevenue * 100)}</p>
                   <p className="text-xs text-muted-foreground">Przychód</p>
                 </div>
               </div>
@@ -350,7 +336,7 @@ function HostEventCard({ event, showActions = true }: HostEventCardProps) {
                   </span>
                 )}
                 <span className="text-muted-foreground">
-                  Przychód: <span className="font-medium text-foreground">{formatPrice(event.revenue)}</span>
+                  Przychód: <span className="font-medium text-foreground">{formatPrice(event.revenue * 100)}</span>
                 </span>
                 <span className="text-muted-foreground">
                   Cena: <span className="font-medium text-foreground">{event.price} PLN</span>

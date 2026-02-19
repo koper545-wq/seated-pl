@@ -25,11 +25,21 @@ import {
   getBookingsByEventId,
   getWaitlistByEventId,
   removeFromWaitlist,
+  addBookingMessage,
   MockBooking,
   WaitlistEntry,
+  BookingMessage,
   bookingStatusLabels,
   HostEvent,
 } from "@/lib/mock-data";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import {
   ArrowLeft,
   Calendar,
@@ -53,6 +63,8 @@ import {
   Bell,
   Trash2,
   Flag,
+  Send,
+  MessageCircle,
 } from "lucide-react";
 import { ReportDialog } from "@/components/reports";
 import { cn, formatPrice } from "@/lib/utils";
@@ -81,12 +93,31 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
   } | null>(null);
   const [entryToRemove, setEntryToRemove] = useState<WaitlistEntry | null>(null);
 
+  // Reply to inquiry state
+  const [replyBooking, setReplyBooking] = useState<MockBooking | null>(null);
+  const [replyMessage, setReplyMessage] = useState("");
+  const [isSendingReply, setIsSendingReply] = useState(false);
+
   // Separate bookings
   const pendingBookings = bookings.filter((b) => b.status === "pending");
   const confirmedBookings = bookings.filter((b) => b.status === "approved");
   const declinedBookings = bookings.filter(
     (b) => b.status === "declined" || b.status === "cancelled"
   );
+
+  // Bookings with inquiries (special requests or messages)
+  const bookingsWithInquiries = bookings.filter(
+    (b) => b.specialRequests || (b.messages && b.messages.length > 0)
+  );
+
+  // Count unanswered inquiries
+  const unansweredInquiriesCount = bookingsWithInquiries.filter((b) => {
+    if (b.messages && b.messages.length > 0) {
+      const lastMessage = b.messages[b.messages.length - 1];
+      return lastMessage.senderType === "guest";
+    }
+    return b.specialRequests && (!b.messages || b.messages.length === 0);
+  }).length;
 
   // Calculate totals
   const totalGuests = confirmedBookings.reduce((sum, b) => sum + b.ticketCount, 0);
@@ -137,6 +168,50 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
       setWaitlistEntries((prev) => prev.filter((e) => e.id !== entryToRemove.id));
       setEntryToRemove(null);
     }
+  };
+
+  // Handle reply to inquiry
+  const handleReply = (booking: MockBooking) => {
+    setReplyBooking(booking);
+    setReplyMessage("");
+  };
+
+  const sendReply = () => {
+    if (!replyBooking || !replyMessage.trim()) return;
+
+    setIsSendingReply(true);
+
+    // Simulate sending (in real app would call API)
+    // Get host info from a confirmed booking's event data, or use defaults
+    const hostInfo = bookings.find(b => b.event?.hostId)?.event || { hostId: "host-1", hostName: "Host" };
+
+    setTimeout(() => {
+      const newMessage = addBookingMessage(
+        replyBooking.id,
+        "host",
+        hostInfo.hostId,
+        hostInfo.hostName,
+        replyMessage.trim()
+      );
+
+      if (newMessage) {
+        // Update local state
+        setBookings((prev) =>
+          prev.map((b) =>
+            b.id === replyBooking.id
+              ? {
+                  ...b,
+                  messages: [...(b.messages || []), newMessage],
+                }
+              : b
+          )
+        );
+      }
+
+      setIsSendingReply(false);
+      setReplyBooking(null);
+      setReplyMessage("");
+    }, 500);
   };
 
   // Collect dietary info from confirmed bookings
@@ -230,7 +305,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
           <Card>
             <CardContent className="p-4 text-center">
               <p className="text-3xl font-bold text-amber-600">
-                {formatPrice(totalRevenue)}
+                {formatPrice(totalRevenue * 100)}
               </p>
               <p className="text-xs text-muted-foreground">Przychód</p>
             </CardContent>
@@ -283,6 +358,13 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                 <TabsTrigger value="declined" className="flex items-center gap-2">
                   <UserX className="h-4 w-4" />
                   Odrzucone
+                </TabsTrigger>
+                <TabsTrigger value="inquiries" className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  Zapytania
+                  {unansweredInquiriesCount > 0 && (
+                    <Badge className="bg-blue-500">{unansweredInquiriesCount}</Badge>
+                  )}
                 </TabsTrigger>
                 <TabsTrigger value="waitlist" className="flex items-center gap-2">
                   <Bell className="h-4 w-4" />
@@ -345,6 +427,35 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                     icon={UserX}
                     title="Brak odrzuconych"
                     description="Nie odrzuciłeś jeszcze żadnych rezerwacji."
+                    compact
+                  />
+                )}
+              </TabsContent>
+
+              {/* Inquiries */}
+              <TabsContent value="inquiries" className="space-y-3">
+                {bookingsWithInquiries.length > 0 ? (
+                  <>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 mb-4">
+                      <p>
+                        Tutaj znajdziesz wszystkie zapytania od gości. Odpowiadaj szybko, aby zapewnić
+                        gościom dobrą obsługę.
+                      </p>
+                    </div>
+                    {bookingsWithInquiries.map((booking) => (
+                      <InquiryCard
+                        key={booking.id}
+                        booking={booking}
+                        event={event}
+                        onReply={() => handleReply(booking)}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <EmptyState
+                    icon={MessageCircle}
+                    title="Brak zapytań"
+                    description="Goście nie zadali jeszcze żadnych pytań dotyczących tego wydarzenia."
                     compact
                   />
                 )}
@@ -470,7 +581,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                 </div>
                 <div className="flex justify-between font-medium">
                   <span>Przychód netto:</span>
-                  <span className="text-amber-600">{formatPrice(totalRevenue)}</span>
+                  <span className="text-amber-600">{formatPrice(totalRevenue * 100)}</span>
                 </div>
               </CardContent>
             </Card>
@@ -547,6 +658,150 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Reply to inquiry dialog */}
+      <Dialog
+        open={replyBooking !== null}
+        onOpenChange={(open) => !open && setReplyBooking(null)}
+      >
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-amber-600" />
+              Odpowiedz na zapytanie
+            </DialogTitle>
+          </DialogHeader>
+
+          {replyBooking && (
+            <div className="space-y-4">
+              {/* Guest info */}
+              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                <Avatar className="h-10 w-10">
+                  <AvatarFallback className="bg-amber-100 text-amber-700">
+                    {replyBooking.guestName
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium">{replyBooking.guestName}</p>
+                  <p className="text-sm text-muted-foreground">{replyBooking.guestEmail}</p>
+                </div>
+              </div>
+
+              {/* Message history */}
+              <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                {/* Original request if no messages */}
+                {replyBooking.specialRequests && (!replyBooking.messages || replyBooking.messages.length === 0) && (
+                  <div className="flex gap-3">
+                    <Avatar className="h-8 w-8 flex-shrink-0">
+                      <AvatarFallback className="bg-blue-100 text-blue-700 text-xs">
+                        {replyBooking.guestName.split(" ").map((n) => n[0]).join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="bg-blue-50 rounded-lg p-3">
+                        <p className="text-sm">{replyBooking.specialRequests}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {replyBooking.createdAt.toLocaleString("pl-PL", {
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Messages */}
+                {replyBooking.messages?.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={cn(
+                      "flex gap-3",
+                      msg.senderType === "host" && "flex-row-reverse"
+                    )}
+                  >
+                    <Avatar className="h-8 w-8 flex-shrink-0">
+                      <AvatarFallback
+                        className={cn(
+                          "text-xs",
+                          msg.senderType === "host"
+                            ? "bg-amber-100 text-amber-700"
+                            : "bg-blue-100 text-blue-700"
+                        )}
+                      >
+                        {msg.senderName.split(" ").map((n) => n[0]).join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className={cn("flex-1", msg.senderType === "host" && "text-right")}>
+                      <div
+                        className={cn(
+                          "rounded-lg p-3 inline-block text-left",
+                          msg.senderType === "host"
+                            ? "bg-amber-50"
+                            : "bg-blue-50"
+                        )}
+                      >
+                        <p className="text-sm">{msg.message}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {msg.createdAt.toLocaleString("pl-PL", {
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Reply input */}
+              <div className="space-y-2">
+                <Textarea
+                  placeholder="Napisz odpowiedź..."
+                  value={replyMessage}
+                  onChange={(e) => setReplyMessage(e.target.value)}
+                  rows={3}
+                  className="resize-none"
+                />
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setReplyBooking(null)}
+              disabled={isSendingReply}
+            >
+              Anuluj
+            </Button>
+            <Button
+              onClick={sendReply}
+              disabled={!replyMessage.trim() || isSendingReply}
+              className="bg-amber-600 hover:bg-amber-700"
+            >
+              {isSendingReply ? (
+                <>
+                  <Clock className="h-4 w-4 mr-2 animate-spin" />
+                  Wysyłanie...
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4 mr-2" />
+                  Wyślij
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -630,7 +885,7 @@ function GuestCard({
             )}
 
             <p className="text-sm font-medium text-amber-600 mt-2">
-              {formatPrice(booking.totalPrice - booking.platformFee)}
+              {formatPrice((booking.totalPrice - booking.platformFee) * 100)}
             </p>
           </div>
 
@@ -674,6 +929,134 @@ function GuestCard({
               }
             />
           </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// Inquiry card component
+interface InquiryCardProps {
+  booking: MockBooking;
+  event: HostEvent;
+  onReply: () => void;
+}
+
+function InquiryCard({ booking, event, onReply }: InquiryCardProps) {
+  const statusInfo = bookingStatusLabels[booking.status];
+
+  // Check if there's an unanswered inquiry
+  const hasUnansweredInquiry = (() => {
+    if (booking.messages && booking.messages.length > 0) {
+      const lastMessage = booking.messages[booking.messages.length - 1];
+      return lastMessage.senderType === "guest";
+    }
+    return booking.specialRequests && (!booking.messages || booking.messages.length === 0);
+  })();
+
+  // Get the last message or special request
+  const lastInquiry = (() => {
+    if (booking.messages && booking.messages.length > 0) {
+      return {
+        message: booking.messages[booking.messages.length - 1].message,
+        date: booking.messages[booking.messages.length - 1].createdAt,
+        isFromGuest: booking.messages[booking.messages.length - 1].senderType === "guest",
+      };
+    }
+    if (booking.specialRequests) {
+      return {
+        message: booking.specialRequests,
+        date: booking.createdAt,
+        isFromGuest: true,
+      };
+    }
+    return null;
+  })();
+
+  const messageCount = booking.messages?.length || 0;
+
+  return (
+    <Card className={cn(hasUnansweredInquiry && "border-blue-200 bg-blue-50/30")}>
+      <CardContent className="p-4">
+        <div className="flex items-start gap-4">
+          <Avatar className="h-12 w-12">
+            <AvatarFallback className="bg-amber-100 text-amber-700">
+              {booking.guestName
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h4 className="font-semibold truncate">{booking.guestName}</h4>
+              <Badge className={cn(statusInfo.color, "text-xs")} variant="secondary">
+                {statusInfo.label}
+              </Badge>
+              {hasUnansweredInquiry && (
+                <Badge className="bg-blue-500 text-white text-xs">
+                  Oczekuje na odpowiedź
+                </Badge>
+              )}
+            </div>
+
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground mb-3">
+              <a
+                href={`mailto:${booking.guestEmail}`}
+                className="flex items-center gap-1 hover:text-foreground"
+              >
+                <Mail className="h-3 w-3" />
+                {booking.guestEmail}
+              </a>
+              {messageCount > 0 && (
+                <span className="flex items-center gap-1">
+                  <MessageCircle className="h-3 w-3" />
+                  {messageCount} {messageCount === 1 ? "wiadomość" : messageCount < 5 ? "wiadomości" : "wiadomości"}
+                </span>
+              )}
+            </div>
+
+            {/* Last message preview */}
+            {lastInquiry && (
+              <div className={cn(
+                "rounded-lg p-3 text-sm",
+                lastInquiry.isFromGuest ? "bg-blue-50 border border-blue-100" : "bg-amber-50 border border-amber-100"
+              )}>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className={cn(
+                    "text-xs font-medium",
+                    lastInquiry.isFromGuest ? "text-blue-700" : "text-amber-700"
+                  )}>
+                    {lastInquiry.isFromGuest ? booking.guestName : "Ty"}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {lastInquiry.date.toLocaleString("pl-PL", {
+                      day: "numeric",
+                      month: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
+                <p className="text-muted-foreground line-clamp-2">{lastInquiry.message}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Reply button */}
+          <Button
+            onClick={onReply}
+            size="sm"
+            className={cn(
+              hasUnansweredInquiry
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-amber-600 hover:bg-amber-700"
+            )}
+          >
+            <MessageCircle className="h-4 w-4 mr-1" />
+            {hasUnansweredInquiry ? "Odpowiedz" : "Wiadomość"}
+          </Button>
         </div>
       </CardContent>
     </Card>
