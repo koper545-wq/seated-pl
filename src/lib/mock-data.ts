@@ -5282,11 +5282,149 @@ export interface PlatformSettings {
 export let platformSettings: PlatformSettings = {
   id: "settings-1",
   commissionType: "percentage",
-  commissionValue: 10,
+  commissionValue: 15, // Default 15%
   minCommission: 500,   // 5 PLN
-  maxCommission: 10000, // 100 PLN
+  maxCommission: 15000, // 150 PLN
   updatedAt: new Date(),
 };
+
+// ============================================
+// HOST COMMISSION OVERRIDES
+// ============================================
+
+export type CommissionOverrideType = "permanent" | "time_limited" | "event_limited";
+
+export interface HostCommissionOverride {
+  id: string;
+  hostId: string;
+  commissionRate: number; // Custom commission % for this host
+  type: CommissionOverrideType;
+  // For time_limited
+  validFrom?: Date;
+  validUntil?: Date;
+  // For event_limited
+  eventsLimit?: number;
+  eventsUsed?: number;
+  // Metadata
+  reason?: string;
+  createdBy: string; // admin user id
+  createdAt: Date;
+  isActive: boolean;
+}
+
+let hostCommissionOverrides: HostCommissionOverride[] = [
+  // Example: Host with permanent 10% commission
+  {
+    id: "override-1",
+    hostId: "host-1",
+    commissionRate: 10,
+    type: "permanent",
+    reason: "Premium partner - obniżona prowizja",
+    createdBy: "admin-1",
+    createdAt: new Date("2024-06-01"),
+    isActive: true,
+  },
+  // Example: Host with time-limited 12% commission
+  {
+    id: "override-2",
+    hostId: "host-2",
+    commissionRate: 12,
+    type: "time_limited",
+    validFrom: new Date("2025-01-01"),
+    validUntil: new Date("2025-06-30"),
+    reason: "Promocja dla nowych hostów - 6 miesięcy",
+    createdBy: "admin-1",
+    createdAt: new Date("2025-01-01"),
+    isActive: true,
+  },
+];
+
+export function getHostCommissionOverrides(): HostCommissionOverride[] {
+  return hostCommissionOverrides;
+}
+
+export function getHostCommissionOverride(hostId: string): HostCommissionOverride | null {
+  const now = new Date();
+
+  const override = hostCommissionOverrides.find((o) => {
+    if (o.hostId !== hostId || !o.isActive) return false;
+
+    if (o.type === "permanent") return true;
+
+    if (o.type === "time_limited") {
+      if (!o.validFrom || !o.validUntil) return false;
+      return now >= o.validFrom && now <= o.validUntil;
+    }
+
+    if (o.type === "event_limited") {
+      if (!o.eventsLimit) return false;
+      return (o.eventsUsed || 0) < o.eventsLimit;
+    }
+
+    return false;
+  });
+
+  return override || null;
+}
+
+export function getEffectiveCommissionRate(hostId?: string): number {
+  if (hostId) {
+    const override = getHostCommissionOverride(hostId);
+    if (override) {
+      return override.commissionRate;
+    }
+  }
+  return platformSettings.commissionValue;
+}
+
+export function calculateCommissionForHost(priceInGrosze: number, hostId?: string): number {
+  const rate = getEffectiveCommissionRate(hostId);
+  const { minCommission, maxCommission } = platformSettings;
+
+  let fee = Math.round(priceInGrosze * (rate / 100));
+
+  if (minCommission) fee = Math.max(fee, minCommission);
+  if (maxCommission) fee = Math.min(fee, maxCommission);
+
+  return fee;
+}
+
+export function addHostCommissionOverride(override: Omit<HostCommissionOverride, "id" | "createdAt">): HostCommissionOverride {
+  const newOverride: HostCommissionOverride = {
+    ...override,
+    id: `override-${Date.now()}`,
+    createdAt: new Date(),
+  };
+  hostCommissionOverrides.push(newOverride);
+  return newOverride;
+}
+
+export function updateHostCommissionOverride(id: string, updates: Partial<HostCommissionOverride>): HostCommissionOverride | null {
+  const index = hostCommissionOverrides.findIndex((o) => o.id === id);
+  if (index === -1) return null;
+
+  hostCommissionOverrides[index] = {
+    ...hostCommissionOverrides[index],
+    ...updates,
+  };
+  return hostCommissionOverrides[index];
+}
+
+export function deleteHostCommissionOverride(id: string): boolean {
+  const index = hostCommissionOverrides.findIndex((o) => o.id === id);
+  if (index === -1) return false;
+  hostCommissionOverrides.splice(index, 1);
+  return true;
+}
+
+export function incrementEventUsage(hostId: string): void {
+  const override = hostCommissionOverrides.find(
+    (o) => o.hostId === hostId && o.type === "event_limited" && o.isActive
+  );
+  if (override) {
+    override.eventsUsed = (override.eventsUsed || 0) + 1;
+  }
+}
 
 export function calculateCommission(priceInGrosze: number): number {
   const { commissionType, commissionValue, minCommission, maxCommission } = platformSettings;

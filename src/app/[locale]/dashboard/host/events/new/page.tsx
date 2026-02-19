@@ -193,8 +193,8 @@ export default function CreateEventPage() {
 
   const totalSteps = 5;
 
-  // Platform fee calculation
-  const platformFee = Math.round(price * 0.1);
+  // Platform fee calculation (15% default, may be different for host with override)
+  const platformFee = Math.round(price * 0.15);
   const hostEarnings = price - platformFee;
 
   // Validation
@@ -828,7 +828,7 @@ export default function CreateEventPage() {
                     <span>{price} PLN</span>
                   </div>
                   <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>Opłata platformy (10%):</span>
+                    <span>Opłata platformy (15%):</span>
                     <span>-{platformFee} PLN</span>
                   </div>
                   <Separator />
