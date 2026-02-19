@@ -128,19 +128,9 @@ export default function CreateEventPage() {
   const duplicateFromId = searchParams.get("duplicate");
   const { user: mockUser, isLoading, effectiveRole } = useMockUser();
   const { addEvent, getEventById } = useEvents();
+
+  // ALL HOOKS MUST BE BEFORE CONDITIONAL RETURNS
   const [step, setStep] = useState(1);
-
-  // Redirect to guest dashboard if in guest mode
-  useEffect(() => {
-    if (!isLoading && effectiveRole === "guest") {
-      intlRouter.push("/dashboard");
-    }
-  }, [isLoading, effectiveRole, intlRouter]);
-
-  // If in guest mode or loading, show nothing
-  if (isLoading || effectiveRole === "guest") {
-    return null;
-  }
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Step 1: Basic info
@@ -165,6 +155,17 @@ export default function CreateEventPage() {
   const [recurrenceEndDate, setRecurrenceEndDate] = useState<Date | undefined>();
   const [recurrenceCount, setRecurrenceCount] = useState(4);
 
+  // Step 3: Capacity & price
+  const [capacity, setCapacity] = useState(8);
+  const [price, setPrice] = useState(150);
+  const [instantBooking, setInstantBooking] = useState(false);
+
+  // Step 4: Menu & dietary
+  const [menuDescription, setMenuDescription] = useState("");
+  const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+  const [whatToBring, setWhatToBring] = useState("");
+  const [byob, setByob] = useState(false);
+
   // Generated dates for recurring events
   const generatedDates = useMemo(() => {
     if (!isRecurring || !eventDate) return [eventDate].filter(Boolean) as Date[];
@@ -176,6 +177,13 @@ export default function CreateEventPage() {
       occurrences: recurrenceCount,
     });
   }, [isRecurring, eventDate, recurrencePattern, endCondition, recurrenceEndDate, recurrenceCount]);
+
+  // Redirect to guest dashboard if in guest mode
+  useEffect(() => {
+    if (!isLoading && effectiveRole === "guest") {
+      intlRouter.push("/dashboard");
+    }
+  }, [isLoading, effectiveRole, intlRouter]);
 
   // Pre-fill form when duplicating an event
   useEffect(() => {
@@ -197,16 +205,10 @@ export default function CreateEventPage() {
     }
   }, [duplicateFromId, getEventById]);
 
-  // Step 3: Capacity & price
-  const [capacity, setCapacity] = useState(8);
-  const [price, setPrice] = useState(150);
-  const [instantBooking, setInstantBooking] = useState(false);
-
-  // Step 4: Menu & dietary
-  const [menuDescription, setMenuDescription] = useState("");
-  const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
-  const [whatToBring, setWhatToBring] = useState("");
-  const [byob, setByob] = useState(false);
+  // CONDITIONAL RETURNS MUST BE AFTER ALL HOOKS
+  if (isLoading || effectiveRole === "guest") {
+    return null;
+  }
 
   // Step 5: Photos
   const [photos, setPhotos] = useState<string[]>([]);
