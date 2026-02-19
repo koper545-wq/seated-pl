@@ -137,6 +137,7 @@ export default function CreateEventPage() {
   const [title, setTitle] = useState("");
   const [eventType, setEventType] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [customTag, setCustomTag] = useState("");
   const [description, setDescription] = useState("");
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(["pl"]);
 
@@ -457,7 +458,54 @@ export default function CreateEventPage() {
                         {tag}
                       </Badge>
                     ))}
+                    {/* Custom tags added by user */}
+                    {selectedTags
+                      .filter((tag) => !cuisineTags.includes(tag))
+                      .map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="default"
+                          className="bg-amber-600 hover:bg-amber-700 cursor-pointer"
+                          onClick={() => handleTagToggle(tag)}
+                        >
+                          {tag} ×
+                        </Badge>
+                      ))}
                   </div>
+                  {/* Add custom tag input */}
+                  <div className="flex gap-2 mt-3">
+                    <Input
+                      placeholder="Dodaj własny tag..."
+                      value={customTag}
+                      onChange={(e) => setCustomTag(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && customTag.trim()) {
+                          e.preventDefault();
+                          if (!selectedTags.includes(customTag.trim())) {
+                            setSelectedTags([...selectedTags, customTag.trim()]);
+                          }
+                          setCustomTag("");
+                        }
+                      }}
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        if (customTag.trim() && !selectedTags.includes(customTag.trim())) {
+                          setSelectedTags([...selectedTags, customTag.trim()]);
+                          setCustomTag("");
+                        }
+                      }}
+                      disabled={!customTag.trim()}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Wybierz z listy lub dodaj własny tag
+                  </p>
                 </div>
 
                 <div className="space-y-2">
