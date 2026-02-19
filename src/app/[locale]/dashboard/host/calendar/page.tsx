@@ -118,32 +118,10 @@ export default function HostCalendarPage() {
   const hostId = mockUser?.id || "host-1";
   const hostEvents = getHostEvents(hostId);
 
-  // Redirect to guest dashboard if in guest mode
-  useEffect(() => {
-    if (!isLoading && effectiveRole === "guest") {
-      router.push("/dashboard");
-    }
-  }, [isLoading, effectiveRole, router]);
-
-  if (isLoading || !eventsLoaded) {
-    return (
-      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Ładowanie...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // If in guest mode, show nothing (redirect will happen)
-  if (effectiveRole === "guest") {
-    return null;
-  }
-
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
+  // ALL HOOKS MUST BE BEFORE CONDITIONAL RETURNS
   const monthDays = useMemo(() => getMonthDays(year, month), [year, month]);
 
   // Get events for current month
@@ -164,6 +142,30 @@ export default function HostCalendarPage() {
     });
     return map;
   }, [eventsThisMonth]);
+
+  // Redirect to guest dashboard if in guest mode
+  useEffect(() => {
+    if (!isLoading && effectiveRole === "guest") {
+      router.push("/dashboard");
+    }
+  }, [isLoading, effectiveRole, router]);
+
+  // CONDITIONAL RETURNS MUST BE AFTER ALL HOOKS
+  if (isLoading || !eventsLoaded) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-stone-500">Ładowanie...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If in guest mode, show nothing (redirect will happen)
+  if (effectiveRole === "guest") {
+    return null;
+  }
 
   const goToPrevMonth = () => {
     setCurrentDate(new Date(year, month - 1, 1));
