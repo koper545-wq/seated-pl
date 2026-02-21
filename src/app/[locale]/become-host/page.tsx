@@ -210,11 +210,36 @@ export default function BecomeHostPage() {
     if (!isStep5Valid) return;
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // In real app, send to API
+    try {
+      const businessNameValue = hostType === "restaurant" ? restaurantName : `${firstName} ${lastName}`;
+      const phoneValue = hostType === "restaurant" ? contactPhone : phone;
 
-    router.push("/become-host/success");
+      const res = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          becomeHost: true,
+          businessName: businessNameValue,
+          description: bio || null,
+          phoneNumber: phoneValue || null,
+          city: city || "Wrocław",
+          neighborhood: neighborhood || null,
+          cuisineSpecialties: selectedCuisines,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to create host profile");
+      }
+
+      router.push("/become-host/success");
+    } catch (error) {
+      console.error("Become host error:", error);
+      alert("Wystąpił błąd. Spróbuj ponownie.");
+      setIsSubmitting(false);
+    }
   };
 
   return (

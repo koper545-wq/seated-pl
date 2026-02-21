@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
@@ -24,14 +24,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useMockUser } from "@/components/dev/account-switcher";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMVPMode } from "@/contexts/mvp-mode-context";
 import { Loader2 } from "lucide-react";
 
 export default function GuestDashboardPage() {
-  const { user: mockUser, isLoading, effectiveRole } = useMockUser();
+  const { user, isLoading, effectiveRole, isMockUser, guestProfile } = useCurrentUser();
   const { mvpMode } = useMVPMode();
   const router = useRouter();
+  const [apiBookings, setApiBookings] = useState<Array<{
+    id: string;
+    status: string;
+    ticketCount: number;
+    totalPrice: number;
+    event: {
+      id: string;
+      title: string;
+      date: string;
+      dateFormatted?: string;
+      imageGradient?: string;
+      locationPublic?: string;
+    };
+  }> | null>(null);
 
   // Redirect to host dashboard if in host mode
   useEffect(() => {
@@ -39,6 +53,17 @@ export default function GuestDashboardPage() {
       router.push("/dashboard/host");
     }
   }, [isLoading, effectiveRole, router]);
+
+  // Fetch bookings from API for real users
+  useEffect(() => {
+    if (isMockUser || isLoading || effectiveRole === "host") return;
+    fetch("/api/bookings")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.bookings) setApiBookings(data.bookings);
+      })
+      .catch(console.error);
+  }, [isMockUser, isLoading, effectiveRole]);
 
   // Show loading while checking user
   if (isLoading) {
@@ -57,18 +82,36 @@ export default function GuestDashboardPage() {
     return null;
   }
 
-  // Get profile based on mock user or fallback to default
-  // For hosts in guest mode, get their guest profile
-  const profile = mockUser
-    ? (getGuestProfileByMockUserId(mockUser.id) || currentGuestProfile)
-    : currentGuestProfile;
+  // Build profile from real data or mock data
+  const profile = isMockUser
+    ? (user && 'id' in user ? (getGuestProfileByMockUserId(user.id) || currentGuestProfile) : currentGuestProfile)
+    : {
+        ...currentGuestProfile,
+        id: guestProfile?.id || "user",
+        firstName: guestProfile?.firstName || (user as { name?: string })?.name?.split(" ")[0] || "",
+        lastName: guestProfile?.lastName || (user as { name?: string })?.name?.split(" ").slice(1).join(" ") || "",
+        avatar: guestProfile?.avatarUrl || (user as { image?: string | null })?.image || "",
+        bio: guestProfile?.bio || "",
+        xp: guestProfile?.xp || 0,
+        dietaryRestrictions: guestProfile?.dietaryRestrictions || [],
+        eventsAttended: 0,
+        reviewsWritten: 0,
+      };
+
   const badges = getGuestBadges(profile.badges);
   const levelInfo = getGuestLevel(profile.xp);
   const xpProgress = getXPProgress(profile.xp, guestLevels);
-  const bookings = getBookingsByGuestId(profile.id);
-  const upcomingBookings = bookings.filter(
-    (b) => b.status === "approved" && b.event.date > new Date()
-  );
+
+  // Use API bookings for real users, mock bookings for mock users
+  const bookings = isMockUser
+    ? getBookingsByGuestId(profile.id)
+    : [];
+
+  const upcomingBookings = isMockUser
+    ? bookings.filter((b) => b.status === "approved" && b.event.date > new Date())
+    : (apiBookings || []).filter(
+        (b) => b.status === "APPROVED" && new Date(b.event.date) > new Date()
+      );
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -252,38 +295,48 @@ export default function GuestDashboardPage() {
               </Link>
             </div>
             <div className="space-y-3">
-              {upcomingBookings.slice(0, 2).map((booking) => (
-                <Card key={booking.id} className="overflow-hidden">
-                  <div className="flex">
-                    <div
-                      className={`w-20 h-20 bg-gradient-to-br ${booking.event.imageGradient} flex items-center justify-center text-2xl shrink-0`}
-                    >
-                      🍴
-                    </div>
-                    <div className="flex-1 p-3">
-                      <p className="font-medium text-stone-900 text-sm line-clamp-1">
-                        {booking.event.title}
-                      </p>
-                      <p className="text-xs text-stone-500 mt-0.5">
-                        {booking.event.dateFormatted}
-                      </p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <span
-                          className={`text-xs px-2 py-0.5 rounded-full ${
-                            bookingStatusLabels[booking.status].color
-                          }`}
-                        >
-                          {bookingStatusLabels[booking.status].label}
-                        </span>
-                        <span className="text-xs text-stone-500">
-                          {booking.ticketCount}{" "}
-                          {booking.ticketCount === 1 ? "bilet" : "bilety"}
-                        </span>
+              {upcomingBookings.slice(0, 2).map((booking) => {
+                const eventTitle = booking.event.title;
+                const eventDate = isMockUser
+                  ? (booking as { event: { dateFormatted: string } }).event.dateFormatted
+                  : format(new Date(booking.event.date), "d MMMM yyyy", { locale: pl });
+                const gradient = isMockUser
+                  ? (booking as { event: { imageGradient: string } }).event.imageGradient
+                  : "from-amber-400 to-orange-500";
+                const statusKey = booking.status.toLowerCase() as keyof typeof bookingStatusLabels;
+                const statusInfo = bookingStatusLabels[statusKey] || { label: booking.status, color: "bg-gray-100 text-gray-700" };
+
+                return (
+                  <Card key={booking.id} className="overflow-hidden">
+                    <div className="flex">
+                      <div
+                        className={`w-20 h-20 bg-gradient-to-br ${gradient} flex items-center justify-center text-2xl shrink-0`}
+                      >
+                        🍴
+                      </div>
+                      <div className="flex-1 p-3">
+                        <p className="font-medium text-stone-900 text-sm line-clamp-1">
+                          {eventTitle}
+                        </p>
+                        <p className="text-xs text-stone-500 mt-0.5">
+                          {eventDate}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <span
+                            className={`text-xs px-2 py-0.5 rounded-full ${statusInfo.color}`}
+                          >
+                            {statusInfo.label}
+                          </span>
+                          <span className="text-xs text-stone-500">
+                            {booking.ticketCount}{" "}
+                            {booking.ticketCount === 1 ? "bilet" : "bilety"}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                );
+              })}
             </div>
           </section>
         )}

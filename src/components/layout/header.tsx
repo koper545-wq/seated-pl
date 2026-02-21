@@ -14,21 +14,23 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { useSession, signOut } from "next-auth/react";
-import { useMockUser, type ActiveMode } from "@/components/dev/account-switcher";
+import { signOut } from "next-auth/react";
+import { useCurrentUser, type ActiveMode } from "@/hooks/use-current-user";
 import { useMVPMode } from "@/contexts/mvp-mode-context";
 
 export function Header() {
   const t = useTranslations("nav");
-  const { data: session, status } = useSession();
-  const { user: mockUser, effectiveRole, canSwitchMode, switchMode, activeMode } = useMockUser();
+  const { user, effectiveRole, canSwitchMode, switchMode, activeMode, isLoading, isAuthenticated } = useCurrentUser();
   const { mvpMode } = useMVPMode();
-  const isLoading = status === "loading";
 
-  // Use mock user if set, otherwise use real session
-  const currentUser = mockUser
-    ? { name: mockUser.name, email: mockUser.email, image: mockUser.image }
-    : session?.user;
+  // Build currentUser for display
+  const currentUser = user
+    ? {
+        name: (user as { name?: string }).name || "",
+        email: (user as { email?: string }).email || "",
+        image: (user as { image?: string | null }).image || null,
+      }
+    : null;
 
   // Use effective role for determining what to show
   const isHost = effectiveRole === "host";

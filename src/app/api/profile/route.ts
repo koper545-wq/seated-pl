@@ -67,7 +67,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Update host profile if applicable
-    const { businessName, description, phoneNumber, city, neighborhood, cuisineSpecialties } = body;
+    const { businessName, description, phoneNumber, city, neighborhood, cuisineSpecialties, becomeHost } = body;
     const hostProfile = await db.hostProfile.findUnique({
       where: { userId: result.user.id },
     });
@@ -84,6 +84,27 @@ export async function PATCH(request: NextRequest) {
           ...(cuisineSpecialties !== undefined && { cuisineSpecialties }),
           ...(avatarUrl !== undefined && { avatarUrl }),
         },
+      });
+    } else if (becomeHost && businessName) {
+      // Create new host profile for existing guest user
+      await db.$transaction(async (tx) => {
+        await tx.hostProfile.create({
+          data: {
+            userId: result.user.id,
+            businessName,
+            description: description || null,
+            phoneNumber: phoneNumber || null,
+            city: city || "Wrocław",
+            neighborhood: neighborhood || null,
+            cuisineSpecialties: cuisineSpecialties || [],
+            avatarUrl: avatarUrl || null,
+          },
+        });
+
+        await tx.user.update({
+          where: { id: result.user.id },
+          data: { userType: "HOST" },
+        });
       });
     }
 

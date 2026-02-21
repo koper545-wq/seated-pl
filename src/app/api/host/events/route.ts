@@ -30,13 +30,11 @@ export async function GET(request: NextRequest) {
           },
         },
         bookings: {
-          where: {
-            status: { in: ["APPROVED", "COMPLETED"] },
-          },
           select: {
             ticketCount: true,
             totalPrice: true,
             platformFee: true,
+            status: true,
           },
         },
       },
@@ -45,24 +43,31 @@ export async function GET(request: NextRequest) {
 
     // Compute stats for each event
     const eventsWithStats = events.map((event) => {
-      const revenue = event.bookings.reduce(
+      const approvedBookings = event.bookings.filter(
+        (b) => b.status === "APPROVED" || b.status === "COMPLETED"
+      );
+      const revenue = approvedBookings.reduce(
         (sum, b) => sum + (b.totalPrice - b.platformFee),
         0
       );
-      const totalGuests = event.bookings.reduce(
+      const totalGuests = approvedBookings.reduce(
         (sum, b) => sum + b.ticketCount,
         0
       );
+      const pendingBookings = event.bookings.filter(
+        (b) => b.status === "PENDING"
+      ).length;
 
       return {
         ...event,
         bookings: undefined, // don't expose raw booking data
         revenue,
         totalGuests,
+        pendingBookings,
       };
     });
 
-    return NextResponse.json(eventsWithStats);
+    return NextResponse.json({ events: eventsWithStats });
   } catch (error) {
     console.error("GET /api/host/events error:", error);
     return serverError();

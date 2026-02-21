@@ -20,8 +20,10 @@ import {
 } from "lucide-react";
 import { type HostEvent } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
-import { useMockUser } from "@/components/dev/account-switcher";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useEvents } from "@/contexts/events-context";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
 
 const MONTHS = [
   "january", "february", "march", "april", "may", "june",
@@ -107,16 +109,69 @@ function EventCard({ event }: { event: HostEvent }) {
   );
 }
 
+// Map API event to HostEvent shape for calendar
+function mapApiEventForCalendar(e: Record<string, unknown>): HostEvent {
+  const eventDate = new Date(e.date as string);
+  const statusMap: Record<string, string> = {
+    PUBLISHED: "published", DRAFT: "draft", PENDING_REVIEW: "pending_review",
+    COMPLETED: "completed", CANCELLED: "cancelled",
+  };
+  return {
+    id: e.id as string,
+    title: e.title as string,
+    slug: (e.slug as string) || "",
+    type: (e.eventType as string) || "",
+    typeSlug: "",
+    date: eventDate,
+    dateFormatted: format(eventDate, "d MMMM yyyy", { locale: pl }),
+    startTime: (e.startTime as string) || "",
+    duration: (e.duration as number) || 0,
+    location: (e.locationPublic as string) || "",
+    fullAddress: (e.locationFull as string) || "",
+    price: ((e.price as number) || 0) / 100,
+    capacity: (e.capacity as number) || 0,
+    spotsLeft: (e.spotsLeft as number) || 0,
+    bookingsCount: 0,
+    pendingBookings: (e.pendingBookings as number) || 0,
+    confirmedGuests: (e.totalGuests as number) || 0,
+    revenue: ((e.revenue as number) || 0) / 100,
+    imageGradient: "from-amber-400 to-orange-500",
+    status: (statusMap[(e.status as string)] || "draft") as HostEvent["status"],
+    description: (e.description as string) || "",
+    menuDescription: (e.menuDescription as string) || "",
+    dietaryOptions: (e.dietaryOptions as string[]) || [],
+    createdAt: new Date((e.createdAt as string) || Date.now()),
+  };
+}
+
 export default function HostCalendarPage() {
   const t = useTranslations("calendar");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<"month" | "list">("month");
-  const { user: mockUser, isLoading, effectiveRole } = useMockUser();
+  const { user, isLoading, effectiveRole, isMockUser } = useCurrentUser();
   const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
   const router = useRouter();
+  const [apiEvents, setApiEvents] = useState<HostEvent[] | null>(null);
+  const [apiEventsLoading, setApiEventsLoading] = useState(false);
 
-  const hostId = mockUser?.id || "host-1";
-  const hostEvents = getHostEvents(hostId);
+  const hostId = isMockUser && user && 'id' in user ? user.id : "host-1";
+  const mockHostEvents = isMockUser ? getHostEvents(hostId) : [];
+
+  // Fetch events from API for real users
+  useEffect(() => {
+    if (isMockUser || isLoading || effectiveRole === "guest") return;
+    setApiEventsLoading(true);
+    fetch("/api/host/events")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.events) setApiEvents(data.events.map(mapApiEventForCalendar));
+        else setApiEvents([]);
+      })
+      .catch(() => setApiEvents([]))
+      .finally(() => setApiEventsLoading(false));
+  }, [isMockUser, isLoading, effectiveRole]);
+
+  const hostEvents = isMockUser ? mockHostEvents : (apiEvents || []);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -151,7 +206,8 @@ export default function HostCalendarPage() {
   }, [isLoading, effectiveRole, router]);
 
   // CONDITIONAL RETURNS MUST BE AFTER ALL HOOKS
-  if (isLoading || !eventsLoaded) {
+  const isDataLoading = isMockUser ? (isLoading || !eventsLoaded) : (isLoading || apiEventsLoading);
+  if (isDataLoading) {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">

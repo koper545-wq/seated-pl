@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertDialog,
@@ -15,13 +15,78 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { BookingCard } from "@/components/bookings/booking-card";
 import { getBookingsByGuestId, MockBooking } from "@/lib/mock-data";
-import { Calendar, CalendarCheck, CalendarX, History, Search } from "lucide-react";
+import { Calendar, CalendarCheck, CalendarX, History, Search, Loader2 } from "lucide-react";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
+
+// Map API booking to MockBooking shape for BookingCard compatibility
+function mapApiBookingToMock(b: Record<string, unknown>): MockBooking {
+  const event = b.event as Record<string, unknown>;
+  const host = (event?.host || {}) as Record<string, unknown>;
+  const eventDate = new Date(event.date as string);
+
+  return {
+    id: b.id as string,
+    eventId: (event.id as string) || "",
+    guestId: b.guestId as string,
+    guestName: "",
+    guestEmail: "",
+    status: (b.status as string).toLowerCase() as MockBooking["status"],
+    ticketCount: b.ticketCount as number,
+    totalPrice: (b.totalPrice as number) / 100, // grosze → PLN
+    platformFee: (b.platformFee as number) / 100,
+    createdAt: new Date(b.createdAt as string),
+    cancelReason: (b.cancelReason as string) || undefined,
+    cancelledAt: b.cancelledAt ? new Date(b.cancelledAt as string) : undefined,
+    event: {
+      title: event.title as string,
+      date: eventDate,
+      dateFormatted: format(eventDate, "d MMMM yyyy", { locale: pl }),
+      location: (event.locationPublic as string) || "",
+      imageGradient: "from-amber-400 to-orange-500",
+      hostName: (host.businessName as string) || "",
+      hostId: (host.id as string) || "",
+    },
+  };
+}
 
 export default function GuestBookingsPage() {
-  const [bookings, setBookings] = useState<MockBooking[]>(
-    getBookingsByGuestId("user-current")
-  );
+  const { isMockUser, isLoading: userLoading } = useCurrentUser();
+  const [bookings, setBookings] = useState<MockBooking[]>([]);
+  const [isLoadingBookings, setIsLoadingBookings] = useState(true);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
+
+  // Load bookings from API or mock data
+  useEffect(() => {
+    if (userLoading) return;
+
+    if (isMockUser) {
+      setBookings(getBookingsByGuestId("user-current"));
+      setIsLoadingBookings(false);
+    } else {
+      fetch("/api/bookings")
+        .then((res) => res.ok ? res.json() : null)
+        .then((data) => {
+          if (data?.bookings) {
+            setBookings(data.bookings.map(mapApiBookingToMock));
+          }
+        })
+        .catch(console.error)
+        .finally(() => setIsLoadingBookings(false));
+    }
+  }, [isMockUser, userLoading]);
+
+  if (userLoading || isLoadingBookings) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <p className="text-stone-500">Ładowanie rezerwacji...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Separate bookings by status
   const now = new Date();
@@ -43,6 +108,15 @@ export default function GuestBookingsPage() {
 
   const confirmCancel = () => {
     if (cancellingId) {
+      // Call API for real users
+      if (!isMockUser) {
+        fetch(`/api/bookings/${cancellingId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "cancel" }),
+        }).catch(console.error);
+      }
+
       setBookings((prev) =>
         prev.map((b) =>
           b.id === cancellingId

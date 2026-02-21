@@ -23,7 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
-import { useMockUser } from "@/components/dev/account-switcher";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 function LanguageSelector() {
   const pathname = usePathname();
@@ -67,29 +67,46 @@ function LanguageSelector() {
 }
 
 export default function SettingsPage() {
-  const { user: mockUser, isLoading } = useMockUser();
+  const { user, isLoading, isMockUser, guestProfile: apiGuestProfile, hostProfile: apiHostProfile } = useCurrentUser();
 
-  // Get profile based on mock user
+  // Get profile based on mock user or real user
   const getInitialProfile = () => {
-    if (!mockUser) return currentGuestProfile;
-
-    if (mockUser.role === "host") {
-      const hostProfile = getHostProfileByMockUserId(mockUser.id);
-      if (hostProfile) {
-        return {
-          ...currentGuestProfile,
-          id: hostProfile.id,
-          firstName: hostProfile.name.split(" ")[0] || hostProfile.name,
-          lastName: hostProfile.name.split(" ").slice(1).join(" ") || "",
-          email: mockUser.email,
-          avatar: hostProfile.avatar,
-          city: hostProfile.city,
-          bio: hostProfile.bio,
-        };
+    if (isMockUser && user && 'id' in user) {
+      const mockUser = user as { id: string; role?: string; email?: string };
+      if (mockUser.role === "host") {
+        const hp = getHostProfileByMockUserId(mockUser.id);
+        if (hp) {
+          return {
+            ...currentGuestProfile,
+            id: hp.id,
+            firstName: hp.name.split(" ")[0] || hp.name,
+            lastName: hp.name.split(" ").slice(1).join(" ") || "",
+            email: mockUser.email || "",
+            avatar: hp.avatar,
+            city: hp.city,
+            bio: hp.bio,
+          };
+        }
+      } else {
+        const gp = getGuestProfileByMockUserId(mockUser.id);
+        if (gp) return gp;
       }
-    } else {
-      const guestProfile = getGuestProfileByMockUserId(mockUser.id);
-      if (guestProfile) return guestProfile;
+      return currentGuestProfile;
+    }
+
+    // Real user
+    if (user && 'email' in user) {
+      return {
+        ...currentGuestProfile,
+        id: (user as { id: string }).id || "",
+        firstName: apiGuestProfile?.firstName || (user as { name?: string }).name?.split(" ")[0] || "",
+        lastName: apiGuestProfile?.lastName || (user as { name?: string }).name?.split(" ").slice(1).join(" ") || "",
+        email: (user as { email: string }).email || "",
+        avatar: apiGuestProfile?.avatarUrl || (user as { image?: string | null }).image || "",
+        bio: apiGuestProfile?.bio || "",
+        dietaryRestrictions: apiGuestProfile?.dietaryRestrictions || [],
+        allergies: apiGuestProfile?.allergies || [],
+      };
     }
 
     return currentGuestProfile;
@@ -99,12 +116,12 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Update profile when mockUser changes
+  // Update profile when user changes
   useEffect(() => {
     if (!isLoading) {
       setProfile(getInitialProfile());
     }
-  }, [isLoading, mockUser]);
+  }, [isLoading, user, isMockUser]);
 
   if (isLoading) {
     return (
@@ -119,8 +136,30 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    if (!isMockUser) {
+      try {
+        const res = await fetch("/api/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            bio: profile.bio,
+            dietaryRestrictions: profile.dietaryRestrictions,
+          }),
+        });
+        if (!res.ok) throw new Error("Save failed");
+      } catch (error) {
+        console.error("Save profile error:", error);
+        setIsSaving(false);
+        return;
+      }
+    } else {
+      // Mock user — simulate delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+
     setIsSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,13 +42,57 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn, formatPrice } from "@/lib/utils";
-import { useMockUser } from "@/components/dev/account-switcher";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useEvents } from "@/contexts/events-context";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
+
+// Map API event to HostEvent shape
+function mapApiEventToHostEvent(e: Record<string, unknown>): HostEvent {
+  const eventDate = new Date(e.date as string);
+
+  const statusMap: Record<string, string> = {
+    PUBLISHED: "published",
+    DRAFT: "draft",
+    PENDING_REVIEW: "pending_review",
+    COMPLETED: "completed",
+    CANCELLED: "cancelled",
+  };
+
+  return {
+    id: e.id as string,
+    title: e.title as string,
+    slug: (e.slug as string) || "",
+    type: (e.eventType as string) || "",
+    typeSlug: "",
+    date: eventDate,
+    dateFormatted: format(eventDate, "d MMMM yyyy", { locale: pl }),
+    startTime: (e.startTime as string) || "",
+    duration: (e.duration as number) || 0,
+    location: (e.locationPublic as string) || "",
+    fullAddress: (e.locationFull as string) || "",
+    price: ((e.price as number) || 0) / 100,
+    capacity: (e.capacity as number) || 0,
+    spotsLeft: (e.spotsLeft as number) || 0,
+    bookingsCount: 0,
+    pendingBookings: (e.pendingBookings as number) || 0,
+    confirmedGuests: (e.totalGuests as number) || 0,
+    revenue: ((e.revenue as number) || 0) / 100, // grosze → PLN
+    imageGradient: "from-amber-400 to-orange-500",
+    status: (statusMap[(e.status as string)] || "draft") as HostEvent["status"],
+    description: (e.description as string) || "",
+    menuDescription: (e.menuDescription as string) || "",
+    dietaryOptions: (e.dietaryOptions as string[]) || [],
+    createdAt: new Date((e.createdAt as string) || Date.now()),
+  };
+}
 
 export default function HostDashboardPage() {
-  const { user: mockUser, isLoading, effectiveRole } = useMockUser();
+  const { user, isLoading, effectiveRole, isMockUser } = useCurrentUser();
   const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
   const router = useRouter();
+  const [apiEvents, setApiEvents] = useState<HostEvent[] | null>(null);
+  const [apiEventsLoading, setApiEventsLoading] = useState(false);
 
   // Redirect to guest dashboard if in guest mode
   useEffect(() => {
@@ -57,8 +101,26 @@ export default function HostDashboardPage() {
     }
   }, [isLoading, effectiveRole, router]);
 
+  // Fetch events from API for real users
+  useEffect(() => {
+    if (isMockUser || isLoading || effectiveRole === "guest") return;
+    setApiEventsLoading(true);
+    fetch("/api/host/events")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.events) {
+          setApiEvents(data.events.map(mapApiEventToHostEvent));
+        } else {
+          setApiEvents([]);
+        }
+      })
+      .catch(() => setApiEvents([]))
+      .finally(() => setApiEventsLoading(false));
+  }, [isMockUser, isLoading, effectiveRole]);
+
   // Show loading while checking user or events
-  if (isLoading || !eventsLoaded) {
+  const isDataLoading = isMockUser ? (isLoading || !eventsLoaded) : (isLoading || apiEventsLoading);
+  if (isDataLoading) {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
@@ -74,11 +136,9 @@ export default function HostDashboardPage() {
     return null;
   }
 
-  const hostProfile = mockUser ? getHostProfileByMockUserId(mockUser.id) : null;
-
-  // Use mock user's ID (they're a host in host mode)
-  const hostId = mockUser?.id || "host-1";
-  const hostEvents = getHostEvents(hostId);
+  // Use mock events or API events
+  const hostId = isMockUser && user && 'id' in user ? user.id : "host-1";
+  const hostEvents = isMockUser ? getHostEvents(hostId) : (apiEvents || []);
 
   // Separate events by status/time
   const now = new Date();
