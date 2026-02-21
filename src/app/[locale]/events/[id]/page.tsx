@@ -10,7 +10,8 @@ import { BadgeDisplay } from "@/components/badges";
 import { ReviewsSection } from "@/components/reviews";
 import { WaitlistDialog } from "@/components/waitlist";
 import { WhosGoingSection } from "@/components/whos-going";
-import { getEventById, mockEvents, getReviewsByHostId, getQuestionsByEventId } from "@/lib/mock-data";
+import { getReviewsByHostId, getQuestionsByEventId } from "@/lib/mock-data";
+import { getEventDetail, getPublishedEvents } from "@/lib/dal/events";
 import {
   Calendar,
   Clock,
@@ -29,7 +30,7 @@ interface EventPageProps {
 
 export default async function EventPage({ params }: EventPageProps) {
   const { id } = await params;
-  const event = getEventById(id);
+  const event = await getEventDetail(id);
 
   if (!event) {
     notFound();
@@ -38,8 +39,9 @@ export default async function EventPage({ params }: EventPageProps) {
   const isSoldOut = event.spotsLeft === 0;
 
   // Get similar events (same type, excluding current)
-  const similarEvents = mockEvents
-    .filter((e) => e.typeSlug === event.typeSlug && e.id !== event.id)
+  const allEvents = await getPublishedEvents({ type: event.typeSlug, limit: 4 });
+  const similarEvents = allEvents
+    .filter((e) => e.id !== event.id)
     .slice(0, 3);
 
   // Get reviews for this host
@@ -310,9 +312,5 @@ export default async function EventPage({ params }: EventPageProps) {
   );
 }
 
-// Generate static params for all events
-export async function generateStaticParams() {
-  return mockEvents.map((event) => ({
-    id: event.id,
-  }));
-}
+// Dynamic page — events come from database
+export const dynamic = "force-dynamic";

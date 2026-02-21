@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, Suspense, lazy } from "react";
+import { useState, useEffect, useMemo, Suspense, lazy } from "react";
 import dynamic from "next/dynamic";
 import { EventCard } from "@/components/events";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-  mockEvents,
+  mockEvents as fallbackEvents,
   eventTypes,
   neighborhoods,
   sortOptions,
@@ -31,6 +31,7 @@ import {
   languageOptions,
   experienceLevels,
   accessibilityOptions,
+  type MockEvent,
 } from "@/lib/mock-data";
 import { Search, SlidersHorizontal, X, MapPin, Calendar, Users, Globe, GraduationCap, Accessibility, ChevronDown, Map, List } from "lucide-react";
 
@@ -48,6 +49,63 @@ const EventsMap = dynamic(
 );
 
 export default function EventsPage() {
+  // Events from API (with fallback to mock data)
+  const [apiEvents, setApiEvents] = useState<MockEvent[] | null>(null);
+
+  useEffect(() => {
+    fetch("/api/events")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.events && data.events.length > 0) {
+          // Map API events to MockEvent format
+          const mapped: MockEvent[] = data.events.map((e: Record<string, unknown>) => ({
+            id: e.id,
+            title: e.title,
+            slug: e.slug,
+            type: e.eventType === "SUPPER_CLUB" ? "Supper Club"
+              : e.eventType === "CHEFS_TABLE" ? "Chef's Table"
+              : e.eventType === "POPUP" ? "Pop-up"
+              : e.eventType === "COOKING_CLASS" ? "Warsztaty"
+              : e.eventType === "WINE_TASTING" ? "Degustacje"
+              : e.eventType === "ACTIVE_FOOD" ? "Active + Food"
+              : e.eventType === "FARM_EXPERIENCE" ? "Farm Experience"
+              : String(e.eventType),
+            typeSlug: String(e.eventType).toLowerCase().replace(/_/g, "-"),
+            date: new Date(e.date as string),
+            dateFormatted: new Date(e.date as string).toLocaleDateString("pl-PL", { weekday: "short", day: "numeric", month: "short" }) + " · " + e.startTime,
+            startTime: e.startTime as string,
+            duration: e.duration as number,
+            location: e.locationPublic as string,
+            locationSlug: String(e.locationPublic).toLowerCase().replace(/\s+/g, "-"),
+            fullAddress: e.locationFull as string,
+            price: (e.price as number) / 100,
+            capacity: e.capacity as number,
+            spotsLeft: e.spotsLeft as number,
+            imageGradient: "from-amber-400 to-orange-500",
+            description: e.description as string,
+            menuDescription: (e.menuDescription as string) || "",
+            dietaryOptions: (e.dietaryOptions as string[]) || [],
+            whatToBring: (e.whatToBring as string) || "Dobry humor i apetyt!",
+            host: {
+              id: (e.host as Record<string, unknown>)?.userId as string || "",
+              name: (e.host as Record<string, unknown>)?.businessName as string || "Host",
+              avatar: "",
+              rating: 0,
+              reviewCount: 0,
+              eventsHosted: 0,
+              verified: false,
+            },
+          }));
+          setApiEvents(mapped);
+        }
+      })
+      .catch(() => {
+        // Silently fall back to mock data
+      });
+  }, []);
+
+  const mockEvents = apiEvents || fallbackEvents;
+
   // Filter states
   const [search, setSearch] = useState("");
   const [eventType, setEventType] = useState("all");

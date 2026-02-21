@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/api/auth";
 import { badRequest, serverError } from "@/lib/api/errors";
+import { notifyGuestBookingRequested, notifyHostNewBooking } from "@/lib/email/send";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
 
 // GET /api/bookings — list bookings for current user
 export async function GET(request: NextRequest) {
@@ -187,6 +190,47 @@ export async function POST(request: NextRequest) {
       where: { id: eventId },
       data: { spotsLeft: { decrement: tickets } },
     });
+
+    // Send email notifications (fire-and-forget)
+    const guestName = [
+      booking.guest?.guestProfile?.firstName,
+      booking.guest?.guestProfile?.lastName,
+    ].filter(Boolean).join(" ") || booking.guest?.email || "Gość";
+    const eventDate = format(event.date, "d MMMM yyyy", { locale: pl });
+    const hostName = event.host.businessName;
+    const hostEmail = (await db.user.findUnique({
+      where: { id: event.host.userId },
+      select: { email: true },
+    }))?.email;
+
+    // Notify guest
+    notifyGuestBookingRequested({
+      guestEmail: booking.guest?.email || "",
+      guestName,
+      eventTitle: event.title,
+      eventDate,
+      eventTime: event.startTime,
+      hostName,
+      ticketCount: tickets,
+      totalPrice: totalPrice / 100, // grosze → PLN
+    }).catch(console.error);
+
+    // Notify host
+    if (hostEmail) {
+      notifyHostNewBooking({
+        hostEmail,
+        hostName,
+        guestName,
+        guestEmail: booking.guest?.email || "",
+        eventTitle: event.title,
+        eventDate,
+        ticketCount: tickets,
+        totalPrice: totalPrice / 100,
+        dietaryInfo: dietaryInfo || undefined,
+        specialRequests: specialRequests || undefined,
+        dashboardLink: `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/dashboard/host`,
+      }).catch(console.error);
+    }
 
     return NextResponse.json(booking, { status: 201 });
   } catch (error) {

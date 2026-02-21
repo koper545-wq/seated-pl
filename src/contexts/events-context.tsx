@@ -103,6 +103,38 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
         [hostId]: [...(prev[hostId] || []), newEvent],
       }));
 
+      // Dual-write: also save to API (fire-and-forget)
+      const typeMap: Record<string, string> = {
+        "supper-club": "SUPPER_CLUB",
+        "chefs-table": "CHEFS_TABLE",
+        "warsztaty": "COOKING_CLASS",
+        "degustacje": "WINE_TASTING",
+        "popup": "POPUP",
+        "active-food": "ACTIVE_FOOD",
+        "farm": "FARM_EXPERIENCE",
+      };
+      fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: eventData.title,
+          description: eventData.description,
+          eventType: typeMap[eventData.typeSlug] || "OTHER",
+          date: eventData.date instanceof Date ? eventData.date.toISOString() : eventData.date,
+          startTime: eventData.startTime,
+          duration: eventData.duration,
+          locationPublic: eventData.location || "Wrocław",
+          locationFull: eventData.fullAddress || "",
+          price: Math.round(eventData.price * 100), // PLN → grosze
+          capacity: eventData.capacity,
+          menuDescription: eventData.menuDescription || null,
+          dietaryOptions: eventData.dietaryOptions || [],
+          status: eventData.status === "draft" ? "DRAFT" : "PUBLISHED",
+        }),
+      }).catch(() => {
+        // API save failed silently — localStorage is primary
+      });
+
       return newEvent;
     },
     []

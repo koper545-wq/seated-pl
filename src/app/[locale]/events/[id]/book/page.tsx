@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { Link } from "@/i18n/navigation";
-import { getEventById, validateWaitlistToken, getWaitlistEntry } from "@/lib/mock-data";
+import { validateWaitlistToken, getWaitlistEntry } from "@/lib/mock-data";
+import { getEventDetail } from "@/lib/dal/events";
 import { BookingForm } from "@/components/bookings";
 import { ArrowLeft, Clock } from "lucide-react";
 import { getWaitlistTimeRemaining } from "@/lib/waitlist";
@@ -13,7 +14,7 @@ interface BookingPageProps {
 export default async function BookingPage({ params, searchParams }: BookingPageProps) {
   const { id } = await params;
   const { waitlist: waitlistId, token } = await searchParams;
-  const event = getEventById(id);
+  const event = await getEventDetail(id);
 
   if (!event) {
     notFound();

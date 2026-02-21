@@ -114,6 +114,21 @@ export function BookingsProvider({ children }: { children: React.ReactNode }) {
     };
 
     setBookings((prev) => [...prev, newBooking]);
+
+    // Dual-write: also save to API (fire-and-forget)
+    fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        eventId: data.eventId,
+        ticketCount: data.ticketCount,
+        dietaryInfo: data.dietaryRestrictions.join(", ") + (data.otherDietary ? ` (${data.otherDietary})` : ""),
+        specialRequests: data.specialRequests || null,
+      }),
+    }).catch(() => {
+      // API save failed silently — localStorage is primary
+    });
+
     return newBooking;
   }, []);
 
@@ -174,6 +189,13 @@ export function BookingsProvider({ children }: { children: React.ReactNode }) {
           : b
       )
     );
+
+    // Dual-write to API
+    fetch(`/api/bookings/${bookingId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "approve" }),
+    }).catch(() => {});
   }, []);
 
   const declineBooking = useCallback((bookingId: string, reason?: string) => {
@@ -191,6 +213,13 @@ export function BookingsProvider({ children }: { children: React.ReactNode }) {
           : b
       )
     );
+
+    // Dual-write to API
+    fetch(`/api/bookings/${bookingId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "decline", reason }),
+    }).catch(() => {});
   }, []);
 
   const getPendingBookingsForHost = useCallback(

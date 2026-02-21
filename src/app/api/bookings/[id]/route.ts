@@ -3,6 +3,9 @@ import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/api/auth";
 import { notFound, forbidden, badRequest, serverError } from "@/lib/api/errors";
 import { BookingStatus } from "@prisma/client";
+import { notifyGuestBookingApproved, notifyGuestBookingDeclined, notifyHostBookingCancelled } from "@/lib/email/send";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
 
 // GET /api/bookings/[id] — booking details
 export async function GET(
@@ -116,6 +119,29 @@ export async function PATCH(
           include: { event: { include: { host: true } }, guest: true },
         });
 
+        // Notify guest about approval
+        const guestName = [
+          booking.guest?.guestProfile?.firstName,
+          booking.guest?.guestProfile?.lastName,
+        ].filter(Boolean).join(" ") || booking.guest?.email || "Gość";
+
+        notifyGuestBookingApproved({
+          guestEmail: booking.guest?.email || "",
+          guestName,
+          eventTitle: booking.event.title,
+          eventDate: format(booking.event.date, "d MMMM yyyy", { locale: pl }),
+          eventTime: booking.event.startTime,
+          eventDuration: booking.event.duration,
+          hostName: booking.event.host.businessName,
+          fullAddress: booking.event.locationFull,
+          neighborhood: booking.event.locationPublic,
+          ticketCount: booking.ticketCount,
+          totalPrice: booking.totalPrice / 100,
+          menuDescription: booking.event.menuDescription || "",
+          dietaryOptions: booking.event.dietaryOptions,
+          whatToBring: booking.event.whatToBring || undefined,
+        }).catch(console.error);
+
         return NextResponse.json(updated);
       }
 
@@ -137,6 +163,21 @@ export async function PATCH(
           where: { id: booking.eventId },
           data: { spotsLeft: { increment: booking.ticketCount } },
         });
+
+        // Notify guest about decline
+        const declineGuestName = [
+          booking.guest?.guestProfile?.firstName,
+          booking.guest?.guestProfile?.lastName,
+        ].filter(Boolean).join(" ") || booking.guest?.email || "Gość";
+
+        notifyGuestBookingDeclined({
+          guestEmail: booking.guest?.email || "",
+          guestName: declineGuestName,
+          eventTitle: booking.event.title,
+          eventDate: format(booking.event.date, "d MMMM yyyy", { locale: pl }),
+          hostName: booking.event.host.businessName,
+          reason: reason || undefined,
+        }).catch(console.error);
 
         return NextResponse.json(updated);
       }
@@ -161,6 +202,27 @@ export async function PATCH(
           where: { id: booking.eventId },
           data: { spotsLeft: { increment: booking.ticketCount } },
         });
+
+        // Notify host when guest cancels
+        if (isGuest) {
+          const cancelGuestName = [
+            booking.guest?.guestProfile?.firstName,
+            booking.guest?.guestProfile?.lastName,
+          ].filter(Boolean).join(" ") || booking.guest?.email || "Gość";
+
+          const hostEmail = booking.event.host.user?.email;
+          if (hostEmail) {
+            notifyHostBookingCancelled({
+              hostEmail,
+              hostName: booking.event.host.businessName,
+              guestName: cancelGuestName,
+              eventTitle: booking.event.title,
+              eventDate: format(booking.event.date, "d MMMM yyyy", { locale: pl }),
+              ticketCount: booking.ticketCount,
+              reason: reason || undefined,
+            }).catch(console.error);
+          }
+        }
 
         return NextResponse.json(updated);
       }
