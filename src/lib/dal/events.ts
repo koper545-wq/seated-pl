@@ -4,6 +4,60 @@ import { db } from "@/lib/db";
 import { EventStatus, EventType } from "@prisma/client";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
+import { getEventById as getMockEventById, mockEvents as mockEventsRaw, type MockEvent } from "@/lib/mock-data";
+
+// Convert MockEvent to FrontendEvent for demo fallback
+function mockToFrontendEvent(e: MockEvent): FrontendEvent {
+  // Map typeSlug to EventType enum
+  const typeSlugToEnum: Record<string, string> = {
+    "supper-club": "SUPPER_CLUB",
+    "chefs-table": "CHEFS_TABLE",
+    "popup": "POPUP",
+    "warsztaty": "COOKING_CLASS",
+    "degustacje": "WINE_TASTING",
+    "active-food": "ACTIVE_FOOD",
+    "farm": "FARM_EXPERIENCE",
+  };
+
+  return {
+    id: e.id,
+    title: e.title,
+    slug: e.slug || e.id,
+    type: e.type,
+    typeSlug: e.typeSlug,
+    date: new Date(e.date),
+    dateFormatted: e.dateFormatted,
+    startTime: e.startTime || "19:00",
+    duration: e.duration || 3,
+    location: e.location,
+    locationSlug: e.locationSlug || e.location.toLowerCase().replace(/\s+/g, "-"),
+    fullAddress: e.fullAddress || e.location,
+    price: e.price,
+    capacity: e.capacity,
+    spotsLeft: e.spotsLeft,
+    imageGradient: e.imageGradient || "from-primary/30 to-primary/40",
+    description: e.description,
+    menuDescription: e.menuDescription || "",
+    dietaryOptions: e.dietaryOptions || [],
+    whatToBring: e.whatToBring || "",
+    languages: e.languages || ["pl"],
+    host: {
+      id: e.host?.id || "host-1",
+      name: e.host?.name || "Host",
+      avatar: e.host?.avatar || "",
+      rating: e.host?.rating || 4.8,
+      reviewCount: e.host?.reviewCount || 0,
+      eventsHosted: e.host?.eventsHosted || 0,
+      verified: e.host?.verified ?? true,
+    },
+    eventType: (typeSlugToEnum[e.typeSlug] || "SUPPER_CLUB") as EventType,
+    status: "PUBLISHED" as EventStatus,
+    cuisineTags: [],
+    images: [],
+    byob: false,
+    bookingMode: "instant",
+  };
+}
 
 // Frontend-compatible event type (matches MockEvent structure)
 export interface FrontendEvent {
@@ -155,93 +209,124 @@ export async function getPublishedEvents(filters?: {
   maxPrice?: number;
   limit?: number;
 }): Promise<FrontendEvent[]> {
-  const where: Record<string, unknown> = {
-    status: EventStatus.PUBLISHED,
-    date: { gte: new Date() },
-  };
+  try {
+    const where: Record<string, unknown> = {
+      status: EventStatus.PUBLISHED,
+      date: { gte: new Date() },
+    };
 
-  if (filters?.type && filters.type !== "all") {
-    // Convert slug to enum: "supper-club" → "SUPPER_CLUB"
-    const enumKey = Object.entries(EVENT_TYPE_SLUGS).find(
-      ([, slug]) => slug === filters.type
-    )?.[0];
-    if (enumKey) {
-      where.eventType = enumKey as EventType;
+    if (filters?.type && filters.type !== "all") {
+      const enumKey = Object.entries(EVENT_TYPE_SLUGS).find(
+        ([, slug]) => slug === filters.type
+      )?.[0];
+      if (enumKey) {
+        where.eventType = enumKey as EventType;
+      }
     }
-  }
 
-  if (filters?.search) {
-    where.OR = [
-      { title: { contains: filters.search, mode: "insensitive" } },
-      { description: { contains: filters.search, mode: "insensitive" } },
-    ];
-  }
+    if (filters?.search) {
+      where.OR = [
+        { title: { contains: filters.search, mode: "insensitive" } },
+        { description: { contains: filters.search, mode: "insensitive" } },
+      ];
+    }
 
-  if (filters?.city && filters.city !== "all") {
-    where.locationPublic = { contains: filters.city, mode: "insensitive" };
-  }
+    if (filters?.city && filters.city !== "all") {
+      where.locationPublic = { contains: filters.city, mode: "insensitive" };
+    }
 
-  if (filters?.minPrice) {
-    where.price = { ...(where.price as object || {}), gte: filters.minPrice * 100 };
-  }
-  if (filters?.maxPrice) {
-    where.price = { ...(where.price as object || {}), lte: filters.maxPrice * 100 };
-  }
+    if (filters?.minPrice) {
+      where.price = { ...(where.price as object || {}), gte: filters.minPrice * 100 };
+    }
+    if (filters?.maxPrice) {
+      where.price = { ...(where.price as object || {}), lte: filters.maxPrice * 100 };
+    }
 
-  const events = await db.event.findMany({
-    where,
-    include: {
-      host: {
-        include: {
-          user: { select: { id: true, email: true } },
+    const events = await db.event.findMany({
+      where,
+      include: {
+        host: {
+          include: {
+            user: { select: { id: true, email: true } },
+          },
         },
+        _count: { select: { reviews: true, bookings: true } },
+        reviews: { select: { overallRating: true } },
       },
-      _count: { select: { reviews: true, bookings: true } },
-      reviews: { select: { overallRating: true } },
-    },
-    orderBy: { date: "asc" },
-    take: filters?.limit || 50,
-  });
+      orderBy: { date: "asc" },
+      take: filters?.limit || 50,
+    });
 
-  return events.map((event) => mapToFrontendEvent(event));
+    return events.map((event) => mapToFrontendEvent(event));
+  } catch (error) {
+    console.error("DB unavailable for getPublishedEvents, using mock data:", error);
+    let filtered = [...mockEventsRaw]; // all mock events are "published"
+    if (filters?.type && filters.type !== "all") {
+      filtered = filtered.filter((e) => e.typeSlug === filters.type);
+    }
+    if (filters?.search) {
+      const s = filters.search.toLowerCase();
+      filtered = filtered.filter((e) => e.title.toLowerCase().includes(s) || e.description.toLowerCase().includes(s));
+    }
+    if (filters?.limit) {
+      filtered = filtered.slice(0, filters.limit);
+    }
+    return filtered.map(mockToFrontendEvent);
+  }
 }
 
 /** Get a single event by ID (for event detail page) */
 export async function getEventDetail(eventId: string): Promise<FrontendEvent | null> {
-  const event = await db.event.findUnique({
-    where: { id: eventId },
-    include: {
-      host: {
-        include: {
-          user: { select: { id: true, email: true } },
+  try {
+    const event = await db.event.findUnique({
+      where: { id: eventId },
+      include: {
+        host: {
+          include: {
+            user: { select: { id: true, email: true } },
+          },
         },
+        _count: { select: { reviews: true, bookings: true } },
+        reviews: { select: { overallRating: true } },
       },
-      _count: { select: { reviews: true, bookings: true } },
-      reviews: { select: { overallRating: true } },
-    },
-  });
+    });
 
-  if (!event) return null;
-  return mapToFrontendEvent(event);
+    if (!event) {
+      // Try mock data as fallback
+      const mockEvent = getMockEventById(eventId);
+      return mockEvent ? mockToFrontendEvent(mockEvent) : null;
+    }
+    return mapToFrontendEvent(event);
+  } catch (error) {
+    console.error("DB unavailable for getEventDetail, using mock data:", error);
+    const mockEvent = getMockEventById(eventId);
+    return mockEvent ? mockToFrontendEvent(mockEvent) : null;
+  }
 }
 
 /** Get a single event by slug */
 export async function getEventBySlug(slug: string): Promise<FrontendEvent | null> {
-  const event = await db.event.findUnique({
-    where: { slug },
-    include: {
-      host: {
-        include: {
-          user: { select: { id: true, email: true } },
+  try {
+    const event = await db.event.findUnique({
+      where: { slug },
+      include: {
+        host: {
+          include: {
+            user: { select: { id: true, email: true } },
+          },
         },
+        _count: { select: { reviews: true, bookings: true } },
+        reviews: { select: { overallRating: true } },
       },
-      _count: { select: { reviews: true, bookings: true } },
-      reviews: { select: { overallRating: true } },
-    },
-  });
+    });
 
-  if (!event) return null;
-  return mapToFrontendEvent(event);
+    if (!event) return null;
+    return mapToFrontendEvent(event);
+  } catch (error) {
+    console.error("DB unavailable for getEventBySlug, using mock data:", error);
+    const mockEvent = mockEventsRaw.find((e) => e.id === slug);
+    return mockEvent ? mockToFrontendEvent(mockEvent) : null;
+  }
 }
 
 // ============================================
