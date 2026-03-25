@@ -138,10 +138,10 @@ export default async function Home() {
       <div className="flex flex-col">
         {/* Hero Section */}
         <section className="relative py-20 md:py-32 bg-gradient-to-b from-primary/5 to-background overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/blob-dots.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
-          <OrganicBlob variant="hero" className="right-0 top-0 w-[600px] h-[400px] opacity-60 hidden md:block" />
-          <OrganicBlob variant="terra" className="-left-32 bottom-0 w-[400px] h-[350px] opacity-40 hidden lg:block" />
-          <div className="container mx-auto px-4 relative">
+          <div className="absolute inset-0 bg-[url('/blob-dots.svg')] bg-repeat opacity-40 z-0" />
+          <OrganicBlob variant="hero" className="right-0 top-0 w-[600px] h-[400px] opacity-30 hidden md:block z-0" />
+          <OrganicBlob variant="terra" className="-left-32 bottom-0 w-[400px] h-[350px] opacity-20 hidden lg:block z-0" />
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <FadeIn duration={0.4}>
                 <Badge className="mb-4 bg-primary/10 text-primary hover:bg-primary/10 border-primary/20">
@@ -185,7 +185,7 @@ export default async function Home() {
 
         {/* Categories */}
         <section className="relative py-16 container mx-auto px-4 overflow-hidden">
-          <OrganicBlob variant="sage" className="-left-20 top-1/2 -translate-y-1/2 w-[400px] h-[350px] opacity-50" />
+          <OrganicBlob variant="sage" className="-left-20 top-1/2 -translate-y-1/2 w-[400px] h-[350px] opacity-20 z-0" />
           <FadeInUp duration={0.4} distance={15}>
             <div className="text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-bold mb-3">

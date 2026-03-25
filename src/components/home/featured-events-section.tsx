@@ -170,10 +170,10 @@ export function FeaturedEventsSection({
 
   return (
     <section className="relative py-16 bg-muted/30 overflow-hidden">
-      <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[450px] h-[400px] pointer-events-none select-none hidden md:block" aria-hidden="true">
+      <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[450px] h-[400px] pointer-events-none select-none hidden md:block opacity-20 z-0" aria-hidden="true">
         <img src="/blob-terra.svg" alt="" className="w-full h-full object-contain" />
       </div>
-      <div className="container mx-auto px-4 relative">
+      <div className="container mx-auto px-4 relative z-10">
         <FadeInUp duration={0.4} distance={15}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
             <div>
