@@ -1,41 +1,85 @@
-"use client";
-
 import { Link } from "@/i18n/navigation";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
-import {
-  adminStats,
-  hostApplications,
-  hostEvents,
-  adminUsers,
-  hostApplicationStatusLabels,
-  mockReports,
-  reportCategoryLabels,
-  reportStatusLabels,
-} from "@/lib/mock-data";
+import { db } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-export default function AdminDashboardPage() {
-  const pendingApplications = hostApplications.filter(
-    (app) => app.status === "pending"
-  );
-  const pendingEvents = hostEvents.filter(
-    (event) => event.status === "pending_review"
-  );
-  const recentUsers = adminUsers
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 5);
-  const pendingReports = mockReports.filter(
-    (report) => report.status === "pending" || report.status === "under_review"
-  );
+async function getAdminStats() {
+  const [
+    totalUsers,
+    totalHosts,
+    totalEvents,
+    activeEvents,
+    newUsersThisMonth,
+    totalRevenueResult,
+    monthlyRevenueResult,
+  ] = await Promise.all([
+    db.user.count(),
+    db.hostProfile.count(),
+    db.event.count(),
+    db.event.count({ where: { status: "PUBLISHED", date: { gte: new Date() } } }),
+    db.user.count({
+      where: {
+        createdAt: { gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1) },
+      },
+    }),
+    db.transaction.aggregate({ where: { status: "COMPLETED" }, _sum: { amount: true } }),
+    db.transaction.aggregate({
+      where: {
+        status: "COMPLETED",
+        processedAt: { gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1) },
+      },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  return {
+    totalUsers,
+    totalHosts,
+    totalEvents,
+    activeEventsThisMonth: activeEvents,
+    newUsersThisMonth,
+    totalRevenue: totalRevenueResult._sum.amount || 0,
+    monthlyRevenue: monthlyRevenueResult._sum.amount || 0,
+  };
+}
+
+async function getPendingEvents() {
+  return db.event.findMany({
+    where: { status: "PENDING_REVIEW" },
+    include: {
+      host: { select: { businessName: true } },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 5,
+  });
+}
+
+async function getRecentUsers() {
+  return db.user.findMany({
+    include: {
+      guestProfile: { select: { firstName: true, lastName: true } },
+      hostProfile: { select: { businessName: true } },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 5,
+  });
+}
+
+export default async function AdminDashboardPage() {
+  const [stats, pendingEvents, recentUsers] = await Promise.all([
+    getAdminStats(),
+    getPendingEvents(),
+    getRecentUsers(),
+  ]);
 
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <p className="text-muted-foreground mt-1">
-          Przegląd platformy Seated
+          Przeglad platformy Seated
         </p>
       </div>
 
@@ -45,15 +89,15 @@ export default function AdminDashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Użytkownicy</p>
+                <p className="text-sm text-muted-foreground">Uzytkownicy</p>
                 <p className="text-3xl font-bold text-foreground">
-                  {adminStats.totalUsers.toLocaleString()}
+                  {stats.totalUsers.toLocaleString()}
                 </p>
               </div>
               <span className="text-4xl">👥</span>
             </div>
             <p className="text-xs text-green-600 mt-2">
-              +{adminStats.newUsersThisMonth} w tym miesiącu
+              +{stats.newUsersThisMonth} w tym miesiacu
             </p>
           </CardContent>
         </Card>
@@ -64,13 +108,13 @@ export default function AdminDashboardPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Hosty</p>
                 <p className="text-3xl font-bold text-foreground">
-                  {adminStats.totalHosts}
+                  {stats.totalHosts}
                 </p>
               </div>
               <span className="text-4xl">👨‍🍳</span>
             </div>
             <p className="text-xs text-primary mt-2">
-              {adminStats.pendingHostApplications} oczekujących aplikacji
+              {stats.activeEventsThisMonth} aktywnych wydarzen
             </p>
           </CardContent>
         </Card>
@@ -81,13 +125,13 @@ export default function AdminDashboardPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Wydarzenia</p>
                 <p className="text-3xl font-bold text-foreground">
-                  {adminStats.totalEvents}
+                  {stats.totalEvents}
                 </p>
               </div>
               <span className="text-4xl">🎉</span>
             </div>
             <p className="text-xs text-blue-600 mt-2">
-              {adminStats.activeEventsThisMonth} aktywnych w tym miesiącu
+              {stats.activeEventsThisMonth} aktywnych
             </p>
           </CardContent>
         </Card>
@@ -96,107 +140,22 @@ export default function AdminDashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Przychód</p>
+                <p className="text-sm text-muted-foreground">Przychod</p>
                 <p className="text-3xl font-bold text-foreground">
-                  {(adminStats.totalRevenue / 100).toLocaleString()} zł
+                  {(stats.totalRevenue / 100).toLocaleString()} zl
                 </p>
               </div>
               <span className="text-4xl">💰</span>
             </div>
             <p className="text-xs text-green-600 mt-2">
-              +{(adminStats.monthlyRevenue / 100).toLocaleString()} zł w tym
-              miesiącu
+              +{(stats.monthlyRevenue / 100).toLocaleString()} zl w tym miesiacu
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Pending Reports Alert */}
-      {pendingReports.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div className="flex gap-3">
-            <span className="text-2xl">🚨</span>
-            <div>
-              <p className="font-medium text-red-800">
-                {pendingReports.length} zgłoszeń wymaga uwagi
-              </p>
-              <p className="text-sm text-red-700">
-                Przejrzyj zgłoszenia od użytkowników
-              </p>
-            </div>
-          </div>
-          <Link href="/admin/reports">
-            <Button className="bg-red-600 hover:bg-red-700">
-              Przejdź do zgłoszeń
-            </Button>
-          </Link>
-        </div>
-      )}
-
       {/* Action Items */}
       <div className="grid md:grid-cols-2 gap-6 mb-8">
-        {/* Pending Host Applications */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <span>📋</span> Aplikacje hostów
-              {pendingApplications.length > 0 && (
-                <span className="bg-primary/50 text-white text-xs px-2 py-0.5 rounded-full">
-                  {pendingApplications.length}
-                </span>
-              )}
-            </CardTitle>
-            <Link href="/admin/hosts">
-              <Button variant="ghost" size="sm">
-                Zobacz wszystkie →
-              </Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            {pendingApplications.length === 0 ? (
-              <p className="text-muted-foreground text-sm py-4 text-center">
-                Brak oczekujących aplikacji 🎉
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {pendingApplications.slice(0, 3).map((app) => (
-                  <Link
-                    key={app.id}
-                    href={`/admin/hosts/${app.id}`}
-                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
-                        👤
-                      </div>
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {app.firstName} {app.lastName}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {app.cuisineTypes.join(", ")}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          hostApplicationStatusLabels[app.status].color
-                        }`}
-                      >
-                        {hostApplicationStatusLabels[app.status].label}
-                      </span>
-                      <p className="text-xs text-muted-foreground/70 mt-1">
-                        {format(app.submittedAt, "d MMM", { locale: pl })}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
         {/* Pending Event Reviews */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -217,20 +176,18 @@ export default function AdminDashboardPage() {
           <CardContent>
             {pendingEvents.length === 0 ? (
               <p className="text-muted-foreground text-sm py-4 text-center">
-                Brak wydarzeń do akceptacji 🎉
+                Brak wydarzen do akceptacji
               </p>
             ) : (
               <div className="space-y-3">
-                {pendingEvents.slice(0, 3).map((event) => (
+                {pendingEvents.map((event) => (
                   <Link
                     key={event.id}
                     href={`/admin/events/${event.id}`}
                     className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div
-                        className={`w-10 h-10 rounded-lg bg-gradient-to-br ${event.imageGradient} flex items-center justify-center text-lg`}
-                      >
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/30 to-primary/50 flex items-center justify-center text-lg">
                         🍴
                       </div>
                       <div>
@@ -238,7 +195,7 @@ export default function AdminDashboardPage() {
                           {event.title}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {event.dateFormatted}
+                          {format(event.date, "d MMM · HH:mm", { locale: pl })}
                         </p>
                       </div>
                     </div>
@@ -251,6 +208,40 @@ export default function AdminDashboardPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* Hosts overview */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <span>👨‍🍳</span> Hosty na platformie
+            </CardTitle>
+            <Link href="/admin/hosts">
+              <Button variant="ghost" size="sm">
+                Zobacz wszystkie →
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-primary/5 rounded-lg">
+                <div>
+                  <p className="text-sm text-primary">Aktywnych hostow</p>
+                  <p className="text-2xl font-bold text-primary">{stats.totalHosts}</p>
+                </div>
+                <span className="text-3xl">👨‍🍳</span>
+              </div>
+              <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                <div>
+                  <p className="text-sm text-green-600">Aktywnych wydarzen</p>
+                  <p className="text-2xl font-bold text-green-700">
+                    {stats.activeEventsThisMonth}
+                  </p>
+                </div>
+                <span className="text-3xl">🎫</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Recent Activity */}
@@ -259,7 +250,7 @@ export default function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <span>🆕</span> Nowi użytkownicy
+              <span>🆕</span> Nowi uzytkownicy
             </CardTitle>
             <Link href="/admin/users">
               <Button variant="ghost" size="sm">
@@ -269,58 +260,59 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {recentUsers.map((user) => (
-                <Link
-                  key={user.id}
-                  href={`/admin/users/${user.id}`}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
-                      {user.avatar || "👤"}
+              {recentUsers.map((user) => {
+                const name = user.guestProfile
+                  ? `${user.guestProfile.firstName} ${user.guestProfile.lastName}`
+                  : user.hostProfile?.businessName || user.email;
+                const role = user.userType.toLowerCase();
+
+                return (
+                  <Link
+                    key={user.id}
+                    href={`/admin/users/${user.id}`}
+                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
+                        {role === "host" ? "👨‍🍳" : role === "admin" ? "👑" : "👤"}
+                      </div>
+                      <div>
+                        <p className="font-medium text-foreground">{name}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium text-foreground">
-                        {user.firstName} {user.lastName}
+                    <div className="text-right">
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full ${
+                          role === "host"
+                            ? "bg-primary/10 text-primary"
+                            : role === "admin"
+                            ? "bg-purple-100 text-purple-700"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
+                        {role === "host" ? "Host" : role === "admin" ? "Admin" : "Gosc"}
+                      </span>
+                      <p className="text-xs text-muted-foreground/70 mt-1">
+                        {format(user.createdAt, "d MMM yyyy", { locale: pl })}
                       </p>
-                      <p className="text-xs text-muted-foreground">{user.email}</p>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        user.role === "host"
-                          ? "bg-primary/10 text-primary"
-                          : user.role === "admin"
-                          ? "bg-purple-100 text-purple-700"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {user.role === "host"
-                        ? "Host"
-                        : user.role === "admin"
-                        ? "Admin"
-                        : "Gość"}
-                    </span>
-                    <p className="text-xs text-muted-foreground/70 mt-1">
-                      {format(user.createdAt, "d MMM yyyy", { locale: pl })}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
 
-        {/* Quick Stats */}
+        {/* Monthly Summary */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <span>📈</span> Podsumowanie miesiąca
+              <span>📈</span> Podsumowanie miesiaca
             </CardTitle>
             <Link href="/admin/analytics">
               <Button variant="ghost" size="sm">
-                Szczegóły →
+                Szczegoly →
               </Button>
             </Link>
           </CardHeader>
@@ -328,9 +320,9 @@ export default function AdminDashboardPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
                 <div>
-                  <p className="text-sm text-green-600">Przychód z prowizji</p>
+                  <p className="text-sm text-green-600">Przychod z prowizji</p>
                   <p className="text-2xl font-bold text-green-700">
-                    {(adminStats.monthlyRevenue / 100).toLocaleString()} zł
+                    {(stats.monthlyRevenue / 100).toLocaleString()} zl
                   </p>
                 </div>
                 <span className="text-3xl">💵</span>
@@ -338,9 +330,9 @@ export default function AdminDashboardPage() {
 
               <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
                 <div>
-                  <p className="text-sm text-blue-600">Zrealizowane wydarzenia</p>
+                  <p className="text-sm text-blue-600">Aktywne wydarzenia</p>
                   <p className="text-2xl font-bold text-blue-700">
-                    {adminStats.activeEventsThisMonth}
+                    {stats.activeEventsThisMonth}
                   </p>
                 </div>
                 <span className="text-3xl">🎫</span>
@@ -348,9 +340,9 @@ export default function AdminDashboardPage() {
 
               <div className="flex items-center justify-between p-4 bg-purple-50 rounded-lg">
                 <div>
-                  <p className="text-sm text-purple-600">Nowi użytkownicy</p>
+                  <p className="text-sm text-purple-600">Nowi uzytkownicy</p>
                   <p className="text-2xl font-bold text-purple-700">
-                    +{adminStats.newUsersThisMonth}
+                    +{stats.newUsersThisMonth}
                   </p>
                 </div>
                 <span className="text-3xl">📈</span>

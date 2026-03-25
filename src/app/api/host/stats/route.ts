@@ -28,22 +28,20 @@ export async function GET() {
       },
     });
 
-    // Total revenue (from approved/completed bookings)
-    const revenueBookings = await db.booking.findMany({
+    // Total revenue (from approved/completed bookings) — single aggregate query
+    const revenueAgg = await db.booking.aggregate({
       where: {
         event: { hostId: result.hostProfileId },
         status: { in: ["APPROVED", "COMPLETED"] },
       },
-      select: {
+      _sum: {
         totalPrice: true,
         platformFee: true,
       },
     });
 
-    const totalRevenue = revenueBookings.reduce(
-      (sum, b) => sum + (b.totalPrice - b.platformFee),
-      0
-    ); // in grosze
+    const totalRevenue =
+      (revenueAgg._sum.totalPrice || 0) - (revenueAgg._sum.platformFee || 0); // in grosze
 
     // Total events count
     const totalEvents = await db.event.count({

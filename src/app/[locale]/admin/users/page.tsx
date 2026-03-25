@@ -1,101 +1,101 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "@/i18n/navigation";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
-import { adminUsers, userRoleLabels, UserRole } from "@/lib/mock-data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+interface AdminUser {
+  id: string;
+  email: string;
+  userType: string;
+  status: string;
+  emailVerified: boolean;
+  createdAt: string;
+  firstName: string;
+  lastName: string;
+  bookingsCount: number;
+  hostProfile: { id: string; businessName: string; verified: boolean } | null;
+}
+
+const roleLabels: Record<string, { label: string; color: string }> = {
+  GUEST: { label: "Gosc", color: "bg-muted text-muted-foreground" },
+  HOST: { label: "Host", color: "bg-primary/10 text-primary" },
+  ADMIN: { label: "Admin", color: "bg-purple-100 text-purple-700" },
+};
+
 export default function AdminUsersPage() {
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<"all" | UserRole>("all");
+  const [activeTab, setActiveTab] = useState("all");
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const filteredUsers = adminUsers.filter((user) => {
-    const matchesSearch =
-      search === "" ||
-      `${user.firstName} ${user.lastName}`.toLowerCase().includes(search.toLowerCase()) ||
-      user.email.toLowerCase().includes(search.toLowerCase());
+  const fetchUsers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (search) params.set("search", search);
+      if (activeTab !== "all") params.set("role", activeTab);
+      const res = await fetch(`/api/admin/users?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        setUsers(data.users);
+        setTotal(data.total);
+      }
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [search, activeTab]);
 
-    const matchesRole = activeTab === "all" || user.role === activeTab;
-
-    return matchesSearch && matchesRole;
-  });
+  useEffect(() => {
+    const timer = setTimeout(fetchUsers, 300);
+    return () => clearTimeout(timer);
+  }, [fetchUsers]);
 
   const roleCounts = {
-    all: adminUsers.length,
-    guest: adminUsers.filter((u) => u.role === "guest").length,
-    host: adminUsers.filter((u) => u.role === "host").length,
-    admin: adminUsers.filter((u) => u.role === "admin").length,
+    GUEST: users.filter((u) => u.userType === "GUEST").length,
+    HOST: users.filter((u) => u.userType === "HOST").length,
+    ADMIN: users.filter((u) => u.userType === "ADMIN").length,
   };
-
-  const activeUsers = adminUsers.filter((u) => u.isActive).length;
-  const verifiedUsers = adminUsers.filter((u) => u.isVerified).length;
 
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Użytkownicy</h1>
-        <p className="text-muted-foreground mt-1">
-          Zarządzaj użytkownikami platformy
-        </p>
+        <h1 className="text-3xl font-bold text-foreground">Uzytkownicy</h1>
+        <p className="text-muted-foreground mt-1">Zarzadzaj uzytkownikami platformy</p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <Card>
-          <CardContent className="p-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-foreground">
-                {roleCounts.all}
-              </p>
-              <p className="text-sm text-muted-foreground">Wszyscy</p>
-            </div>
+          <CardContent className="p-4 text-center">
+            <p className="text-2xl font-bold text-foreground">{total}</p>
+            <p className="text-sm text-muted-foreground">Wszyscy</p>
           </CardContent>
         </Card>
-
         <Card className="bg-muted/50">
-          <CardContent className="p-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-muted-foreground">
-                {roleCounts.guest}
-              </p>
-              <p className="text-sm text-muted-foreground">Goście</p>
-            </div>
+          <CardContent className="p-4 text-center">
+            <p className="text-2xl font-bold text-muted-foreground">{roleCounts.GUEST}</p>
+            <p className="text-sm text-muted-foreground">Goscie</p>
           </CardContent>
         </Card>
-
         <Card className="bg-primary/5">
-          <CardContent className="p-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-primary">
-                {roleCounts.host}
-              </p>
-              <p className="text-sm text-primary">Hosty</p>
-            </div>
+          <CardContent className="p-4 text-center">
+            <p className="text-2xl font-bold text-primary">{roleCounts.HOST}</p>
+            <p className="text-sm text-primary">Hosty</p>
           </CardContent>
         </Card>
-
-        <Card className="bg-green-50">
-          <CardContent className="p-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-green-700">
-                {verifiedUsers}
-              </p>
-              <p className="text-sm text-green-600">Zweryfikowani</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-blue-50">
-          <CardContent className="p-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-blue-700">{activeUsers}</p>
-              <p className="text-sm text-blue-600">Aktywni</p>
-            </div>
+        <Card className="bg-purple-50">
+          <CardContent className="p-4 text-center">
+            <p className="text-2xl font-bold text-purple-700">{roleCounts.ADMIN}</p>
+            <p className="text-sm text-purple-600">Admini</p>
           </CardContent>
         </Card>
       </div>
@@ -111,152 +111,90 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="mb-4">
-          <TabsTrigger value="all">Wszyscy ({roleCounts.all})</TabsTrigger>
-          <TabsTrigger value="guest">Goście ({roleCounts.guest})</TabsTrigger>
-          <TabsTrigger value="host">Hosty ({roleCounts.host})</TabsTrigger>
-          <TabsTrigger value="admin">Admini ({roleCounts.admin})</TabsTrigger>
+          <TabsTrigger value="all">Wszyscy ({total})</TabsTrigger>
+          <TabsTrigger value="guest">Goscie</TabsTrigger>
+          <TabsTrigger value="host">Hosty</TabsTrigger>
+          <TabsTrigger value="admin">Admini</TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab}>
-          {filteredUsers.length === 0 ? (
+          {loading ? (
+            <Card className="p-8 text-center">
+              <p className="text-muted-foreground">Ladowanie...</p>
+            </Card>
+          ) : users.length === 0 ? (
             <Card className="p-8 text-center">
               <span className="text-4xl mb-2 block">🔍</span>
-              <p className="text-muted-foreground">
-                Brak użytkowników spełniających kryteria
-              </p>
+              <p className="text-muted-foreground">Brak uzytkownikow spelniajacych kryteria</p>
             </Card>
           ) : (
-            <div className="bg-white rounded-lg border border overflow-hidden">
+            <div className="bg-white rounded-lg border overflow-hidden">
               <table className="w-full">
                 <thead className="bg-muted/50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      Użytkownik
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      Rola
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      Statystyki
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      Dołączył
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      Akcje
-                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Uzytkownik</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Rola</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Statystyki</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Dolaczyl</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Akcje</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-muted/50">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                              user.role === "host"
-                                ? "bg-primary/10"
-                                : user.role === "admin"
-                                ? "bg-purple-100"
-                                : "bg-muted"
-                            }`}
-                          >
-                            {user.avatar ||
-                              (user.role === "host"
-                                ? "👨‍🍳"
-                                : user.role === "admin"
-                                ? "👑"
-                                : "👤")}
+                  {users.map((user) => {
+                    const rl = roleLabels[user.userType] || roleLabels.GUEST;
+                    return (
+                      <tr key={user.id} className="hover:bg-muted/50">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                              user.userType === "HOST" ? "bg-primary/10" : user.userType === "ADMIN" ? "bg-purple-100" : "bg-muted"
+                            }`}>
+                              {user.userType === "HOST" ? "👨‍🍳" : user.userType === "ADMIN" ? "👑" : "👤"}
+                            </div>
+                            <div>
+                              <p className="font-medium text-foreground">{user.firstName} {user.lastName}</p>
+                              <p className="text-xs text-muted-foreground">{user.email}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-medium text-foreground">
-                              {user.firstName} {user.lastName}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {user.email}
-                            </p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2 py-1 rounded-full text-xs ${rl.color}`}>{rl.label}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col gap-1">
+                            {user.emailVerified ? (
+                              <span className="text-xs text-green-600">✓ Zweryfikowany</span>
+                            ) : (
+                              <span className="text-xs text-yellow-600">○ Niezweryfikowany</span>
+                            )}
+                            <span className={`text-xs ${user.status === "ACTIVE" ? "text-blue-600" : "text-red-600"}`}>
+                              {user.status === "ACTIVE" ? "● Aktywny" : `○ ${user.status}`}
+                            </span>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs ${
-                            userRoleLabels[user.role].color
-                          }`}
-                        >
-                          {userRoleLabels[user.role].label}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex flex-col gap-1">
-                          {user.isVerified ? (
-                            <span className="text-xs text-green-600">
-                              ✓ Zweryfikowany
-                            </span>
-                          ) : (
-                            <span className="text-xs text-yellow-600">
-                              ○ Niezweryfikowany
-                            </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-muted-foreground">
+                          {user.userType === "HOST" && user.hostProfile && (
+                            <p>{user.hostProfile.verified ? "✅" : "⏳"} {user.hostProfile.businessName}</p>
                           )}
-                          {user.isActive ? (
-                            <span className="text-xs text-blue-600">
-                              ● Aktywny
-                            </span>
-                          ) : (
-                            <span className="text-xs text-red-600">
-                              ○ Zablokowany
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-muted-foreground">
-                          {user.role === "host" && user.eventsHosted && (
-                            <p>🎉 {user.eventsHosted} wydarzeń</p>
-                          )}
-                          {user.role === "host" && user.totalRevenue && (
-                            <p className="text-green-600">
-                              💰 {(user.totalRevenue / 100).toLocaleString()} zł
-                            </p>
-                          )}
-                          {user.role === "guest" && user.eventsAttended && (
-                            <p>🎫 {user.eventsAttended} wydarzeń</p>
-                          )}
-                          {user.role === "guest" && !user.eventsAttended && (
-                            <p className="text-muted-foreground/70">Brak aktywności</p>
-                          )}
-                          {user.role === "admin" && (
-                            <p className="text-purple-600">Administrator</p>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
+                          {user.userType === "GUEST" && <p>🎫 {user.bookingsCount} rezerwacji</p>}
+                          {user.userType === "ADMIN" && <p className="text-purple-600">Administrator</p>}
+                        </td>
+                        <td className="px-6 py-4">
                           <p className="text-sm text-foreground">
-                            {format(user.createdAt, "d MMM yyyy", { locale: pl })}
+                            {format(new Date(user.createdAt), "d MMM yyyy", { locale: pl })}
                           </p>
-                          {user.lastLoginAt && (
-                            <p className="text-xs text-muted-foreground">
-                              Ostatnio:{" "}
-                              {format(user.lastLoginAt, "d MMM", { locale: pl })}
-                            </p>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <Link href={`/admin/users/${user.id}`}>
-                          <Button variant="ghost" size="sm">
-                            Szczegóły →
-                          </Button>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <Link href={`/admin/users/${user.id}`}>
+                            <Button variant="ghost" size="sm">Szczegoly →</Button>
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

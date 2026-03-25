@@ -28,7 +28,7 @@ export default function TermsPage() {
             <p className="text-muted-foreground mb-4">
               Niniejszy regulamin określa zasady korzystania z serwisu Seated
               (dalej: &quot;Serwis&quot;), którego właścicielem jest Seated Sp. z o.o. z
-              siedzibą we Wrocławiu, ul. Przykładowa 1, 50-001 Wrocław.
+              siedzibą we Wrocławiu, ul. Świdnicka 40, 50-024 Wrocław.
             </p>
             <p className="text-muted-foreground mb-4">
               Serwis umożliwia organizację i uczestnictwo w wydarzeniach

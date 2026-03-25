@@ -6,23 +6,39 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Mail, CheckCircle } from "lucide-react";
+import { ArrowLeft, Mail, CheckCircle, Loader2 } from "lucide-react";
 import { PageTransition, ScaleIn } from "@/components/ui/motion";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    setIsLoading(false);
-    setIsSubmitted(true);
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Wystąpił błąd. Spróbuj ponownie.");
+        return;
+      }
+
+      setIsSubmitted(true);
+    } catch {
+      setError("Wystąpił błąd. Spróbuj ponownie później.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSubmitted) {
@@ -44,13 +60,16 @@ export default function ForgotPasswordPage() {
             </p>
             <p className="text-sm text-muted-foreground mb-8">
               Jeśli nie widzisz wiadomości, sprawdź folder spam. Link jest ważny
-              przez 24 godziny.
+              przez 1 godzinę.
             </p>
             <div className="space-y-3">
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => setIsSubmitted(false)}
+                onClick={() => {
+                  setIsSubmitted(false);
+                  setError("");
+                }}
               >
                 Wyślij ponownie
               </Button>
@@ -76,7 +95,7 @@ export default function ForgotPasswordPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Link href="/" className="text-3xl font-bold text-primary/80 mb-4 block">
-            🍽️ Seated
+            Seated
           </Link>
           <CardTitle className="text-2xl">Zresetuj hasło</CardTitle>
           <p className="text-muted-foreground text-sm mt-2">
@@ -85,6 +104,12 @@ export default function ForgotPasswordPage() {
           </p>
         </CardHeader>
         <CardContent>
+          {error && (
+            <div className="p-3 rounded-md bg-red-50 text-red-700 text-sm mb-4">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Adres e-mail</Label>
@@ -97,6 +122,7 @@ export default function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={isLoading}
                   className="pl-10"
                 />
               </div>
@@ -109,7 +135,7 @@ export default function ForgotPasswordPage() {
             >
               {isLoading ? (
                 <>
-                  <span className="animate-spin mr-2">⏳</span>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Wysyłanie...
                 </>
               ) : (

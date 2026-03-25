@@ -165,6 +165,47 @@ export interface ApiMessage {
   };
 }
 
+// Extended conversation types for frontend
+export interface ApiConversationListItem {
+  id: string;
+  hostId: string;
+  hostName: string;
+  hostAvatar: string | null;
+  guestId: string;
+  guestName: string;
+  guestAvatar: string | null;
+  bookingId: string | null;
+  eventTitle: string | null;
+  lastMessage: string | null;
+  lastMessageAt: string | null;
+  unreadCount: number;
+  createdAt: string;
+}
+
+export interface ApiConversationDetail {
+  id: string;
+  hostId: string;
+  hostName: string;
+  hostAvatar: string | null;
+  guestId: string;
+  guestName: string;
+  guestAvatar: string | null;
+  bookingId: string | null;
+  eventTitle: string | null;
+  messages: ApiMessageWithSender[];
+}
+
+export interface ApiMessageWithSender {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar: string | null;
+  text: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
 // API response wrappers
 export interface EventsResponse {
   events: ApiEvent[];

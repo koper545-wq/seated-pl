@@ -26,16 +26,24 @@ function LoginForm() {
   const t = useTranslations("auth");
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const registered = searchParams.get("registered");
+  const verified = searchParams.get("verified");
+  const urlError = searchParams.get("error");
+  const prefillEmail = searchParams.get("email");
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(prefillEmail || "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOAuthLoading, setIsOAuthLoading] = useState<string | null>(null);
+  const [showResendVerification, setShowResendVerification] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setShowResendVerification(false);
+    setResendSuccess(false);
     setIsLoading(true);
 
     try {
@@ -46,7 +54,12 @@ function LoginForm() {
       });
 
       if (result?.error) {
-        setError(t("login.errors.invalid"));
+        if (result.error.includes("EMAIL_NOT_VERIFIED")) {
+          setError("Najpierw zweryfikuj swój adres email. Sprawdź skrzynkę pocztową.");
+          setShowResendVerification(true);
+        } else {
+          setError(t("login.errors.invalid"));
+        }
       } else {
         router.push(callbackUrl);
         router.refresh();
@@ -55,6 +68,29 @@ function LoginForm() {
       setError(t("login.errors.generic"));
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    setResendLoading(true);
+    try {
+      const res = await fetch("/api/auth/resend-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        setResendSuccess(true);
+        setShowResendVerification(false);
+        setError("");
+      } else {
+        const data = await res.json();
+        setError(data.error || "Nie udało się wysłać linku. Spróbuj ponownie.");
+      }
+    } catch {
+      setError("Wystąpił błąd. Spróbuj ponownie później.");
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -77,14 +113,48 @@ function LoginForm() {
 
       <CardContent className="space-y-4">
         {registered && (
+          <div className="p-3 rounded-md bg-primary/10 text-primary text-sm">
+            Konto utworzone! Sprawdź skrzynkę email i kliknij link weryfikacyjny, aby aktywować konto.
+          </div>
+        )}
+
+        {verified && (
           <div className="p-3 rounded-md bg-green-50 text-green-700 text-sm">
-            {t("login.accountCreated")}
+            Email zweryfikowany! Możesz się teraz zalogować.
+          </div>
+        )}
+
+        {urlError === "expired_token" && (
+          <div className="p-3 rounded-md bg-red-50 text-red-700 text-sm">
+            Link weryfikacyjny wygasł. Zarejestruj się ponownie, aby otrzymać nowy link.
+          </div>
+        )}
+
+        {urlError === "invalid_token" && (
+          <div className="p-3 rounded-md bg-red-50 text-red-700 text-sm">
+            Nieprawidłowy link weryfikacyjny. Spróbuj zarejestrować się ponownie.
+          </div>
+        )}
+
+        {resendSuccess && (
+          <div className="p-3 rounded-md bg-green-50 text-green-700 text-sm">
+            Link weryfikacyjny został wysłany! Sprawdź skrzynkę email.
           </div>
         )}
 
         {error && (
           <div className="p-3 rounded-md bg-red-50 text-red-700 text-sm">
-            {error}
+            <p>{error}</p>
+            {showResendVerification && (
+              <button
+                type="button"
+                onClick={handleResendVerification}
+                disabled={resendLoading}
+                className="mt-2 text-primary hover:text-primary/80 font-medium underline underline-offset-2 disabled:opacity-50"
+              >
+                {resendLoading ? "Wysyłanie..." : "Wyślij link weryfikacyjny ponownie"}
+              </button>
+            )}
           </div>
         )}
 

@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { db } from "@/lib/db";
 import { UserType } from "@prisma/client";
+import { notifyEmailVerification } from "@/lib/email/send";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, userType, firstName, lastName, businessName, ageVerified } = body;
+    const {
+      email, password, userType, firstName, lastName,
+      businessName, phoneNumber, city, cuisineSpecialties, description,
+      ageVerified, hostSubtype,
+      // Extended host onboarding fields
+      experienceLevel, experienceDetails, eventTypes,
+      address, nip, website, contactPerson, verificationAppointment,
+    } = body;
 
     // Validation
     if (!email || !password) {
@@ -61,6 +70,20 @@ export async function POST(request: Request) {
         data: {
           userId: user.id,
           businessName: businessName || email.split("@")[0],
+          phoneNumber: phoneNumber || null,
+          city: city || "Wroclaw",
+          cuisineSpecialties: Array.isArray(cuisineSpecialties) ? cuisineSpecialties : [],
+          description: description || null,
+          hostSubtype: hostSubtype || null,
+          experienceLevel: experienceLevel || null,
+          experienceDetails: experienceDetails || null,
+          eventTypes: Array.isArray(eventTypes) ? eventTypes : [],
+          address: address || null,
+          nip: nip || null,
+          website: website || null,
+          contactPerson: contactPerson || null,
+          verificationAppointment: verificationAppointment || null,
+          onboardingCompleted: true,
         },
       });
     } else {
@@ -73,8 +96,28 @@ export async function POST(request: Request) {
       });
     }
 
+    // Generate verification token
+    const token = crypto.randomUUID();
+    await db.verificationToken.create({
+      data: {
+        token,
+        email: user.email,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+      },
+    });
+
+    // Send verification email
+    const baseUrl = process.env.NEXTAUTH_URL
+      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    const verifyUrl = `${baseUrl}/api/auth/verify-email?token=${token}`;
+
+    await notifyEmailVerification({
+      email: user.email,
+      verifyUrl,
+    });
+
     return NextResponse.json(
-      { message: "Konto zostało utworzone", userId: user.id },
+      { message: "Konto zostało utworzone. Sprawdź email, aby zweryfikować konto.", userId: user.id },
       { status: 201 }
     );
   } catch (error) {

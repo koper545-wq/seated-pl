@@ -22,10 +22,24 @@ async function main() {
   await prisma.user.deleteMany();
 
   const passwordHash = await bcrypt.hash("password123", 12);
+  const adminPasswordHash = await bcrypt.hash("admin123", 12);
+  const hostPasswordHash = await bcrypt.hash("host123", 12);
 
   // ============================================
   // USERS
   // ============================================
+
+  // Admin user
+  const admin = await prisma.user.create({
+    data: {
+      email: "admin@seated.pl",
+      passwordHash: adminPasswordHash,
+      userType: UserType.ADMIN,
+      emailVerified: new Date(),
+      ageVerified: true,
+      language: "pl",
+    },
+  });
 
   // User 1: Guest only
   const guest1 = await prisma.user.create({
@@ -49,23 +63,23 @@ async function main() {
     },
   });
 
-  // User 2: Host (individual)
+  // User 2: Host (individual) — Marta Kowalska
   const host1 = await prisma.user.create({
     data: {
       email: "host@seated.pl",
-      passwordHash,
+      passwordHash: hostPasswordHash,
       userType: UserType.HOST,
       emailVerified: new Date(),
       ageVerified: true,
       language: "pl",
       hostProfile: {
         create: {
-          businessName: "Anna Kowalska",
-          description: "Pasjonatka kuchni włoskiej z 15-letnim doświadczeniem. Uwielbiam dzielić się moimi przepisami rodzinnymi z Toskanii.",
+          businessName: "Marta Kowalska",
+          description: "Szefowa kuchni z 12-letnim doświadczeniem w najlepszych restauracjach Wrocławia. Specjalizuję się w kuchni polskiej i fusion. Uwielbiam łączyć tradycyjne dolnośląskie smaki z nowoczesnymi technikami kulinarnymi.",
           phoneNumber: "+48 600 100 200",
           city: "Wrocław",
           neighborhood: "Stare Miasto",
-          cuisineSpecialties: ["Kuchnia włoska", "Pasta", "Desery"],
+          cuisineSpecialties: ["Kuchnia polska", "Kuchnia fusion", "Farm-to-table", "Kuchnia regionalna"],
           verified: true,
           responseRate: 98,
           responseTime: 1,
@@ -314,6 +328,221 @@ async function main() {
       bookingMode: BookingMode.MANUAL,
       status: EventStatus.CANCELLED,
       viewCount: 45,
+    },
+  });
+
+  // ============================================
+  // SAMPLE EVENTS — Wrocław showcase (all PUBLISHED)
+  // ============================================
+
+  // Sample Event 1: Supper Club — Smaki Dolnego Śląska
+  const sampleEvent1 = await prisma.event.create({
+    data: {
+      hostId: host1Profile.id,
+      title: "Kolacja Autorska: Smaki Dolnego Śląska",
+      slug: "kolacja-autorska-smaki-dolnego-slaska",
+      description: "Zapraszam na autorską kolację inspirowaną tradycyjnymi smakami Dolnego Śląska. Pięć dań przygotowanych z lokalnych, sezonowych produktów od dolnośląskich rolników. Każde danie to opowieść o regionie — od śląskich klusek po nowoczesne interpretacje klasycznych receptur. Wieczór w kameralnym gronie przy świecach i dobrym winie.",
+      eventType: EventType.SUPPER_CLUB,
+      cuisineTags: ["Kuchnia polska", "Kuchnia regionalna", "Dolny Śląsk", "Sezonowa"],
+      images: [
+        "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+        "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800",
+      ],
+      date: new Date("2026-04-04T19:00:00"),
+      startTime: "19:00",
+      duration: 210,
+      locationPublic: "Stare Miasto, Wrocław",
+      locationFull: "ul. Kuźnicza 29/3, 50-138 Wrocław",
+      price: 18000, // 180 PLN
+      capacity: 12,
+      spotsLeft: 5,
+      menuDescription: "**Amuse-bouche:** Tatar z buraka z chrzanowym kremem\n**Zupa:** Żurek na zakwasie z białą kiełbasą i jajkiem przepiórczym\n**Ryba:** Pstrąg z Kotliny Kłodzkiej z masłem szałwiowym i młodymi ziemniakami\n**Danie główne:** Policzki wołowe duszone w piwie z Browaru Stu Mostów, kluski śląskie, modra kapusta\n**Deser:** Sernik na zimno z dżemem z dzikiej róży",
+      dietaryOptions: ["gluten-free-possible", "pescatarian-possible"],
+      byob: false,
+      ageRequired: true,
+      dressCode: "Smart casual",
+      bookingMode: BookingMode.MANUAL,
+      cancellationPolicy: "Bezpłatna rezygnacja do 48h przed eventem. Po tym terminie zwrot 50%.",
+      status: EventStatus.PUBLISHED,
+      featured: true,
+      languages: ["pl"],
+      viewCount: 312,
+    },
+  });
+
+  // Sample Event 2: Chef's Table — Kuchnia Japońska z Twist
+  const sampleEvent2 = await prisma.event.create({
+    data: {
+      hostId: hostGuestProfile.id,
+      title: "Chef's Table: Kuchnia Japońska z Twist",
+      slug: "chefs-table-kuchnia-japonska-z-twist",
+      description: "Ekskluzywne doświadczenie kulinarne przy barze szefa kuchni. Siedem dań łączących japońskie techniki z polskimi składnikami — omakase w wydaniu wrocławskim. Każde danie przygotowywane na Twoich oczach z objaśnieniem technik i historii. Limitowana liczba miejsc gwarantuje intymną atmosferę.",
+      eventType: EventType.CHEFS_TABLE,
+      cuisineTags: ["Kuchnia japońska", "Fusion", "Omakase", "Fine dining"],
+      images: [
+        "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800",
+        "https://images.unsplash.com/photo-1553621042-f6e147245754?w=800",
+      ],
+      date: new Date("2026-04-11T18:30:00"),
+      startTime: "18:30",
+      duration: 180,
+      locationPublic: "Nadodrze, Wrocław",
+      locationFull: "ul. Łąkowa 8/2, 50-345 Wrocław",
+      price: 25000, // 250 PLN
+      capacity: 8,
+      spotsLeft: 3,
+      menuDescription: "**Omakase 7 dań:**\n1. Edamame z solą wędzoną z Bochni\n2. Tataki z tuńczyka z ponzu i rzodkiewką\n3. Gyoza z kaczką i śliwką\n4. Tempura z warzyw sezonowych\n5. Nigiri selection (łosoś, węgorz, przegrzebek)\n6. Ramen z bulionem dashi i domowym chashu\n7. Matcha panna cotta z yuzu\n\n*Parowanie z sake — opcjonalnie +80 PLN*",
+      dietaryOptions: ["pescatarian"],
+      byob: false,
+      ageRequired: true,
+      dressCode: "Smart casual",
+      bookingMode: BookingMode.MANUAL,
+      cancellationPolicy: "Pełny zwrot do 72h przed wydarzeniem. Brak zwrotu poniżej 24h.",
+      status: EventStatus.PUBLISHED,
+      featured: true,
+      languages: ["pl"],
+      viewCount: 428,
+    },
+  });
+
+  // Sample Event 3: Warsztaty Pierogów
+  const sampleEvent3 = await prisma.event.create({
+    data: {
+      hostId: host1Profile.id,
+      title: "Warsztaty Pierogów z Babcią Basią",
+      slug: "warsztaty-pierogow-z-babcia-basia",
+      description: "Nauczcie się lepić pierogi od prawdziwej mistrzyni! Babcia Basia dzieli się swoimi recepturami przekazywanymi od pokoleń. Wspólnie przygotujemy ciasto, trzy rodzaje farszu i nauczymy się profesjonalnego lepienia. Każdy zabiera do domu porcję pierogów na wynos. Idealne na rodzinne spotkanie lub wyjście z przyjaciółmi!",
+      eventType: EventType.COOKING_CLASS,
+      cuisineTags: ["Kuchnia polska", "Pierogi", "Warsztaty", "Tradycyjna"],
+      images: [
+        "https://images.unsplash.com/photo-1587049016823-69ef9d68d9a6?w=800",
+        "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800",
+      ],
+      date: new Date("2026-04-08T16:00:00"),
+      startTime: "16:00",
+      duration: 180,
+      locationPublic: "Przedmieście Oławskie, Wrocław",
+      locationFull: "ul. Traugutta 112/2, 50-419 Wrocław",
+      price: 12000, // 120 PLN
+      capacity: 16,
+      spotsLeft: 9,
+      menuDescription: "**Przygotujemy wspólnie:**\n- Pierogi ruskie (ziemniaki, twaróg, cebula)\n- Pierogi z mięsem po babcinemu\n- Pierogi ze szpinakiem i fetą (wersja wegetariańska)\n\n**W cenie:** Wszystkie składniki, fartuch, napoje (kompot, herbata), porcja pierogów na wynos (~15 szt.)",
+      dietaryOptions: ["vegetarian", "vegan-possible"],
+      byob: false,
+      ageRequired: false,
+      whatToBring: "Dobry humor i apetyt! Fartuchy zapewniamy na miejscu.",
+      bookingMode: BookingMode.INSTANT,
+      cancellationPolicy: "Bezpłatna rezygnacja do 24h przed warsztatami.",
+      status: EventStatus.PUBLISHED,
+      featured: false,
+      languages: ["pl"],
+      viewCount: 567,
+    },
+  });
+
+  // Sample Event 4: Pop-up — Street Food z Azji
+  const sampleEvent4 = await prisma.event.create({
+    data: {
+      hostId: hostGuestProfile.id,
+      title: "Pop-up: Street Food z Azji",
+      slug: "popup-street-food-z-azji",
+      description: "Jedna noc, pięć krajów Azji na Twoim talerzu! Podróż kulinarna przez uliczne smaki Bangkoku, Tokio, Seulu, Hanoi i Singapuru. Format pop-up na wrocławskim podwórku z muzyką na żywo i lampionami. Jedzenie serwowane w stylu hawker center — swobodnie, bez formalności, za to z pełnią smaków.",
+      eventType: EventType.POPUP,
+      cuisineTags: ["Street food", "Kuchnia azjatycka", "Kuchnia tajska", "Kuchnia koreańska", "Kuchnia wietnamska"],
+      images: [
+        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
+        "https://images.unsplash.com/photo-1569058242567-93de6f36f8e6?w=800",
+      ],
+      date: new Date("2026-04-18T17:00:00"),
+      startTime: "17:00",
+      duration: 240,
+      locationPublic: "Nadodrze, Wrocław",
+      locationFull: "ul. Roosevelta 14 (podwórko), 50-233 Wrocław",
+      price: 9000, // 90 PLN
+      capacity: 30,
+      spotsLeft: 18,
+      menuDescription: "**W cenie wejściówki 5 dań:**\n🇹🇭 Pad thai z krewetkami\n🇯🇵 Takoyaki (kulki z ośmiornicą)\n🇰🇷 Kimchi fried rice z jajkiem\n🇻🇳 Bún chả z grillowaną wieprzowiną\n🇸🇬 Satay z sosem orzechowym\n\n*Opcjonalnie: piwo rzemieślnicze i koktajle azjatyckie (bar płatny osobno)*",
+      dietaryOptions: ["vegetarian-possible", "vegan-possible"],
+      byob: true,
+      ageRequired: false,
+      dressCode: "Casual — będziemy na zewnątrz!",
+      bookingMode: BookingMode.INSTANT,
+      cancellationPolicy: "Pełny zwrot do 48h przed wydarzeniem.",
+      status: EventStatus.PUBLISHED,
+      featured: true,
+      languages: ["pl"],
+      viewCount: 891,
+    },
+  });
+
+  // Sample Event 5: Degustacja Win Naturalnych
+  const sampleEvent5 = await prisma.event.create({
+    data: {
+      hostId: host1Profile.id,
+      title: "Degustacja Win Naturalnych",
+      slug: "degustacja-win-naturalnych",
+      description: "Odkryj świat win naturalnych na kameralnej degustacji w historycznej piwnicy na Ostrowie Tumskim. Skosztujemy 8 win od małych europejskich producentów — od pet-natów po orange wine. Każde wino parowane z autorską przekąską. Prowadzenie: sommelierka Marta Kowalska z certyfikatem WSET Level 3.",
+      eventType: EventType.WINE_TASTING,
+      cuisineTags: ["Wino naturalne", "Degustacja", "Sommelier", "Przekąski"],
+      images: [
+        "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800",
+        "https://images.unsplash.com/photo-1474722883778-792e7990302f?w=800",
+      ],
+      date: new Date("2026-04-15T18:00:00"),
+      startTime: "18:00",
+      duration: 150,
+      locationPublic: "Ostrów Tumski, Wrocław",
+      locationFull: "ul. Katedralna 4 (piwnica), 50-328 Wrocław",
+      price: 15000, // 150 PLN
+      capacity: 20,
+      spotsLeft: 11,
+      menuDescription: "**8 win do degustacji:**\n- 2x Pet-Nat (Francja, Włochy)\n- 2x Orange Wine (Gruzja, Słowenia)\n- 2x Czerwone (Beaujolais, Jura)\n- 1x Rosé (Prowansja)\n- 1x Dessert wine (Tokaj)\n\n**Przekąski:** Deska serów z małych farm, charcuterie, oliwki, focaccia z rozmarynem, grissini",
+      dietaryOptions: ["vegetarian", "gluten-free-possible"],
+      byob: false,
+      ageRequired: true,
+      dressCode: "Smart casual",
+      bookingMode: BookingMode.MANUAL,
+      cancellationPolicy: "Bezpłatna rezygnacja do 72h przed degustacją. Brak zwrotu poniżej 24h.",
+      status: EventStatus.PUBLISHED,
+      featured: false,
+      languages: ["pl"],
+      viewCount: 245,
+    },
+  });
+
+  // Sample Event 6: Farm-to-table — Kolacja na Farmie
+  const sampleEvent6 = await prisma.event.create({
+    data: {
+      hostId: host1Profile.id,
+      title: "Kolacja na Farmie: Od Pola do Stołu",
+      slug: "kolacja-na-farmie-od-pola-do-stolu",
+      description: "Wyjątkowa kolacja w plenerze na ekologicznej farmie pod Wrocławiem. Zaczynamy od spaceru po gospodarstwie i samodzielnego zbierania warzyw, z których potem przygotujemy kolację. Cztery dania ugotowane na ogniu w otoczeniu natury. Całość przy długim drewnianym stole, zachodzącym słońcu i muzyce akustycznej na żywo.",
+      eventType: EventType.FARM_EXPERIENCE,
+      cuisineTags: ["Farm-to-table", "Ekologiczna", "Sezonowa", "Na ogniu"],
+      images: [
+        "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800",
+        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800",
+      ],
+      date: new Date("2026-04-25T15:00:00"),
+      startTime: "15:00",
+      duration: 300,
+      locationPublic: "Okolice Wrocławia (Kiełczów)",
+      locationFull: "Farma Zielony Kąt, Kiełczów ul. Polna 8, 55-093",
+      price: 22000, // 220 PLN
+      capacity: 10,
+      spotsLeft: 6,
+      menuDescription: "**15:00** Spacer po farmie + zbieranie składników\n**16:00** Wspólne gotowanie na ogniu\n**17:30** Kolacja przy długim stole\n\n**Menu:**\n- Grillowane warzywa z farmy z ziołowym aioli\n- Zupa z pokrzyw z grzankami i olejem z pestek dyni\n- Jagnięcina z rożna z młodymi ziemniakami i sałatką z pola\n- Deser: Pieczone jabłka z miodem i lodami waniliowymi\n\n*W cenie: napoje (lemoniada, herbata ziołowa, woda). Wino/piwo dostępne za dopłatą.*",
+      dietaryOptions: ["vegetarian-possible", "vegan-possible"],
+      byob: true,
+      ageRequired: false,
+      dressCode: "Wygodnie — będziemy na farmie! Zamknięte buty.",
+      whatToBring: "Koc do siedzenia (mamy zapasowe), bluza na wieczór, krem z filtrem",
+      bookingMode: BookingMode.MANUAL,
+      cancellationPolicy: "Bezpłatna rezygnacja do 72h przed wydarzeniem. W przypadku złej pogody event zostaje przeniesiony do stodoły.",
+      status: EventStatus.PUBLISHED,
+      featured: true,
+      languages: ["pl"],
+      viewCount: 156,
     },
   });
 
@@ -620,18 +849,19 @@ async function main() {
   console.log("✅ Seed completed!");
   console.log(`
 📊 Created:
-  - 4 users (1 guest, 1 host, 1 both, 1 guest)
+  - 5 users (1 admin, 1 guest, 1 host, 1 both, 1 guest)
   - 2 host profiles
   - 3 guest profiles
-  - 6 events (3 published, 1 completed, 1 draft, 1 cancelled)
+  - 12 events (9 published, 1 completed, 1 draft, 1 cancelled)
   - 10 bookings (various statuses)
   - 6 transactions
   - 3 reviews
   - 1 conversation with 3 messages
 
 🔑 Login credentials:
+  - Admin: admin@seated.pl / admin123
   - Guest: guest@seated.pl / password123
-  - Host: host@seated.pl / password123
+  - Host (Marta): host@seated.pl / host123
   - Both: both@seated.pl / password123
   - Guest 2: maria@example.com / password123
 `);

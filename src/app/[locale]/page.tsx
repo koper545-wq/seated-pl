@@ -2,8 +2,9 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { EventCard } from "@/components/events";
 import { FAQSection } from "@/components/faq-section";
+import { PartnersMarquee } from "@/components/partners-marquee";
+import { FeaturedEventsSection } from "@/components/home/featured-events-section";
 import {
   PageTransition,
   FadeIn,
@@ -83,69 +84,6 @@ const categories: Category[] = [
     slug: "farm",
     icon: TreePine,
     color: "bg-emerald-100 text-emerald-700 hover:bg-emerald-200",
-  },
-];
-
-const mockEvents = [
-  {
-    id: "1",
-    title: "Italian Dinner at Anna's - Tuscan Flavors",
-    type: "Supper Club",
-    date: "Sat, Feb 15 · 7:00 PM",
-    location: "Old Town, Wrocław",
-    price: 150,
-    spotsLeft: 4,
-    imageGradient: "from-primary/15 to-orange-300",
-  },
-  {
-    id: "2",
-    title: "Sushi Masterclass - From Basics to Master",
-    type: "Workshops",
-    date: "Tue, Feb 18 · 6:00 PM",
-    location: "Nadodrze, Wrocław",
-    price: 200,
-    spotsLeft: 6,
-    imageGradient: "from-rose-200 to-pink-300",
-  },
-  {
-    id: "3",
-    title: "Georgian Natural Wines - Tasting",
-    type: "Tastings",
-    date: "Fri, Feb 22 · 8:00 PM",
-    location: "Downtown, Wrocław",
-    price: 120,
-    spotsLeft: 2,
-    imageGradient: "from-purple-200 to-violet-300",
-  },
-  {
-    id: "4",
-    title: "Thai Street Food Pop-up",
-    type: "Pop-up",
-    date: "Sat, Mar 1 · 6:00 PM",
-    location: "Przedmieście Oławskie",
-    price: 89,
-    spotsLeft: 0,
-    imageGradient: "from-orange-200 to-red-300",
-  },
-  {
-    id: "5",
-    title: "Run + Brunch - Morning Energy",
-    type: "Active + Food",
-    date: "Sun, Mar 2 · 9:00 AM",
-    location: "Szczytnicki Park",
-    price: 75,
-    spotsLeft: 12,
-    imageGradient: "from-green-200 to-teal-300",
-  },
-  {
-    id: "6",
-    title: "Georgian Khinkali - Dumpling Workshop",
-    type: "Workshops",
-    date: "Wed, Mar 5 · 6:30 PM",
-    location: "Ołbin, Wrocław",
-    price: 160,
-    spotsLeft: 8,
-    imageGradient: "from-yellow-200 to-primary/20",
   },
 ];
 
@@ -279,33 +217,15 @@ export default async function Home() {
           </StaggerContainer>
         </section>
 
-        {/* Featured Events */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <FadeInUp duration={0.4} distance={15}>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-bold">
-                    {t("featured.title")}
-                  </h2>
-                  <p className="text-muted-foreground mt-1">
-                    {t("featured.subtitle")}
-                  </p>
-                </div>
-                <Button variant="outline" asChild>
-                  <Link href="/events">{t("featured.viewAll")}</Link>
-                </Button>
-              </div>
-            </FadeInUp>
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mockEvents.map((event) => (
-                <StaggerItem key={event.id}>
-                  <EventCard {...event} />
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          </div>
-        </section>
+        {/* Featured Events — client component with mvpMode support */}
+        <FeaturedEventsSection
+          title={t("featured.title")}
+          subtitle={t("featured.subtitle")}
+          viewAllLabel={t("featured.viewAll")}
+          noEventsTitle={t("featured.noEvents")}
+          noEventsDescription={t("featured.noEventsDescription")}
+          ctaSecondaryLabel={t("hero.ctaSecondary")}
+        />
 
         {/* Benefits */}
         <section className="py-16 container mx-auto px-4">
@@ -445,6 +365,9 @@ export default async function Home() {
             </div>
           </section>
         </FadeInUp>
+
+        {/* Partners / Trusted By */}
+        <PartnersMarquee title={t("partners.title")} />
       </div>
     </PageTransition>
   );

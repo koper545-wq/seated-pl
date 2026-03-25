@@ -21,8 +21,8 @@ export function Footer() {
       { name: t("contact"), href: "mailto:kontakt@seated.pl" },
     ],
     social: [
-      { name: "Instagram", href: "https://instagram.com" },
-      { name: "Facebook", href: "https://facebook.com" },
+      { name: "Instagram", href: "https://instagram.com/seated.pl" },
+      { name: "Facebook", href: "https://facebook.com/seated.pl" },
     ],
   };
 

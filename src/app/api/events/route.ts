@@ -19,9 +19,13 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "50");
     const offset = parseInt(searchParams.get("offset") || "0");
 
+    // Use start of today so events happening today still show up
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const where: Record<string, unknown> = {
       status: EventStatus.PUBLISHED,
-      date: { gte: new Date() }, // only future events
+      date: { gte: today },
     };
 
     if (type && type !== "all") {
@@ -99,7 +103,7 @@ export async function POST(request: NextRequest) {
       date, startTime, duration, locationPublic, locationFull,
       price, capacity, menuDescription, dietaryOptions,
       byob, ageRequired, dressCode, whatToBring,
-      bookingMode, cancellationPolicy, status,
+      bookingMode, cancellationPolicy, languages, status,
     } = body;
 
     if (!title || !description || !date || !startTime || !price || !capacity) {
@@ -141,7 +145,10 @@ export async function POST(request: NextRequest) {
         whatToBring: whatToBring || null,
         bookingMode: (bookingMode as BookingMode) || BookingMode.MANUAL,
         cancellationPolicy: cancellationPolicy || null,
-        status: status === "PUBLISHED" ? EventStatus.PUBLISHED : EventStatus.DRAFT,
+        languages: languages || ["pl"],
+        status: status === "PUBLISHED" ? EventStatus.PUBLISHED
+          : status === "PENDING_REVIEW" ? EventStatus.PENDING_REVIEW
+          : EventStatus.DRAFT,
       },
       include: {
         host: true,

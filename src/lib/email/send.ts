@@ -284,6 +284,44 @@ export async function notifyHostApplicationApproved(data: {
 }
 
 // ============================================
+// EMAIL VERIFICATION
+// ============================================
+
+/**
+ * Send email verification link after registration
+ */
+export async function notifyEmailVerification(data: {
+  email: string;
+  verifyUrl: string;
+}) {
+  return sendEmail({
+    to: data.email,
+    template: templates.emailVerification({
+      verifyUrl: data.verifyUrl,
+    }),
+  });
+}
+
+// ============================================
+// PASSWORD RESET
+// ============================================
+
+/**
+ * Send password reset link
+ */
+export async function notifyPasswordReset(data: {
+  email: string;
+  resetUrl: string;
+}) {
+  return sendEmail({
+    to: data.email,
+    template: templates.passwordReset({
+      resetUrl: data.resetUrl,
+    }),
+  });
+}
+
+// ============================================
 // WAITLIST EMAIL NOTIFICATIONS
 // ============================================
 

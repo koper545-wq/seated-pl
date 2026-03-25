@@ -54,6 +54,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
+        // Block login if email not verified (credentials only)
+        if (!user.emailVerified) {
+          throw new Error("EMAIL_NOT_VERIFIED");
+        }
+
         return {
           id: user.id,
           email: user.email,
@@ -117,6 +122,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
         } catch (error) {
           console.error("OAuth signIn error:", error);
+          console.error("OAuth signIn error details:", JSON.stringify(error, Object.getOwnPropertyNames(error as object)));
           return false;
         }
       }

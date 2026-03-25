@@ -6,6 +6,8 @@ const MVP_MODE_KEY = "seated-mvp-mode";
 
 interface MVPModeContextType {
   mvpMode: boolean;
+  /** Alias: true = demo mode (mock data), false = real/live mode */
+  isDemoMode: boolean;
   toggleMVPMode: () => void;
   setMVPMode: (enabled: boolean) => void;
   isLoaded: boolean;
@@ -49,6 +51,7 @@ export function MVPModeProvider({ children }: { children: React.ReactNode }) {
     <MVPModeContext.Provider
       value={{
         mvpMode,
+        isDemoMode: mvpMode,
         toggleMVPMode,
         setMVPMode,
         isLoaded,
@@ -66,6 +69,9 @@ export function useMVPMode(): MVPModeContextType {
   }
   return context;
 }
+
+/** Alias for useMVPMode - same hook, friendlier name */
+export const useDemoMode = useMVPMode;
 
 // Get MVP mode from localStorage (for non-hook usage)
 export function getMVPMode(): boolean {

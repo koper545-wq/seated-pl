@@ -27,7 +27,7 @@ export default function PrivacyPage() {
             </h2>
             <p className="text-muted-foreground mb-4">
               Administratorem Twoich danych osobowych jest Seated Sp. z o.o. z
-              siedzibą we Wrocławiu, ul. Przykładowa 1, 50-001 Wrocław (dalej:
+              siedzibą we Wrocławiu, ul. Świdnicka 40, 50-024 Wrocław (dalej:
               &quot;Administrator&quot; lub &quot;my&quot;).
             </p>
             <p className="text-muted-foreground">

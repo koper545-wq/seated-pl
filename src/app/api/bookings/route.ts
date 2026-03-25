@@ -128,67 +128,61 @@ export async function POST(request: NextRequest) {
     // Determine initial status based on booking mode
     const initialStatus = event.bookingMode === "INSTANT" ? "APPROVED" : "PENDING";
 
-    // Create booking (or update cancelled one)
-    let booking;
-    if (existingBooking && existingBooking.status === "CANCELLED") {
-      booking = await db.booking.update({
-        where: { id: existingBooking.id },
-        data: {
-          ticketCount: tickets,
-          totalPrice,
-          platformFee,
-          status: initialStatus,
-          dietaryInfo: dietaryInfo || null,
-          specialRequests: specialRequests || null,
-          cancelledAt: null,
-          cancelReason: null,
-          approvedAt: initialStatus === "APPROVED" ? new Date() : null,
-        },
-        include: {
-          event: { include: { host: true } },
-          guest: {
-            select: {
-              id: true,
-              email: true,
-              guestProfile: {
-                select: { firstName: true, lastName: true },
-              },
-            },
+    // Atomic transaction: create/update booking + decrement spots
+    const bookingInclude = {
+      event: { include: { host: true } },
+      guest: {
+        select: {
+          id: true,
+          email: true,
+          guestProfile: {
+            select: { firstName: true, lastName: true },
           },
         },
-      });
-    } else {
-      booking = await db.booking.create({
-        data: {
-          eventId,
-          guestId: result.user.id,
-          ticketCount: tickets,
-          totalPrice,
-          platformFee,
-          status: initialStatus,
-          dietaryInfo: dietaryInfo || null,
-          specialRequests: specialRequests || null,
-          approvedAt: initialStatus === "APPROVED" ? new Date() : null,
-        },
-        include: {
-          event: { include: { host: true } },
-          guest: {
-            select: {
-              id: true,
-              email: true,
-              guestProfile: {
-                select: { firstName: true, lastName: true },
-              },
-            },
-          },
-        },
-      });
-    }
+      },
+    } as const;
 
-    // Update spots left
-    await db.event.update({
-      where: { id: eventId },
-      data: { spotsLeft: { decrement: tickets } },
+    const booking = await db.$transaction(async (tx) => {
+      let txResult;
+      if (existingBooking && existingBooking.status === "CANCELLED") {
+        txResult = await tx.booking.update({
+          where: { id: existingBooking.id },
+          data: {
+            ticketCount: tickets,
+            totalPrice,
+            platformFee,
+            status: initialStatus,
+            dietaryInfo: dietaryInfo || null,
+            specialRequests: specialRequests || null,
+            cancelledAt: null,
+            cancelReason: null,
+            approvedAt: initialStatus === "APPROVED" ? new Date() : null,
+          },
+          include: bookingInclude,
+        });
+      } else {
+        txResult = await tx.booking.create({
+          data: {
+            eventId,
+            guestId: result.user.id,
+            ticketCount: tickets,
+            totalPrice,
+            platformFee,
+            status: initialStatus,
+            dietaryInfo: dietaryInfo || null,
+            specialRequests: specialRequests || null,
+            approvedAt: initialStatus === "APPROVED" ? new Date() : null,
+          },
+          include: bookingInclude,
+        });
+      }
+
+      await tx.event.update({
+        where: { id: eventId },
+        data: { spotsLeft: { decrement: tickets } },
+      });
+
+      return txResult;
     });
 
     // Send email notifications (fire-and-forget)
