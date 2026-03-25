@@ -8,10 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
-  getBookingsByEventId,
   HostEvent,
   hostEventStatusLabels,
-  getHostProfileByMockUserId,
 } from "@/lib/mock-data";
 import {
   Plus,
@@ -43,7 +41,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn, formatPrice } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { useEvents } from "@/contexts/events-context";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 
@@ -78,7 +75,7 @@ function mapApiEventToHostEvent(e: Record<string, unknown>): HostEvent {
     pendingBookings: (e.pendingBookings as number) || 0,
     confirmedGuests: (e.totalGuests as number) || 0,
     revenue: ((e.revenue as number) || 0) / 100, // grosze → PLN
-    imageGradient: "from-amber-400 to-orange-500",
+    imageGradient: "from-primary/70 to-orange-500",
     status: (statusMap[(e.status as string)] || "draft") as HostEvent["status"],
     description: (e.description as string) || "",
     menuDescription: (e.menuDescription as string) || "",
@@ -89,7 +86,6 @@ function mapApiEventToHostEvent(e: Record<string, unknown>): HostEvent {
 
 export default function HostDashboardPage() {
   const { user, isLoading, effectiveRole, isMockUser } = useCurrentUser();
-  const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
   const router = useRouter();
   const [apiEvents, setApiEvents] = useState<HostEvent[] | null>(null);
   const [apiEventsLoading, setApiEventsLoading] = useState(false);
@@ -101,9 +97,9 @@ export default function HostDashboardPage() {
     }
   }, [isLoading, effectiveRole, router]);
 
-  // Fetch events from API for real users
+  // Fetch events from API
   useEffect(() => {
-    if (isMockUser || isLoading || effectiveRole === "guest") return;
+    if (isLoading || effectiveRole === "guest") return;
     setApiEventsLoading(true);
     fetch("/api/host/events")
       .then((res) => res.ok ? res.json() : null)
@@ -119,12 +115,12 @@ export default function HostDashboardPage() {
   }, [isMockUser, isLoading, effectiveRole]);
 
   // Show loading while checking user or events
-  const isDataLoading = isMockUser ? (isLoading || !eventsLoaded) : (isLoading || apiEventsLoading);
+  const isDataLoading = isLoading || apiEventsLoading;
   if (isDataLoading) {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
           <p className="text-muted-foreground">Ładowanie panelu hosta...</p>
         </div>
       </div>
@@ -136,9 +132,8 @@ export default function HostDashboardPage() {
     return null;
   }
 
-  // Use mock events or API events
-  const hostId = isMockUser && user && 'id' in user ? user.id : "host-1";
-  const hostEvents = isMockUser ? getHostEvents(hostId) : (apiEvents || []);
+  // Use API events
+  const hostEvents = apiEvents || [];
 
   // Separate events by status/time
   const now = new Date();
@@ -185,7 +180,7 @@ export default function HostDashboardPage() {
                   Automatyzacja
                 </Link>
               </Button>
-              <Button asChild className="bg-amber-600 hover:bg-amber-700">
+              <Button asChild className="bg-primary hover:bg-primary/90">
                 <Link href="/dashboard/host/events/new">
                   <Plus className="h-4 w-4 mr-2" />
                   Stwórz wydarzenie
@@ -202,8 +197,8 @@ export default function HostDashboardPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-full bg-amber-100">
-                  <CalendarDays className="h-5 w-5 text-amber-600" />
+                <div className="p-2 rounded-full bg-primary/10">
+                  <CalendarDays className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{upcomingEvents.length}</p>
@@ -267,7 +262,7 @@ export default function HostDashboardPage() {
               <Calendar className="h-4 w-4" />
               Nadchodzące
               {upcomingEvents.length > 0 && (
-                <Badge className="bg-amber-600 text-white">
+                <Badge className="bg-primary text-white">
                   {upcomingEvents.length}
                 </Badge>
               )}
@@ -346,7 +341,6 @@ interface HostEventCardProps {
 
 function HostEventCard({ event, showActions = true }: HostEventCardProps) {
   const statusInfo = hostEventStatusLabels[event.status];
-  const bookings = getBookingsByEventId(event.id);
   const isPast = event.date < new Date() || event.status === "completed";
 
   return (
@@ -407,12 +401,12 @@ function HostEventCard({ event, showActions = true }: HostEventCardProps) {
             {/* Actions */}
             {showActions && (
               <div className="flex flex-row md:flex-col gap-2">
-                <Button asChild variant="default" size="sm" className="bg-amber-600 hover:bg-amber-700">
+                <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90">
                   <Link href={`/dashboard/host/events/${event.id}/guests`}>
                     <Users className="h-4 w-4 mr-1" />
                     Goście
                     {event.pendingBookings > 0 && (
-                      <Badge className="ml-1 bg-white text-amber-600 h-5 px-1.5">
+                      <Badge className="ml-1 bg-white text-primary h-5 px-1.5">
                         {event.pendingBookings}
                       </Badge>
                     )}

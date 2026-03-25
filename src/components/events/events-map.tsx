@@ -11,18 +11,18 @@ interface EventsMapProps {
 
 // Event type colors mapping
 const eventTypeColors: Record<string, { bg: string; border: string; icon: string }> = {
-  "supper-club": { bg: "#f59e0b", border: "#d97706", icon: "🍽️" },      // amber
-  "chefs-table": { bg: "#8b5cf6", border: "#7c3aed", icon: "👨‍🍳" },     // violet
-  "popup": { bg: "#ef4444", border: "#dc2626", icon: "🎪" },            // red
-  "warsztaty": { bg: "#10b981", border: "#059669", icon: "🥘" },        // emerald
-  "degustacje": { bg: "#6366f1", border: "#4f46e5", icon: "🍷" },       // indigo
-  "active-food": { bg: "#06b6d4", border: "#0891b2", icon: "🏃" },      // cyan
-  "farm": { bg: "#84cc16", border: "#65a30d", icon: "🌾" },             // lime
-  "default": { bg: "#f59e0b", border: "#d97706", icon: "🍴" },          // amber fallback
+  "supper-club": { bg: "#C05C36", border: "#A04D2E", icon: "🍽️" },      // terrakota
+  "chefs-table": { bg: "#6E8060", border: "#5A6B4E", icon: "👨‍🍳" },     // szałwia
+  "popup": { bg: "#D9846A", border: "#C0735A", icon: "🎪" },            // terra mid
+  "warsztaty": { bg: "#8B7355", border: "#725F46", icon: "🥘" },        // warm brown
+  "degustacje": { bg: "#9B8B6E", border: "#847660", icon: "🍷" },       // tan
+  "active-food": { bg: "#7A9E7E", border: "#658266", icon: "🏃" },      // green sage
+  "farm": { bg: "#A8956E", border: "#8F7D5C", icon: "🌾" },             // golden brown
+  "default": { bg: "#C05C36", border: "#A04D2E", icon: "🍴" },          // terrakota fallback
 };
 
 // Sold out / waitlist color
-const soldOutColor = { bg: "#94a3b8", border: "#64748b" }; // slate gray
+const soldOutColor = { bg: "#6B6560", border: "#555049" }; // szary ciepły
 
 // Custom marker icon with event type color
 const createCustomIcon = (event: MockEvent) => {
@@ -92,10 +92,10 @@ const createPopupContent = (event: MockEvent) => {
       <h3 style="font-weight: 600; font-size: 14px; margin-bottom: 4px; line-height: 1.3;">
         ${event.title}
       </h3>
-      <p style="color: #6b7280; font-size: 12px; margin-bottom: 4px;">
+      <p style="color: #6B6560; font-size: 12px; margin-bottom: 4px;">
         📅 ${event.dateFormatted}
       </p>
-      <p style="color: #6b7280; font-size: 12px; margin-bottom: 8px;">
+      <p style="color: #6B6560; font-size: 12px; margin-bottom: 8px;">
         📍 ${event.location}
       </p>
       <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -126,26 +126,26 @@ const createPopupContent = (event: MockEvent) => {
 // Helper to extract gradient colors
 const getGradientColors = (gradient: string): string => {
   const colorMap: Record<string, string> = {
-    "amber-200": "#fde68a",
-    "amber-300": "#fcd34d",
-    "amber-400": "#fbbf24",
-    "amber-900": "#78350f",
-    "orange-300": "#fdba74",
-    "orange-400": "#fb923c",
-    "orange-500": "#f97316",
-    "rose-200": "#fecdd3",
-    "rose-300": "#fda4af",
-    "pink-300": "#f9a8d4",
-    "purple-200": "#e9d5ff",
-    "violet-300": "#c4b5fd",
-    "red-200": "#fecaca",
-    "red-300": "#fca5a5",
-    "green-200": "#bbf7d0",
-    "teal-300": "#5eead4",
-    "yellow-200": "#fef08a",
-    "yellow-700": "#a16207",
-    "slate-700": "#334155",
-    "zinc-900": "#18181b",
+    "amber-200": "#EDE0CE",
+    "amber-300": "#D9846A",
+    "amber-400": "#C05C36",
+    "amber-900": "#1A1916",
+    "orange-300": "#D9846A",
+    "orange-400": "#C05C36",
+    "orange-500": "#A04D2E",
+    "rose-200": "#EDE0CE",
+    "rose-300": "#D9846A",
+    "pink-300": "#D9846A",
+    "purple-200": "#EDE0CE",
+    "violet-300": "#9B8B6E",
+    "red-200": "#EDE0CE",
+    "red-300": "#D9846A",
+    "green-200": "#B8C4A8",
+    "teal-300": "#7A9E7E",
+    "yellow-200": "#EDE0CE",
+    "yellow-700": "#8B7355",
+    "slate-700": "#1A1916",
+    "zinc-900": "#1A1916",
   };
 
   const fromMatch = gradient.match(/from-([a-z]+-\d+)/);

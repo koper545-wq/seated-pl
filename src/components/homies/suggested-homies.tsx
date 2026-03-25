@@ -49,7 +49,7 @@ export function SuggestedHomies({
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
-          <Users className="h-5 w-5 text-amber-600" />
+          <Users className="h-5 w-5 text-primary" />
           Sugerowani do obserwowania
         </CardTitle>
       </CardHeader>
@@ -68,8 +68,8 @@ export function SuggestedHomies({
                   <AvatarFallback
                     className={
                       suggestion.type === "host"
-                        ? "bg-amber-100 text-amber-700"
-                        : "bg-stone-100 text-stone-700"
+                        ? "bg-primary/10 text-primary"
+                        : "bg-muted text-muted-foreground"
                     }
                   >
                     {initials}
@@ -81,12 +81,12 @@ export function SuggestedHomies({
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/profile/${suggestion.id}`}
-                    className="font-medium text-sm hover:text-amber-600 transition-colors truncate"
+                    className="font-medium text-sm hover:text-primary transition-colors truncate"
                   >
                     {suggestion.name}
                   </Link>
                   {suggestion.type === "host" && (
-                    <Badge variant="secondary" className="bg-amber-100 text-amber-700 text-xs px-1.5 py-0">
+                    <Badge variant="secondary" className="bg-primary/10 text-primary text-xs px-1.5 py-0">
                       <ChefHat className="h-3 w-3" />
                     </Badge>
                   )}
@@ -110,7 +110,7 @@ export function SuggestedHomies({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="h-8 text-amber-600 border-amber-200 hover:bg-amber-50"
+                    className="h-8 text-primary border-primary/20 hover:bg-primary/5"
                     onClick={() => handleFollow(suggestion.id)}
                   >
                     <UserPlus className="h-4 w-4" />

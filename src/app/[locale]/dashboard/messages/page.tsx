@@ -53,7 +53,7 @@ function ConversationItem({
     >
       <Avatar className="h-12 w-12">
         <AvatarImage src={conversation.hostAvatar} />
-        <AvatarFallback className="bg-amber-100 text-amber-700">
+        <AvatarFallback className="bg-primary/10 text-primary">
           {conversation.hostName
             .split(" ")
             .map((n) => n[0])
@@ -72,7 +72,7 @@ function ConversationItem({
         </div>
 
         {conversation.eventTitle && (
-          <div className="flex items-center gap-1 text-xs text-amber-600 mb-1">
+          <div className="flex items-center gap-1 text-xs text-primary mb-1">
             <Calendar className="h-3 w-3" />
             <span className="truncate">{conversation.eventTitle}</span>
           </div>
@@ -87,7 +87,7 @@ function ConversationItem({
 
       <div className="flex items-center gap-2">
         {conversation.unreadCount > 0 && (
-          <Badge className="bg-amber-600 text-white rounded-full h-5 min-w-5 flex items-center justify-center text-xs">
+          <Badge className="bg-primary text-white rounded-full h-5 min-w-5 flex items-center justify-center text-xs">
             {conversation.unreadCount}
           </Badge>
         )}
@@ -164,7 +164,7 @@ export default function MessagesPage() {
               {t("noConversationsDesc")}
             </p>
             <Link href="/events" className="mt-4">
-              <Button className="bg-amber-600 hover:bg-amber-700">
+              <Button className="bg-primary hover:bg-primary/90">
                 {t("startConversation")}
               </Button>
             </Link>

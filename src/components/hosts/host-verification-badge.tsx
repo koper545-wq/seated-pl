@@ -231,7 +231,7 @@ export function VerifiedBadgeInline({
           <TooltipTrigger asChild>
             <span
               className={cn(
-                "inline-flex items-center gap-0.5 text-amber-500",
+                "inline-flex items-center gap-0.5 text-primary/80",
                 className
               )}
             >

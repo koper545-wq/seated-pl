@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-muted/50">
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link href="/">
           <Button variant="ghost" className="mb-6">
@@ -13,28 +13,28 @@ export default function PrivacyPage() {
           </Button>
         </Link>
 
-        <h1 className="text-4xl font-bold text-stone-900 mb-2">
+        <h1 className="text-4xl font-bold text-foreground mb-2">
           Polityka Prywatności
         </h1>
-        <p className="text-stone-500 mb-8">
+        <p className="text-muted-foreground mb-8">
           Ostatnia aktualizacja: 1 lutego 2025
         </p>
 
         <div className="prose prose-stone max-w-none">
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               1. Administrator danych
             </h2>
-            <p className="text-stone-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               Administratorem Twoich danych osobowych jest Seated Sp. z o.o. z
               siedzibą we Wrocławiu, ul. Przykładowa 1, 50-001 Wrocław (dalej:
               &quot;Administrator&quot; lub &quot;my&quot;).
             </p>
-            <p className="text-stone-600">
+            <p className="text-muted-foreground">
               Kontakt z Administratorem:{" "}
               <a
                 href="mailto:privacy@seated.pl"
-                className="text-amber-600 hover:underline"
+                className="text-primary hover:underline"
               >
                 privacy@seated.pl
               </a>
@@ -42,11 +42,11 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               2. Jakie dane zbieramy
             </h2>
-            <p className="text-stone-600 mb-4">Zbieramy następujące dane:</p>
-            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+            <p className="text-muted-foreground mb-4">Zbieramy następujące dane:</p>
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>
                 <strong>Dane konta:</strong> imię, nazwisko, adres e-mail, numer
                 telefonu, zdjęcie profilowe
@@ -71,11 +71,11 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               3. Cele przetwarzania
             </h2>
-            <p className="text-stone-600 mb-4">Twoje dane przetwarzamy w celu:</p>
-            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+            <p className="text-muted-foreground mb-4">Twoje dane przetwarzamy w celu:</p>
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>Realizacji usług - rezerwacji i organizacji wydarzeń</li>
               <li>Obsługi płatności i księgowości</li>
               <li>Komunikacji dotyczącej rezerwacji i wydarzeń</li>
@@ -88,10 +88,10 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               4. Podstawy prawne przetwarzania
             </h2>
-            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>
                 <strong>Wykonanie umowy</strong> (art. 6 ust. 1 lit. b RODO) - dla
                 realizacji usług
@@ -112,13 +112,13 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               5. Udostępnianie danych
             </h2>
-            <p className="text-stone-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               Twoje dane mogą być udostępniane:
             </p>
-            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>
                 <strong>Hostom</strong> - w zakresie niezbędnym do realizacji
                 rezerwacji (imię, numer telefonu, preferencje żywieniowe)
@@ -137,11 +137,11 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               6. Okres przechowywania
             </h2>
-            <p className="text-stone-600 mb-4">Dane przechowujemy przez:</p>
-            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+            <p className="text-muted-foreground mb-4">Dane przechowujemy przez:</p>
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>
                 <strong>Dane konta:</strong> do czasu usunięcia konta + 30 dni
               </li>
@@ -159,11 +159,11 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               7. Twoje prawa
             </h2>
-            <p className="text-stone-600 mb-4">Przysługują Ci następujące prawa:</p>
-            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+            <p className="text-muted-foreground mb-4">Przysługują Ci następujące prawa:</p>
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>
                 <strong>Prawo dostępu</strong> - możesz uzyskać kopię swoich danych
               </li>
@@ -192,11 +192,11 @@ export default function PrivacyPage() {
                 wpływu na legalność wcześniejszego przetwarzania
               </li>
             </ul>
-            <p className="text-stone-600 mt-4">
+            <p className="text-muted-foreground mt-4">
               Aby skorzystać z praw, skontaktuj się z nami:{" "}
               <a
                 href="mailto:privacy@seated.pl"
-                className="text-amber-600 hover:underline"
+                className="text-primary hover:underline"
               >
                 privacy@seated.pl
               </a>
@@ -204,11 +204,11 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               8. Pliki cookies
             </h2>
-            <p className="text-stone-600 mb-4">Używamy następujących cookies:</p>
-            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+            <p className="text-muted-foreground mb-4">Używamy następujących cookies:</p>
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>
                 <strong>Niezbędne:</strong> do działania serwisu (sesja, autoryzacja)
               </li>
@@ -222,19 +222,19 @@ export default function PrivacyPage() {
                 <strong>Marketingowe:</strong> do personalizacji reklam (za zgodą)
               </li>
             </ul>
-            <p className="text-stone-600 mt-4">
+            <p className="text-muted-foreground mt-4">
               Możesz zarządzać cookies w ustawieniach przeglądarki.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               9. Bezpieczeństwo
             </h2>
-            <p className="text-stone-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               Stosujemy odpowiednie środki techniczne i organizacyjne, w tym:
             </p>
-            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>Szyfrowanie danych (SSL/TLS)</li>
               <li>Regularne kopie zapasowe</li>
               <li>Kontrolę dostępu do danych</li>
@@ -244,10 +244,10 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               10. Transfer danych
             </h2>
-            <p className="text-stone-600">
+            <p className="text-muted-foreground">
               Niektóre usługi mogą przekazywać dane poza EOG (np. Google). W takim
               przypadku stosujemy standardowe klauzule umowne zatwierdzone przez
               Komisję Europejską lub inne odpowiednie zabezpieczenia.
@@ -255,10 +255,10 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               11. Skargi
             </h2>
-            <p className="text-stone-600">
+            <p className="text-muted-foreground">
               Jeśli uważasz, że przetwarzanie Twoich danych narusza przepisy RODO,
               masz prawo złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych
               (ul. Stawki 2, 00-193 Warszawa).
@@ -266,10 +266,10 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               12. Zmiany polityki
             </h2>
-            <p className="text-stone-600">
+            <p className="text-muted-foreground">
               Możemy aktualizować tę politykę. O istotnych zmianach poinformujemy
               Cię e-mailem lub poprzez powiadomienie w serwisie.
             </p>
@@ -277,9 +277,9 @@ export default function PrivacyPage() {
         </div>
 
         <div className="mt-12 pt-8 border-t">
-          <p className="text-sm text-stone-500">
+          <p className="text-sm text-muted-foreground">
             Zapoznaj się również z naszym{" "}
-            <Link href="/terms" className="text-amber-600 hover:underline">
+            <Link href="/terms" className="text-primary hover:underline">
               Regulaminem
             </Link>
           </p>

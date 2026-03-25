@@ -43,6 +43,7 @@ import {
   Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PageTransition, FadeIn, FadeInUp } from "@/components/ui/motion";
 
 const cuisineKeys = [
   "polish", "italian", "french", "asian", "japanese", "indian",
@@ -243,21 +244,24 @@ export default function BecomeHostPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 py-8">
+    <PageTransition className="min-h-screen bg-muted/30 py-8">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
+          <FadeInUp>
           <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
-              <ChefHat className="h-8 w-8 text-amber-600" />
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <ChefHat className="h-8 w-8 text-primary" />
             </div>
             <h1 className="text-2xl font-bold mb-2">{t("header.title")}</h1>
             <p className="text-muted-foreground">
               {t("header.subtitle")}
             </p>
           </div>
+          </FadeInUp>
 
           {/* Progress bar */}
+          <FadeIn delay={0.1}>
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               {[1, 2, 3, 4, 5].map((s) => (
@@ -268,7 +272,7 @@ export default function BecomeHostPage() {
                       step > s
                         ? "bg-green-500 text-white"
                         : step === s
-                        ? "bg-amber-600 text-white"
+                        ? "bg-primary text-white"
                         : "bg-muted text-muted-foreground"
                     )}
                   >
@@ -293,6 +297,7 @@ export default function BecomeHostPage() {
               <span>{t("progress.schedule")}</span>
             </div>
           </div>
+          </FadeIn>
 
           {/* Step 1: Host Type & Personal Info */}
           {step === 1 && (
@@ -301,7 +306,7 @@ export default function BecomeHostPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <ChefHat className="h-5 w-5 text-amber-600" />
+                    <ChefHat className="h-5 w-5 text-primary" />
                     {t("hostType.title")}
                   </CardTitle>
                   <CardDescription>
@@ -318,8 +323,8 @@ export default function BecomeHostPage() {
                       className={cn(
                         "border-2 rounded-xl p-4 cursor-pointer transition-all",
                         hostType === "individual"
-                          ? "border-amber-500 bg-amber-50"
-                          : "border-muted hover:border-amber-200"
+                          ? "border-primary bg-primary/5"
+                          : "border-muted hover:border-primary/20"
                       )}
                       onClick={() => setHostType("individual")}
                     >
@@ -327,7 +332,7 @@ export default function BecomeHostPage() {
                         <RadioGroupItem value="individual" id="individual" className="mt-1" />
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <User className="h-5 w-5 text-amber-600" />
+                            <User className="h-5 w-5 text-primary" />
                             <Label htmlFor="individual" className="font-semibold cursor-pointer">
                               {t("hostType.individual")}
                             </Label>
@@ -343,8 +348,8 @@ export default function BecomeHostPage() {
                       className={cn(
                         "border-2 rounded-xl p-4 cursor-pointer transition-all",
                         hostType === "restaurant"
-                          ? "border-amber-500 bg-amber-50"
-                          : "border-muted hover:border-amber-200"
+                          ? "border-primary bg-primary/5"
+                          : "border-muted hover:border-primary/20"
                       )}
                       onClick={() => setHostType("restaurant")}
                     >
@@ -352,7 +357,7 @@ export default function BecomeHostPage() {
                         <RadioGroupItem value="restaurant" id="restaurant" className="mt-1" />
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <Building2 className="h-5 w-5 text-amber-600" />
+                            <Building2 className="h-5 w-5 text-primary" />
                             <Label htmlFor="restaurant" className="font-semibold cursor-pointer">
                               {t("hostType.restaurant")}
                             </Label>
@@ -372,7 +377,7 @@ export default function BecomeHostPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <User className="h-5 w-5 text-amber-600" />
+                      <User className="h-5 w-5 text-primary" />
                       {t("personalInfo.title")}
                     </CardTitle>
                     <CardDescription>
@@ -444,7 +449,7 @@ export default function BecomeHostPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Building2 className="h-5 w-5 text-amber-600" />
+                      <Building2 className="h-5 w-5 text-primary" />
                       {t("restaurantInfo.title")}
                     </CardTitle>
                     <CardDescription>
@@ -545,7 +550,7 @@ export default function BecomeHostPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-amber-600" />
+                  <MapPin className="h-5 w-5 text-primary" />
                   {t("address.title")}
                 </CardTitle>
                 <CardDescription>
@@ -624,7 +629,7 @@ export default function BecomeHostPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Utensils className="h-5 w-5 text-amber-600" />
+                  <Utensils className="h-5 w-5 text-primary" />
                   {t("experience.title")}
                 </CardTitle>
                 <CardDescription>
@@ -683,8 +688,8 @@ export default function BecomeHostPage() {
                         className={cn(
                           "cursor-pointer transition-all",
                           selectedCuisines.includes(cuisine)
-                            ? "bg-amber-600 hover:bg-amber-700"
-                            : "hover:bg-amber-50"
+                            ? "bg-primary hover:bg-primary/90"
+                            : "hover:bg-primary/5"
                         )}
                         onClick={() => handleCuisineToggle(cuisine)}
                       >
@@ -706,8 +711,8 @@ export default function BecomeHostPage() {
                         className={cn(
                           "border rounded-lg p-3 cursor-pointer transition-all",
                           selectedEventTypes.includes(type)
-                            ? "border-amber-600 bg-amber-50"
-                            : "hover:border-amber-300"
+                            ? "border-primary bg-primary/5"
+                            : "hover:border-primary/40"
                         )}
                         onClick={() => handleEventTypeToggle(type)}
                       >
@@ -719,7 +724,7 @@ export default function BecomeHostPage() {
                             </p>
                           </div>
                           {selectedEventTypes.includes(type) && (
-                            <CheckCircle className="h-5 w-5 text-amber-600" />
+                            <CheckCircle className="h-5 w-5 text-primary" />
                           )}
                         </div>
                       </div>
@@ -757,7 +762,7 @@ export default function BecomeHostPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Camera className="h-5 w-5 text-amber-600" />
+                  <Camera className="h-5 w-5 text-primary" />
                   {t("photos.title")}
                 </CardTitle>
                 <CardDescription>
@@ -877,7 +882,7 @@ export default function BecomeHostPage() {
                       <button
                         type="button"
                         onClick={() => simulatePhotoUpload("food")}
-                        className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-amber-500 hover:bg-amber-50 transition-colors"
+                        className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-primary hover:bg-primary/5 transition-colors"
                       >
                         <Upload className="h-6 w-6 text-muted-foreground/50 mb-1" />
                         <span className="text-xs text-muted-foreground">{t("photos.add")}</span>
@@ -891,10 +896,10 @@ export default function BecomeHostPage() {
                   </p>
                 </div>
 
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
                   <div className="flex gap-3">
-                    <Star className="h-5 w-5 text-amber-600 flex-shrink-0" />
-                    <div className="text-sm text-amber-800">
+                    <Star className="h-5 w-5 text-primary flex-shrink-0" />
+                    <div className="text-sm text-primary">
                       <p className="font-medium mb-1">{t("photos.tip")}</p>
                       <p>
                         {hostType === "individual"
@@ -913,7 +918,7 @@ export default function BecomeHostPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CalendarDays className="h-5 w-5 text-amber-600" />
+                  <CalendarDays className="h-5 w-5 text-primary" />
                   {t("schedule.title")}
                 </CardTitle>
                 <CardDescription>
@@ -973,8 +978,8 @@ export default function BecomeHostPage() {
                         className={cn(
                           "cursor-pointer",
                           preferredTimes.includes(time)
-                            ? "bg-amber-600 hover:bg-amber-700"
-                            : "hover:bg-amber-50"
+                            ? "bg-primary hover:bg-primary/90"
+                            : "hover:bg-primary/5"
                         )}
                         onClick={() => handleTimeToggle(time)}
                       >
@@ -999,8 +1004,8 @@ export default function BecomeHostPage() {
                     />
                     <label htmlFor="terms" className="text-sm cursor-pointer">
                       {t.rich("schedule.terms", {
-                        terms: (chunks) => <a href="/terms" className="text-amber-600 underline">{chunks}</a>,
-                        privacy: (chunks) => <a href="/privacy" className="text-amber-600 underline">{chunks}</a>
+                        terms: (chunks) => <a href="/terms" className="text-primary underline">{chunks}</a>,
+                        privacy: (chunks) => <a href="/privacy" className="text-primary underline">{chunks}</a>
                       })} *
                     </label>
                   </div>
@@ -1049,7 +1054,7 @@ export default function BecomeHostPage() {
               <Button
                 onClick={() => setStep(step + 1)}
                 disabled={!canProceed()}
-                className="bg-amber-600 hover:bg-amber-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 {t("buttons.next")}
                 <ArrowRight className="h-4 w-4 ml-2" />
@@ -1058,7 +1063,7 @@ export default function BecomeHostPage() {
               <Button
                 onClick={handleSubmit}
                 disabled={!canProceed() || isSubmitting}
-                className="bg-amber-600 hover:bg-amber-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 {isSubmitting ? (
                   <>
@@ -1076,6 +1081,6 @@ export default function BecomeHostPage() {
           </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

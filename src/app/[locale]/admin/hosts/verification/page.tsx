@@ -97,7 +97,7 @@ export default function HostVerificationPage() {
   const getStatusIcon = (status: HostVerificationStatus) => {
     switch (status) {
       case "premium":
-        return <Star className="h-5 w-5 text-amber-500 fill-current" />;
+        return <Star className="h-5 w-5 text-primary/80 fill-current" />;
       case "verified":
         return <CheckCircle className="h-5 w-5 text-green-600" />;
       case "pending":
@@ -113,15 +113,15 @@ export default function HostVerificationPage() {
     <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <Link href="/admin/hosts" className="inline-flex items-center text-sm text-stone-500 hover:text-stone-700 mb-4">
+        <Link href="/admin/hosts" className="inline-flex items-center text-sm text-muted-foreground hover:text-muted-foreground mb-4">
           <ArrowLeft className="h-4 w-4 mr-1" />
           Powrót do aplikacji
         </Link>
         <div className="flex items-center gap-3">
           <Shield className="h-8 w-8 text-blue-600" />
           <div>
-            <h1 className="text-3xl font-bold text-stone-900">Weryfikacja Hostów</h1>
-            <p className="text-stone-500 mt-1">
+            <h1 className="text-3xl font-bold text-foreground">Weryfikacja Hostów</h1>
+            <p className="text-muted-foreground mt-1">
               Zarządzaj weryfikacją aktywnych hostów na platformie
             </p>
           </div>
@@ -158,16 +158,16 @@ export default function HostVerificationPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-amber-50 border-amber-200">
+        <Card className="bg-primary/5 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-amber-600">Premium</p>
-                <p className="text-2xl font-bold text-amber-700">
+                <p className="text-sm text-primary">Premium</p>
+                <p className="text-2xl font-bold text-primary">
                   {statusCounts.premium}
                 </p>
               </div>
-              <Star className="h-8 w-8 text-amber-400 fill-current" />
+              <Star className="h-8 w-8 text-primary/60 fill-current" />
             </div>
           </CardContent>
         </Card>
@@ -186,16 +186,16 @@ export default function HostVerificationPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-stone-50 border-stone-200">
+        <Card className="bg-muted/50 border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-stone-600">Zawieszeni</p>
-                <p className="text-2xl font-bold text-stone-700">
+                <p className="text-sm text-muted-foreground">Zawieszeni</p>
+                <p className="text-2xl font-bold text-muted-foreground">
                   {statusCounts.suspended}
                 </p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-stone-400" />
+              <AlertTriangle className="h-8 w-8 text-muted-foreground/70" />
             </div>
           </CardContent>
         </Card>
@@ -235,8 +235,8 @@ export default function HostVerificationPage() {
         <TabsContent value={activeTab}>
           {filteredHosts.length === 0 ? (
             <Card className="p-8 text-center">
-              <Shield className="h-12 w-12 mx-auto text-stone-300 mb-4" />
-              <p className="text-stone-500">Brak hostów spełniających kryteria</p>
+              <Shield className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+              <p className="text-muted-foreground">Brak hostów spełniających kryteria</p>
             </Card>
           ) : (
             <div className="space-y-4">
@@ -250,7 +250,7 @@ export default function HostVerificationPage() {
                         <div className="flex-1 p-6">
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex items-center gap-4">
-                              <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center text-2xl">
+                              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-2xl">
                                 {host.avatar ? (
                                   // eslint-disable-next-line @next/next/no-img-element
                                   <img
@@ -259,12 +259,12 @@ export default function HostVerificationPage() {
                                     className="w-full h-full rounded-full object-cover"
                                   />
                                 ) : (
-                                  <User className="h-6 w-6 text-amber-600" />
+                                  <User className="h-6 w-6 text-primary" />
                                 )}
                               </div>
                               <div>
                                 <div className="flex items-center gap-2">
-                                  <h3 className="font-semibold text-lg text-stone-900">
+                                  <h3 className="font-semibold text-lg text-foreground">
                                     {host.name}
                                   </h3>
                                   <HostVerificationBadge
@@ -275,25 +275,25 @@ export default function HostVerificationPage() {
                                     showDetails={false}
                                   />
                                 </div>
-                                <p className="text-sm text-stone-500">{host.type === "individual" ? "Osoba prywatna" : "Restauracja"}</p>
+                                <p className="text-sm text-muted-foreground">{host.type === "individual" ? "Osoba prywatna" : "Restauracja"}</p>
                               </div>
                             </div>
                           </div>
 
                           {/* Stats */}
-                          <div className="grid grid-cols-3 gap-4 mb-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                             <div className="flex items-center gap-2">
-                              <Star className="h-4 w-4 text-amber-400 fill-current" />
+                              <Star className="h-4 w-4 text-primary/60 fill-current" />
                               <span className="text-sm">
                                 <strong>{host.rating}</strong> ({host.reviewCount} opinii)
                               </span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <UtensilsCrossed className="h-4 w-4 text-stone-400" />
+                              <UtensilsCrossed className="h-4 w-4 text-muted-foreground/70" />
                               <span className="text-sm">{host.eventsHosted} wydarzeń</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-stone-400" />
+                              <Clock className="h-4 w-4 text-muted-foreground/70" />
                               <span className="text-sm">
                                 Od {format(host.joinedAt, "MMM yyyy", { locale: pl })}
                               </span>
@@ -337,19 +337,19 @@ export default function HostVerificationPage() {
                           </div>
 
                           {host.verification.notes && (
-                            <div className="p-3 bg-stone-50 rounded-lg">
-                              <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                            <div className="p-3 bg-muted/50 rounded-lg">
+                              <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                                 Notatki
                               </p>
-                              <p className="text-sm text-stone-600">{host.verification.notes}</p>
+                              <p className="text-sm text-muted-foreground">{host.verification.notes}</p>
                             </div>
                           )}
                         </div>
 
                         {/* Right side - Actions */}
-                        <div className="w-full md:w-56 bg-stone-50 p-6 flex flex-col justify-between">
+                        <div className="w-full md:w-56 bg-muted/50 p-6 flex flex-col justify-between">
                           <div>
-                            <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                               Status
                             </p>
                             <div className="flex items-center gap-2">
@@ -361,10 +361,10 @@ export default function HostVerificationPage() {
 
                             {host.verification.verifiedAt && (
                               <div className="mt-3">
-                                <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                                   Zweryfikowano
                                 </p>
-                                <p className="text-sm text-stone-700">
+                                <p className="text-sm text-muted-foreground">
                                   {format(host.verification.verifiedAt, "d MMM yyyy", { locale: pl })}
                                 </p>
                               </div>
@@ -422,7 +422,7 @@ export default function HostVerificationPage() {
                   }
                 />
                 <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-stone-400" />
+                  <User className="h-4 w-4 text-muted-foreground/70" />
                   <Label htmlFor="identity">Tożsamość zweryfikowana</Label>
                 </div>
               </div>
@@ -439,7 +439,7 @@ export default function HostVerificationPage() {
                   }
                 />
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-stone-400" />
+                  <MapPin className="h-4 w-4 text-muted-foreground/70" />
                   <Label htmlFor="location">Lokalizacja zweryfikowana</Label>
                 </div>
               </div>
@@ -456,7 +456,7 @@ export default function HostVerificationPage() {
                   }
                 />
                 <div className="flex items-center gap-2">
-                  <UtensilsCrossed className="h-4 w-4 text-stone-400" />
+                  <UtensilsCrossed className="h-4 w-4 text-muted-foreground/70" />
                   <Label htmlFor="foodSafety">Bezpieczeństwo żywności</Label>
                 </div>
               </div>
@@ -473,7 +473,7 @@ export default function HostVerificationPage() {
                   }
                 />
                 <div className="flex items-center gap-2">
-                  <FileCheck className="h-4 w-4 text-stone-400" />
+                  <FileCheck className="h-4 w-4 text-muted-foreground/70" />
                   <Label htmlFor="background">Weryfikacja osoby</Label>
                 </div>
               </div>
@@ -523,7 +523,7 @@ export default function HostVerificationPage() {
               Zweryfikuj
             </Button>
             <Button
-              className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700"
+              className="w-full sm:w-auto bg-primary hover:bg-primary/90"
               onClick={() => handleVerify("premium")}
               disabled={
                 !verificationData.identityVerified ||

@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
-  getBookingsByHostId,
   MockBooking,
   bookingStatusLabels,
 } from "@/lib/mock-data";
@@ -71,7 +70,7 @@ function mapApiHostBookingToMock(b: Record<string, unknown>): MockBooking {
       date: eventDate,
       dateFormatted: format(eventDate, "d MMMM yyyy", { locale: pl }),
       location: (event.locationPublic as string) || "",
-      imageGradient: "from-amber-400 to-orange-500",
+      imageGradient: "from-primary/70 to-orange-500",
       hostName: (host.businessName as string) || "",
       hostId: (host.id as string) || "",
     },
@@ -97,32 +96,27 @@ export default function HostBookingsPage() {
     }
   }, [isLoading, effectiveRole, router]);
 
-  // Initialize bookings from mock or API
+  // Initialize bookings from API
   useEffect(() => {
     if (isLoading) return;
 
-    if (isMockUser) {
-      setBookings(getBookingsByHostId(hostId));
-      setIsLoadingBookings(false);
-    } else {
-      fetch("/api/bookings?role=host")
-        .then((res) => res.ok ? res.json() : null)
-        .then((data) => {
-          if (data?.bookings) {
-            setBookings(data.bookings.map(mapApiHostBookingToMock));
-          }
-        })
-        .catch(console.error)
-        .finally(() => setIsLoadingBookings(false));
-    }
-  }, [isLoading, isMockUser, hostId]);
+    fetch("/api/bookings?role=host")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.bookings) {
+          setBookings(data.bookings.map(mapApiHostBookingToMock));
+        }
+      })
+      .catch(console.error)
+      .finally(() => setIsLoadingBookings(false));
+  }, [isLoading]);
 
   if (isLoading || isLoadingBookings) {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Ładowanie...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Ładowanie...</p>
         </div>
       </div>
     );
@@ -237,8 +231,8 @@ export default function HostBookingsPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-full bg-amber-100">
-                  <TrendingUp className="h-5 w-5 text-amber-600" />
+                <div className="p-2 rounded-full bg-primary/10">
+                  <TrendingUp className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{formatPrice(totalRevenue * 100)}</p>
@@ -425,7 +419,7 @@ function HostBookingCard({
           {/* Guest info */}
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarFallback className="bg-amber-100 text-amber-700">
+              <AvatarFallback className="bg-primary/10 text-primary">
                 {booking.guestName
                   .split(" ")
                   .map((n) => n[0])
@@ -471,7 +465,7 @@ function HostBookingCard({
                 {booking.ticketCount}{" "}
                 {booking.ticketCount === 1 ? "osoba" : "osoby"}
               </p>
-              <p className="text-amber-600 font-semibold mt-1">
+              <p className="text-primary font-semibold mt-1">
                 {formatPrice((booking.totalPrice - booking.platformFee) * 100)}
               </p>
             </div>

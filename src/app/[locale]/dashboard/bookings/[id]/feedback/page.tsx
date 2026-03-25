@@ -76,8 +76,8 @@ function StarRating({
             className={cn(
               size === "large" ? "h-8 w-8" : "h-6 w-6",
               (hovered || value) >= star
-                ? "fill-amber-400 text-amber-400"
-                : "text-stone-300"
+                ? "fill-primary/60 text-primary/60"
+                : "text-muted-foreground/50"
             )}
           />
         </button>
@@ -157,13 +157,13 @@ export default function GuestFeedbackPage() {
             <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-10 w-10 text-green-600" />
             </div>
-            <h1 className="text-2xl font-bold text-stone-900 mb-4">
+            <h1 className="text-2xl font-bold text-foreground mb-4">
               {t("submitted.title")}
             </h1>
-            <p className="text-stone-600 mb-8">{t("submitted.description")}</p>
+            <p className="text-muted-foreground mb-8">{t("submitted.description")}</p>
 
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
-              <p className="text-amber-800 text-sm">
+            <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mb-8">
+              <p className="text-primary text-sm">
                 🎉 {t("submitted.xpEarned", { xp: 50 })}
               </p>
             </div>
@@ -172,7 +172,7 @@ export default function GuestFeedbackPage() {
               <Button asChild variant="outline">
                 <Link href="/dashboard/bookings">{t("submitted.viewBookings")}</Link>
               </Button>
-              <Button asChild className="bg-amber-600 hover:bg-amber-700">
+              <Button asChild className="bg-primary hover:bg-primary/90">
                 <Link href="/events">{t("submitted.browseEvents")}</Link>
               </Button>
             </div>
@@ -228,7 +228,7 @@ export default function GuestFeedbackPage() {
                 key={s}
                 className={cn(
                   "flex-1 h-2 rounded-full transition-colors",
-                  step >= s ? "bg-amber-500" : "bg-stone-200"
+                  step >= s ? "bg-primary/50" : "bg-muted"
                 )}
               />
             ))}
@@ -239,7 +239,7 @@ export default function GuestFeedbackPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Star className="h-5 w-5 text-amber-500" />
+                  <Star className="h-5 w-5 text-primary/80" />
                   {t("guest.step1.title")}
                 </CardTitle>
                 <CardDescription>{t("guest.step1.description")}</CardDescription>
@@ -264,7 +264,7 @@ export default function GuestFeedbackPage() {
                   <Button
                     onClick={() => setStep(2)}
                     disabled={!isStep1Valid}
-                    className="w-full bg-amber-600 hover:bg-amber-700"
+                    className="w-full bg-primary hover:bg-primary/90"
                   >
                     {t("continue")}
                   </Button>
@@ -278,7 +278,7 @@ export default function GuestFeedbackPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <ThumbsUp className="h-5 w-5 text-amber-500" />
+                  <ThumbsUp className="h-5 w-5 text-primary/80" />
                   {t("guest.step2.title")}
                 </CardTitle>
                 <CardDescription>{t("guest.step2.description")}</CardDescription>
@@ -295,8 +295,8 @@ export default function GuestFeedbackPage() {
                         className={cn(
                           "cursor-pointer py-2 px-3 text-sm",
                           highlights.includes(option.id)
-                            ? "bg-amber-600 hover:bg-amber-700"
-                            : "hover:bg-amber-50"
+                            ? "bg-primary hover:bg-primary/90"
+                            : "hover:bg-primary/5"
                         )}
                         onClick={() => handleHighlightToggle(option.id)}
                       >
@@ -342,7 +342,7 @@ export default function GuestFeedbackPage() {
                   <Button
                     onClick={() => setStep(3)}
                     disabled={!isStep2Valid}
-                    className="flex-1 bg-amber-600 hover:bg-amber-700"
+                    className="flex-1 bg-primary hover:bg-primary/90"
                   >
                     {t("continue")}
                   </Button>
@@ -356,7 +356,7 @@ export default function GuestFeedbackPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Camera className="h-5 w-5 text-amber-500" />
+                  <Camera className="h-5 w-5 text-primary/80" />
                   {t("guest.step3.title")}
                 </CardTitle>
                 <CardDescription>{t("guest.step3.description")}</CardDescription>
@@ -378,7 +378,7 @@ export default function GuestFeedbackPage() {
                       <button
                         type="button"
                         onClick={handlePhotoUpload}
-                        className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-amber-500 hover:bg-amber-50 transition-colors"
+                        className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-primary hover:bg-primary/5 transition-colors"
                       >
                         <Camera className="h-6 w-6 text-muted-foreground/50 mb-1" />
                         <span className="text-xs text-muted-foreground">
@@ -401,7 +401,7 @@ export default function GuestFeedbackPage() {
                         {t("guest.summary.overallRating")}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                        <Star className="h-4 w-4 fill-primary/60 text-primary/60" />
                         {ratings.overall}
                       </span>
                     </div>
@@ -427,7 +427,7 @@ export default function GuestFeedbackPage() {
                   <Button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex-1 bg-amber-600 hover:bg-amber-700"
+                    className="flex-1 bg-primary hover:bg-primary/90"
                   >
                     {isSubmitting ? (
                       <>

@@ -47,8 +47,8 @@ export function WhosGoingSection({
       <div className="flex items-center gap-2">
         <AttendeeAvatars attendees={confirmedAttendees} maxDisplay={3} size="sm" />
         {stats.homiesGoing > 0 && (
-          <Badge variant="outline" className="text-amber-700 border-amber-200 bg-amber-50">
-            <Heart className="h-3 w-3 mr-1 fill-amber-500 text-amber-500" />
+          <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5">
+            <Heart className="h-3 w-3 mr-1 fill-primary/80 text-primary/80" />
             {stats.homiesGoing} homie{stats.homiesGoing > 1 ? "s" : ""}
           </Badge>
         )}
@@ -61,7 +61,7 @@ export function WhosGoingSection({
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
-            <Users className="h-4 w-4 text-stone-500" />
+            <Users className="h-4 w-4 text-muted-foreground" />
             Kto idzie?
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -77,15 +77,15 @@ export function WhosGoingSection({
       <CardContent>
         {/* Homies going highlight */}
         {homiesGoing.length > 0 && (
-          <div className="bg-amber-50 rounded-lg p-3 mb-4 flex items-center gap-3">
-            <Heart className="h-5 w-5 text-amber-500 fill-amber-500 flex-shrink-0" />
+          <div className="bg-primary/5 rounded-lg p-3 mb-4 flex items-center gap-3">
+            <Heart className="h-5 w-5 text-primary/80 fill-primary/80 flex-shrink-0" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-amber-900">
+              <p className="text-sm font-medium text-primary">
                 {homiesGoing.length} twoich homies idzie!
               </p>
               <div className="flex items-center gap-1 mt-1">
                 {homiesGoing.slice(0, 3).map((h) => (
-                  <span key={h.id} className="text-xs text-amber-700">
+                  <span key={h.id} className="text-xs text-primary">
                     {h.userName}
                     {homiesGoing.indexOf(h) < Math.min(homiesGoing.length - 1, 2)
                       ? ", "
@@ -93,7 +93,7 @@ export function WhosGoingSection({
                   </span>
                 ))}
                 {homiesGoing.length > 3 && (
-                  <span className="text-xs text-amber-600">
+                  <span className="text-xs text-primary">
                     i {homiesGoing.length - 3} więcej
                   </span>
                 )}
@@ -145,19 +145,19 @@ export function WhosGoingSection({
                       <AvatarFallback
                         className={`${
                           attendee.isHomie
-                            ? "bg-amber-100 text-amber-700"
-                            : "bg-stone-100 text-stone-700"
+                            ? "bg-primary/10 text-primary"
+                            : "bg-muted text-muted-foreground"
                         }`}
                       >
                         {initials}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium text-stone-900">
+                      <p className="text-sm font-medium text-foreground">
                         {attendee.userName}
                       </p>
                       {attendee.userLevel && (
-                        <p className="text-xs text-stone-500">
+                        <p className="text-xs text-muted-foreground">
                           Poziom {attendee.userLevel}
                         </p>
                       )}
@@ -170,7 +170,7 @@ export function WhosGoingSection({
                       </Badge>
                     )}
                     {attendee.isHomie && !attendee.isMutualHomie && (
-                      <Badge variant="outline" className="border-amber-200 text-amber-700">
+                      <Badge variant="outline" className="border-primary/20 text-primary">
                         Obserwujesz
                       </Badge>
                     )}
@@ -181,7 +181,7 @@ export function WhosGoingSection({
 
             {interestedAttendees.length > 0 && (
               <>
-                <div className="text-xs text-stone-500 font-medium pt-2 border-t">
+                <div className="text-xs text-muted-foreground font-medium pt-2 border-t">
                   Zainteresowani ({interestedAttendees.length})
                 </div>
                 {interestedAttendees.slice(0, 3).map((attendee) => {
@@ -196,11 +196,11 @@ export function WhosGoingSection({
                       className="flex items-center gap-3 py-2 opacity-75"
                     >
                       <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-stone-100 text-stone-600">
+                        <AvatarFallback className="bg-muted text-muted-foreground">
                           {initials}
                         </AvatarFallback>
                       </Avatar>
-                      <p className="text-sm text-stone-600">
+                      <p className="text-sm text-muted-foreground">
                         {attendee.userName}
                       </p>
                     </div>

@@ -104,7 +104,7 @@ export default function WishlistPage() {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <p className="text-3xl font-bold text-amber-600">{soldOutCount}</p>
+              <p className="text-3xl font-bold text-primary">{soldOutCount}</p>
               <p className="text-sm text-muted-foreground">Wyprzedanych</p>
             </CardContent>
           </Card>
@@ -162,7 +162,7 @@ export default function WishlistPage() {
                   : "Zapisuj wydarzenia, które Cię interesują"}
               </p>
               {!searchQuery && typeFilter === "all" && (
-                <Button asChild className="bg-amber-600 hover:bg-amber-700">
+                <Button asChild className="bg-primary hover:bg-primary/90">
                   <Link href="/events">Przeglądaj wydarzenia</Link>
                 </Button>
               )}
@@ -209,7 +209,7 @@ export default function WishlistPage() {
                               {item.notifyOnSpotAvailable && (
                                 <Badge
                                   variant="outline"
-                                  className="text-xs border-amber-300 text-amber-700"
+                                  className="text-xs border-primary/40 text-primary"
                                 >
                                   <Bell className="h-3 w-3 mr-1" />
                                   Powiadomienia
@@ -220,7 +220,7 @@ export default function WishlistPage() {
                             {/* Title */}
                             <Link
                               href={`/events/${item.eventId}`}
-                              className="font-semibold text-lg hover:text-amber-600 transition-colors line-clamp-1"
+                              className="font-semibold text-lg hover:text-primary transition-colors line-clamp-1"
                             >
                               {item.event.title}
                             </Link>
@@ -273,7 +273,7 @@ export default function WishlistPage() {
                               {!isPast && (
                                 <Button
                                   size="sm"
-                                  className="bg-amber-600 hover:bg-amber-700"
+                                  className="bg-primary hover:bg-primary/90"
                                   asChild
                                   disabled={isSoldOut}
                                 >

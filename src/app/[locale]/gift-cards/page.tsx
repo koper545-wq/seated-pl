@@ -22,6 +22,7 @@ import {
 import { cn, formatPrice } from "@/lib/utils";
 import { giftCardAmounts, createGiftCard } from "@/lib/mock-data";
 import { Link } from "@/i18n/navigation";
+import { PageTransition, FadeInUp, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 
 export default function GiftCardsPage() {
   const t = useTranslations("giftCards");
@@ -72,52 +73,60 @@ export default function GiftCardsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
+    <PageTransition className="min-h-screen bg-gradient-to-b from-primary/5 to-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-amber-600 to-orange-500 text-white py-16">
+      <div className="bg-gradient-to-r from-primary to-orange-500 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
+          <FadeInUp>
           <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
             <Gift className="h-10 w-10" />
           </div>
           <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
-          <p className="text-xl text-amber-100 max-w-2xl mx-auto">
+          <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto">
             {t("subtitle")}
           </p>
+          </FadeInUp>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Benefits */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <StaggerContainer className="grid md:grid-cols-3 gap-6 mb-12">
+          <StaggerItem>
           <div className="text-center p-6">
-            <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ChefHat className="h-6 w-6 text-amber-600" />
+            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <ChefHat className="h-6 w-6 text-primary" />
             </div>
             <h3 className="font-semibold mb-2">{t("benefit1Title")}</h3>
             <p className="text-sm text-muted-foreground">{t("benefit1Desc")}</p>
           </div>
+          </StaggerItem>
+          <StaggerItem>
           <div className="text-center p-6">
-            <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="h-6 w-6 text-amber-600" />
+            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Sparkles className="h-6 w-6 text-primary" />
             </div>
             <h3 className="font-semibold mb-2">{t("benefit2Title")}</h3>
             <p className="text-sm text-muted-foreground">{t("benefit2Desc")}</p>
           </div>
+          </StaggerItem>
+          <StaggerItem>
           <div className="text-center p-6">
-            <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Heart className="h-6 w-6 text-amber-600" />
+            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Heart className="h-6 w-6 text-primary" />
             </div>
             <h3 className="font-semibold mb-2">{t("benefit3Title")}</h3>
             <p className="text-sm text-muted-foreground">{t("benefit3Desc")}</p>
           </div>
-        </div>
+          </StaggerItem>
+        </StaggerContainer>
 
         {/* Step 1: Select Amount */}
         {step === "select" && (
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Gift className="h-5 w-5 text-amber-600" />
+                <Gift className="h-5 w-5 text-primary" />
                 {t("selectAmount")}
               </CardTitle>
               <CardDescription>{t("selectAmountDesc")}</CardDescription>
@@ -135,8 +144,8 @@ export default function GiftCardsPage() {
                     className={cn(
                       "p-4 border rounded-lg text-center transition-all",
                       selectedAmount === amount.value && !isCustom
-                        ? "border-amber-600 bg-amber-50 ring-2 ring-amber-600"
-                        : "hover:border-amber-300 hover:bg-amber-50/50"
+                        ? "border-primary bg-primary/5 ring-2 ring-primary"
+                        : "hover:border-primary/40 hover:bg-primary/5/50"
                     )}
                   >
                     <p className="font-bold text-lg">{amount.label}</p>
@@ -177,19 +186,19 @@ export default function GiftCardsPage() {
 
               {/* Preview */}
               {finalAmount && finalAmount >= 5000 && (
-                <div className="bg-gradient-to-r from-amber-100 to-orange-100 rounded-lg p-6 text-center">
-                  <p className="text-sm text-amber-700 mb-2">{t("giftCardPreview")}</p>
-                  <p className="text-4xl font-bold text-amber-800">
+                <div className="bg-gradient-to-r from-primary/10 to-orange-100 rounded-lg p-6 text-center">
+                  <p className="text-sm text-primary mb-2">{t("giftCardPreview")}</p>
+                  <p className="text-4xl font-bold text-primary">
                     {formatPrice(finalAmount)}
                   </p>
-                  <p className="text-sm text-amber-600 mt-2">
+                  <p className="text-sm text-primary mt-2">
                     {t("validFor")}
                   </p>
                 </div>
               )}
 
               <Button
-                className="w-full bg-amber-600 hover:bg-amber-700"
+                className="w-full bg-primary hover:bg-primary/90"
                 size="lg"
                 onClick={() => setStep("details")}
                 disabled={!isStep1Valid}
@@ -205,16 +214,16 @@ export default function GiftCardsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Mail className="h-5 w-5 text-amber-600" />
+                <Mail className="h-5 w-5 text-primary" />
                 {t("recipientDetails")}
               </CardTitle>
               <CardDescription>{t("recipientDetailsDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Amount reminder */}
-              <div className="bg-amber-50 rounded-lg p-4 flex items-center justify-between">
-                <span className="text-amber-700">{t("selectedAmount")}:</span>
-                <span className="text-2xl font-bold text-amber-800">
+              <div className="bg-primary/5 rounded-lg p-4 flex items-center justify-between">
+                <span className="text-primary">{t("selectedAmount")}:</span>
+                <span className="text-2xl font-bold text-primary">
                   {formatPrice(finalAmount!)}
                 </span>
               </div>
@@ -299,7 +308,7 @@ export default function GiftCardsPage() {
                 </div>
                 <div className="flex justify-between text-lg font-bold">
                   <span>{t("total")}</span>
-                  <span className="text-amber-600">{formatPrice(finalAmount!)}</span>
+                  <span className="text-primary">{formatPrice(finalAmount!)}</span>
                 </div>
               </div>
 
@@ -312,7 +321,7 @@ export default function GiftCardsPage() {
                   {t("back")}
                 </Button>
                 <Button
-                  className="flex-1 bg-amber-600 hover:bg-amber-700"
+                  className="flex-1 bg-primary hover:bg-primary/90"
                   size="lg"
                   onClick={handleSubmit}
                   disabled={!isStep2Valid || isSubmitting}
@@ -347,12 +356,12 @@ export default function GiftCardsPage() {
                 <p className="text-muted-foreground">{t("successDesc")}</p>
               </div>
 
-              <div className="bg-gradient-to-r from-amber-100 to-orange-100 rounded-lg p-6 max-w-md mx-auto">
-                <p className="text-sm text-amber-700 mb-2">{t("giftCardCode")}</p>
-                <p className="text-3xl font-mono font-bold text-amber-800 tracking-wider">
+              <div className="bg-gradient-to-r from-primary/10 to-orange-100 rounded-lg p-6 max-w-md mx-auto">
+                <p className="text-sm text-primary mb-2">{t("giftCardCode")}</p>
+                <p className="text-3xl font-mono font-bold text-primary tracking-wider">
                   {giftCardCode}
                 </p>
-                <p className="text-2xl font-bold text-amber-700 mt-4">
+                <p className="text-2xl font-bold text-primary mt-4">
                   {formatPrice(finalAmount!)}
                 </p>
               </div>
@@ -372,7 +381,7 @@ export default function GiftCardsPage() {
                 </Button>
                 <Button
                   asChild
-                  className="bg-amber-600 hover:bg-amber-700"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   <Link href="/gift-cards">{t("buyAnother")}</Link>
                 </Button>
@@ -388,7 +397,7 @@ export default function GiftCardsPage() {
             <div className="grid md:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map((num) => (
                 <div key={num} className="text-center">
-                  <div className="w-10 h-10 bg-amber-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">
+                  <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">
                     {num}
                   </div>
                   <h3 className="font-semibold mb-1">{t(`step${num}Title`)}</h3>
@@ -401,6 +410,6 @@ export default function GiftCardsPage() {
           </div>
         )}
       </div>
-    </div>
+    </PageTransition>
   );
 }

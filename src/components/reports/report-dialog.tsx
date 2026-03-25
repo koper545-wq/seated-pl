@@ -246,8 +246,8 @@ export function ReportDialog({
               </div>
 
               {/* Warning about false reports */}
-              <div className="flex items-start gap-2 text-xs text-muted-foreground bg-amber-50 p-3 rounded-lg">
-                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
+              <div className="flex items-start gap-2 text-xs text-muted-foreground bg-primary/5 p-3 rounded-lg">
+                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
                 <span>{t("falseReportWarning")}</span>
               </div>
 

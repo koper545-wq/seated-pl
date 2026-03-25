@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { GoogleIcon, FacebookIcon } from "@/components/icons";
+import { PageTransition, ScaleIn } from "@/components/ui/motion";
 
 function LoginForm() {
   const router = useRouter();
@@ -151,7 +152,7 @@ function LoginForm() {
               <Label htmlFor="password">{t("login.password")}</Label>
               <Link
                 href="/forgot-password"
-                className="text-sm text-amber-600 hover:text-amber-700"
+                className="text-sm text-primary hover:text-primary"
               >
                 {t("login.forgotPassword")}
               </Link>
@@ -169,7 +170,7 @@ function LoginForm() {
 
           <Button
             type="submit"
-            className="w-full bg-amber-600 hover:bg-amber-700"
+            className="w-full bg-primary hover:bg-primary/90"
             disabled={isLoading || isOAuthLoading !== null}
           >
             {isLoading ? (
@@ -189,7 +190,7 @@ function LoginForm() {
           {t("login.noAccount")}{" "}
           <Link
             href="/register"
-            className="text-amber-600 hover:text-amber-700 font-medium"
+            className="text-primary hover:text-primary font-medium"
           >
             {t("login.register")}
           </Link>
@@ -225,8 +226,12 @@ function LoginFormSkeleton() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<LoginFormSkeleton />}>
-      <LoginForm />
-    </Suspense>
+    <PageTransition>
+      <Suspense fallback={<LoginFormSkeleton />}>
+        <ScaleIn>
+          <LoginForm />
+        </ScaleIn>
+      </Suspense>
+    </PageTransition>
   );
 }

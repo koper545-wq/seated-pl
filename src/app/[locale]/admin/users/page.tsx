@@ -38,8 +38,8 @@ export default function AdminUsersPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-stone-900">Użytkownicy</h1>
-        <p className="text-stone-500 mt-1">
+        <h1 className="text-3xl font-bold text-foreground">Użytkownicy</h1>
+        <p className="text-muted-foreground mt-1">
           Zarządzaj użytkownikami platformy
         </p>
       </div>
@@ -49,32 +49,32 @@ export default function AdminUsersPage() {
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-stone-900">
+              <p className="text-2xl font-bold text-foreground">
                 {roleCounts.all}
               </p>
-              <p className="text-sm text-stone-500">Wszyscy</p>
+              <p className="text-sm text-muted-foreground">Wszyscy</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-stone-50">
+        <Card className="bg-muted/50">
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-stone-700">
+              <p className="text-2xl font-bold text-muted-foreground">
                 {roleCounts.guest}
               </p>
-              <p className="text-sm text-stone-500">Goście</p>
+              <p className="text-sm text-muted-foreground">Goście</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-amber-50">
+        <Card className="bg-primary/5">
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-amber-700">
+              <p className="text-2xl font-bold text-primary">
                 {roleCounts.host}
               </p>
-              <p className="text-sm text-amber-600">Hosty</p>
+              <p className="text-sm text-primary">Hosty</p>
             </div>
           </CardContent>
         </Card>
@@ -123,47 +123,47 @@ export default function AdminUsersPage() {
           {filteredUsers.length === 0 ? (
             <Card className="p-8 text-center">
               <span className="text-4xl mb-2 block">🔍</span>
-              <p className="text-stone-500">
+              <p className="text-muted-foreground">
                 Brak użytkowników spełniających kryteria
               </p>
             </Card>
           ) : (
-            <div className="bg-white rounded-lg border border-stone-200 overflow-hidden">
+            <div className="bg-white rounded-lg border border overflow-hidden">
               <table className="w-full">
-                <thead className="bg-stone-50">
+                <thead className="bg-muted/50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Użytkownik
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Rola
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Statystyki
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Dołączył
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Akcje
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-stone-200">
+                <tbody className="divide-y divide-border">
                   {filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-stone-50">
+                    <tr key={user.id} className="hover:bg-muted/50">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div
                             className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
                               user.role === "host"
-                                ? "bg-amber-100"
+                                ? "bg-primary/10"
                                 : user.role === "admin"
                                 ? "bg-purple-100"
-                                : "bg-stone-100"
+                                : "bg-muted"
                             }`}
                           >
                             {user.avatar ||
@@ -174,10 +174,10 @@ export default function AdminUsersPage() {
                                 : "👤")}
                           </div>
                           <div>
-                            <p className="font-medium text-stone-900">
+                            <p className="font-medium text-foreground">
                               {user.firstName} {user.lastName}
                             </p>
-                            <p className="text-xs text-stone-500">
+                            <p className="text-xs text-muted-foreground">
                               {user.email}
                             </p>
                           </div>
@@ -215,7 +215,7 @@ export default function AdminUsersPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-stone-600">
+                        <div className="text-sm text-muted-foreground">
                           {user.role === "host" && user.eventsHosted && (
                             <p>🎉 {user.eventsHosted} wydarzeń</p>
                           )}
@@ -228,7 +228,7 @@ export default function AdminUsersPage() {
                             <p>🎫 {user.eventsAttended} wydarzeń</p>
                           )}
                           {user.role === "guest" && !user.eventsAttended && (
-                            <p className="text-stone-400">Brak aktywności</p>
+                            <p className="text-muted-foreground/70">Brak aktywności</p>
                           )}
                           {user.role === "admin" && (
                             <p className="text-purple-600">Administrator</p>
@@ -237,11 +237,11 @@ export default function AdminUsersPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <p className="text-sm text-stone-900">
+                          <p className="text-sm text-foreground">
                             {format(user.createdAt, "d MMM yyyy", { locale: pl })}
                           </p>
                           {user.lastLoginAt && (
-                            <p className="text-xs text-stone-500">
+                            <p className="text-xs text-muted-foreground">
                               Ostatnio:{" "}
                               {format(user.lastLoginAt, "d MMM", { locale: pl })}
                             </p>

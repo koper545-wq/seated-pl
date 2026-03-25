@@ -5,13 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { EventCard, QASection, HostCardWithFollow, EventActionButtons } from "@/components/events";
-import { BadgeDisplay } from "@/components/badges";
-import { ReviewsSection } from "@/components/reviews";
+import { EventCard, HostCardWithFollow, EventActionButtons } from "@/components/events";
+import {
+  EventPageTransition,
+  EventHeroFadeIn,
+  EventInfoFadeInUp,
+  EventSidebarSlideIn,
+} from "@/components/events/event-detail-animations";
 import { WaitlistDialog } from "@/components/waitlist";
-import { WhosGoingSection } from "@/components/whos-going";
-import { getReviewsByHostId, getQuestionsByEventId } from "@/lib/mock-data";
 import { getEventDetail, getPublishedEvents } from "@/lib/dal/events";
+import { db } from "@/lib/db";
 import {
   Calendar,
   Clock,
@@ -44,11 +47,38 @@ export default async function EventPage({ params }: EventPageProps) {
     .filter((e) => e.id !== event.id)
     .slice(0, 3);
 
-  // Get reviews for this host
-  const hostReviews = getReviewsByHostId(event.host.id);
+  // Get reviews for this event from database
+  const reviews = await db.review.findMany({
+    where: { eventId: event.id, isHostReview: false },
+    include: {
+      author: {
+        select: {
+          id: true,
+          guestProfile: { select: { firstName: true, lastName: true, avatarUrl: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 10,
+  });
 
-  // Get Q&A for this event
-  const eventQuestions = getQuestionsByEventId(event.id);
+  const hostReviews = reviews.map((r) => ({
+    id: r.id,
+    authorName: [r.author?.guestProfile?.firstName, r.author?.guestProfile?.lastName].filter(Boolean).join(" ") || "Anonim",
+    authorAvatar: r.author?.guestProfile?.avatarUrl || "",
+    overallRating: r.overallRating,
+    foodRating: r.foodRating,
+    ambianceRating: r.ambianceRating,
+    text: r.text || "",
+    date: r.createdAt,
+    eventTitle: event.title,
+    hostName: event.host.name,
+    photos: r.photos || [],
+    verifiedAttendee: r.verifiedAttendee,
+    helpfulCount: r.helpfulCount,
+    response: r.response || undefined,
+    respondedAt: r.respondedAt || undefined,
+  }));
 
   // Format duration
   const formatDuration = (minutes: number) => {
@@ -59,8 +89,10 @@ export default async function EventPage({ params }: EventPageProps) {
   };
 
   return (
+    <EventPageTransition>
     <div className="min-h-screen bg-background">
       {/* Hero image / gradient */}
+      <EventHeroFadeIn>
       <div
         className={`relative h-64 md:h-80 bg-gradient-to-br ${event.imageGradient}`}
       >
@@ -80,58 +112,66 @@ export default async function EventPage({ params }: EventPageProps) {
           </Badge>
         </div>
       </div>
+      </EventHeroFadeIn>
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Title and basic info */}
+            <EventInfoFadeInUp delay={0.1}>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold mb-4">
                 {event.title}
               </h1>
               <div className="flex flex-wrap gap-4 text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-amber-600" />
+                  <Calendar className="h-5 w-5 text-primary" />
                   <span>{event.dateFormatted}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-amber-600" />
+                  <Clock className="h-5 w-5 text-primary" />
                   <span>{formatDuration(event.duration)}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-amber-600" />
+                  <MapPin className="h-5 w-5 text-primary" />
                   <span>{event.location}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-amber-600" />
+                  <Users className="h-5 w-5 text-primary" />
                   <span>Max {event.capacity} osób</span>
                 </div>
               </div>
             </div>
+            </EventInfoFadeInUp>
 
             <Separator />
 
             {/* Description */}
+            <EventInfoFadeInUp delay={0.15}>
             <div>
               <h2 className="text-xl font-semibold mb-4">O wydarzeniu</h2>
               <p className="text-muted-foreground leading-relaxed">
                 {event.description}
               </p>
             </div>
+            </EventInfoFadeInUp>
 
             {/* Menu */}
+            <EventInfoFadeInUp delay={0.2}>
             <div>
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Utensils className="h-5 w-5 text-amber-600" />
+                <Utensils className="h-5 w-5 text-primary" />
                 Menu
               </h2>
               <p className="text-muted-foreground leading-relaxed">
                 {event.menuDescription}
               </p>
             </div>
+            </EventInfoFadeInUp>
 
             {/* Dietary options */}
+            <EventInfoFadeInUp delay={0.25}>
             <div>
               <h2 className="text-xl font-semibold mb-4">Opcje dietetyczne</h2>
               <div className="flex flex-wrap gap-2">
@@ -143,52 +183,73 @@ export default async function EventPage({ params }: EventPageProps) {
                 ))}
               </div>
             </div>
+            </EventInfoFadeInUp>
 
             {/* What to bring */}
+            <EventInfoFadeInUp delay={0.3}>
             <div>
               <h2 className="text-xl font-semibold mb-4">Co zabrać?</h2>
               <p className="text-muted-foreground">{event.whatToBring}</p>
             </div>
-
-            <Separator />
-
-            {/* Who's Going section */}
-            <WhosGoingSection eventId={event.id} />
+            </EventInfoFadeInUp>
 
             <Separator />
 
             {/* Host card with follow button */}
+            <EventInfoFadeInUp delay={0.35}>
             <div>
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <ChefHat className="h-5 w-5 text-amber-600" />
+                <ChefHat className="h-5 w-5 text-primary" />
                 Twój host
               </h2>
               <HostCardWithFollow host={event.host} />
             </div>
+            </EventInfoFadeInUp>
 
-            <Separator />
+            {hostReviews.length > 0 && (
+              <>
+                <Separator />
 
-            {/* Q&A section */}
-            <QASection
-              questions={eventQuestions}
-              eventId={event.id}
-              hostName={event.host.name}
-            />
-
-            <Separator />
-
-            {/* Reviews section */}
-            <ReviewsSection
-              reviews={hostReviews}
-              eventId={event.id}
-              eventTitle={event.title}
-              hostName={event.host.name}
-              canReview={true}
-            />
+                {/* Reviews */}
+                <EventInfoFadeInUp>
+                <div>
+                  <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <Star className="h-5 w-5 text-primary" />
+                    Opinie ({hostReviews.length})
+                  </h2>
+                  <div className="space-y-4">
+                    {hostReviews.map((review) => (
+                      <div key={review.id} className="border rounded-lg p-4">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-medium">
+                            {review.authorName.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="font-medium text-sm">{review.authorName}</p>
+                            <div className="flex items-center gap-1">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-3 w-3 ${i < review.overallRating ? "text-primary/80 fill-primary/80" : "text-gray-300"}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        {review.text && (
+                          <p className="text-sm text-muted-foreground">{review.text}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                </EventInfoFadeInUp>
+              </>
+            )}
           </div>
 
           {/* Sidebar - booking card */}
-          <div className="lg:col-span-1">
+          <EventSidebarSlideIn className="lg:col-span-1">
             <div className="sticky top-24">
               <Card className="shadow-lg">
                 <CardContent className="p-6">
@@ -232,7 +293,7 @@ export default async function EventPage({ params }: EventPageProps) {
                     </Button>
                   ) : (
                     <Button
-                      className="w-full bg-amber-600 hover:bg-amber-700"
+                      className="w-full bg-primary hover:bg-primary/90"
                       size="lg"
                       asChild
                     >
@@ -283,7 +344,7 @@ export default async function EventPage({ params }: EventPageProps) {
                 </CardContent>
               </Card>
             </div>
-          </div>
+          </EventSidebarSlideIn>
         </div>
 
         {/* Similar events */}
@@ -309,6 +370,7 @@ export default async function EventPage({ params }: EventPageProps) {
         )}
       </div>
     </div>
+    </EventPageTransition>
   );
 }
 

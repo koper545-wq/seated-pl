@@ -61,7 +61,7 @@ export function FAQSection() {
                     .filter((item) => item.category === category.value)
                     .map((item, index) => (
                       <AccordionItem key={item.id} value={item.id}>
-                        <AccordionTrigger className="text-left hover:no-underline hover:text-amber-600">
+                        <AccordionTrigger className="text-left hover:no-underline hover:text-primary">
                           {item.question}
                         </AccordionTrigger>
                         <AccordionContent className="text-muted-foreground">
@@ -79,7 +79,7 @@ export function FAQSection() {
               Nie znalazłeś odpowiedzi na swoje pytanie?{" "}
               <a
                 href="mailto:kontakt@seated.pl"
-                className="text-amber-600 hover:text-amber-700 font-medium"
+                className="text-primary hover:text-primary font-medium"
               >
                 Napisz do nas
               </a>

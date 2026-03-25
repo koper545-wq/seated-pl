@@ -44,7 +44,7 @@ export function HostCardWithFollow({ host }: HostCardWithFollowProps) {
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
           <Avatar className="h-16 w-16">
-            <AvatarFallback className="bg-amber-100 text-amber-700 text-xl">
+            <AvatarFallback className="bg-primary/10 text-primary text-xl">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -69,7 +69,7 @@ export function HostCardWithFollow({ host }: HostCardWithFollowProps) {
             </div>
             <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2 flex-wrap">
               <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                <Star className="h-4 w-4 fill-primary/70 text-primary/70" />
                 <span className="font-medium text-foreground">{host.rating}</span>
                 <span>({host.reviewCount} opinii)</span>
               </div>

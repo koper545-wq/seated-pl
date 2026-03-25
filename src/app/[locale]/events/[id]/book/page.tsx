@@ -68,22 +68,22 @@ export default async function BookingPage({ params, searchParams }: BookingPageP
         <div className="max-w-xl mx-auto">
           {/* Waitlist booking banner */}
           {isWaitlistBooking && timeRemaining && (
-            <div className="bg-gradient-to-r from-amber-50 to-green-50 border border-amber-200 rounded-xl p-4 mb-6">
+            <div className="bg-gradient-to-r from-primary/5 to-green-50 border border-primary/20 rounded-xl p-4 mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
-                  <Clock className="h-5 w-5 text-amber-600" />
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+                  <Clock className="h-5 w-5 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-semibold text-amber-800">
+                  <p className="font-semibold text-primary">
                     Miejsce zarezerwowane dla Ciebie!
                   </p>
-                  <p className="text-sm text-amber-700">
+                  <p className="text-sm text-primary">
                     Masz jeszcze <strong>{timeRemaining.formatted}</strong> na dokończenie rezerwacji
                   </p>
                 </div>
               </div>
               {waitlistEntry && (
-                <p className="text-xs text-amber-600 mt-2 ml-13">
+                <p className="text-xs text-primary mt-2 ml-13">
                   Rezerwacja dla: {waitlistEntry.ticketsWanted}{" "}
                   {waitlistEntry.ticketsWanted === 1 ? "osoby" : "osób"}
                 </p>

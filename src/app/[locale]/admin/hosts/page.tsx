@@ -43,8 +43,8 @@ export default function AdminHostsPage() {
     <div className="max-w-7xl mx-auto">
       <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-stone-900">Aplikacje Hostów</h1>
-          <p className="text-stone-500 mt-1">
+          <h1 className="text-3xl font-bold text-foreground">Aplikacje Hostów</h1>
+          <p className="text-muted-foreground mt-1">
             Zarządzaj aplikacjami na hostów platformy
           </p>
         </div>
@@ -149,7 +149,7 @@ export default function AdminHostsPage() {
           {filteredApplications.length === 0 ? (
             <Card className="p-8 text-center">
               <span className="text-4xl mb-2 block">🔍</span>
-              <p className="text-stone-500">Brak aplikacji spełniających kryteria</p>
+              <p className="text-muted-foreground">Brak aplikacji spełniających kryteria</p>
             </Card>
           ) : (
             <div className="space-y-4">
@@ -161,15 +161,15 @@ export default function AdminHostsPage() {
                       <div className="flex-1 p-6">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center text-2xl">
+                            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-2xl">
                               👤
                             </div>
                             <div>
-                              <h3 className="font-semibold text-lg text-stone-900">
+                              <h3 className="font-semibold text-lg text-foreground">
                                 {app.firstName} {app.lastName}
                               </h3>
-                              <p className="text-sm text-stone-500">{app.email}</p>
-                              <p className="text-sm text-stone-500">{app.phone}</p>
+                              <p className="text-sm text-muted-foreground">{app.email}</p>
+                              <p className="text-sm text-muted-foreground">{app.phone}</p>
                             </div>
                           </div>
                           <span
@@ -183,18 +183,18 @@ export default function AdminHostsPage() {
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                           <div>
-                            <p className="text-xs text-stone-400 uppercase tracking-wide">
+                            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                               Lokalizacja
                             </p>
-                            <p className="text-sm text-stone-700">
+                            <p className="text-sm text-muted-foreground">
                               {app.neighborhood}, {app.city}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-stone-400 uppercase tracking-wide">
+                            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                               Doświadczenie
                             </p>
-                            <p className="text-sm text-stone-700">
+                            <p className="text-sm text-muted-foreground">
                               {app.experience === "none" && "Brak"}
                               {app.experience === "some" && "Podstawowe"}
                               {app.experience === "experienced" && "Doświadczony"}
@@ -203,14 +203,14 @@ export default function AdminHostsPage() {
                         </div>
 
                         <div className="mb-4">
-                          <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                          <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                             Typ kuchni
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {app.cuisineTypes.map((cuisine) => (
                               <span
                                 key={cuisine}
-                                className="px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs"
+                                className="px-2 py-1 bg-primary/5 text-primary rounded-full text-xs"
                               >
                                 {cuisine}
                               </span>
@@ -218,7 +218,7 @@ export default function AdminHostsPage() {
                           </div>
                         </div>
 
-                        <p className="text-sm text-stone-600 line-clamp-2">
+                        <p className="text-sm text-muted-foreground line-clamp-2">
                           {app.bio}
                         </p>
 
@@ -236,25 +236,25 @@ export default function AdminHostsPage() {
                         )}
 
                         {app.adminNotes && (
-                          <div className="mt-4 p-3 bg-stone-50 rounded-lg">
-                            <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                          <div className="mt-4 p-3 bg-muted/50 rounded-lg">
+                            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                               Notatka admina
                             </p>
-                            <p className="text-sm text-stone-600">{app.adminNotes}</p>
+                            <p className="text-sm text-muted-foreground">{app.adminNotes}</p>
                           </div>
                         )}
                       </div>
 
                       {/* Right side - Actions */}
-                      <div className="w-full md:w-48 bg-stone-50 p-6 flex flex-col justify-between">
+                      <div className="w-full md:w-48 bg-muted/50 p-6 flex flex-col justify-between">
                         <div>
-                          <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                          <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                             Data aplikacji
                           </p>
-                          <p className="text-sm text-stone-700">
+                          <p className="text-sm text-muted-foreground">
                             {format(app.submittedAt, "d MMMM yyyy", { locale: pl })}
                           </p>
-                          <p className="text-xs text-stone-500">
+                          <p className="text-xs text-muted-foreground">
                             {format(app.submittedAt, "HH:mm")}
                           </p>
                         </div>

@@ -53,10 +53,10 @@ export default function CheckoutPage() {
   // Loading state
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Ładowanie...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Ładowanie...</p>
         </div>
       </div>
     );
@@ -65,7 +65,7 @@ export default function CheckoutPage() {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-stone-50 py-12">
+      <div className="min-h-screen bg-muted/50 py-12">
         <div className="max-w-lg mx-auto px-4">
           <Card>
             <CardContent className="p-8 text-center">
@@ -90,17 +90,17 @@ export default function CheckoutPage() {
   // No booking yet (still loading)
   if (!booking || !event) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Przygotowywanie płatności...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Przygotowywanie płatności...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 py-8">
+    <div className="min-h-screen bg-muted/50 py-8">
       <div className="max-w-lg mx-auto px-4">
         {/* Back button */}
         <Link
@@ -112,7 +112,7 @@ export default function CheckoutPage() {
         </Link>
 
         {/* Page title */}
-        <h1 className="text-2xl font-bold text-stone-900 mb-6">
+        <h1 className="text-2xl font-bold text-foreground mb-6">
           Dokończ płatność
         </h1>
 

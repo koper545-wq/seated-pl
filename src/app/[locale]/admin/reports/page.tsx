@@ -141,11 +141,11 @@ export default function AdminReportsPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-stone-900 flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
           <Shield className="h-8 w-8 text-red-600" />
           {t("title")}
         </h1>
-        <p className="text-stone-500 mt-1">{t("subtitle")}</p>
+        <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
 
       {/* Stats */}
@@ -358,7 +358,7 @@ export default function AdminReportsPage() {
                         Dotyczy wydarzenia:{" "}
                         <Link
                           href={`/events/${selectedReport.eventId}`}
-                          className="text-amber-600 hover:underline inline-flex items-center gap-1"
+                          className="text-primary hover:underline inline-flex items-center gap-1"
                         >
                           {selectedReport.eventTitle}
                           <ExternalLink className="h-3 w-3" />
@@ -398,7 +398,7 @@ export default function AdminReportsPage() {
                                 href={url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-amber-600 hover:underline flex items-center gap-1"
+                                className="text-sm text-primary hover:underline flex items-center gap-1"
                               >
                                 <ExternalLink className="h-3 w-3" />
                                 {url}

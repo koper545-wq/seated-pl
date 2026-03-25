@@ -52,7 +52,7 @@ export function HomieCard({
               {avatar ? (
                 <AvatarImage src={avatar} alt={name} />
               ) : null}
-              <AvatarFallback className={isHost ? "bg-amber-100 text-amber-700" : "bg-stone-100 text-stone-700"}>
+              <AvatarFallback className={isHost ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}>
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -62,12 +62,12 @@ export function HomieCard({
             <div className="flex items-center gap-2 flex-wrap">
               <Link
                 href={isHost ? `/hosts/${id}` : `/profile/${id}`}
-                className="font-semibold hover:text-amber-600 transition-colors truncate"
+                className="font-semibold hover:text-primary transition-colors truncate"
               >
                 {name}
               </Link>
               {isHost && (
-                <Badge variant="secondary" className="bg-amber-100 text-amber-700 text-xs">
+                <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
                   <ChefHat className="h-3 w-3 mr-1" />
                   Host
                 </Badge>
@@ -85,7 +85,7 @@ export function HomieCard({
               <span>{followersCount} obserwujących</span>
               {isHost && rating && (
                 <span className="flex items-center gap-1">
-                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                  <Star className="h-3 w-3 fill-primary/70 text-primary/70" />
                   {rating}
                 </span>
               )}

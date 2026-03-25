@@ -60,13 +60,13 @@ export function RatingStars({
 
         return (
           <div key={i} className="relative">
-            <Star className={cn(sizeClasses[size], "text-stone-200")} />
+            <Star className={cn(sizeClasses[size], "text-muted-foreground/30")} />
             <div
               className="absolute inset-0 overflow-hidden"
               style={{ width: `${fillPercentage}%` }}
             >
               <Star
-                className={cn(sizeClasses[size], "text-amber-400 fill-amber-400")}
+                className={cn(sizeClasses[size], "text-primary/70 fill-primary/70")}
               />
             </div>
           </div>
@@ -96,7 +96,7 @@ export function RatingBar({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <span className="text-sm w-4 text-muted-foreground">{stars}</span>
-      <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
+      <Star className="h-3 w-3 text-primary/70 fill-primary/70" />
       <div className="flex-1">
         <Progress value={percentage} className="h-2" />
       </div>
@@ -130,7 +130,7 @@ export function CategoryRating({
         </div>
         <div className="flex items-center gap-1">
           <span className="text-sm font-semibold">{value.toFixed(1)}</span>
-          <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
+          <Star className="h-3 w-3 text-primary/70 fill-primary/70" />
         </div>
       </div>
       {showBar && (
@@ -201,7 +201,7 @@ export function RatingBreakdown({
     <Card className={className}>
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
+          <Star className="h-5 w-5 text-primary/70 fill-primary/70" />
           Oceny i opinie
         </CardTitle>
       </CardHeader>
@@ -209,7 +209,7 @@ export function RatingBreakdown({
         {/* Overall rating */}
         <div className="flex items-center gap-6">
           <div className="text-center">
-            <div className="text-5xl font-bold text-stone-900">
+            <div className="text-5xl font-bold text-foreground">
               {data.overall.toFixed(1)}
             </div>
             <RatingStars rating={data.overall} size="lg" className="justify-center mt-1" />

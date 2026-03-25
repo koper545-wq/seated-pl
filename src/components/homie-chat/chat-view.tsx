@@ -83,7 +83,7 @@ export function ChatView({
           <div key={groupIndex}>
             {/* Date separator */}
             <div className="flex items-center justify-center my-4">
-              <span className="text-xs text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
+              <span className="text-xs text-muted-foreground bg-muted px-3 py-1 rounded-full">
                 {group.date}
               </span>
             </div>
@@ -135,7 +135,7 @@ export function ChatView({
           <Button
             onClick={handleSend}
             disabled={!newMessage.trim()}
-            className="bg-amber-500 hover:bg-amber-600 flex-shrink-0"
+            className="bg-primary/50 hover:bg-primary flex-shrink-0"
           >
             <Send className="h-5 w-5" />
           </Button>

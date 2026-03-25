@@ -60,7 +60,7 @@ function MessageBubble({ message, isOwn, showAvatar }: MessageBubbleProps) {
       {!isOwn && showAvatar ? (
         <Avatar className="h-8 w-8 mt-1">
           <AvatarImage src={message.senderAvatar} />
-          <AvatarFallback className="bg-stone-100 text-stone-700 text-xs">
+          <AvatarFallback className="bg-muted text-muted-foreground text-xs">
             {message.senderName
               .split(" ")
               .map((n) => n[0])
@@ -75,7 +75,7 @@ function MessageBubble({ message, isOwn, showAvatar }: MessageBubbleProps) {
         className={cn(
           "max-w-[75%] rounded-2xl px-4 py-2",
           isOwn
-            ? "bg-amber-600 text-white rounded-br-md"
+            ? "bg-primary text-white rounded-br-md"
             : "bg-muted rounded-bl-md"
         )}
       >
@@ -83,7 +83,7 @@ function MessageBubble({ message, isOwn, showAvatar }: MessageBubbleProps) {
         <p
           className={cn(
             "text-[10px] mt-1",
-            isOwn ? "text-amber-100" : "text-muted-foreground"
+            isOwn ? "text-primary-foreground/80" : "text-muted-foreground"
           )}
         >
           {formatMessageTime(message.createdAt)}
@@ -142,8 +142,8 @@ export default function HostConversationPage({
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Ładowanie...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Ładowanie...</p>
         </div>
       </div>
     );
@@ -190,7 +190,7 @@ export default function HostConversationPage({
 
             <Avatar className="h-10 w-10">
               <AvatarImage src={conversation.guestAvatar} />
-              <AvatarFallback className="bg-stone-100 text-stone-700">
+              <AvatarFallback className="bg-muted text-muted-foreground">
                 {conversation.guestName
                   .split(" ")
                   .map((n) => n[0])
@@ -277,7 +277,7 @@ export default function HostConversationPage({
             <Button
               type="submit"
               size="icon"
-              className="bg-amber-600 hover:bg-amber-700"
+              className="bg-primary hover:bg-primary/90"
               disabled={!newMessage.trim()}
             >
               <Send className="h-4 w-4" />

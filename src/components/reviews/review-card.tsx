@@ -42,7 +42,7 @@ export function ReviewCard({ review, showEventTitle = false }: ReviewCardProps) 
             className={cn(
               "h-4 w-4",
               star <= rating
-                ? "fill-amber-400 text-amber-400"
+                ? "fill-primary/70 text-primary/70"
                 : "text-gray-200"
             )}
           />
@@ -61,7 +61,7 @@ export function ReviewCard({ review, showEventTitle = false }: ReviewCardProps) 
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10">
-              <AvatarFallback className="bg-amber-100 text-amber-700">
+              <AvatarFallback className="bg-primary/10 text-primary">
                 {review.authorName
                   .split(" ")
                   .map((n) => n[0])
@@ -109,7 +109,7 @@ export function ReviewCard({ review, showEventTitle = false }: ReviewCardProps) 
             variant="ghost"
             size="sm"
             onClick={() => setExpanded(!expanded)}
-            className="text-amber-600 hover:text-amber-700 p-0 h-auto mb-4"
+            className="text-primary hover:text-primary p-0 h-auto mb-4"
           >
             {expanded ? (
               <>
@@ -130,14 +130,14 @@ export function ReviewCard({ review, showEventTitle = false }: ReviewCardProps) 
           <div className="text-center">
             <p className="text-xs text-muted-foreground">Jedzenie</p>
             <div className="flex items-center justify-center gap-1 mt-1">
-              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              <Star className="h-3 w-3 fill-primary/70 text-primary/70" />
               <span className="font-semibold text-sm">{review.foodRating}</span>
             </div>
           </div>
           <div className="text-center">
             <p className="text-xs text-muted-foreground">Komunikacja</p>
             <div className="flex items-center justify-center gap-1 mt-1">
-              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              <Star className="h-3 w-3 fill-primary/70 text-primary/70" />
               <span className="font-semibold text-sm">
                 {review.communicationRating}
               </span>
@@ -146,14 +146,14 @@ export function ReviewCard({ review, showEventTitle = false }: ReviewCardProps) 
           <div className="text-center">
             <p className="text-xs text-muted-foreground">Wartość</p>
             <div className="flex items-center justify-center gap-1 mt-1">
-              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              <Star className="h-3 w-3 fill-primary/70 text-primary/70" />
               <span className="font-semibold text-sm">{review.valueRating}</span>
             </div>
           </div>
           <div className="text-center">
             <p className="text-xs text-muted-foreground">Atmosfera</p>
             <div className="flex items-center justify-center gap-1 mt-1">
-              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              <Star className="h-3 w-3 fill-primary/70 text-primary/70" />
               <span className="font-semibold text-sm">
                 {review.ambianceRating}
               </span>
@@ -163,9 +163,9 @@ export function ReviewCard({ review, showEventTitle = false }: ReviewCardProps) 
 
         {/* Host response */}
         {review.response && (
-          <div className="bg-amber-50 border border-amber-100 rounded-lg p-4 mb-4">
+          <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mb-4">
             <div className="flex items-center gap-2 mb-2">
-              <MessageCircle className="h-4 w-4 text-amber-600" />
+              <MessageCircle className="h-4 w-4 text-primary" />
               <span className="font-semibold text-sm">Odpowiedź hosta</span>
               {review.respondedAt && (
                 <span className="text-xs text-muted-foreground">
@@ -184,7 +184,7 @@ export function ReviewCard({ review, showEventTitle = false }: ReviewCardProps) 
             size="sm"
             className={cn(
               "text-muted-foreground hover:text-foreground",
-              helpful && "text-amber-600"
+              helpful && "text-primary"
             )}
             onClick={() => setHelpful(!helpful)}
           >

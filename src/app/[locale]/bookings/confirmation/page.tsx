@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getEventById } from "@/lib/mock-data";
 import {
   CheckCircle,
   Calendar,
@@ -13,23 +12,67 @@ import {
   Mail,
   Home,
   CalendarPlus,
+  Loader2,
 } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
+
+interface BookingData {
+  id: string;
+  ticketCount: number;
+  totalPrice: number;
+  status: string;
+  event: {
+    title: string;
+    date: string;
+    startTime: string;
+    duration: number;
+    locationPublic: string;
+    host: {
+      businessName: string;
+    };
+  };
+}
 
 function ConfirmationContent() {
   const searchParams = useSearchParams();
-  const eventId = searchParams.get("eventId");
-  const tickets = searchParams.get("tickets") || "1";
+  const bookingId = searchParams.get("bookingId");
+  const [booking, setBooking] = useState<BookingData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const event = eventId ? getEventById(eventId) : null;
+  useEffect(() => {
+    if (!bookingId) {
+      setLoading(false);
+      return;
+    }
 
-  if (!event) {
+    fetch(`/api/bookings/${bookingId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Nie udało się pobrać rezerwacji");
+        return res.json();
+      })
+      .then((data) => setBooking(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [bookingId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!booking || error) {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <Card className="max-w-md mx-auto">
           <CardContent className="p-8 text-center">
             <p className="text-muted-foreground">
-              Nie znaleziono szczegółów rezerwacji.
+              {error || "Nie znaleziono szczegółów rezerwacji."}
             </p>
             <Button asChild className="mt-4">
               <Link href="/events">Przeglądaj wydarzenia</Link>
@@ -39,6 +82,8 @@ function ConfirmationContent() {
       </div>
     );
   }
+
+  const eventDate = new Date(booking.event.date);
 
   return (
     <div className="min-h-screen bg-muted/30 py-12">
@@ -58,31 +103,49 @@ function ConfirmationContent() {
           {/* Booking details */}
           <Card className="mb-6">
             <CardContent className="p-6">
-              <h2 className="font-semibold text-lg mb-4">{event.title}</h2>
+              <h2 className="font-semibold text-lg mb-4">
+                {booking.event.title}
+              </h2>
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 text-sm">
-                  <Calendar className="h-4 w-4 text-amber-600" />
-                  <span>{event.dateFormatted}</span>
+                  <Calendar className="h-4 w-4 text-primary" />
+                  <span>
+                    {format(eventDate, "d MMMM yyyy (EEEE)", { locale: pl })}
+                  </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <Clock className="h-4 w-4 text-amber-600" />
-                  <span>Czas trwania: {Math.floor(event.duration / 60)}h</span>
+                  <Clock className="h-4 w-4 text-primary" />
+                  <span>
+                    {booking.event.startTime} &middot;{" "}
+                    {Math.floor(booking.event.duration / 60)}h
+                    {booking.event.duration % 60 > 0
+                      ? ` ${booking.event.duration % 60}min`
+                      : ""}
+                  </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <MapPin className="h-4 w-4 text-amber-600" />
-                  <span>{event.location}</span>
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <span>{booking.event.locationPublic}</span>
                 </div>
               </div>
 
               <div className="bg-muted/50 rounded-lg p-4">
                 <div className="flex justify-between text-sm mb-2">
                   <span className="text-muted-foreground">Liczba miejsc:</span>
-                  <span className="font-medium">{tickets}</span>
+                  <span className="font-medium">{booking.ticketCount}</span>
+                </div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-muted-foreground">Host:</span>
+                  <span className="font-medium">
+                    {booking.event.host.businessName}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Host:</span>
-                  <span className="font-medium">{event.host.name}</span>
+                  <span className="text-muted-foreground">Kwota:</span>
+                  <span className="font-medium">
+                    {(booking.totalPrice / 100).toFixed(2)} zł
+                  </span>
                 </div>
               </div>
             </CardContent>
@@ -94,7 +157,7 @@ function ConfirmationContent() {
               <h3 className="font-semibold mb-4">Co dalej?</h3>
               <div className="space-y-4">
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 text-sm font-semibold">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 text-sm font-semibold">
                     1
                   </div>
                   <div>
@@ -147,7 +210,7 @@ function ConfirmationContent() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild className="flex-1 bg-amber-600 hover:bg-amber-700">
+            <Button asChild className="flex-1 bg-primary hover:bg-primary/90">
               <Link href="/dashboard/bookings">
                 <CalendarPlus className="h-4 w-4 mr-2" />
                 Moje rezerwacje
@@ -171,7 +234,7 @@ export default function ConfirmationPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-muted/30 flex items-center justify-center">
-          <div className="animate-spin text-4xl">⏳</div>
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       }
     >

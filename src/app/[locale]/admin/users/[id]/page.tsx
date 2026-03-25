@@ -49,10 +49,10 @@ export default function AdminUserDetailPage({
       <div className="max-w-7xl mx-auto">
         <Card className="p-8 text-center">
           <span className="text-6xl mb-4 block">🔍</span>
-          <h1 className="text-xl font-bold text-stone-900 mb-2">
+          <h1 className="text-xl font-bold text-foreground mb-2">
             Nie znaleziono użytkownika
           </h1>
-          <p className="text-stone-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             Użytkownik o podanym ID nie istnieje
           </p>
           <Link href="/admin/users">
@@ -102,10 +102,10 @@ export default function AdminUserDetailPage({
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-stone-900">
+            <h1 className="text-2xl font-bold text-foreground">
               {user.firstName} {user.lastName}
             </h1>
-            <p className="text-stone-500">{user.email}</p>
+            <p className="text-muted-foreground">{user.email}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -139,10 +139,10 @@ export default function AdminUserDetailPage({
                 <div
                   className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl ${
                     user.role === "host"
-                      ? "bg-amber-100"
+                      ? "bg-primary/10"
                       : user.role === "admin"
                       ? "bg-purple-100"
-                      : "bg-stone-100"
+                      : "bg-muted"
                   }`}
                 >
                   {user.avatar ||
@@ -154,28 +154,28 @@ export default function AdminUserDetailPage({
                 </div>
                 <div className="flex-1 grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-stone-400 uppercase tracking-wide">
+                    <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                       Imię
                     </p>
-                    <p className="text-stone-900">{user.firstName}</p>
+                    <p className="text-foreground">{user.firstName}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-stone-400 uppercase tracking-wide">
+                    <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                       Nazwisko
                     </p>
-                    <p className="text-stone-900">{user.lastName}</p>
+                    <p className="text-foreground">{user.lastName}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-stone-400 uppercase tracking-wide">
+                    <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                       Email
                     </p>
-                    <p className="text-stone-900">{user.email}</p>
+                    <p className="text-foreground">{user.email}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-stone-400 uppercase tracking-wide">
+                    <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                       Miasto
                     </p>
-                    <p className="text-stone-900">{user.city}</p>
+                    <p className="text-foreground">{user.city}</p>
                   </div>
                 </div>
               </div>
@@ -191,19 +191,19 @@ export default function AdminUserDetailPage({
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center p-4 bg-stone-50 rounded-lg">
-                  <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                <div className="text-center p-4 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                     Dołączył
                   </p>
-                  <p className="font-medium text-stone-900">
+                  <p className="font-medium text-foreground">
                     {format(user.createdAt, "d MMM yyyy", { locale: pl })}
                   </p>
                 </div>
-                <div className="text-center p-4 bg-stone-50 rounded-lg">
-                  <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                <div className="text-center p-4 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                     Ostatnio aktywny
                   </p>
-                  <p className="font-medium text-stone-900">
+                  <p className="font-medium text-foreground">
                     {user.lastLoginAt
                       ? format(user.lastLoginAt, "d MMM yyyy", { locale: pl })
                       : "Nigdy"}
@@ -211,11 +211,11 @@ export default function AdminUserDetailPage({
                 </div>
                 {user.role === "host" && (
                   <>
-                    <div className="text-center p-4 bg-amber-50 rounded-lg">
-                      <p className="text-xs text-amber-600 uppercase tracking-wide mb-1">
+                    <div className="text-center p-4 bg-primary/5 rounded-lg">
+                      <p className="text-xs text-primary uppercase tracking-wide mb-1">
                         Wydarzenia
                       </p>
-                      <p className="font-bold text-amber-700 text-xl">
+                      <p className="font-bold text-primary text-xl">
                         {user.eventsHosted || 0}
                       </p>
                     </div>
@@ -266,7 +266,7 @@ export default function AdminUserDetailPage({
                   {bookings.map((booking) => (
                     <div
                       key={booking.id}
-                      className="flex items-center justify-between p-4 bg-stone-50 rounded-lg"
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
                         <div
@@ -275,10 +275,10 @@ export default function AdminUserDetailPage({
                           🍴
                         </div>
                         <div>
-                          <p className="font-medium text-stone-900">
+                          <p className="font-medium text-foreground">
                             {booking.event.title}
                           </p>
-                          <p className="text-xs text-stone-500">
+                          <p className="text-xs text-muted-foreground">
                             {booking.event.dateFormatted}
                           </p>
                         </div>
@@ -288,7 +288,7 @@ export default function AdminUserDetailPage({
                           <p className="text-sm font-medium">
                             {(booking.totalPrice / 100).toLocaleString()} zł
                           </p>
-                          <p className="text-xs text-stone-500">
+                          <p className="text-xs text-muted-foreground">
                             {booking.ticketCount} bilet
                             {booking.ticketCount > 1 ? "y" : ""}
                           </p>
@@ -318,7 +318,7 @@ export default function AdminUserDetailPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-stone-500">Weryfikacja</span>
+                <span className="text-muted-foreground">Weryfikacja</span>
                 {user.isVerified ? (
                   <span className="text-green-600 font-medium">
                     ✓ Zweryfikowany
@@ -330,7 +330,7 @@ export default function AdminUserDetailPage({
                 )}
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-stone-500">Konto</span>
+                <span className="text-muted-foreground">Konto</span>
                 {user.isActive ? (
                   <span className="text-blue-600 font-medium">● Aktywne</span>
                 ) : (
@@ -361,7 +361,7 @@ export default function AdminUserDetailPage({
                 </SelectContent>
               </Select>
               {user.role === "admin" && (
-                <p className="text-xs text-stone-500 mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   Nie można zmienić roli admina
                 </p>
               )}

@@ -112,8 +112,8 @@ function StarRating({
             className={cn(
               "h-5 w-5",
               (hovered || value) >= star
-                ? "fill-amber-400 text-amber-400"
-                : "text-stone-300"
+                ? "fill-primary/60 text-primary/60"
+                : "text-muted-foreground/50"
             )}
           />
         </button>
@@ -217,10 +217,10 @@ export default function HostFeedbackPage() {
             <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-10 w-10 text-green-600" />
             </div>
-            <h1 className="text-2xl font-bold text-stone-900 mb-4">
+            <h1 className="text-2xl font-bold text-foreground mb-4">
               {t("submitted.hostTitle")}
             </h1>
-            <p className="text-stone-600 mb-8">
+            <p className="text-muted-foreground mb-8">
               {t("submitted.hostDescription")}
             </p>
 
@@ -234,7 +234,7 @@ export default function HostFeedbackPage() {
               <Button asChild variant="outline">
                 <Link href="/dashboard/host">{t("submitted.viewDashboard")}</Link>
               </Button>
-              <Button asChild className="bg-amber-600 hover:bg-amber-700">
+              <Button asChild className="bg-primary hover:bg-primary/90">
                 <Link href="/dashboard/host/events/new">
                   {t("submitted.createEvent")}
                 </Link>
@@ -304,8 +304,8 @@ export default function HostFeedbackPage() {
                   className={cn(
                     "flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors flex-shrink-0",
                     index === currentGuestIndex
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-stone-200 hover:bg-stone-50"
+                      ? "border-primary bg-primary/5"
+                      : "border hover:bg-muted/50"
                   )}
                 >
                   <Avatar className="h-8 w-8">
@@ -314,7 +314,7 @@ export default function HostFeedbackPage() {
                         "text-xs",
                         isComplete
                           ? "bg-green-100 text-green-700"
-                          : "bg-stone-100 text-stone-700"
+                          : "bg-muted text-muted-foreground"
                       )}
                     >
                       {isComplete ? "✓" : initials}
@@ -335,7 +335,7 @@ export default function HostFeedbackPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-12 w-12">
-                      <AvatarFallback className="bg-stone-100 text-stone-700">
+                      <AvatarFallback className="bg-muted text-muted-foreground">
                         {getInitials(currentGuest.name)}
                       </AvatarFallback>
                     </Avatar>
@@ -412,7 +412,7 @@ export default function HostFeedbackPage() {
                 {/* Concern tags */}
                 <div>
                   <Label className="mb-3 block flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-amber-600" />
+                    <AlertTriangle className="h-4 w-4 text-primary" />
                     {t("host.tags.concerns")}
                   </Label>
                   <div className="flex flex-wrap gap-2">
@@ -427,8 +427,8 @@ export default function HostFeedbackPage() {
                         className={cn(
                           "cursor-pointer py-1.5",
                           currentFeedback.concernTags.includes(tag.id)
-                            ? "bg-amber-600 hover:bg-amber-700"
-                            : "hover:bg-amber-50 hover:border-amber-300"
+                            ? "bg-primary hover:bg-primary/90"
+                            : "hover:bg-primary/5 hover:border-primary/40"
                         )}
                         onClick={() => handleTagToggle(tag.id, "concern")}
                       >
@@ -472,7 +472,7 @@ export default function HostFeedbackPage() {
                     <Button
                       onClick={() => setCurrentGuestIndex(currentGuestIndex + 1)}
                       disabled={!isCurrentGuestComplete}
-                      className="bg-amber-600 hover:bg-amber-700"
+                      className="bg-primary hover:bg-primary/90"
                     >
                       {t("next")}
                       <ChevronRight className="h-4 w-4 ml-1" />
@@ -519,7 +519,7 @@ export default function HostFeedbackPage() {
               <Button
                 onClick={handleSubmit}
                 disabled={!allGuestsComplete || isSubmitting}
-                className="w-full bg-amber-600 hover:bg-amber-700"
+                className="w-full bg-primary hover:bg-primary/90"
               >
                 {isSubmitting ? (
                   <>

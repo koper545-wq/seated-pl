@@ -44,10 +44,10 @@ export function AttendeeAvatars({
                 <Avatar
                   className={`${sizeClasses[size]} border-2 border-white ring-2 ${
                     attendee.isHomie
-                      ? "ring-amber-400"
+                      ? "ring-primary/60"
                       : attendee.isMutualHomie
                       ? "ring-green-400"
-                      : "ring-stone-200"
+                      : "ring-border"
                   }`}
                 >
                   {attendee.userAvatar && (
@@ -56,8 +56,8 @@ export function AttendeeAvatars({
                   <AvatarFallback
                     className={`${
                       attendee.isHomie
-                        ? "bg-amber-100 text-amber-700"
-                        : "bg-stone-100 text-stone-700"
+                        ? "bg-primary/10 text-primary"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {initials}
@@ -67,7 +67,7 @@ export function AttendeeAvatars({
               <TooltipContent>
                 <p>{attendee.userName}</p>
                 {attendee.isHomie && (
-                  <p className="text-xs text-amber-600">Twój homie</p>
+                  <p className="text-xs text-primary">Twój homie</p>
                 )}
               </TooltipContent>
             </Tooltip>
@@ -76,9 +76,9 @@ export function AttendeeAvatars({
 
         {remaining > 0 && (
           <Avatar
-            className={`${sizeClasses[size]} border-2 border-white ring-2 ring-stone-200`}
+            className={`${sizeClasses[size]} border-2 border-white ring-2 ring-border`}
           >
-            <AvatarFallback className="bg-stone-200 text-stone-600">
+            <AvatarFallback className="bg-muted text-muted-foreground">
               +{remaining}
             </AvatarFallback>
           </Avatar>

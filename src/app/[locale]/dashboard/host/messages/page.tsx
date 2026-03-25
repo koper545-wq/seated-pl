@@ -55,7 +55,7 @@ function ConversationItem({
     >
       <Avatar className="h-12 w-12">
         <AvatarImage src={conversation.guestAvatar} />
-        <AvatarFallback className="bg-stone-100 text-stone-700">
+        <AvatarFallback className="bg-muted text-muted-foreground">
           {conversation.guestName
             .split(" ")
             .map((n) => n[0])
@@ -74,7 +74,7 @@ function ConversationItem({
         </div>
 
         {conversation.eventTitle && (
-          <div className="flex items-center gap-1 text-xs text-amber-600 mb-1">
+          <div className="flex items-center gap-1 text-xs text-primary mb-1">
             <Calendar className="h-3 w-3" />
             <span className="truncate">{conversation.eventTitle}</span>
           </div>
@@ -89,7 +89,7 @@ function ConversationItem({
 
       <div className="flex items-center gap-2">
         {conversation.unreadCount > 0 && (
-          <Badge className="bg-amber-600 text-white rounded-full h-5 min-w-5 flex items-center justify-center text-xs">
+          <Badge className="bg-primary text-white rounded-full h-5 min-w-5 flex items-center justify-center text-xs">
             {conversation.unreadCount}
           </Badge>
         )}
@@ -113,8 +113,8 @@ export default function HostMessagesPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Ładowanie...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Ładowanie...</p>
         </div>
       </div>
     );

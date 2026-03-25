@@ -32,7 +32,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link href="/" className="text-2xl font-bold text-amber-600">
+            <Link href="/" className="text-2xl font-bold text-primary">
               Seated
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">

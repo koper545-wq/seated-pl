@@ -55,7 +55,7 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
-import { mockEvents } from "@/lib/mock-data";
+import { Loader2 } from "lucide-react";
 
 const eventTypes = [
   { value: "supper-club", label: "Supper Club", icon: "🍽️" },
@@ -125,27 +125,36 @@ export default function EditEventPage() {
   const [whatToBring, setWhatToBring] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
 
-  // Load event data
+  // Load event data from API
   useEffect(() => {
-    const event = mockEvents.find((e) => e.id === eventId);
-    if (event) {
-      setTitle(event.title);
-      setEventType(event.typeSlug);
-      setSelectedTags(["Włoska"]); // mock
-      setDescription(event.description);
-      setEventDate(event.date);
-      setStartTime(event.startTime);
-      setDuration(event.duration);
-      setNeighborhood(event.locationSlug);
-      setFullAddress(event.fullAddress);
-      setCapacity(event.capacity);
-      setPrice(event.price);
-      setMenuDescription(event.menuDescription);
-      setSelectedDietary(event.dietaryOptions);
-      setWhatToBring(event.whatToBring);
-      setPhotos(["photo-1", "photo-2"]); // mock
-    }
-    setIsLoading(false);
+    fetch(`/api/events/${eventId}`)
+      .then((res) => res.ok ? res.json() : null)
+      .then((event) => {
+        if (event) {
+          setTitle(event.title);
+          const typeSlugMap: Record<string, string> = {
+            SUPPER_CLUB: "supper-club", CHEFS_TABLE: "chefs-table", POPUP: "popup",
+            COOKING_CLASS: "warsztaty", WINE_TASTING: "degustacje",
+            ACTIVE_FOOD: "active-food", FARM_EXPERIENCE: "farm", OTHER: "other",
+          };
+          setEventType(typeSlugMap[event.eventType] || "");
+          setSelectedTags(event.cuisineTags || []);
+          setDescription(event.description);
+          setEventDate(new Date(event.date));
+          setStartTime(event.startTime);
+          setDuration(event.duration);
+          setNeighborhood(event.locationPublic || "");
+          setFullAddress(event.locationFull || "");
+          setCapacity(event.capacity);
+          setPrice(event.price / 100); // grosze → PLN
+          setMenuDescription(event.menuDescription || "");
+          setSelectedDietary(event.dietaryOptions || []);
+          setWhatToBring(event.whatToBring || "");
+          setPhotos(event.images || []);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   }, [eventId]);
 
   // Track changes
@@ -179,15 +188,53 @@ export default function EditEventPage() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSaving(false);
-    setHasChanges(false);
-    router.push(`/dashboard/host?edited=${eventId}`);
+    try {
+      const typeEnumMap: Record<string, string> = {
+        "supper-club": "SUPPER_CLUB", "chefs-table": "CHEFS_TABLE", "popup": "POPUP",
+        "warsztaty": "COOKING_CLASS", "degustacje": "WINE_TASTING",
+        "active-food": "ACTIVE_FOOD", "farm": "FARM_EXPERIENCE", "other": "OTHER",
+      };
+      const res = await fetch(`/api/events/${eventId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          eventType: typeEnumMap[eventType] || "OTHER",
+          cuisineTags: selectedTags,
+          description,
+          date: eventDate?.toISOString(),
+          startTime,
+          duration,
+          locationPublic: neighborhood,
+          locationFull: fullAddress,
+          capacity,
+          price: Math.round(price * 100), // PLN → grosze
+          menuDescription,
+          dietaryOptions: selectedDietary,
+          whatToBring,
+          images: photos,
+        }),
+      });
+      if (!res.ok) throw new Error("Save failed");
+      setHasChanges(false);
+      router.push("/dashboard/host");
+    } catch (error) {
+      console.error("Save error:", error);
+      alert("Nie udało się zapisać zmian");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleDelete = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.push("/dashboard/host?deleted=true");
+    try {
+      const res = await fetch(`/api/events/${eventId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Delete failed");
+      router.push("/dashboard/host");
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Nie udało się usunąć wydarzenia");
+    }
   };
 
   if (isLoading) {
@@ -231,9 +278,9 @@ export default function EditEventPage() {
 
           {/* Unsaved changes warning */}
           {hasChanges && (
-            <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-center gap-3">
-              <AlertTriangle className="h-5 w-5 text-amber-600" />
-              <span className="text-sm text-amber-800">
+            <div className="mb-6 bg-primary/5 border border-primary/20 rounded-lg p-4 flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5 text-primary" />
+              <span className="text-sm text-primary">
                 Masz niezapisane zmiany
               </span>
             </div>
@@ -265,8 +312,8 @@ export default function EditEventPage() {
                         className={cn(
                           "border rounded-lg p-3 cursor-pointer transition-all text-center",
                           eventType === type.value
-                            ? "border-amber-600 bg-amber-50"
-                            : "hover:border-amber-300"
+                            ? "border-primary bg-primary/5"
+                            : "hover:border-primary/40"
                         )}
                         onClick={() => setEventType(type.value)}
                       >
@@ -287,8 +334,8 @@ export default function EditEventPage() {
                         className={cn(
                           "cursor-pointer",
                           selectedTags.includes(tag)
-                            ? "bg-amber-600 hover:bg-amber-700"
-                            : "hover:bg-amber-50"
+                            ? "bg-primary hover:bg-primary/90"
+                            : "hover:bg-primary/5"
                         )}
                         onClick={() => handleTagToggle(tag)}
                       >
@@ -549,7 +596,7 @@ export default function EditEventPage() {
                     <button
                       type="button"
                       onClick={simulatePhotoUpload}
-                      className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-amber-500 hover:bg-amber-50 transition-colors"
+                      className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-primary hover:bg-primary/5 transition-colors"
                     >
                       <Upload className="h-6 w-6 text-muted-foreground/50 mb-1" />
                       <span className="text-xs text-muted-foreground">Dodaj</span>
@@ -595,7 +642,7 @@ export default function EditEventPage() {
                 <Button
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="bg-amber-600 hover:bg-amber-700"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   {isSaving ? (
                     <>

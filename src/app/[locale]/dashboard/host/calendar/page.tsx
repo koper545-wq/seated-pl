@@ -135,7 +135,7 @@ function mapApiEventForCalendar(e: Record<string, unknown>): HostEvent {
     pendingBookings: (e.pendingBookings as number) || 0,
     confirmedGuests: (e.totalGuests as number) || 0,
     revenue: ((e.revenue as number) || 0) / 100,
-    imageGradient: "from-amber-400 to-orange-500",
+    imageGradient: "from-primary/70 to-orange-500",
     status: (statusMap[(e.status as string)] || "draft") as HostEvent["status"],
     description: (e.description as string) || "",
     menuDescription: (e.menuDescription as string) || "",
@@ -211,8 +211,8 @@ export default function HostCalendarPage() {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Ładowanie...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Ładowanie...</p>
         </div>
       </div>
     );
@@ -260,7 +260,7 @@ export default function HostCalendarPage() {
                 <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
               </div>
             </div>
-            <Button asChild className="bg-amber-600 hover:bg-amber-700">
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <Link href="/dashboard/host/events/new">
                 <Plus className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">{t("createEvent")}</span>
@@ -326,7 +326,7 @@ export default function HostCalendarPage() {
                       className={cn(
                         "min-h-[80px] md:min-h-[100px] p-1 border rounded-lg",
                         day ? "bg-background" : "bg-muted/30",
-                        isToday && "border-amber-600 border-2"
+                        isToday && "border-primary border-2"
                       )}
                     >
                       {day && (
@@ -334,7 +334,7 @@ export default function HostCalendarPage() {
                           <span
                             className={cn(
                               "inline-flex items-center justify-center w-6 h-6 text-sm rounded-full",
-                              isToday && "bg-amber-600 text-white font-bold"
+                              isToday && "bg-primary text-white font-bold"
                             )}
                           >
                             {day}
@@ -347,7 +347,7 @@ export default function HostCalendarPage() {
                                 className={cn(
                                   "block text-xs p-1 rounded truncate",
                                   event.status === "published"
-                                    ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
+                                    ? "bg-primary/10 text-primary hover:bg-primary/15"
                                     : event.status === "draft"
                                     ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                     : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
@@ -397,7 +397,7 @@ export default function HostCalendarPage() {
                 <CardContent className="p-8 text-center">
                   <CalendarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground">{t("noEventsThisMonth")}</p>
-                  <Button asChild className="mt-4 bg-amber-600 hover:bg-amber-700">
+                  <Button asChild className="mt-4 bg-primary hover:bg-primary/90">
                     <Link href="/dashboard/host/events/new">
                       <Plus className="h-4 w-4 mr-2" />
                       {t("createEvent")}

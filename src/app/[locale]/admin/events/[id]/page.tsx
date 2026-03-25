@@ -48,10 +48,10 @@ export default function AdminEventDetailPage({
       <div className="max-w-7xl mx-auto">
         <Card className="p-8 text-center">
           <span className="text-6xl mb-4 block">🔍</span>
-          <h1 className="text-xl font-bold text-stone-900 mb-2">
+          <h1 className="text-xl font-bold text-foreground mb-2">
             Nie znaleziono wydarzenia
           </h1>
-          <p className="text-stone-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             Wydarzenie o podanym ID nie istnieje
           </p>
           <Link href="/admin/events">
@@ -97,8 +97,8 @@ export default function AdminEventDetailPage({
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-stone-900">{event.title}</h1>
-            <p className="text-stone-500">ID: {event.id}</p>
+            <h1 className="text-2xl font-bold text-foreground">{event.title}</h1>
+            <p className="text-muted-foreground">ID: {event.id}</p>
           </div>
         </div>
         <span
@@ -123,55 +123,55 @@ export default function AdminEventDetailPage({
             <CardContent className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Typ
                   </p>
-                  <p className="text-stone-900 font-medium">{event.type}</p>
+                  <p className="text-foreground font-medium">{event.type}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Data i godzina
                   </p>
-                  <p className="text-stone-900">{event.dateFormatted}</p>
+                  <p className="text-foreground">{event.dateFormatted}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Czas trwania
                   </p>
-                  <p className="text-stone-900">{event.duration} min</p>
+                  <p className="text-foreground">{event.duration} min</p>
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Cena
                   </p>
-                  <p className="text-stone-900 font-medium">{event.price} zł</p>
+                  <p className="text-foreground font-medium">{event.price} zł</p>
                 </div>
               </div>
 
               <div className="mb-6">
-                <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                   Lokalizacja
                 </p>
-                <p className="text-stone-900">{event.location}</p>
-                <p className="text-sm text-stone-500">{event.fullAddress}</p>
+                <p className="text-foreground">{event.location}</p>
+                <p className="text-sm text-muted-foreground">{event.fullAddress}</p>
               </div>
 
               <div className="mb-6">
-                <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                   Opis
                 </p>
-                <p className="text-stone-700">{event.description}</p>
+                <p className="text-muted-foreground">{event.description}</p>
               </div>
 
               <div className="mb-6">
-                <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-1">
                   Menu
                 </p>
-                <p className="text-stone-700">{event.menuDescription}</p>
+                <p className="text-muted-foreground">{event.menuDescription}</p>
               </div>
 
               <div>
-                <p className="text-xs text-stone-400 uppercase tracking-wide mb-2">
+                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-2">
                   Opcje dietetyczne
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -198,14 +198,14 @@ export default function AdminEventDetailPage({
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center text-2xl">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl">
                     👤
                   </div>
                   <div>
-                    <p className="font-semibold text-stone-900">
+                    <p className="font-semibold text-foreground">
                       {event.host.name}
                     </p>
-                    <div className="flex items-center gap-3 text-sm text-stone-500">
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
                       <span>⭐ {event.host.rating}</span>
                       <span>({event.host.reviewCount} opinii)</span>
                       <span>🎉 {event.host.eventsHosted} wydarzeń</span>
@@ -235,7 +235,7 @@ export default function AdminEventDetailPage({
             </CardHeader>
             <CardContent>
               {bookings.length === 0 ? (
-                <p className="text-stone-500 text-center py-4">
+                <p className="text-muted-foreground text-center py-4">
                   Brak rezerwacji dla tego wydarzenia
                 </p>
               ) : (
@@ -251,28 +251,28 @@ export default function AdminEventDetailPage({
                       {bookings.map((booking) => (
                         <div
                           key={booking.id}
-                          className="flex items-center justify-between p-4 bg-stone-50 rounded-lg"
+                          className="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-lg">
+                            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
                               👤
                             </div>
                             <div>
-                              <p className="font-medium text-stone-900">
+                              <p className="font-medium text-foreground">
                                 {booking.guestName}
                               </p>
-                              <p className="text-xs text-stone-500">
+                              <p className="text-xs text-muted-foreground">
                                 {booking.guestEmail}
                               </p>
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="text-right">
-                              <p className="text-sm font-medium text-stone-900">
+                              <p className="text-sm font-medium text-foreground">
                                 {booking.ticketCount} bilet
                                 {booking.ticketCount > 1 ? "y" : ""}
                               </p>
-                              <p className="text-xs text-stone-500">
+                              <p className="text-xs text-muted-foreground">
                                 {(booking.totalPrice / 100).toLocaleString()} zł
                               </p>
                             </div>
@@ -296,17 +296,17 @@ export default function AdminEventDetailPage({
                         .map((booking) => (
                           <div
                             key={booking.id}
-                            className="flex items-center justify-between p-4 bg-stone-50 rounded-lg"
+                            className="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-lg">
+                              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
                                 👤
                               </div>
                               <div>
-                                <p className="font-medium text-stone-900">
+                                <p className="font-medium text-foreground">
                                   {booking.guestName}
                                 </p>
-                                <p className="text-xs text-stone-500">
+                                <p className="text-xs text-muted-foreground">
                                   {booking.ticketCount} bilet
                                   {booking.ticketCount > 1 ? "y" : ""}
                                 </p>
@@ -324,7 +324,7 @@ export default function AdminEventDetailPage({
                     <div className="space-y-3">
                       {bookings.filter((b) => b.status === "pending").length ===
                       0 ? (
-                        <p className="text-stone-500 text-center py-4">
+                        <p className="text-muted-foreground text-center py-4">
                           Brak oczekujących rezerwacji
                         </p>
                       ) : (
@@ -333,17 +333,17 @@ export default function AdminEventDetailPage({
                           .map((booking) => (
                             <div
                               key={booking.id}
-                              className="flex items-center justify-between p-4 bg-stone-50 rounded-lg"
+                              className="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
                             >
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-lg">
+                                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
                                   👤
                                 </div>
                                 <div>
-                                  <p className="font-medium text-stone-900">
+                                  <p className="font-medium text-foreground">
                                     {booking.guestName}
                                   </p>
-                                  <p className="text-xs text-stone-500">
+                                  <p className="text-xs text-muted-foreground">
                                     {booking.ticketCount} bilet
                                     {booking.ticketCount > 1 ? "y" : ""}
                                   </p>
@@ -372,14 +372,14 @@ export default function AdminEventDetailPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-stone-500">Miejsca</span>
+                <span className="text-muted-foreground">Miejsca</span>
                 <span className="font-medium">
                   {event.capacity - event.spotsLeft}/{event.capacity}
                 </span>
               </div>
-              <div className="w-full bg-stone-200 rounded-full h-2">
+              <div className="w-full bg-muted rounded-full h-2">
                 <div
-                  className="bg-amber-500 h-2 rounded-full"
+                  className="bg-primary/50 h-2 rounded-full"
                   style={{
                     width: `${
                       ((event.capacity - event.spotsLeft) / event.capacity) * 100
@@ -389,20 +389,20 @@ export default function AdminEventDetailPage({
               </div>
 
               <div className="flex justify-between items-center pt-2">
-                <span className="text-stone-500">Rezerwacje</span>
+                <span className="text-muted-foreground">Rezerwacje</span>
                 <span className="font-medium">{bookings.length}</span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-stone-500">Przychód</span>
+                <span className="text-muted-foreground">Przychód</span>
                 <span className="font-medium text-green-600">
                   {(revenue / 100).toLocaleString()} zł
                 </span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-stone-500">Prowizja (10%)</span>
-                <span className="font-medium text-amber-600">
+                <span className="text-muted-foreground">Prowizja (10%)</span>
+                <span className="font-medium text-primary">
                   {(revenue / 1000).toLocaleString()} zł
                 </span>
               </div>

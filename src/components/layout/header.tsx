@@ -68,7 +68,7 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-amber-600">Seated</span>
+            <span className="text-2xl font-bold text-primary">Seated</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -109,7 +109,7 @@ export function Header() {
                           src={currentUser.image || undefined}
                           alt={currentUser.name || "User"}
                         />
-                        <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700" : "bg-amber-100 text-amber-700"}>
+                        <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700" : "bg-primary/10 text-primary"}>
                           {userInitials}
                         </AvatarFallback>
                       </Avatar>
@@ -125,7 +125,7 @@ export function Header() {
                           src={currentUser.image || undefined}
                           alt={currentUser.name || "User"}
                         />
-                        <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700 text-lg" : "bg-amber-100 text-amber-700 text-lg"}>
+                        <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700 text-lg" : "bg-primary/10 text-primary text-lg"}>
                           {userInitials}
                         </AvatarFallback>
                       </Avatar>
@@ -140,7 +140,7 @@ export function Header() {
                               Tryb hosta
                             </span>
                           ) : (
-                            <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                            <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
                               Tryb gościa
                             </span>
                           )}
@@ -153,20 +153,20 @@ export function Header() {
                       <div className="py-3 border-b">
                         <button
                           onClick={handleSwitchMode}
-                          className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-gradient-to-r from-amber-50 to-purple-50 hover:from-amber-100 hover:to-purple-100 transition-colors"
+                          className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-gradient-to-r from-primary/5 to-purple-50 hover:from-primary/10 hover:to-purple-100 transition-colors"
                         >
                           <div className="flex items-center gap-3">
-                            <ArrowLeftRight className="h-4 w-4 text-amber-600" />
+                            <ArrowLeftRight className="h-4 w-4 text-primary" />
                             <span className="text-sm font-medium">
                               Przełącz na tryb {activeMode === "host" ? "gościa" : "hosta"}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <span className={`text-xs px-1.5 py-0.5 rounded ${activeMode === "host" ? "bg-purple-100 text-purple-700" : "bg-amber-100 text-amber-700"}`}>
+                            <span className={`text-xs px-1.5 py-0.5 rounded ${activeMode === "host" ? "bg-purple-100 text-purple-700" : "bg-primary/10 text-primary"}`}>
                               {activeMode === "host" ? "Host" : "Gość"}
                             </span>
                             <span className="text-muted-foreground">→</span>
-                            <span className={`text-xs px-1.5 py-0.5 rounded ${activeMode === "host" ? "bg-amber-100 text-amber-700" : "bg-purple-100 text-purple-700"}`}>
+                            <span className={`text-xs px-1.5 py-0.5 rounded ${activeMode === "host" ? "bg-primary/10 text-primary" : "bg-purple-100 text-purple-700"}`}>
                               {activeMode === "host" ? "Gość" : "Host"}
                             </span>
                           </div>
@@ -270,7 +270,7 @@ export function Header() {
                 <Button variant="ghost" asChild>
                   <Link href="/login">{t("login")}</Link>
                 </Button>
-                <Button asChild className="bg-amber-600 hover:bg-amber-700">
+                <Button asChild className="bg-primary hover:bg-primary/90">
                   <Link href="/register">{t("register")}</Link>
                 </Button>
               </>
@@ -289,7 +289,7 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px]">
                 <SheetHeader>
-                  <SheetTitle className="text-left text-amber-600">
+                  <SheetTitle className="text-left text-primary">
                     Seated
                   </SheetTitle>
                 </SheetHeader>
@@ -301,7 +301,7 @@ export function Header() {
                         src={currentUser.image || undefined}
                         alt={currentUser.name || "User"}
                       />
-                      <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700" : "bg-amber-100 text-amber-700"}>
+                      <AvatarFallback className={isHost ? "bg-purple-100 text-purple-700" : "bg-primary/10 text-primary"}>
                         {userInitials}
                       </AvatarFallback>
                     </Avatar>
@@ -315,7 +315,7 @@ export function Header() {
                           Tryb hosta
                         </span>
                       ) : canSwitchMode ? (
-                        <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
                           Tryb gościa
                         </span>
                       ) : null}
@@ -328,9 +328,9 @@ export function Header() {
                   <div className="py-3 border-b">
                     <button
                       onClick={handleSwitchMode}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gradient-to-r from-amber-50 to-purple-50"
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gradient-to-r from-primary/5 to-purple-50"
                     >
-                      <ArrowLeftRight className="h-4 w-4 text-amber-600" />
+                      <ArrowLeftRight className="h-4 w-4 text-primary" />
                       <span className="text-sm font-medium">
                         Przełącz na tryb {activeMode === "host" ? "gościa" : "hosta"}
                       </span>
@@ -343,7 +343,7 @@ export function Header() {
                     <SheetClose key={item.href} asChild>
                       <Link
                         href={item.href}
-                        className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                        className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                       >
                         {item.name}
                       </Link>
@@ -359,7 +359,7 @@ export function Header() {
                           <SheetClose asChild>
                             <Link
                               href="/dashboard/host"
-                              className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                             >
                               Panel hosta
                             </Link>
@@ -367,7 +367,7 @@ export function Header() {
                           <SheetClose asChild>
                             <Link
                               href="/dashboard/host/calendar"
-                              className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                             >
                               Moje wydarzenia
                             </Link>
@@ -378,7 +378,7 @@ export function Header() {
                           <SheetClose asChild>
                             <Link
                               href="/dashboard"
-                              className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                             >
                               {t("dashboard")}
                             </Link>
@@ -386,7 +386,7 @@ export function Header() {
                           <SheetClose asChild>
                             <Link
                               href="/dashboard/bookings"
-                              className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                             >
                               {t("myBookings")}
                             </Link>
@@ -409,7 +409,7 @@ export function Header() {
                       <SheetClose asChild>
                         <Link
                           href="/login"
-                          className="text-lg font-medium text-foreground hover:text-amber-600 transition-colors"
+                          className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                         >
                           {t("login")}
                         </Link>
@@ -417,7 +417,7 @@ export function Header() {
                       <SheetClose asChild>
                         <Button
                           asChild
-                          className="bg-amber-600 hover:bg-amber-700 mt-2"
+                          className="bg-primary hover:bg-primary/90 mt-2"
                         >
                           <Link href="/register">{t("register")}</Link>
                         </Button>

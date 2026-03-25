@@ -40,7 +40,7 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
       case "attended_event":
         return <Calendar className="h-4 w-4 text-blue-600" />;
       case "reviewed":
-        return <Star className="h-4 w-4 text-amber-600" />;
+        return <Star className="h-4 w-4 text-primary" />;
       case "hosted_event":
         return <ChefHat className="h-4 w-4 text-rose-600" />;
       case "earned_badge":
@@ -99,14 +99,14 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
         <div className="flex gap-3 mb-3">
           <Avatar className="h-10 w-10 flex-shrink-0">
             {post.userAvatar && <AvatarImage src={post.userAvatar} alt={post.userName} />}
-            <AvatarFallback className="bg-amber-100 text-amber-700 text-sm">
+            <AvatarFallback className="bg-primary/10 text-primary text-sm">
               {initials}
             </AvatarFallback>
           </Avatar>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-semibold text-stone-900">{post.userName}</span>
+              <span className="font-semibold text-foreground">{post.userName}</span>
               {post.userLevelIcon && (
                 <span className="text-sm" title={`Poziom ${post.userLevel}`}>
                   {post.userLevelIcon}
@@ -135,18 +135,18 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
           post.type === "hosted_event") &&
           post.eventId && (
             <Link href={`/events/${post.eventId}`}>
-              <div className="bg-stone-50 rounded-lg p-3 mb-3 hover:bg-stone-100 transition-colors">
+              <div className="bg-muted/50 rounded-lg p-3 mb-3 hover:bg-muted transition-colors">
                 <div className="flex items-start gap-3">
-                  <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex-shrink-0" />
+                  <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-primary/70 to-orange-500 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-stone-900 line-clamp-1">
+                    <p className="font-medium text-foreground line-clamp-1">
                       {post.eventTitle}
                     </p>
                     {post.eventDate && (
-                      <p className="text-sm text-stone-500">{post.eventDate}</p>
+                      <p className="text-sm text-muted-foreground">{post.eventDate}</p>
                     )}
                     {post.hostName && (
-                      <p className="text-sm text-stone-500">Host: {post.hostName}</p>
+                      <p className="text-sm text-muted-foreground">Host: {post.hostName}</p>
                     )}
                     {post.eventType && (
                       <Badge variant="outline" className="mt-1 text-xs">
@@ -169,7 +169,7 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
 
         {/* Review text and sentiment */}
         {post.reviewText && (
-          <p className="text-stone-700 mb-3">{post.reviewText}</p>
+          <p className="text-muted-foreground mb-3">{post.reviewText}</p>
         )}
 
         {/* Sentiment and rating */}
@@ -181,7 +181,7 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
                 <Star
                   key={i}
                   className={`h-4 w-4 ${
-                    i < post.rating! ? "fill-amber-400 text-amber-400" : "text-stone-300"
+                    i < post.rating! ? "fill-primary/70 text-primary/70" : "text-muted-foreground/50"
                   }`}
                 />
               ))}
@@ -204,7 +204,7 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
               variant="ghost"
               size="sm"
               onClick={() => setIsCommentsOpen(!isCommentsOpen)}
-              className="text-stone-600"
+              className="text-muted-foreground"
             >
               {isCommentsOpen ? (
                 <>
@@ -230,26 +230,26 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
                   {comment.userAvatar && (
                     <AvatarImage src={comment.userAvatar} alt={comment.userName} />
                   )}
-                  <AvatarFallback className="bg-stone-100 text-stone-600 text-xs">
+                  <AvatarFallback className="bg-muted text-muted-foreground text-xs">
                     {comment.userName
                       .split(" ")
                       .map((n) => n[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex-1 bg-stone-50 rounded-lg px-3 py-2">
+                <div className="flex-1 bg-muted/50 rounded-lg px-3 py-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm text-stone-900">
+                    <span className="font-medium text-sm text-foreground">
                       {comment.userName}
                     </span>
-                    <span className="text-xs text-stone-500">
+                    <span className="text-xs text-muted-foreground">
                       {formatDistanceToNow(comment.createdAt, {
                         addSuffix: true,
                         locale: pl,
                       })}
                     </span>
                   </div>
-                  <p className="text-sm text-stone-700">{comment.text}</p>
+                  <p className="text-sm text-muted-foreground">{comment.text}</p>
                 </div>
               </div>
             ))}
@@ -257,7 +257,7 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
             {/* Add comment */}
             <div className="flex gap-2">
               <Avatar className="h-8 w-8 flex-shrink-0">
-                <AvatarFallback className="bg-amber-100 text-amber-700 text-xs">
+                <AvatarFallback className="bg-primary/10 text-primary text-xs">
                   MN
                 </AvatarFallback>
               </Avatar>
@@ -273,7 +273,7 @@ export function SocialPostCard({ post, showComments = false }: SocialPostCardPro
                   size="icon"
                   onClick={handleAddComment}
                   disabled={!newComment.trim()}
-                  className="bg-amber-500 hover:bg-amber-600"
+                  className="bg-primary/50 hover:bg-primary"
                 >
                   <Send className="h-4 w-4" />
                 </Button>

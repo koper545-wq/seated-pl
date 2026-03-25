@@ -163,7 +163,7 @@ export function MockPayment({
             <Separator />
             <div className="flex justify-between font-semibold">
               <span>Do zapłaty</span>
-              <span className="text-amber-600">{formatPrice(totalAmount)}</span>
+              <span className="text-primary">{formatPrice(totalAmount)}</span>
             </div>
           </div>
         </CardContent>
@@ -182,9 +182,9 @@ export function MockPayment({
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Demo notice */}
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-2">
-            <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0" />
-            <p className="text-sm text-amber-800">
+          <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 flex gap-2">
+            <AlertTriangle className="h-5 w-5 text-primary flex-shrink-0" />
+            <p className="text-sm text-primary">
               <strong>Tryb demo:</strong> Kliknij &quot;Zapłać&quot; aby zasymulować płatność.
               Żadne pieniądze nie zostaną pobrane.
             </p>
@@ -243,8 +243,8 @@ export function MockPayment({
               className={cn(
                 "flex-1",
                 isProcessing
-                  ? "bg-amber-400"
-                  : "bg-amber-600 hover:bg-amber-700"
+                  ? "bg-primary/70"
+                  : "bg-primary hover:bg-primary/90"
               )}
               onClick={handlePay}
               disabled={isProcessing}

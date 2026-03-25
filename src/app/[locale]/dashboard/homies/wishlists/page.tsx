@@ -57,7 +57,7 @@ export default function WishlistsPage() {
         </div>
         <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-amber-600 hover:bg-amber-700 gap-2">
+            <Button className="bg-primary hover:bg-primary/90 gap-2">
               <Plus className="h-4 w-4" />
               Utwórz listę
             </Button>
@@ -119,7 +119,7 @@ export default function WishlistsPage() {
                 <Button
                   onClick={handleCreateWishlist}
                   disabled={!newListName.trim()}
-                  className="bg-amber-600 hover:bg-amber-700"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   <ListPlus className="h-4 w-4 mr-2" />
                   Utwórz
@@ -156,7 +156,7 @@ export default function WishlistsPage() {
           {!searchQuery && (
             <Button
               onClick={() => setCreateDialogOpen(true)}
-              className="bg-amber-600 hover:bg-amber-700 gap-2"
+              className="bg-primary hover:bg-primary/90 gap-2"
             >
               <Plus className="h-4 w-4" />
               Utwórz pierwszą listę

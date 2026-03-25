@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState, useEffect, use, useCallback } from "react";
 import { Link } from "@/i18n/navigation";
-import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,35 +20,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
-  getHostEventById,
-  getBookingsByEventId,
-  getWaitlistByEventId,
-  removeFromWaitlist,
-  addBookingMessage,
-  MockBooking,
-  WaitlistEntry,
-  BookingMessage,
-  bookingStatusLabels,
-  HostEvent,
-} from "@/lib/mock-data";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import {
   ArrowLeft,
   Calendar,
-  MapPin,
   Users,
   Clock,
   Check,
   X,
   Mail,
-  Phone,
   UtensilsCrossed,
   MessageSquare,
   Download,
@@ -60,164 +37,309 @@ import {
   UserX,
   Eye,
   Star,
-  Bell,
-  Trash2,
   Flag,
-  Send,
-  MessageCircle,
+  Loader2,
 } from "lucide-react";
 import { ReportDialog } from "@/components/reports";
 import { cn, formatPrice } from "@/lib/utils";
+
+// ---------------------------------------------------------------------------
+// Types matching the API response from GET /api/events/[id]/guests
+// ---------------------------------------------------------------------------
+
+interface GuestProfile {
+  firstName: string | null;
+  lastName: string | null;
+  avatarUrl: string | null;
+  dietaryRestrictions: string | null;
+  allergies: string | null;
+}
+
+interface BookingGuest {
+  id: string;
+  email: string;
+  guestProfile: GuestProfile | null;
+}
+
+interface BookingTransaction {
+  type: string;
+  amount: number;
+  status: string;
+  processedAt: string | null;
+}
+
+interface Booking {
+  id: string;
+  eventId: string;
+  guestId: string;
+  ticketCount: number;
+  totalPrice: number; // in grosze
+  platformFee: number; // in grosze
+  status: "PENDING" | "APPROVED" | "DECLINED" | "CANCELLED" | "COMPLETED";
+  dietaryInfo: string | null;
+  specialRequests: string | null;
+  createdAt: string;
+  approvedAt: string | null;
+  cancelledAt: string | null;
+  cancelReason: string | null;
+  guest: BookingGuest;
+  transactions: BookingTransaction[];
+}
+
+interface GuestsApiResponse {
+  bookings: Booking[];
+  eventTitle: string;
+}
+
+// ---------------------------------------------------------------------------
+// Status labels (moved from mock-data, adapted for uppercase API statuses)
+// ---------------------------------------------------------------------------
+
+const bookingStatusLabels: Record<
+  Booking["status"],
+  { label: string; color: string }
+> = {
+  PENDING: { label: "Oczekuje", color: "bg-yellow-100 text-yellow-700" },
+  APPROVED: { label: "Potwierdzona", color: "bg-green-100 text-green-700" },
+  DECLINED: { label: "Odrzucona", color: "bg-red-100 text-red-700" },
+  CANCELLED: { label: "Anulowana", color: "bg-gray-100 text-gray-700" },
+  COMPLETED: { label: "Zakonczona", color: "bg-blue-100 text-blue-700" },
+};
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function getGuestName(guest: BookingGuest): string {
+  const first = guest.guestProfile?.firstName;
+  const last = guest.guestProfile?.lastName;
+  if (first || last) return [first, last].filter(Boolean).join(" ");
+  return guest.email.split("@")[0];
+}
+
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+}
+
+// ---------------------------------------------------------------------------
+// Page component
+// ---------------------------------------------------------------------------
 
 interface EventGuestsPageProps {
   params: Promise<{ id: string }>;
 }
 
 export default function EventGuestsPage({ params }: EventGuestsPageProps) {
-  const { id } = use(params);
-  const event = getHostEventById(id);
+  const { id: eventId } = use(params);
 
-  if (!event) {
-    notFound();
-  }
-
-  const [bookings, setBookings] = useState<MockBooking[]>(
-    getBookingsByEventId(id)
-  );
-  const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>(
-    getWaitlistByEventId(id)
-  );
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [eventTitle, setEventTitle] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [actionBooking, setActionBooking] = useState<{
-    booking: MockBooking;
+    booking: Booking;
     action: "approve" | "decline";
   } | null>(null);
-  const [entryToRemove, setEntryToRemove] = useState<WaitlistEntry | null>(null);
+  const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
 
-  // Reply to inquiry state
-  const [replyBooking, setReplyBooking] = useState<MockBooking | null>(null);
-  const [replyMessage, setReplyMessage] = useState("");
-  const [isSendingReply, setIsSendingReply] = useState(false);
-
-  // Separate bookings
-  const pendingBookings = bookings.filter((b) => b.status === "pending");
-  const confirmedBookings = bookings.filter((b) => b.status === "approved");
-  const declinedBookings = bookings.filter(
-    (b) => b.status === "declined" || b.status === "cancelled"
-  );
-
-  // Bookings with inquiries (special requests or messages)
-  const bookingsWithInquiries = bookings.filter(
-    (b) => b.specialRequests || (b.messages && b.messages.length > 0)
-  );
-
-  // Count unanswered inquiries
-  const unansweredInquiriesCount = bookingsWithInquiries.filter((b) => {
-    if (b.messages && b.messages.length > 0) {
-      const lastMessage = b.messages[b.messages.length - 1];
-      return lastMessage.senderType === "guest";
+  // Fetch guests data
+  const fetchGuests = useCallback(async () => {
+    try {
+      setError(null);
+      const res = await fetch(`/api/events/${eventId}/guests`);
+      if (!res.ok) {
+        if (res.status === 404) {
+          setError("Wydarzenie nie zostalo znalezione.");
+          return;
+        }
+        if (res.status === 403) {
+          setError("Brak dostepu do tego wydarzenia.");
+          return;
+        }
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const data: GuestsApiResponse = await res.json();
+      setBookings(data.bookings);
+      setEventTitle(data.eventTitle);
+    } catch {
+      setError("Nie udalo sie pobrac listy gosci. Sprobuj ponownie.");
+    } finally {
+      setIsLoading(false);
     }
-    return b.specialRequests && (!b.messages || b.messages.length === 0);
-  }).length;
+  }, [eventId]);
+
+  useEffect(() => {
+    fetchGuests();
+  }, [fetchGuests]);
+
+  // Separate bookings by status
+  const pendingBookings = bookings.filter((b) => b.status === "PENDING");
+  const confirmedBookings = bookings.filter(
+    (b) => b.status === "APPROVED" || b.status === "COMPLETED"
+  );
+  const declinedBookings = bookings.filter(
+    (b) => b.status === "DECLINED" || b.status === "CANCELLED"
+  );
 
   // Calculate totals
-  const totalGuests = confirmedBookings.reduce((sum, b) => sum + b.ticketCount, 0);
+  const totalGuests = confirmedBookings.reduce(
+    (sum, b) => sum + b.ticketCount,
+    0
+  );
   const totalRevenue = confirmedBookings.reduce(
-    (sum, b) => sum + b.totalPrice - b.platformFee,
+    (sum, b) => sum + (b.totalPrice - b.platformFee),
     0
   );
 
-  const handleAction = (booking: MockBooking, action: "approve" | "decline") => {
+  // Dietary info from confirmed bookings
+  const dietaryInfo = confirmedBookings
+    .filter((b) => b.dietaryInfo || b.guest.guestProfile?.dietaryRestrictions || b.guest.guestProfile?.allergies)
+    .map((b) => {
+      const parts: string[] = [];
+      if (b.dietaryInfo) parts.push(b.dietaryInfo);
+      if (b.guest.guestProfile?.dietaryRestrictions)
+        parts.push(b.guest.guestProfile.dietaryRestrictions);
+      if (b.guest.guestProfile?.allergies)
+        parts.push(`Alergie: ${b.guest.guestProfile.allergies}`);
+      return {
+        name: getGuestName(b.guest),
+        info: parts.join(", "),
+        tickets: b.ticketCount,
+      };
+    });
+
+  // Handlers
+  const handleAction = (booking: Booking, action: "approve" | "decline") => {
     setActionBooking({ booking, action });
   };
 
-  const confirmAction = () => {
-    if (actionBooking) {
-      const { booking, action } = actionBooking;
+  const confirmAction = async () => {
+    if (!actionBooking) return;
+    const { booking, action } = actionBooking;
+
+    setProcessingIds((prev) => new Set(prev).add(booking.id));
+    setActionBooking(null);
+
+    try {
+      const res = await fetch(`/api/bookings/${booking.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+
+      // Update local state
       setBookings((prev) =>
         prev.map((b) =>
           b.id === booking.id
             ? {
                 ...b,
-                status: action === "approve" ? "approved" : ("declined" as const),
-                approvedAt: action === "approve" ? new Date() : undefined,
+                status: action === "approve" ? "APPROVED" : "DECLINED",
+                approvedAt:
+                  action === "approve" ? new Date().toISOString() : b.approvedAt,
               }
             : b
         )
       );
-      setActionBooking(null);
+    } catch (err) {
+      console.error(`Failed to ${action} booking:`, err);
+      setError(
+        `Nie udalo sie ${action === "approve" ? "zaakceptowac" : "odrzucic"} rezerwacji. Sprobuj ponownie.`
+      );
+    } finally {
+      setProcessingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(booking.id);
+        return next;
+      });
     }
   };
 
-  const handleApproveAll = () => {
+  const handleApproveAll = async () => {
+    const pending = bookings.filter((b) => b.status === "PENDING");
+    const ids = pending.map((b) => b.id);
+
+    setProcessingIds(new Set(ids));
+
+    const results = await Promise.allSettled(
+      pending.map((b) =>
+        fetch(`/api/bookings/${b.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "approve" }),
+        })
+      )
+    );
+
+    const succeededIds = new Set<string>();
+    results.forEach((result, index) => {
+      if (result.status === "fulfilled" && result.value.ok) {
+        succeededIds.add(ids[index]);
+      }
+    });
+
     setBookings((prev) =>
       prev.map((b) =>
-        b.status === "pending"
-          ? { ...b, status: "approved" as const, approvedAt: new Date() }
+        succeededIds.has(b.id)
+          ? { ...b, status: "APPROVED", approvedAt: new Date().toISOString() }
           : b
       )
     );
-  };
 
-  const handleRemoveFromWaitlist = (entry: WaitlistEntry) => {
-    setEntryToRemove(entry);
-  };
-
-  const confirmRemoveFromWaitlist = () => {
-    if (entryToRemove) {
-      removeFromWaitlist(entryToRemove.id);
-      setWaitlistEntries((prev) => prev.filter((e) => e.id !== entryToRemove.id));
-      setEntryToRemove(null);
-    }
-  };
-
-  // Handle reply to inquiry
-  const handleReply = (booking: MockBooking) => {
-    setReplyBooking(booking);
-    setReplyMessage("");
-  };
-
-  const sendReply = () => {
-    if (!replyBooking || !replyMessage.trim()) return;
-
-    setIsSendingReply(true);
-
-    // Simulate sending (in real app would call API)
-    // Get host info from a confirmed booking's event data, or use defaults
-    const hostInfo = bookings.find(b => b.event?.hostId)?.event || { hostId: "host-1", hostName: "Host" };
-
-    setTimeout(() => {
-      const newMessage = addBookingMessage(
-        replyBooking.id,
-        "host",
-        hostInfo.hostId,
-        hostInfo.hostName,
-        replyMessage.trim()
+    if (succeededIds.size < ids.length) {
+      setError(
+        `Nie udalo sie zaakceptowac ${ids.length - succeededIds.size} z ${ids.length} rezerwacji.`
       );
+    }
 
-      if (newMessage) {
-        // Update local state
-        setBookings((prev) =>
-          prev.map((b) =>
-            b.id === replyBooking.id
-              ? {
-                  ...b,
-                  messages: [...(b.messages || []), newMessage],
-                }
-              : b
-          )
-        );
-      }
-
-      setIsSendingReply(false);
-      setReplyBooking(null);
-      setReplyMessage("");
-    }, 500);
+    setProcessingIds(new Set());
   };
 
-  // Collect dietary info from confirmed bookings
-  const dietaryInfo = confirmedBookings
-    .filter((b) => b.dietaryInfo)
-    .map((b) => ({ name: b.guestName, info: b.dietaryInfo!, tickets: b.ticketCount }));
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-muted-foreground">Ladowanie listy gosci...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state (full-page)
+  if (error && bookings.length === 0) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="text-center space-y-4 max-w-md">
+          <AlertCircle className="h-12 w-12 mx-auto text-red-500" />
+          <h2 className="text-xl font-semibold">Wystapil blad</h2>
+          <p className="text-muted-foreground">{error}</p>
+          <div className="flex gap-3 justify-center">
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/host">Wroc do panelu</Link>
+            </Button>
+            <Button
+              onClick={() => {
+                setIsLoading(true);
+                fetchGuests();
+              }}
+            >
+              Sprobuj ponownie
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -229,48 +351,43 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
             className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Wróć do panelu
+            Wroc do panelu
           </Link>
 
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold mb-2">{event.title}</h1>
+              <h1 className="text-2xl font-bold mb-2">{eventTitle}</h1>
               <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  {event.dateFormatted}
-                </span>
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  {event.location}
-                </span>
-                <span className="flex items-center gap-1">
                   <Users className="h-4 w-4" />
-                  {totalGuests}/{event.capacity} gości
+                  {totalGuests} potwierdzonych gosci
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  {bookings.length} rezerwacji lacznie
                 </span>
               </div>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
                 <Printer className="h-4 w-4 mr-1" />
-                Drukuj listę
+                Drukuj liste
               </Button>
               <Button variant="outline" size="sm">
                 <Download className="h-4 w-4 mr-1" />
                 Eksportuj
               </Button>
               <Button asChild variant="outline" size="sm">
-                <Link href={`/events/${event.id}`}>
+                <Link href={`/events/${eventId}`}>
                   <Eye className="h-4 w-4 mr-1" />
-                  Podgląd
+                  Podglad
                 </Link>
               </Button>
-              {/* Feedback button - show after event */}
-              {event.date < new Date() && confirmedBookings.length > 0 && (
-                <Button asChild size="sm" className="bg-amber-600 hover:bg-amber-700">
-                  <Link href={`/dashboard/host/events/${event.id}/feedback`}>
+              {confirmedBookings.length > 0 && (
+                <Button asChild size="sm" className="bg-primary hover:bg-primary/90">
+                  <Link href={`/dashboard/host/events/${eventId}/feedback`}>
                     <Star className="h-4 w-4 mr-1" />
-                    Oceń gości
+                    Ocen gosci
                   </Link>
                 </Button>
               )}
@@ -280,6 +397,22 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
       </div>
 
       <div className="container mx-auto px-4 py-6">
+        {/* Inline error banner */}
+        {error && bookings.length > 0 && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3 mb-6">
+            <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
+            <p className="text-sm text-red-700 flex-1">{error}</p>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setError(null)}
+              className="text-red-600"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+
         {/* Stats cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <Card>
@@ -287,7 +420,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
               <p className="text-3xl font-bold text-yellow-600">
                 {pendingBookings.length}
               </p>
-              <p className="text-xs text-muted-foreground">Oczekujące</p>
+              <p className="text-xs text-muted-foreground">Oczekujace</p>
             </CardContent>
           </Card>
           <Card>
@@ -298,16 +431,16 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <p className="text-3xl font-bold">{event.spotsLeft}</p>
-              <p className="text-xs text-muted-foreground">Wolnych miejsc</p>
+              <p className="text-3xl font-bold">{declinedBookings.length}</p>
+              <p className="text-xs text-muted-foreground">Odrzuconych</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <p className="text-3xl font-bold text-amber-600">
-                {formatPrice(totalRevenue * 100)}
+              <p className="text-3xl font-bold text-primary">
+                {formatPrice(totalRevenue)}
               </p>
-              <p className="text-xs text-muted-foreground">Przychód</p>
+              <p className="text-xs text-muted-foreground">Przychod</p>
             </CardContent>
           </Card>
         </div>
@@ -320,19 +453,29 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
               <div>
                 <p className="font-medium text-yellow-800">
                   {pendingBookings.length} rezerwacj
-                  {pendingBookings.length === 1 ? "a" : pendingBookings.length < 5 ? "e" : "i"}{" "}
-                  czeka na Twoją decyzję
+                  {pendingBookings.length === 1
+                    ? "a"
+                    : pendingBookings.length < 5
+                      ? "e"
+                      : "i"}{" "}
+                  czeka na Twoja decyzje
                 </p>
                 <p className="text-sm text-yellow-700">
-                  Łącznie {pendingBookings.reduce((s, b) => s + b.ticketCount, 0)} osób
+                  Lacznie{" "}
+                  {pendingBookings.reduce((s, b) => s + b.ticketCount, 0)} osob
                 </p>
               </div>
             </div>
             <Button
               onClick={handleApproveAll}
               className="bg-green-600 hover:bg-green-700"
+              disabled={processingIds.size > 0}
             >
-              <CheckCircle className="h-4 w-4 mr-2" />
+              {processingIds.size > 0 ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <CheckCircle className="h-4 w-4 mr-2" />
+              )}
               Akceptuj wszystkie
             </Button>
           </div>
@@ -345,35 +488,27 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
               <TabsList>
                 <TabsTrigger value="pending" className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
-                  Oczekujące
+                  Oczekujace
                   {pendingBookings.length > 0 && (
-                    <Badge className="bg-yellow-500">{pendingBookings.length}</Badge>
+                    <Badge className="bg-yellow-500">
+                      {pendingBookings.length}
+                    </Badge>
                   )}
                 </TabsTrigger>
-                <TabsTrigger value="confirmed" className="flex items-center gap-2">
+                <TabsTrigger
+                  value="confirmed"
+                  className="flex items-center gap-2"
+                >
                   <UserCheck className="h-4 w-4" />
                   Potwierdzone
                   <Badge variant="secondary">{confirmedBookings.length}</Badge>
                 </TabsTrigger>
-                <TabsTrigger value="declined" className="flex items-center gap-2">
+                <TabsTrigger
+                  value="declined"
+                  className="flex items-center gap-2"
+                >
                   <UserX className="h-4 w-4" />
                   Odrzucone
-                </TabsTrigger>
-                <TabsTrigger value="inquiries" className="flex items-center gap-2">
-                  <MessageCircle className="h-4 w-4" />
-                  Zapytania
-                  {unansweredInquiriesCount > 0 && (
-                    <Badge className="bg-blue-500">{unansweredInquiriesCount}</Badge>
-                  )}
-                </TabsTrigger>
-                <TabsTrigger value="waitlist" className="flex items-center gap-2">
-                  <Bell className="h-4 w-4" />
-                  Lista oczekujących
-                  {waitlistEntries.filter(e => e.status === "waiting").length > 0 && (
-                    <Badge variant="secondary">
-                      {waitlistEntries.filter(e => e.status === "waiting").length}
-                    </Badge>
-                  )}
                 </TabsTrigger>
               </TabsList>
 
@@ -384,7 +519,9 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                     <GuestCard
                       key={booking.id}
                       booking={booking}
-                      event={event}
+                      eventId={eventId}
+                      eventTitle={eventTitle}
+                      isProcessing={processingIds.has(booking.id)}
                       onApprove={() => handleAction(booking, "approve")}
                       onDecline={() => handleAction(booking, "decline")}
                       showActions
@@ -393,8 +530,8 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                 ) : (
                   <EmptyState
                     icon={CheckCircle}
-                    title="Brak oczekujących"
-                    description="Wszystkie rezerwacje zostały rozpatrzone."
+                    title="Brak oczekujacych"
+                    description="Wszystkie rezerwacje zostaly rozpatrzone."
                     compact
                   />
                 )}
@@ -404,13 +541,18 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
               <TabsContent value="confirmed" className="space-y-3">
                 {confirmedBookings.length > 0 ? (
                   confirmedBookings.map((booking) => (
-                    <GuestCard key={booking.id} booking={booking} event={event} />
+                    <GuestCard
+                      key={booking.id}
+                      booking={booking}
+                      eventId={eventId}
+                      eventTitle={eventTitle}
+                    />
                   ))
                 ) : (
                   <EmptyState
                     icon={Users}
-                    title="Brak potwierdzonych gości"
-                    description="Zaakceptuj rezerwacje, aby zobaczyć listę gości."
+                    title="Brak potwierdzonych gosci"
+                    description="Zaakceptuj rezerwacje, aby zobaczyc liste gosci."
                     compact
                   />
                 )}
@@ -420,72 +562,18 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
               <TabsContent value="declined" className="space-y-3">
                 {declinedBookings.length > 0 ? (
                   declinedBookings.map((booking) => (
-                    <GuestCard key={booking.id} booking={booking} event={event} />
+                    <GuestCard
+                      key={booking.id}
+                      booking={booking}
+                      eventId={eventId}
+                      eventTitle={eventTitle}
+                    />
                   ))
                 ) : (
                   <EmptyState
                     icon={UserX}
                     title="Brak odrzuconych"
-                    description="Nie odrzuciłeś jeszcze żadnych rezerwacji."
-                    compact
-                  />
-                )}
-              </TabsContent>
-
-              {/* Inquiries */}
-              <TabsContent value="inquiries" className="space-y-3">
-                {bookingsWithInquiries.length > 0 ? (
-                  <>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 mb-4">
-                      <p>
-                        Tutaj znajdziesz wszystkie zapytania od gości. Odpowiadaj szybko, aby zapewnić
-                        gościom dobrą obsługę.
-                      </p>
-                    </div>
-                    {bookingsWithInquiries.map((booking) => (
-                      <InquiryCard
-                        key={booking.id}
-                        booking={booking}
-                        event={event}
-                        onReply={() => handleReply(booking)}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <EmptyState
-                    icon={MessageCircle}
-                    title="Brak zapytań"
-                    description="Goście nie zadali jeszcze żadnych pytań dotyczących tego wydarzenia."
-                    compact
-                  />
-                )}
-              </TabsContent>
-
-              {/* Waitlist */}
-              <TabsContent value="waitlist" className="space-y-3">
-                {waitlistEntries.length > 0 ? (
-                  <>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 mb-4">
-                      <p>
-                        Osoby na liście oczekujących zostaną automatycznie powiadomione emailem,
-                        gdy zwolni się miejsce. Będą mieć 12 godzin na dokonanie rezerwacji.
-                      </p>
-                    </div>
-                    {waitlistEntries
-                      .sort((a, b) => a.position - b.position)
-                      .map((entry) => (
-                        <WaitlistEntryCard
-                          key={entry.id}
-                          entry={entry}
-                          onRemove={() => handleRemoveFromWaitlist(entry)}
-                        />
-                      ))}
-                  </>
-                ) : (
-                  <EmptyState
-                    icon={Bell}
-                    title="Brak osób na liście oczekujących"
-                    description="Gdy wydarzenie będzie wyprzedane, goście będą mogli zapisać się na listę."
+                    description="Nie odrzuciles jeszcze zadnych rezerwacji."
                     compact
                   />
                 )}
@@ -493,13 +581,13 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
             </Tabs>
           </div>
 
-          {/* Sidebar - dietary info */}
+          {/* Sidebar - dietary info & summary */}
           <div className="space-y-6">
             {/* Dietary summary */}
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <UtensilsCrossed className="h-4 w-4 text-amber-600" />
+                  <UtensilsCrossed className="h-4 w-4 text-primary" />
                   Wymagania dietetyczne
                 </CardTitle>
               </CardHeader>
@@ -520,7 +608,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    Brak specjalnych wymagań dietetycznych.
+                    Brak specjalnych wymagan dietetycznych.
                   </p>
                 )}
               </CardContent>
@@ -530,18 +618,21 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-amber-600" />
-                  Specjalne życzenia
+                  <MessageSquare className="h-4 w-4 text-primary" />
+                  Specjalne zyczenia
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {confirmedBookings.filter((b) => b.specialRequests).length > 0 ? (
+                {confirmedBookings.filter((b) => b.specialRequests).length >
+                0 ? (
                   <div className="space-y-3">
                     {confirmedBookings
                       .filter((b) => b.specialRequests)
                       .map((booking) => (
                         <div key={booking.id} className="text-sm">
-                          <p className="font-medium">{booking.guestName}</p>
+                          <p className="font-medium">
+                            {getGuestName(booking.guest)}
+                          </p>
                           <p className="text-muted-foreground">
                             {booking.specialRequests}
                           </p>
@@ -550,7 +641,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    Brak specjalnych życzeń od gości.
+                    Brak specjalnych zyczen od gosci.
                   </p>
                 )}
               </CardContent>
@@ -563,25 +654,27 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Pojemność:</span>
-                  <span>{event.capacity} osób</span>
+                  <span className="text-muted-foreground">Rezerwacji:</span>
+                  <span>{bookings.length}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Potwierdzonych:</span>
-                  <span className="text-green-600 font-medium">{totalGuests}</span>
+                  <span className="text-green-600 font-medium">
+                    {totalGuests} osob
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Wolnych miejsc:</span>
-                  <span>{event.spotsLeft}</span>
+                  <span className="text-muted-foreground">Oczekujacych:</span>
+                  <span className="text-yellow-600 font-medium">
+                    {pendingBookings.reduce((s, b) => s + b.ticketCount, 0)} osob
+                  </span>
                 </div>
                 <Separator className="my-2" />
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Cena/os:</span>
-                  <span>{event.price} PLN</span>
-                </div>
                 <div className="flex justify-between font-medium">
-                  <span>Przychód netto:</span>
-                  <span className="text-amber-600">{formatPrice(totalRevenue * 100)}</span>
+                  <span>Przychod netto:</span>
+                  <span className="text-primary">
+                    {formatPrice(totalRevenue)}
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -598,21 +691,27 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>
               {actionBooking?.action === "approve"
-                ? "Zaakceptować rezerwację?"
-                : "Odrzucić rezerwację?"}
+                ? "Zaakceptowac rezerwacje?"
+                : "Odrzucic rezerwacje?"}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {actionBooking?.action === "approve" ? (
                 <>
-                  <strong>{actionBooking?.booking.guestName}</strong> (
-                  {actionBooking?.booking.ticketCount}{" "}
+                  <strong>
+                    {actionBooking?.booking &&
+                      getGuestName(actionBooking.booking.guest)}
+                  </strong>{" "}
+                  ({actionBooking?.booking.ticketCount}{" "}
                   {actionBooking?.booking.ticketCount === 1 ? "osoba" : "osoby"})
-                  otrzyma email z potwierdzeniem i pełnym adresem wydarzenia.
+                  otrzyma email z potwierdzeniem i pelnym adresem wydarzenia.
                 </>
               ) : (
                 <>
-                  <strong>{actionBooking?.booking.guestName}</strong> zostanie
-                  powiadomiony o odrzuceniu rezerwacji.
+                  <strong>
+                    {actionBooking?.booking &&
+                      getGuestName(actionBooking.booking.guest)}
+                  </strong>{" "}
+                  zostanie powiadomiony o odrzuceniu rezerwacji.
                 </>
               )}
             </AlertDialogDescription>
@@ -627,189 +726,24 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
                   : "bg-red-600 hover:bg-red-700"
               }
             >
-              {actionBooking?.action === "approve" ? "Zaakceptuj" : "Odrzuć"}
+              {actionBooking?.action === "approve" ? "Zaakceptuj" : "Odrzuc"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      {/* Remove from waitlist confirmation */}
-      <AlertDialog
-        open={entryToRemove !== null}
-        onOpenChange={(open) => !open && setEntryToRemove(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Usunąć z listy oczekujących?</AlertDialogTitle>
-            <AlertDialogDescription>
-              <strong>{entryToRemove?.name || entryToRemove?.email}</strong> zostanie
-              usunięty z listy oczekujących. Ta osoba nie będzie już powiadamiana
-              o wolnych miejscach.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Anuluj</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmRemoveFromWaitlist}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              Usuń
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {/* Reply to inquiry dialog */}
-      <Dialog
-        open={replyBooking !== null}
-        onOpenChange={(open) => !open && setReplyBooking(null)}
-      >
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <MessageCircle className="h-5 w-5 text-amber-600" />
-              Odpowiedz na zapytanie
-            </DialogTitle>
-          </DialogHeader>
-
-          {replyBooking && (
-            <div className="space-y-4">
-              {/* Guest info */}
-              <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                <Avatar className="h-10 w-10">
-                  <AvatarFallback className="bg-amber-100 text-amber-700">
-                    {replyBooking.guestName
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium">{replyBooking.guestName}</p>
-                  <p className="text-sm text-muted-foreground">{replyBooking.guestEmail}</p>
-                </div>
-              </div>
-
-              {/* Message history */}
-              <div className="space-y-3 max-h-[300px] overflow-y-auto">
-                {/* Original request if no messages */}
-                {replyBooking.specialRequests && (!replyBooking.messages || replyBooking.messages.length === 0) && (
-                  <div className="flex gap-3">
-                    <Avatar className="h-8 w-8 flex-shrink-0">
-                      <AvatarFallback className="bg-blue-100 text-blue-700 text-xs">
-                        {replyBooking.guestName.split(" ").map((n) => n[0]).join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <div className="bg-blue-50 rounded-lg p-3">
-                        <p className="text-sm">{replyBooking.specialRequests}</p>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {replyBooking.createdAt.toLocaleString("pl-PL", {
-                          day: "numeric",
-                          month: "short",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Messages */}
-                {replyBooking.messages?.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={cn(
-                      "flex gap-3",
-                      msg.senderType === "host" && "flex-row-reverse"
-                    )}
-                  >
-                    <Avatar className="h-8 w-8 flex-shrink-0">
-                      <AvatarFallback
-                        className={cn(
-                          "text-xs",
-                          msg.senderType === "host"
-                            ? "bg-amber-100 text-amber-700"
-                            : "bg-blue-100 text-blue-700"
-                        )}
-                      >
-                        {msg.senderName.split(" ").map((n) => n[0]).join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className={cn("flex-1", msg.senderType === "host" && "text-right")}>
-                      <div
-                        className={cn(
-                          "rounded-lg p-3 inline-block text-left",
-                          msg.senderType === "host"
-                            ? "bg-amber-50"
-                            : "bg-blue-50"
-                        )}
-                      >
-                        <p className="text-sm">{msg.message}</p>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {msg.createdAt.toLocaleString("pl-PL", {
-                          day: "numeric",
-                          month: "short",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Reply input */}
-              <div className="space-y-2">
-                <Textarea
-                  placeholder="Napisz odpowiedź..."
-                  value={replyMessage}
-                  onChange={(e) => setReplyMessage(e.target.value)}
-                  rows={3}
-                  className="resize-none"
-                />
-              </div>
-            </div>
-          )}
-
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setReplyBooking(null)}
-              disabled={isSendingReply}
-            >
-              Anuluj
-            </Button>
-            <Button
-              onClick={sendReply}
-              disabled={!replyMessage.trim() || isSendingReply}
-              className="bg-amber-600 hover:bg-amber-700"
-            >
-              {isSendingReply ? (
-                <>
-                  <Clock className="h-4 w-4 mr-2 animate-spin" />
-                  Wysyłanie...
-                </>
-              ) : (
-                <>
-                  <Send className="h-4 w-4 mr-2" />
-                  Wyślij
-                </>
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
 
-// Guest card component
+// ---------------------------------------------------------------------------
+// GuestCard component
+// ---------------------------------------------------------------------------
+
 interface GuestCardProps {
-  booking: MockBooking;
-  event: HostEvent;
+  booking: Booking;
+  eventId: string;
+  eventTitle: string;
+  isProcessing?: boolean;
   onApprove?: () => void;
   onDecline?: () => void;
   showActions?: boolean;
@@ -817,75 +751,83 @@ interface GuestCardProps {
 
 function GuestCard({
   booking,
-  event,
+  eventId,
+  eventTitle,
+  isProcessing = false,
   onApprove,
   onDecline,
   showActions = false,
 }: GuestCardProps) {
   const statusInfo = bookingStatusLabels[booking.status];
+  const guestName = getGuestName(booking.guest);
+  const netRevenue = booking.totalPrice - booking.platformFee;
+
+  // Build dietary display string
+  const dietaryParts: string[] = [];
+  if (booking.dietaryInfo) dietaryParts.push(booking.dietaryInfo);
+  if (booking.guest.guestProfile?.dietaryRestrictions)
+    dietaryParts.push(booking.guest.guestProfile.dietaryRestrictions);
+  if (booking.guest.guestProfile?.allergies)
+    dietaryParts.push(`Alergie: ${booking.guest.guestProfile.allergies}`);
+  const dietaryDisplay = dietaryParts.length > 0 ? dietaryParts.join(", ") : null;
 
   return (
     <Card>
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
           <Avatar className="h-12 w-12">
-            <AvatarFallback className="bg-amber-100 text-amber-700">
-              {booking.guestName
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
+            <AvatarFallback className="bg-primary/10 text-primary">
+              {getInitials(guestName)}
             </AvatarFallback>
           </Avatar>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-semibold truncate">{booking.guestName}</h4>
-              <Badge className={cn(statusInfo.color, "text-xs")} variant="secondary">
+              <h4 className="font-semibold truncate">{guestName}</h4>
+              <Badge
+                className={cn(statusInfo.color, "text-xs")}
+                variant="secondary"
+              >
                 {statusInfo.label}
               </Badge>
               <Badge variant="outline" className="text-xs">
-                {booking.ticketCount} {booking.ticketCount === 1 ? "os." : "os."}
+                {booking.ticketCount} os.
               </Badge>
             </div>
 
             <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground mb-2">
               <a
-                href={`mailto:${booking.guestEmail}`}
+                href={`mailto:${booking.guest.email}`}
                 className="flex items-center gap-1 hover:text-foreground"
               >
                 <Mail className="h-3 w-3" />
-                {booking.guestEmail}
+                {booking.guest.email}
               </a>
-              {booking.guestPhone && (
-                <a
-                  href={`tel:${booking.guestPhone}`}
-                  className="flex items-center gap-1 hover:text-foreground"
-                >
-                  <Phone className="h-3 w-3" />
-                  {booking.guestPhone}
-                </a>
-              )}
             </div>
 
-            {(booking.dietaryInfo || booking.specialRequests) && (
+            {(dietaryDisplay || booking.specialRequests) && (
               <div className="text-sm space-y-1">
-                {booking.dietaryInfo && (
+                {dietaryDisplay && (
                   <p className="flex items-start gap-1">
-                    <UtensilsCrossed className="h-3 w-3 mt-1 text-amber-600" />
-                    <span className="text-muted-foreground">{booking.dietaryInfo}</span>
+                    <UtensilsCrossed className="h-3 w-3 mt-1 text-primary" />
+                    <span className="text-muted-foreground">
+                      {dietaryDisplay}
+                    </span>
                   </p>
                 )}
                 {booking.specialRequests && (
                   <p className="flex items-start gap-1">
                     <MessageSquare className="h-3 w-3 mt-1 text-blue-600" />
-                    <span className="text-muted-foreground">{booking.specialRequests}</span>
+                    <span className="text-muted-foreground">
+                      {booking.specialRequests}
+                    </span>
                   </p>
                 )}
               </div>
             )}
 
-            <p className="text-sm font-medium text-amber-600 mt-2">
-              {formatPrice((booking.totalPrice - booking.platformFee) * 100)}
+            <p className="text-sm font-medium text-primary mt-2">
+              {formatPrice(netRevenue)}
             </p>
           </div>
 
@@ -897,14 +839,20 @@ function GuestCard({
                   size="sm"
                   className="bg-green-600 hover:bg-green-700"
                   onClick={onApprove}
+                  disabled={isProcessing}
                 >
-                  <Check className="h-4 w-4" />
+                  {isProcessing ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Check className="h-4 w-4" />
+                  )}
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   className="text-red-600 border-red-200 hover:bg-red-50"
                   onClick={onDecline}
+                  disabled={isProcessing}
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -912,10 +860,10 @@ function GuestCard({
             )}
             <ReportDialog
               reportType="guest"
-              reportedEntityId={booking.guestId || booking.id}
-              reportedEntityName={booking.guestName}
-              eventId={event.id}
-              eventTitle={event.title}
+              reportedEntityId={booking.guestId}
+              reportedEntityName={guestName}
+              eventId={eventId}
+              eventTitle={eventTitle}
               bookingId={booking.id}
               reporterRole="host"
               trigger={
@@ -929,233 +877,6 @@ function GuestCard({
               }
             />
           </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// Inquiry card component
-interface InquiryCardProps {
-  booking: MockBooking;
-  event: HostEvent;
-  onReply: () => void;
-}
-
-function InquiryCard({ booking, event, onReply }: InquiryCardProps) {
-  const statusInfo = bookingStatusLabels[booking.status];
-
-  // Check if there's an unanswered inquiry
-  const hasUnansweredInquiry = (() => {
-    if (booking.messages && booking.messages.length > 0) {
-      const lastMessage = booking.messages[booking.messages.length - 1];
-      return lastMessage.senderType === "guest";
-    }
-    return booking.specialRequests && (!booking.messages || booking.messages.length === 0);
-  })();
-
-  // Get the last message or special request
-  const lastInquiry = (() => {
-    if (booking.messages && booking.messages.length > 0) {
-      return {
-        message: booking.messages[booking.messages.length - 1].message,
-        date: booking.messages[booking.messages.length - 1].createdAt,
-        isFromGuest: booking.messages[booking.messages.length - 1].senderType === "guest",
-      };
-    }
-    if (booking.specialRequests) {
-      return {
-        message: booking.specialRequests,
-        date: booking.createdAt,
-        isFromGuest: true,
-      };
-    }
-    return null;
-  })();
-
-  const messageCount = booking.messages?.length || 0;
-
-  return (
-    <Card className={cn(hasUnansweredInquiry && "border-blue-200 bg-blue-50/30")}>
-      <CardContent className="p-4">
-        <div className="flex items-start gap-4">
-          <Avatar className="h-12 w-12">
-            <AvatarFallback className="bg-amber-100 text-amber-700">
-              {booking.guestName
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-semibold truncate">{booking.guestName}</h4>
-              <Badge className={cn(statusInfo.color, "text-xs")} variant="secondary">
-                {statusInfo.label}
-              </Badge>
-              {hasUnansweredInquiry && (
-                <Badge className="bg-blue-500 text-white text-xs">
-                  Oczekuje na odpowiedź
-                </Badge>
-              )}
-            </div>
-
-            <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground mb-3">
-              <a
-                href={`mailto:${booking.guestEmail}`}
-                className="flex items-center gap-1 hover:text-foreground"
-              >
-                <Mail className="h-3 w-3" />
-                {booking.guestEmail}
-              </a>
-              {messageCount > 0 && (
-                <span className="flex items-center gap-1">
-                  <MessageCircle className="h-3 w-3" />
-                  {messageCount} {messageCount === 1 ? "wiadomość" : messageCount < 5 ? "wiadomości" : "wiadomości"}
-                </span>
-              )}
-            </div>
-
-            {/* Last message preview */}
-            {lastInquiry && (
-              <div className={cn(
-                "rounded-lg p-3 text-sm",
-                lastInquiry.isFromGuest ? "bg-blue-50 border border-blue-100" : "bg-amber-50 border border-amber-100"
-              )}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className={cn(
-                    "text-xs font-medium",
-                    lastInquiry.isFromGuest ? "text-blue-700" : "text-amber-700"
-                  )}>
-                    {lastInquiry.isFromGuest ? booking.guestName : "Ty"}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {lastInquiry.date.toLocaleString("pl-PL", {
-                      day: "numeric",
-                      month: "short",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                </div>
-                <p className="text-muted-foreground line-clamp-2">{lastInquiry.message}</p>
-              </div>
-            )}
-          </div>
-
-          {/* Reply button */}
-          <Button
-            onClick={onReply}
-            size="sm"
-            className={cn(
-              hasUnansweredInquiry
-                ? "bg-blue-600 hover:bg-blue-700"
-                : "bg-amber-600 hover:bg-amber-700"
-            )}
-          >
-            <MessageCircle className="h-4 w-4 mr-1" />
-            {hasUnansweredInquiry ? "Odpowiedz" : "Wiadomość"}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// Waitlist entry card component
-interface WaitlistEntryCardProps {
-  entry: WaitlistEntry;
-  onRemove: () => void;
-}
-
-const waitlistStatusLabels: Record<WaitlistEntry["status"], { label: string; color: string }> = {
-  waiting: { label: "Oczekuje", color: "bg-blue-100 text-blue-700" },
-  notified: { label: "Powiadomiony", color: "bg-amber-100 text-amber-700" },
-  expired: { label: "Wygasło", color: "bg-gray-100 text-gray-700" },
-  converted: { label: "Zarezerwował", color: "bg-green-100 text-green-700" },
-};
-
-function WaitlistEntryCard({ entry, onRemove }: WaitlistEntryCardProps) {
-  const statusInfo = waitlistStatusLabels[entry.status];
-  const displayName = entry.name || entry.email.split("@")[0];
-
-  return (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-start gap-4">
-          {/* Position number */}
-          <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-lg">
-            #{entry.position}
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-semibold truncate">{displayName}</h4>
-              <Badge className={cn(statusInfo.color, "text-xs")} variant="secondary">
-                {statusInfo.label}
-              </Badge>
-              <Badge variant="outline" className="text-xs">
-                {entry.ticketsWanted}{" "}
-                {entry.ticketsWanted === 1 ? "miejsce" : entry.ticketsWanted < 5 ? "miejsca" : "miejsc"}
-              </Badge>
-            </div>
-
-            <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground mb-2">
-              <a
-                href={`mailto:${entry.email}`}
-                className="flex items-center gap-1 hover:text-foreground"
-              >
-                <Mail className="h-3 w-3" />
-                {entry.email}
-              </a>
-              {entry.phone && (
-                <a
-                  href={`tel:${entry.phone}`}
-                  className="flex items-center gap-1 hover:text-foreground"
-                >
-                  <Phone className="h-3 w-3" />
-                  {entry.phone}
-                </a>
-              )}
-            </div>
-
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Clock className="h-3 w-3" />
-                Zapisano: {entry.createdAt.toLocaleDateString("pl-PL")}
-              </span>
-              {entry.notifiedAt && (
-                <span className="flex items-center gap-1">
-                  <Bell className="h-3 w-3" />
-                  Powiadomiono: {entry.notifiedAt.toLocaleDateString("pl-PL")}
-                </span>
-              )}
-              {entry.expiresAt && entry.status === "notified" && (
-                <span className="flex items-center gap-1 text-amber-600">
-                  <Clock className="h-3 w-3" />
-                  Wygasa: {entry.expiresAt.toLocaleString("pl-PL", {
-                    day: "numeric",
-                    month: "short",
-                    hour: "2-digit",
-                    minute: "2-digit"
-                  })}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Remove button - only for waiting/notified statuses */}
-          {(entry.status === "waiting" || entry.status === "notified") && (
-            <Button
-              size="sm"
-              variant="ghost"
-              className="text-red-600 hover:text-red-700 hover:bg-red-50"
-              onClick={onRemove}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          )}
         </div>
       </CardContent>
     </Card>

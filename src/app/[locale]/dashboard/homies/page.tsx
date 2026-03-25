@@ -109,7 +109,7 @@ export default function HomiesPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl md:text-3xl font-bold mb-2 flex items-center gap-2">
-            <Users className="h-7 w-7 text-amber-600" />
+            <Users className="h-7 w-7 text-primary" />
             Moi Homies
           </h1>
           <p className="text-muted-foreground">
@@ -121,13 +121,13 @@ export default function HomiesPage() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <Card>
             <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-amber-600">{following.length}</p>
+              <p className="text-2xl font-bold text-primary">{following.length}</p>
               <p className="text-xs text-muted-foreground">Obserwujesz</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-amber-600">{followers.length}</p>
+              <p className="text-2xl font-bold text-primary">{followers.length}</p>
               <p className="text-xs text-muted-foreground">Obserwujących</p>
             </CardContent>
           </Card>
@@ -220,7 +220,7 @@ export default function HomiesPage() {
                         {searchQuery ? "Nie znaleziono" : "Nie obserwujesz jeszcze nikogo"}
                       </p>
                       {!searchQuery && (
-                        <Button variant="link" className="text-amber-600 mt-2" asChild>
+                        <Button variant="link" className="text-primary mt-2" asChild>
                           <Link href="/events">Odkryj hostów</Link>
                         </Button>
                       )}
@@ -300,7 +300,7 @@ export default function HomiesPage() {
                           className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
                         >
                           <Avatar className="h-10 w-10">
-                            <AvatarFallback className="bg-amber-100 text-amber-700">
+                            <AvatarFallback className="bg-primary/10 text-primary">
                               {conv.participantNames[0]?.[0] || "?"}
                             </AvatarFallback>
                           </Avatar>
@@ -313,7 +313,7 @@ export default function HomiesPage() {
                             </p>
                           </div>
                           {conv.unreadCount[currentUserId] > 0 && (
-                            <Badge className="bg-amber-600 text-white text-xs">
+                            <Badge className="bg-primary text-white text-xs">
                               {conv.unreadCount[currentUserId]}
                             </Badge>
                           )}
@@ -343,7 +343,7 @@ export default function HomiesPage() {
                         <p className="text-muted-foreground mb-4">
                           Brak wspólnych list. Utwórz pierwszą!
                         </p>
-                        <Button asChild className="bg-amber-600 hover:bg-amber-700">
+                        <Button asChild className="bg-primary hover:bg-primary/90">
                           <Link href="/dashboard/homies/wishlists">
                             Utwórz listę
                           </Link>
@@ -398,7 +398,7 @@ export default function HomiesPage() {
                     return (
                       <div key={homieId} className="flex items-center gap-3 p-2">
                         <Avatar className="h-10 w-10">
-                          <AvatarFallback className={person.isHost ? "bg-amber-100 text-amber-700" : "bg-stone-100 text-stone-700"}>
+                          <AvatarFallback className={person.isHost ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}>
                             {initials}
                           </AvatarFallback>
                         </Avatar>
@@ -413,7 +413,7 @@ export default function HomiesPage() {
                             )}
                             {person.rating && (
                               <span className="flex items-center gap-0.5">
-                                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                                <Star className="h-3 w-3 fill-primary/60 text-primary/60" />
                                 {person.rating}
                               </span>
                             )}

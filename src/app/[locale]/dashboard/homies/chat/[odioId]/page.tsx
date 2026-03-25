@@ -53,9 +53,9 @@ export default function HomieChatPage({
   const displayMessages: HomieMessage[] = messages.length > 0 ? messages : [];
 
   return (
-    <div className="h-screen flex flex-col bg-stone-50">
+    <div className="h-screen flex flex-col bg-muted/50">
       {/* Header */}
-      <header className="bg-white border-b border-stone-200 flex-shrink-0">
+      <header className="bg-white border-b border flex-shrink-0">
         <div className="max-w-2xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -65,12 +65,12 @@ export default function HomieChatPage({
                 </Button>
               </Link>
               <Avatar className="h-10 w-10">
-                <AvatarFallback className="bg-amber-100 text-amber-700">
+                <AvatarFallback className="bg-primary/10 text-primary">
                   {initials}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h1 className="font-semibold text-stone-900">{otherUserName}</h1>
+                <h1 className="font-semibold text-foreground">{otherUserName}</h1>
                 <p className="text-xs text-green-600">Online</p>
               </div>
             </div>

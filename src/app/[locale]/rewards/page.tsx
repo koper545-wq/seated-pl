@@ -35,14 +35,15 @@ import {
   Info,
   Sparkles,
 } from "lucide-react";
+import { PageTransition, FadeInUp } from "@/components/ui/motion";
 
 // Rarity colors
 const rarityColors = {
-  common: "border-stone-300 bg-stone-50",
+  common: "border bg-muted/50",
   uncommon: "border-green-300 bg-green-50",
   rare: "border-blue-300 bg-blue-50",
   epic: "border-purple-300 bg-purple-50",
-  legendary: "border-amber-400 bg-amber-50",
+  legendary: "border-primary/40 bg-primary/5",
 };
 
 const rarityLabels = {
@@ -66,7 +67,7 @@ const badgeCategoryLabels: Record<string, { en: string; pl: string }> = {
 
 function LevelCard({ level, isCurrentExample }: { level: LevelInfo; isCurrentExample?: boolean }) {
   return (
-    <Card className={`relative overflow-hidden ${isCurrentExample ? "ring-2 ring-amber-500" : ""}`}>
+    <Card className={`relative overflow-hidden ${isCurrentExample ? "ring-2 ring-primary/80" : ""}`}>
       <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${level.color}`} />
       <CardContent className="p-4">
         <div className="flex items-center gap-3">
@@ -75,19 +76,19 @@ function LevelCard({ level, isCurrentExample }: { level: LevelInfo; isCurrentExa
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-stone-900">{level.namePl}</span>
+              <span className="font-bold text-foreground">{level.namePl}</span>
               <Badge variant="outline" className="text-xs">
                 Poziom {level.level}
               </Badge>
             </div>
-            <p className="text-xs text-stone-500">
+            <p className="text-xs text-muted-foreground">
               {level.minXP.toLocaleString()} - {level.maxXP === 999999 ? "∞" : level.maxXP.toLocaleString()} XP
             </p>
           </div>
         </div>
         <div className="mt-3 space-y-1">
           {level.benefitsPl.map((benefit, i) => (
-            <div key={i} className="flex items-start gap-2 text-xs text-stone-600">
+            <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
               <span className="text-green-500">✓</span>
               <span>{benefit}</span>
             </div>
@@ -106,8 +107,8 @@ function BadgeCard({ badge }: { badge: MockBadge }) {
           <div className={`p-3 rounded-lg border-2 ${rarityColors[badge.rarity]} cursor-help transition-transform hover:scale-105`}>
             <div className="text-center">
               <span className="text-2xl block mb-1">{badge.icon}</span>
-              <p className="font-medium text-xs text-stone-900 line-clamp-1">{badge.namePl}</p>
-              <Badge variant="outline" className={`text-[10px] mt-1 ${badge.tier === "gold" ? "border-amber-400 text-amber-700" : badge.tier === "silver" ? "border-stone-400 text-stone-700" : "border-orange-300 text-orange-700"}`}>
+              <p className="font-medium text-xs text-foreground line-clamp-1">{badge.namePl}</p>
+              <Badge variant="outline" className={`text-[10px] mt-1 ${badge.tier === "gold" ? "border-primary/40 text-primary" : badge.tier === "silver" ? "border-muted-foreground/50 text-muted-foreground" : "border-orange-300 text-orange-700"}`}>
                 {badge.tier === "gold" ? "Złota" : badge.tier === "silver" ? "Srebrna" : "Brązowa"}
               </Badge>
             </div>
@@ -119,17 +120,17 @@ function BadgeCard({ badge }: { badge: MockBadge }) {
               <span className="text-xl">{badge.icon}</span>
               <span className="font-bold">{badge.namePl}</span>
             </div>
-            <p className="text-sm text-stone-600">{badge.descriptionPl}</p>
+            <p className="text-sm text-muted-foreground">{badge.descriptionPl}</p>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-stone-500">Wymaganie:</span>
+              <span className="text-muted-foreground">Wymaganie:</span>
               <span>{badge.requirementPl}</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-stone-500">Nagroda XP:</span>
-              <span className="font-medium text-amber-600">+{badge.xpReward} XP</span>
+              <span className="text-muted-foreground">Nagroda XP:</span>
+              <span className="font-medium text-primary">+{badge.xpReward} XP</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-stone-500">Rzadkość:</span>
+              <span className="text-muted-foreground">Rzadkość:</span>
               <Badge variant="outline" className={`text-[10px] ${rarityColors[badge.rarity]}`}>
                 {rarityLabels[badge.rarity].pl}
               </Badge>
@@ -149,17 +150,17 @@ function RewardCard({ reward }: { reward: Reward }) {
     <Card className="h-full">
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-xl flex-shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl flex-shrink-0">
             {reward.icon}
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="font-semibold text-stone-900 text-sm">{reward.namePl}</h4>
-            <p className="text-xs text-stone-500 mt-1">{reward.descriptionPl}</p>
+            <h4 className="font-semibold text-foreground text-sm">{reward.namePl}</h4>
+            <p className="text-xs text-muted-foreground mt-1">{reward.descriptionPl}</p>
           </div>
         </div>
         <div className="mt-3 flex items-center justify-between">
           {isXPPurchasable ? (
-            <Badge className="bg-amber-500 hover:bg-amber-600">
+            <Badge className="bg-primary/50 hover:bg-primary">
               <Zap className="w-3 h-3 mr-1" />
               {reward.xpCost?.toLocaleString()} XP
             </Badge>
@@ -205,21 +206,23 @@ export default function RewardsPage() {
   const purchasableRewards = rewards.filter(r => r.xpCost && r.isActive);
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <PageTransition className="min-h-screen bg-muted/50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-amber-50 to-stone-50 py-12 md:py-20">
+      <section className="bg-gradient-to-b from-primary/5 to-muted/50 py-12 md:py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <FadeInUp>
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Sparkles className="w-4 h-4" />
             System nagród Seated
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-stone-900 mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Zdobywaj XP, Odblokuj Nagrody
           </h1>
-          <p className="text-xl text-stone-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Im więcej uczestniczysz w wydarzeniach i angażujesz się w społeczność,
             tym więcej benefitów odblokowujesz. Odkryj nasz system gamifikacji!
           </p>
+          </FadeInUp>
         </div>
       </section>
 
@@ -252,18 +255,18 @@ export default function RewardsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Info className="w-5 h-5 text-amber-500" />
+                    <Info className="w-5 h-5 text-primary/80" />
                     Jak działa system XP?
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-3 gap-6">
                     <div className="text-center">
-                      <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                         <span className="text-3xl">⚡</span>
                       </div>
-                      <h3 className="font-bold text-stone-900 mb-2">Zdobywaj XP</h3>
-                      <p className="text-sm text-stone-600">
+                      <h3 className="font-bold text-foreground mb-2">Zdobywaj XP</h3>
+                      <p className="text-sm text-muted-foreground">
                         Za udział w wydarzeniach, opinie, polecenia znajomym i inne aktywności
                       </p>
                     </div>
@@ -271,8 +274,8 @@ export default function RewardsPage() {
                       <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
                         <span className="text-3xl">📈</span>
                       </div>
-                      <h3 className="font-bold text-stone-900 mb-2">Awansuj na wyższe poziomy</h3>
-                      <p className="text-sm text-stone-600">
+                      <h3 className="font-bold text-foreground mb-2">Awansuj na wyższe poziomy</h3>
+                      <p className="text-sm text-muted-foreground">
                         Każdy poziom odblokowuje nowe benefity i przywileje na platformie
                       </p>
                     </div>
@@ -280,8 +283,8 @@ export default function RewardsPage() {
                       <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                         <span className="text-3xl">🎁</span>
                       </div>
-                      <h3 className="font-bold text-stone-900 mb-2">Odbieraj nagrody</h3>
-                      <p className="text-sm text-stone-600">
+                      <h3 className="font-bold text-foreground mb-2">Odbieraj nagrody</h3>
+                      <p className="text-sm text-muted-foreground">
                         Wymieniaj XP na zniżki, vouchery i ekskluzywne perki
                       </p>
                     </div>
@@ -290,15 +293,15 @@ export default function RewardsPage() {
               </Card>
 
               {/* Demo progress */}
-              <Card className="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
+              <Card className="bg-gradient-to-r from-primary/50 to-orange-500 text-white">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <p className="text-amber-100 text-sm">Przykład: Twoje XP</p>
+                      <p className="text-primary-foreground/80 text-sm">Przykład: Twoje XP</p>
                       <p className="text-3xl font-bold">{demoXP.toLocaleString()} XP</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-amber-100 text-sm">Aktualny poziom</p>
+                      <p className="text-primary-foreground/80 text-sm">Aktualny poziom</p>
                       <p className="text-xl font-bold flex items-center gap-2">
                         🌟 Entuzjasta
                       </p>
@@ -309,8 +312,8 @@ export default function RewardsPage() {
                       <span>Postęp do następnego poziomu</span>
                       <span>{demoProgress.current} / {demoProgress.max} XP</span>
                     </div>
-                    <Progress value={demoProgress.percent} className="h-3 bg-amber-400/30" />
-                    <p className="text-xs text-amber-100">
+                    <Progress value={demoProgress.percent} className="h-3 bg-primary/30" />
+                    <p className="text-xs text-primary-foreground/80">
                       Jeszcze {demoProgress.max - demoProgress.current} XP do poziomu Wtajemniczony 💎
                     </p>
                   </div>
@@ -321,20 +324,20 @@ export default function RewardsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-amber-500" />
+                    <Zap className="w-5 h-5 text-primary/80" />
                     Jak szybko zdobyć XP?
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {xpActions.filter(a => a.category !== "hosting").slice(0, 9).map(action => (
-                      <div key={action.id} className="flex items-center gap-3 p-3 bg-stone-50 rounded-lg">
-                        <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-700">
+                      <div key={action.id} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
                           +{action.xp}
                         </div>
                         <div>
-                          <p className="font-medium text-stone-900 text-sm">{action.actionPl}</p>
-                          <p className="text-xs text-stone-500">{action.descriptionPl}</p>
+                          <p className="font-medium text-foreground text-sm">{action.actionPl}</p>
+                          <p className="text-xs text-muted-foreground">{action.descriptionPl}</p>
                         </div>
                       </div>
                     ))}
@@ -349,7 +352,7 @@ export default function RewardsPage() {
               <div>
                 <div className="flex items-center gap-2 mb-6">
                   <Users className="w-6 h-6 text-blue-500" />
-                  <h2 className="text-2xl font-bold text-stone-900">Poziomy dla Gości</h2>
+                  <h2 className="text-2xl font-bold text-foreground">Poziomy dla Gości</h2>
                 </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {guestLevels.map((level, i) => (
@@ -361,8 +364,8 @@ export default function RewardsPage() {
               {/* Host Levels */}
               <div>
                 <div className="flex items-center gap-2 mb-6">
-                  <ChefHat className="w-6 h-6 text-amber-500" />
-                  <h2 className="text-2xl font-bold text-stone-900">Poziomy dla Hostów</h2>
+                  <ChefHat className="w-6 h-6 text-primary/80" />
+                  <h2 className="text-2xl font-bold text-foreground">Poziomy dla Hostów</h2>
                 </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {hostLevels.map(level => (
@@ -375,20 +378,20 @@ export default function RewardsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <ChefHat className="w-5 h-5 text-amber-500" />
+                    <ChefHat className="w-5 h-5 text-primary/80" />
                     Jak hosty zdobywają XP?
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {xpActions.filter(a => a.category === "hosting" || a.category === "quality").map(action => (
-                      <div key={action.id} className="flex items-center gap-3 p-3 bg-stone-50 rounded-lg">
-                        <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-700">
+                      <div key={action.id} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
                           +{action.xp}
                         </div>
                         <div>
-                          <p className="font-medium text-stone-900 text-sm">{action.actionPl}</p>
-                          <p className="text-xs text-stone-500">{action.descriptionPl}</p>
+                          <p className="font-medium text-foreground text-sm">{action.actionPl}</p>
+                          <p className="text-xs text-muted-foreground">{action.descriptionPl}</p>
                         </div>
                       </div>
                     ))}
@@ -403,7 +406,7 @@ export default function RewardsPage() {
               <Card>
                 <CardContent className="p-4">
                   <div className="flex flex-wrap items-center gap-4 text-sm">
-                    <span className="font-medium text-stone-900">Rzadkość:</span>
+                    <span className="font-medium text-foreground">Rzadkość:</span>
                     {Object.entries(rarityLabels).map(([key, label]) => (
                       <div key={key} className={`px-3 py-1 rounded-full border ${rarityColors[key as keyof typeof rarityColors]}`}>
                         {label.pl}
@@ -417,7 +420,7 @@ export default function RewardsPage() {
               <div>
                 <div className="flex items-center gap-2 mb-6">
                   <Users className="w-6 h-6 text-blue-500" />
-                  <h2 className="text-2xl font-bold text-stone-900">Odznaki dla Gości</h2>
+                  <h2 className="text-2xl font-bold text-foreground">Odznaki dla Gości</h2>
                   <Badge variant="outline">{guestBadges.length} odznak</Badge>
                 </div>
 
@@ -427,7 +430,7 @@ export default function RewardsPage() {
                   if (catBadges.length === 0) return null;
                   return (
                     <div key={cat} className="mb-6">
-                      <h3 className="text-lg font-semibold text-stone-700 mb-3 flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                         {cat === "activity" && "🎯"}
                         {cat === "cuisine" && "🍽️"}
                         {cat === "social" && "👥"}
@@ -448,8 +451,8 @@ export default function RewardsPage() {
               {/* Host Badges */}
               <div>
                 <div className="flex items-center gap-2 mb-6">
-                  <ChefHat className="w-6 h-6 text-amber-500" />
-                  <h2 className="text-2xl font-bold text-stone-900">Odznaki dla Hostów</h2>
+                  <ChefHat className="w-6 h-6 text-primary/80" />
+                  <h2 className="text-2xl font-bold text-foreground">Odznaki dla Hostów</h2>
                   <Badge variant="outline">{hostBadges.length} odznak</Badge>
                 </div>
 
@@ -458,7 +461,7 @@ export default function RewardsPage() {
                   if (catBadges.length === 0) return null;
                   return (
                     <div key={cat} className="mb-6">
-                      <h3 className="text-lg font-semibold text-stone-700 mb-3 flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                         {cat === "host_activity" && "🎪"}
                         {cat === "host_quality" && "⭐"}
                         {cat === "host_community" && "🤝"}
@@ -481,13 +484,13 @@ export default function RewardsPage() {
               <div>
                 <div className="flex items-center gap-2 mb-6">
                   <Star className="w-6 h-6 text-purple-500" />
-                  <h2 className="text-2xl font-bold text-stone-900">Automatyczne Perki</h2>
+                  <h2 className="text-2xl font-bold text-foreground">Automatyczne Perki</h2>
                 </div>
-                <p className="text-stone-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Te benefity odblokowujesz automatycznie wraz z awansem na wyższe poziomy.
                 </p>
 
-                <h3 className="text-lg font-semibold text-stone-700 mb-3 flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                   <Users className="w-5 h-5" />
                   Dla Gości
                 </h3>
@@ -497,7 +500,7 @@ export default function RewardsPage() {
                   ))}
                 </div>
 
-                <h3 className="text-lg font-semibold text-stone-700 mb-3 flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                   <ChefHat className="w-5 h-5" />
                   Dla Hostów
                 </h3>
@@ -511,10 +514,10 @@ export default function RewardsPage() {
               {/* Purchasable with XP */}
               <div>
                 <div className="flex items-center gap-2 mb-6">
-                  <Gift className="w-6 h-6 text-amber-500" />
-                  <h2 className="text-2xl font-bold text-stone-900">Wymień XP na nagrody</h2>
+                  <Gift className="w-6 h-6 text-primary/80" />
+                  <h2 className="text-2xl font-bold text-foreground">Wymień XP na nagrody</h2>
                 </div>
-                <p className="text-stone-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Zdobyte XP możesz wymieniać na zniżki, vouchery i inne nagrody w sklepie nagród.
                 </p>
 
@@ -530,17 +533,18 @@ export default function RewardsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-stone-50 to-amber-50">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-muted/50 to-primary/5">
+        <FadeInUp>
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-stone-900 mb-4">
+          <h2 className="text-3xl font-bold text-foreground mb-4">
             Gotowy na kulinarną przygodę?
           </h2>
-          <p className="text-stone-600 mb-8">
+          <p className="text-muted-foreground mb-8">
             Dołącz do społeczności Seated i zacznij zdobywać XP już dziś!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/events">
-              <Button size="lg" className="bg-amber-500 hover:bg-amber-600">
+              <Button size="lg" className="bg-primary/50 hover:bg-primary">
                 Przeglądaj wydarzenia
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -552,7 +556,8 @@ export default function RewardsPage() {
             </Link>
           </div>
         </div>
+        </FadeInUp>
       </section>
-    </div>
+    </PageTransition>
   );
 }

@@ -239,7 +239,7 @@ export function DigitalTicket({
         );
       case "used":
         return (
-          <Badge variant="secondary" className="bg-stone-100 text-stone-600">
+          <Badge variant="secondary" className="bg-muted text-muted-foreground">
             Wykorzystany
           </Badge>
         );
@@ -264,8 +264,8 @@ export function DigitalTicket({
         <CardContent className="p-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-amber-50 rounded-lg flex items-center justify-center">
-                <Ticket className="h-6 w-6 text-amber-600" />
+              <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center">
+                <Ticket className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <h4 className="font-medium">{ticket.eventTitle}</h4>
@@ -310,7 +310,7 @@ export function DigitalTicket({
   return (
     <Card className={cn("overflow-hidden", className)}>
       {/* Ticket header with decorative edge */}
-      <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white p-4">
+      <div className="bg-gradient-to-r from-primary/85 to-primary text-white p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Ticket className="h-6 w-6" />
@@ -321,7 +321,7 @@ export function DigitalTicket({
       </div>
 
       {/* Decorative perforation */}
-      <div className="h-4 bg-stone-50 relative">
+      <div className="h-4 bg-muted/50 relative">
         <div className="absolute inset-x-0 top-1/2 transform -translate-y-1/2 flex justify-between px-2">
           {[...Array(20)].map((_, i) => (
             <div key={i} className="w-2 h-2 bg-white rounded-full" />
@@ -334,7 +334,7 @@ export function DigitalTicket({
           {/* Event details */}
           <div className="md:col-span-2 space-y-4">
             <div>
-              <h2 className="text-2xl font-bold text-stone-900">
+              <h2 className="text-2xl font-bold text-foreground">
                 {ticket.eventTitle}
               </h2>
               <p className="text-sm text-muted-foreground mt-1">
@@ -344,8 +344,8 @@ export function DigitalTicket({
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Calendar className="h-5 w-5 text-amber-600" />
+                <div className="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Calendar className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Data</p>
@@ -356,8 +356,8 @@ export function DigitalTicket({
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Clock className="h-5 w-5 text-amber-600" />
+                <div className="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Clock className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Godzina</p>
@@ -366,8 +366,8 @@ export function DigitalTicket({
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <MapPin className="h-5 w-5 text-amber-600" />
+                <div className="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <MapPin className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Lokalizacja</p>
@@ -376,8 +376,8 @@ export function DigitalTicket({
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Users className="h-5 w-5 text-amber-600" />
+                <div className="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Users className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Liczba miejsc</p>
@@ -390,8 +390,8 @@ export function DigitalTicket({
 
             <div className="pt-4 border-t">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-stone-100 rounded-full flex items-center justify-center">
-                  <User className="h-5 w-5 text-stone-600" />
+                <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                  <User className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <div>
                   <p className="font-medium">{ticket.guestName}</p>
@@ -402,7 +402,7 @@ export function DigitalTicket({
           </div>
 
           {/* QR Code section */}
-          <div className="flex flex-col items-center justify-center p-4 bg-stone-50 rounded-xl">
+          <div className="flex flex-col items-center justify-center p-4 bg-muted/50 rounded-xl">
             <TicketQRCode data={ticket.qrData} size={160} className="shadow-sm" />
 
             <div className="mt-4 text-center">
@@ -411,13 +411,13 @@ export function DigitalTicket({
                   <TooltipTrigger asChild>
                     <button
                       onClick={copyTicketCode}
-                      className="font-mono text-lg font-bold text-stone-900 hover:text-amber-600 transition-colors flex items-center gap-2"
+                      className="font-mono text-lg font-bold text-foreground hover:text-primary transition-colors flex items-center gap-2"
                     >
                       {ticket.ticketCode}
                       {copied ? (
                         <CheckCircle className="h-4 w-4 text-green-600" />
                       ) : (
-                        <Copy className="h-4 w-4 text-stone-400" />
+                        <Copy className="h-4 w-4 text-muted-foreground/60" />
                       )}
                     </button>
                   </TooltipTrigger>

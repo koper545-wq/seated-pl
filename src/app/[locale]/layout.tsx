@@ -82,7 +82,7 @@ export default async function LocaleLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Seated" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#d97706" />
+        <meta name="theme-color" content="#C05C36" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>

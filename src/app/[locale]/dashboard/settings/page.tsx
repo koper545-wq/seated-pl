@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
-import { currentGuestProfile, dietaryOptions, eventTypes, profileLanguages, getGuestProfileByMockUserId, getHostProfileByMockUserId } from "@/lib/mock-data";
+import { dietaryOptions, eventTypes, profileLanguages } from "@/lib/mock-data";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,7 +42,7 @@ function LanguageSelector() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-muted-foreground">
           Wybierz preferowany język interfejsu
         </p>
         <div className="grid grid-cols-2 gap-3">
@@ -52,8 +52,8 @@ function LanguageSelector() {
               onClick={() => handleLanguageChange(lang.value)}
               className={`flex items-center gap-3 p-3 border rounded-lg transition-colors ${
                 currentLocale === lang.value
-                  ? "border-amber-500 bg-amber-50"
-                  : "hover:border-stone-300"
+                  ? "border-primary bg-primary/5"
+                  : "hover:border"
               }`}
             >
               <span className="text-2xl">{lang.flag}</span>
@@ -69,35 +69,27 @@ function LanguageSelector() {
 export default function SettingsPage() {
   const { user, isLoading, isMockUser, guestProfile: apiGuestProfile, hostProfile: apiHostProfile } = useCurrentUser();
 
-  // Get profile based on mock user or real user
-  const getInitialProfile = () => {
-    if (isMockUser && user && 'id' in user) {
-      const mockUser = user as { id: string; role?: string; email?: string };
-      if (mockUser.role === "host") {
-        const hp = getHostProfileByMockUserId(mockUser.id);
-        if (hp) {
-          return {
-            ...currentGuestProfile,
-            id: hp.id,
-            firstName: hp.name.split(" ")[0] || hp.name,
-            lastName: hp.name.split(" ").slice(1).join(" ") || "",
-            email: mockUser.email || "",
-            avatar: hp.avatar,
-            city: hp.city,
-            bio: hp.bio,
-          };
-        }
-      } else {
-        const gp = getGuestProfileByMockUserId(mockUser.id);
-        if (gp) return gp;
-      }
-      return currentGuestProfile;
-    }
+  const defaultProfile = {
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    avatar: "",
+    bio: "",
+    city: "Wrocław",
+    dietaryRestrictions: [] as string[],
+    allergies: [] as string[],
+    isPublic: false,
+    socialLinks: { instagram: "", facebook: "", tiktok: "" },
+    favoriteCategories: [] as string[],
+    photos: [] as string[],
+  };
 
-    // Real user
+  // Get profile from real user data
+  const getInitialProfile = () => {
     if (user && 'email' in user) {
       return {
-        ...currentGuestProfile,
+        ...defaultProfile,
         id: (user as { id: string }).id || "",
         firstName: apiGuestProfile?.firstName || (user as { name?: string }).name?.split(" ")[0] || "",
         lastName: apiGuestProfile?.lastName || (user as { name?: string }).name?.split(" ").slice(1).join(" ") || "",
@@ -109,7 +101,7 @@ export default function SettingsPage() {
       };
     }
 
-    return currentGuestProfile;
+    return defaultProfile;
   };
 
   const [profile, setProfile] = useState(getInitialProfile);
@@ -125,10 +117,10 @@ export default function SettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Ładowanie...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Ładowanie...</p>
         </div>
       </div>
     );
@@ -171,9 +163,9 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Header */}
-      <header className="bg-white border-b border-stone-200 sticky top-0 z-10">
+      <header className="bg-white border-b border sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -182,12 +174,12 @@ export default function SettingsPage() {
                   ← Wróć
                 </Button>
               </Link>
-              <h1 className="font-semibold text-stone-900">Ustawienia</h1>
+              <h1 className="font-semibold text-foreground">Ustawienia</h1>
             </div>
             <Button
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-amber-500 hover:bg-amber-600"
+              className="bg-primary/50 hover:bg-primary"
             >
               {isSaving ? "Zapisuję..." : saved ? "✓ Zapisano" : "Zapisz"}
             </Button>
@@ -205,7 +197,7 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-full bg-stone-200 flex items-center justify-center text-3xl">
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center text-3xl">
                 {profile.avatar ? (
                   <img
                     src={profile.avatar}
@@ -220,7 +212,7 @@ export default function SettingsPage() {
                 <Button onClick={handlePhotoUpload} variant="outline" size="sm">
                   Zmień zdjęcie
                 </Button>
-                <p className="text-xs text-stone-500 mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   JPG, PNG. Maks. 5MB
                 </p>
               </div>
@@ -266,9 +258,9 @@ export default function SettingsPage() {
                 type="email"
                 value={profile.email}
                 disabled
-                className="bg-stone-50"
+                className="bg-muted/50"
               />
-              <p className="text-xs text-stone-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Email nie może być zmieniony
               </p>
             </div>
@@ -295,7 +287,7 @@ export default function SettingsPage() {
                 placeholder="Opowiedz coś o sobie i swojej pasji do jedzenia..."
                 rows={4}
               />
-              <p className="text-xs text-stone-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Maks. 500 znaków. Widoczne na profilu publicznym.
               </p>
             </div>
@@ -316,7 +308,7 @@ export default function SettingsPage() {
             <div>
               <Label htmlFor="instagram">Instagram</Label>
               <div className="flex">
-                <span className="inline-flex items-center px-3 bg-stone-100 border border-r-0 rounded-l-md text-stone-500 text-sm">
+                <span className="inline-flex items-center px-3 bg-muted border border-r-0 rounded-l-md text-muted-foreground text-sm">
                   @
                 </span>
                 <Input
@@ -358,7 +350,7 @@ export default function SettingsPage() {
             <div>
               <Label htmlFor="tiktok">TikTok</Label>
               <div className="flex">
-                <span className="inline-flex items-center px-3 bg-stone-100 border border-r-0 rounded-l-md text-stone-500 text-sm">
+                <span className="inline-flex items-center px-3 bg-muted border border-r-0 rounded-l-md text-muted-foreground text-sm">
                   @
                 </span>
                 <Input
@@ -391,8 +383,8 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-stone-900">Profil publiczny</p>
-                <p className="text-sm text-stone-500">
+                <p className="font-medium text-foreground">Profil publiczny</p>
+                <p className="text-sm text-muted-foreground">
                   Inni użytkownicy mogą zobaczyć Twój profil, odznaki i
                   wydarzenia
                 </p>
@@ -405,14 +397,14 @@ export default function SettingsPage() {
               />
             </div>
 
-            <div className="p-4 bg-stone-50 rounded-lg">
-              <p className="text-sm text-stone-600">
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">
                 {profile.isPublic ? (
                   <>
                     🌐 Twój profil jest widoczny pod adresem:{" "}
                     <Link
                       href={`/profile/${profile.id}`}
-                      className="text-amber-600 underline"
+                      className="text-primary underline"
                     >
                       seated.pl/profile/{profile.id}
                     </Link>
@@ -433,7 +425,7 @@ export default function SettingsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-stone-500 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               Wybierz swoje preferencje, a hosty będą o nich wiedzieć przed
               wydarzeniem
             </p>
@@ -465,7 +457,7 @@ export default function SettingsPage() {
                       }
                     }}
                   />
-                  <span className="text-sm text-stone-700">{option.label}</span>
+                  <span className="text-sm text-muted-foreground">{option.label}</span>
                 </label>
               ))}
             </div>
@@ -480,7 +472,7 @@ export default function SettingsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-stone-500 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               Wybierz kategorie wydarzeń, które Cię interesują
             </p>
             <div className="flex flex-wrap gap-2">
@@ -511,8 +503,8 @@ export default function SettingsPage() {
                     }}
                     className={`px-4 py-2 rounded-full text-sm transition-colors ${
                       isSelected
-                        ? "bg-amber-500 text-white"
-                        : "bg-stone-100 text-stone-700 hover:bg-stone-200"
+                        ? "bg-primary/50 text-white"
+                        : "bg-muted text-muted-foreground hover:bg-muted"
                     }`}
                   >
                     {type.label}
@@ -531,7 +523,7 @@ export default function SettingsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-stone-500 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               Dodaj zdjęcia z wydarzeń, które pojawią się na Twoim profilu
               publicznym
             </p>
@@ -539,11 +531,11 @@ export default function SettingsPage() {
             {profile.photos.length === 0 ? (
               <div
                 onClick={handlePhotoUpload}
-                className="border-2 border-dashed border-stone-300 rounded-lg p-8 text-center cursor-pointer hover:border-amber-400 transition-colors"
+                className="border-2 border-dashed border rounded-lg p-8 text-center cursor-pointer hover:border-primary/40 transition-colors"
               >
                 <span className="text-4xl mb-2 block">📷</span>
-                <p className="text-stone-600">Kliknij aby dodać zdjęcia</p>
-                <p className="text-xs text-stone-400 mt-1">
+                <p className="text-muted-foreground">Kliknij aby dodać zdjęcia</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">
                   Maks. 6 zdjęć, każde do 5MB
                 </p>
               </div>
@@ -552,7 +544,7 @@ export default function SettingsPage() {
                 {profile.photos.map((photo, index) => (
                   <div
                     key={index}
-                    className="aspect-square bg-stone-200 rounded-lg relative"
+                    className="aspect-square bg-muted rounded-lg relative"
                   >
                     <img
                       src={photo}
@@ -567,9 +559,9 @@ export default function SettingsPage() {
                 {profile.photos.length < 6 && (
                   <div
                     onClick={handlePhotoUpload}
-                    className="aspect-square border-2 border-dashed border-stone-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-amber-400 transition-colors"
+                    className="aspect-square border-2 border-dashed border rounded-lg flex items-center justify-center cursor-pointer hover:border-primary/40 transition-colors"
                   >
-                    <span className="text-2xl text-stone-400">+</span>
+                    <span className="text-2xl text-muted-foreground/70">+</span>
                   </div>
                 )}
               </div>
@@ -585,23 +577,23 @@ export default function SettingsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-stone-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">🔵</span>
                 <div>
-                  <p className="font-medium text-stone-900">Google</p>
-                  <p className="text-sm text-stone-500">jan@gmail.com</p>
+                  <p className="font-medium text-foreground">Google</p>
+                  <p className="text-sm text-muted-foreground">jan@gmail.com</p>
                 </div>
               </div>
               <span className="text-green-600 text-sm">✓ Połączone</span>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-stone-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">📘</span>
                 <div>
-                  <p className="font-medium text-stone-900">Facebook</p>
-                  <p className="text-sm text-stone-500">Nie połączone</p>
+                  <p className="font-medium text-foreground">Facebook</p>
+                  <p className="text-sm text-muted-foreground">Nie połączone</p>
                 </div>
               </div>
               <Button variant="outline" size="sm">
@@ -621,8 +613,8 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-stone-900">Wyloguj się</p>
-                <p className="text-sm text-stone-500">
+                <p className="font-medium text-foreground">Wyloguj się</p>
+                <p className="text-sm text-muted-foreground">
                   Wyloguj ze wszystkich urządzeń
                 </p>
               </div>
@@ -636,7 +628,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-red-600">Usuń konto</p>
-                <p className="text-sm text-stone-500">
+                <p className="text-sm text-muted-foreground">
                   Trwale usuń konto i wszystkie dane
                 </p>
               </div>

@@ -40,7 +40,7 @@ export function PostActions({
         variant="ghost"
         size="sm"
         onClick={handleLike}
-        className={`gap-1.5 ${isLiked ? "text-pink-600 hover:text-pink-700" : "text-stone-600 hover:text-stone-900"}`}
+        className={`gap-1.5 ${isLiked ? "text-pink-600 hover:text-pink-700" : "text-muted-foreground hover:text-foreground"}`}
       >
         <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
         <span className="text-sm">{likes}</span>
@@ -51,7 +51,7 @@ export function PostActions({
           variant="ghost"
           size="sm"
           onClick={() => onComment?.(postId)}
-          className="gap-1.5 text-stone-600 hover:text-stone-900"
+          className="gap-1.5 text-muted-foreground hover:text-foreground"
         >
           <MessageCircle className="h-4 w-4" />
           <span className="text-sm">{commentsCount}</span>
@@ -62,7 +62,7 @@ export function PostActions({
         variant="ghost"
         size="sm"
         onClick={() => onShare?.(postId)}
-        className="text-stone-600 hover:text-stone-900"
+        className="text-muted-foreground hover:text-foreground"
       >
         <Share2 className="h-4 w-4" />
       </Button>

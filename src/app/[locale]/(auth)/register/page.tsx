@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/card";
 import { Loader2, ChefHat } from "lucide-react";
 import { GoogleIcon, FacebookIcon } from "@/components/icons";
+import { PageTransition, ScaleIn } from "@/components/ui/motion";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -103,6 +104,8 @@ export default function RegisterPage() {
   };
 
   return (
+    <PageTransition>
+    <ScaleIn>
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">{t("register.title")}</CardTitle>
@@ -253,11 +256,11 @@ export default function RegisterPage() {
               />
               <Label htmlFor="terms" className="text-sm font-normal leading-tight">
                 Akceptuję{" "}
-                <Link href="/terms" className="text-amber-600 hover:underline">
+                <Link href="/terms" className="text-primary hover:underline">
                   regulamin
                 </Link>{" "}
                 i{" "}
-                <Link href="/privacy" className="text-amber-600 hover:underline">
+                <Link href="/privacy" className="text-primary hover:underline">
                   politykę prywatności
                 </Link>{" "}
                 *
@@ -267,7 +270,7 @@ export default function RegisterPage() {
 
           <Button
             type="submit"
-            className="w-full bg-amber-600 hover:bg-amber-700"
+            className="w-full bg-primary hover:bg-primary/90"
             disabled={isLoading || isOAuthLoading !== null}
           >
             {isLoading ? (
@@ -287,7 +290,7 @@ export default function RegisterPage() {
           {t("register.hasAccount")}{" "}
           <Link
             href="/login"
-            className="text-amber-600 hover:text-amber-700 font-medium"
+            className="text-primary hover:text-primary font-medium"
           >
             {t("register.login")}
           </Link>
@@ -297,7 +300,7 @@ export default function RegisterPage() {
         <div className="mt-2 pt-4 border-t w-full">
           <Link
             href="/become-host"
-            className="flex items-center justify-center gap-2 w-full p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition-colors text-amber-700 text-sm font-medium"
+            className="flex items-center justify-center gap-2 w-full p-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors text-primary text-sm font-medium"
           >
             <ChefHat className="h-4 w-4" />
             Chcesz zostać hostem? Złóż aplikację
@@ -305,5 +308,7 @@ export default function RegisterPage() {
         </div>
       </CardFooter>
     </Card>
+    </ScaleIn>
+    </PageTransition>
   );
 }

@@ -58,8 +58,8 @@ function StarRating({ value, onChange, label, description }: StarRatingProps) {
               className={cn(
                 "h-6 w-6 transition-colors",
                 star <= (hoverValue || value)
-                  ? "fill-amber-400 text-amber-400"
-                  : "text-gray-300 hover:text-amber-200"
+                  ? "fill-primary/70 text-primary/70"
+                  : "text-gray-300 hover:text-primary/20"
               )}
             />
           </button>
@@ -159,7 +159,7 @@ export function ReviewForm({
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Overall rating - prominent */}
-          <div className="p-4 bg-amber-50 rounded-lg">
+          <div className="p-4 bg-primary/5 rounded-lg">
             <StarRating
               value={overallRating}
               onChange={setOverallRating}
@@ -225,7 +225,7 @@ export function ReviewForm({
             <Button
               type="submit"
               disabled={!isValid || isSubmitting}
-              className="bg-amber-600 hover:bg-amber-700"
+              className="bg-primary hover:bg-primary/90"
             >
               {isSubmitting ? (
                 <>

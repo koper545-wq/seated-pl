@@ -130,8 +130,8 @@ export function FollowButton({
       className={cn(
         "transition-all duration-200",
         isFollowing && !isHovered && "border-green-200 bg-green-50 text-green-700 hover:bg-green-100",
-        isMutual && !isHovered && "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100",
-        !isFollowing && variant === "default" && "bg-amber-600 hover:bg-amber-700",
+        isMutual && !isHovered && "border-primary/20 bg-primary/5 text-primary hover:bg-primary/10",
+        !isFollowing && variant === "default" && "bg-primary hover:bg-primary/90",
         className
       )}
     >

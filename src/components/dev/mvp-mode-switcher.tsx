@@ -30,13 +30,13 @@ export function MVPModeSwitcher() {
               className={cn(
                 "gap-2 transition-all",
                 mvpMode
-                  ? "bg-amber-50 border-amber-400 hover:bg-amber-100 text-amber-700"
-                  : "bg-stone-50 border-stone-300 hover:bg-stone-100 text-stone-600"
+                  ? "bg-primary/5 border-primary/40 hover:bg-primary/10 text-primary"
+                  : "bg-muted/50 border hover:bg-muted text-muted-foreground"
               )}
             >
               {mvpMode ? (
                 <>
-                  <Zap className="h-4 w-4 fill-amber-500" />
+                  <Zap className="h-4 w-4 fill-primary/80" />
                   <span className="text-xs font-medium">MVP</span>
                 </>
               ) : (

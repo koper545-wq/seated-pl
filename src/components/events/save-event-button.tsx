@@ -115,7 +115,7 @@ export function SaveEventButton({
                 disabled={isLoading}
                 className={cn(
                   "h-9 w-9",
-                  notifyOnAvailable && "bg-amber-500 hover:bg-amber-600 text-white"
+                  notifyOnAvailable && "bg-primary/50 hover:bg-primary text-white"
                 )}
               >
                 {notifyOnAvailable ? (

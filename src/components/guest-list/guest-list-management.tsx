@@ -209,10 +209,10 @@ export function GuestListStats({
         <p className="text-2xl font-bold text-red-700">{noShows.length}</p>
         <p className="text-xs text-red-600">Nieobecni</p>
       </div>
-      <div className="p-4 bg-stone-50 rounded-xl text-center">
-        <Users className="h-6 w-6 text-stone-600 mx-auto mb-1" />
-        <p className="text-2xl font-bold text-stone-700">{totalSeats}</p>
-        <p className="text-xs text-stone-600">Łącznie miejsc</p>
+      <div className="p-4 bg-muted/50 rounded-xl text-center">
+        <Users className="h-6 w-6 text-muted-foreground mx-auto mb-1" />
+        <p className="text-2xl font-bold text-muted-foreground">{totalSeats}</p>
+        <p className="text-xs text-muted-foreground">Łącznie miejsc</p>
       </div>
     </div>
   );
@@ -257,7 +257,7 @@ export function QRScanner({
 
         <div className="space-y-4 py-4">
           {/* Camera preview placeholder */}
-          <div className="aspect-square bg-stone-900 rounded-xl flex items-center justify-center">
+          <div className="aspect-square bg-foreground rounded-xl flex items-center justify-center">
             {scanning ? (
               <div className="text-white text-center">
                 <Camera className="h-12 w-12 mx-auto mb-2 animate-pulse" />
@@ -313,14 +313,14 @@ export function GuestListItem({
         "flex items-center gap-4 p-4 rounded-xl border transition-colors",
         guest.status === "checked_in" && "bg-green-50 border-green-200",
         guest.status === "no_show" && "bg-red-50 border-red-200",
-        guest.status === "cancelled" && "bg-stone-50 border-stone-200 opacity-60",
-        guest.status === "confirmed" && "bg-white hover:bg-stone-50",
+        guest.status === "cancelled" && "bg-muted/50 border opacity-60",
+        guest.status === "confirmed" && "bg-white hover:bg-muted/50",
         className
       )}
     >
       {/* Avatar */}
       <Avatar className="h-12 w-12">
-        <AvatarFallback className="bg-amber-100 text-amber-700">
+        <AvatarFallback className="bg-primary/10 text-primary">
           {initials}
         </AvatarFallback>
       </Avatar>
@@ -336,7 +336,7 @@ export function GuestListItem({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Utensils className="h-4 w-4 text-amber-600" />
+                  <Utensils className="h-4 w-4 text-primary" />
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="font-medium">Wymagania dietetyczne:</p>

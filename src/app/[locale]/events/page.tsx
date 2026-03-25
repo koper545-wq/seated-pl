@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo, Suspense, lazy } from "react";
+import { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { EventCard } from "@/components/events";
 import { Input } from "@/components/ui/input";
+import { PageTransition, FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -22,18 +23,29 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-  mockEvents as fallbackEvents,
   eventTypes,
   neighborhoods,
   sortOptions,
-  filterEvents,
   groupSizeOptions,
   languageOptions,
   experienceLevels,
   accessibilityOptions,
-  type MockEvent,
 } from "@/lib/mock-data";
-import { Search, SlidersHorizontal, X, MapPin, Calendar, Users, Globe, GraduationCap, Accessibility, ChevronDown, Map, List } from "lucide-react";
+import {
+  Search,
+  SlidersHorizontal,
+  X,
+  MapPin,
+  Calendar,
+  Users,
+  Globe,
+  GraduationCap,
+  Accessibility,
+  ChevronDown,
+  Map,
+  List,
+  Loader2,
+} from "lucide-react";
 
 // Dynamic import for map component (SSR disabled)
 const EventsMap = dynamic(
@@ -48,63 +60,115 @@ const EventsMap = dynamic(
   }
 );
 
+// ---- Types matching API response ----
+
+interface ApiHost {
+  id: string;
+  userId: string;
+  businessName: string;
+  avatarUrl: string | null;
+  verified: boolean;
+  user?: { id: string; email: string };
+}
+
+interface ApiEvent {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  eventType: string; // uppercase enum: SUPPER_CLUB, COOKING_CLASS, etc.
+  date: string; // ISO string
+  startTime: string;
+  duration: number;
+  locationPublic: string;
+  locationFull: string;
+  price: number; // in grosze
+  capacity: number;
+  spotsLeft: number;
+  menuDescription: string | null;
+  dietaryOptions: string[];
+  whatToBring: string | null;
+  images: string[];
+  status: string;
+  featured: boolean;
+  host: ApiHost;
+  _count: { reviews: number; bookings: number };
+}
+
+// ---- Mapping helpers ----
+
+// Maps the filter dropdown value (e.g. "supper-club") to API eventType (e.g. "SUPPER_CLUB")
+const filterValueToEventType: Record<string, string> = {
+  "supper-club": "SUPPER_CLUB",
+  "chefs-table": "CHEFS_TABLE",
+  "popup": "POPUP",
+  "warsztaty": "COOKING_CLASS",
+  "degustacje": "WINE_TASTING",
+  "active-food": "ACTIVE_FOOD",
+  "farm": "FARM_EXPERIENCE",
+  "other": "OTHER",
+};
+
+// Maps API eventType to a display name
+const eventTypeDisplayName: Record<string, string> = {
+  SUPPER_CLUB: "Supper Club",
+  CHEFS_TABLE: "Chef's Table",
+  POPUP: "Pop-up",
+  COOKING_CLASS: "Warsztaty",
+  WINE_TASTING: "Degustacje",
+  ACTIVE_FOOD: "Active + Food",
+  FARM_EXPERIENCE: "Farm Experience",
+  RESTAURANT_COLLAB: "Kolaboracja",
+  OTHER: "Inne",
+};
+
+// Maps API eventType to a typeSlug for the EventsMap colors
+const eventTypeToSlug: Record<string, string> = {
+  SUPPER_CLUB: "supper-club",
+  CHEFS_TABLE: "chefs-table",
+  POPUP: "popup",
+  COOKING_CLASS: "warsztaty",
+  WINE_TASTING: "degustacje",
+  ACTIVE_FOOD: "active-food",
+  FARM_EXPERIENCE: "farm",
+  RESTAURANT_COLLAB: "other",
+  OTHER: "default",
+};
+
+// Maps API eventType to a gradient for the EventCard
+const eventTypeGradient: Record<string, string> = {
+  SUPPER_CLUB: "from-primary/70 to-orange-500",
+  CHEFS_TABLE: "from-purple-200 to-violet-300",
+  POPUP: "from-red-200 to-red-300",
+  COOKING_CLASS: "from-green-200 to-teal-300",
+  WINE_TASTING: "from-rose-200 to-pink-300",
+  ACTIVE_FOOD: "from-primary/15 to-orange-300",
+  FARM_EXPERIENCE: "from-yellow-200 to-green-200",
+  RESTAURANT_COLLAB: "from-primary/15 to-primary/20",
+  OTHER: "from-primary/15 to-orange-300",
+};
+
 export default function EventsPage() {
-  // Events from API (with fallback to mock data)
-  const [apiEvents, setApiEvents] = useState<MockEvent[] | null>(null);
+  // API data state
+  const [events, setEvents] = useState<ApiEvent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/events")
+    setLoading(true);
+    fetch("/api/events?limit=200")
       .then((res) => res.json())
       .then((data) => {
-        if (data.events && data.events.length > 0) {
-          // Map API events to MockEvent format
-          const mapped: MockEvent[] = data.events.map((e: Record<string, unknown>) => ({
-            id: e.id,
-            title: e.title,
-            slug: e.slug,
-            type: e.eventType === "SUPPER_CLUB" ? "Supper Club"
-              : e.eventType === "CHEFS_TABLE" ? "Chef's Table"
-              : e.eventType === "POPUP" ? "Pop-up"
-              : e.eventType === "COOKING_CLASS" ? "Warsztaty"
-              : e.eventType === "WINE_TASTING" ? "Degustacje"
-              : e.eventType === "ACTIVE_FOOD" ? "Active + Food"
-              : e.eventType === "FARM_EXPERIENCE" ? "Farm Experience"
-              : String(e.eventType),
-            typeSlug: String(e.eventType).toLowerCase().replace(/_/g, "-"),
-            date: new Date(e.date as string),
-            dateFormatted: new Date(e.date as string).toLocaleDateString("pl-PL", { weekday: "short", day: "numeric", month: "short" }) + " · " + e.startTime,
-            startTime: e.startTime as string,
-            duration: e.duration as number,
-            location: e.locationPublic as string,
-            locationSlug: String(e.locationPublic).toLowerCase().replace(/\s+/g, "-"),
-            fullAddress: e.locationFull as string,
-            price: (e.price as number) / 100,
-            capacity: e.capacity as number,
-            spotsLeft: e.spotsLeft as number,
-            imageGradient: "from-amber-400 to-orange-500",
-            description: e.description as string,
-            menuDescription: (e.menuDescription as string) || "",
-            dietaryOptions: (e.dietaryOptions as string[]) || [],
-            whatToBring: (e.whatToBring as string) || "Dobry humor i apetyt!",
-            host: {
-              id: (e.host as Record<string, unknown>)?.userId as string || "",
-              name: (e.host as Record<string, unknown>)?.businessName as string || "Host",
-              avatar: "",
-              rating: 0,
-              reviewCount: 0,
-              eventsHosted: 0,
-              verified: false,
-            },
-          }));
-          setApiEvents(mapped);
+        if (data.events && Array.isArray(data.events)) {
+          setEvents(data.events);
         }
       })
-      .catch(() => {
-        // Silently fall back to mock data
+      .catch((err) => {
+        console.error("Failed to fetch events:", err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
-
-  const mockEvents = apiEvents || fallbackEvents;
 
   // Filter states
   const [search, setSearch] = useState("");
@@ -118,28 +182,141 @@ export default function EventsPage() {
   const [groupSize, setGroupSize] = useState("all");
   const [language, setLanguage] = useState("all");
   const [experienceLevel, setExperienceLevel] = useState("all");
-  const [selectedAccessibility, setSelectedAccessibility] = useState<string[]>([]);
+  const [selectedAccessibility, setSelectedAccessibility] = useState<string[]>(
+    []
+  );
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   // View mode: list or map
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
-  // Filter events
+  // Client-side filtering on real API data
   const filteredEvents = useMemo(() => {
-    return filterEvents({
-      type: eventType,
-      location: location,
-      minPrice: priceRange[0],
-      maxPrice: priceRange[1],
-      search: search,
-      sort: sortBy,
-      // Advanced filters
-      groupSize,
-      language,
-      experienceLevel,
-      accessibility: selectedAccessibility,
+    let result = [...events];
+
+    // Event type filter
+    if (eventType !== "all") {
+      const apiType = filterValueToEventType[eventType];
+      if (apiType) {
+        result = result.filter((e) => e.eventType === apiType);
+      }
+    }
+
+    // Location filter - match neighborhood label against locationPublic
+    if (location !== "all") {
+      const neighborhoodLabel = neighborhoods.find(
+        (n) => n.value === location
+      )?.label;
+      if (neighborhoodLabel) {
+        result = result.filter((e) =>
+          e.locationPublic
+            .toLowerCase()
+            .includes(neighborhoodLabel.toLowerCase())
+        );
+      }
+    }
+
+    // Price range filter (convert grosze to PLN for comparison)
+    result = result.filter((e) => {
+      const pricePLN = e.price / 100;
+      return pricePLN >= priceRange[0] && pricePLN <= priceRange[1];
     });
-  }, [search, eventType, location, priceRange, sortBy, groupSize, language, experienceLevel, selectedAccessibility]);
+
+    // Search filter
+    if (search) {
+      const searchLower = search.toLowerCase();
+      result = result.filter(
+        (e) =>
+          e.title.toLowerCase().includes(searchLower) ||
+          e.description.toLowerCase().includes(searchLower) ||
+          e.host.businessName.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Group size filter (by capacity)
+    if (groupSize !== "all") {
+      const sizeOption = groupSizeOptions.find((o) => o.value === groupSize);
+      if (sizeOption) {
+        result = result.filter(
+          (e) => e.capacity >= sizeOption.min && e.capacity <= sizeOption.max
+        );
+      }
+    }
+
+    // Sorting
+    result.sort((a, b) => {
+      switch (sortBy) {
+        case "date-asc":
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        case "date-desc":
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        case "price-asc":
+          return a.price - b.price;
+        case "price-desc":
+          return b.price - a.price;
+        case "spots":
+          return b.spotsLeft - a.spotsLeft;
+        default:
+          return 0;
+      }
+    });
+
+    return result;
+  }, [
+    events,
+    search,
+    eventType,
+    location,
+    priceRange,
+    sortBy,
+    groupSize,
+    language,
+    experienceLevel,
+    selectedAccessibility,
+  ]);
+
+  // Convert filtered events to MockEvent shape for the map
+  const mapEvents = useMemo(() => {
+    return filteredEvents.map((e) => ({
+      id: e.id,
+      title: e.title,
+      slug: e.slug,
+      type: eventTypeDisplayName[e.eventType] || e.eventType,
+      typeSlug: eventTypeToSlug[e.eventType] || "default",
+      date: new Date(e.date),
+      dateFormatted:
+        new Date(e.date).toLocaleDateString("pl-PL", {
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+        }) +
+        " \u00b7 " +
+        e.startTime,
+      startTime: e.startTime,
+      duration: e.duration,
+      location: e.locationPublic,
+      locationSlug: e.locationPublic.toLowerCase().replace(/\s+/g, "-"),
+      fullAddress: e.locationFull,
+      price: e.price / 100,
+      capacity: e.capacity,
+      spotsLeft: e.spotsLeft,
+      imageGradient:
+        eventTypeGradient[e.eventType] || "from-primary/15 to-orange-300",
+      description: e.description,
+      menuDescription: e.menuDescription || "",
+      dietaryOptions: e.dietaryOptions,
+      whatToBring: e.whatToBring || "Dobry humor i apetyt!",
+      host: {
+        id: e.host.userId || e.host.id,
+        name: e.host.businessName,
+        avatar: e.host.avatarUrl || "",
+        rating: 0,
+        reviewCount: e._count?.reviews || 0,
+        eventsHosted: 0,
+        verified: e.host.verified,
+      },
+    }));
+  }, [filteredEvents]);
 
   // Count active filters
   const activeFiltersCount = useMemo(() => {
@@ -154,7 +331,16 @@ export default function EventsPage() {
     if (experienceLevel !== "all") count++;
     if (selectedAccessibility.length > 0) count++;
     return count;
-  }, [eventType, location, priceRange, search, groupSize, language, experienceLevel, selectedAccessibility]);
+  }, [
+    eventType,
+    location,
+    priceRange,
+    search,
+    groupSize,
+    language,
+    experienceLevel,
+    selectedAccessibility,
+  ]);
 
   // Clear all filters
   const clearFilters = () => {
@@ -179,22 +365,41 @@ export default function EventsPage() {
     );
   };
 
+  // Format date for EventCard display
+  const formatEventDate = (event: ApiEvent) => {
+    return (
+      new Date(event.date).toLocaleDateString("pl-PL", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      }) +
+      " \u00b7 " +
+      event.startTime
+    );
+  };
+
   return (
+    <PageTransition>
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-b from-amber-50 to-background py-8 md:py-12">
+      <FadeIn>
+      <div className="bg-gradient-to-b from-primary/5 to-background py-8 md:py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
             Odkryj wydarzenia
           </h1>
           <p className="text-muted-foreground">
-            {mockEvents.length} kulinarnych doświadczeń czeka na Ciebie
+            {loading
+              ? "Wczytywanie wydarzeń..."
+              : `${events.length} kulinarnych doświadczeń czeka na Ciebie`}
           </p>
         </div>
       </div>
+      </FadeIn>
 
       <div className="container mx-auto px-4 py-6">
         {/* Search and filters bar */}
+        <FadeIn delay={0.1}>
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           {/* Search input */}
           <div className="relative flex-1">
@@ -262,10 +467,11 @@ export default function EventsPage() {
             <SlidersHorizontal className="h-4 w-4 mr-2" />
             Filtry
             {activeFiltersCount > 0 && (
-              <Badge className="ml-2 bg-amber-600">{activeFiltersCount}</Badge>
+              <Badge className="ml-2 bg-primary">{activeFiltersCount}</Badge>
             )}
           </Button>
         </div>
+        </FadeIn>
 
         <div className="flex flex-col md:flex-row gap-6">
           {/* Filters sidebar */}
@@ -334,7 +540,11 @@ export default function EventsPage() {
                     className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
                     onClick={() => setExperienceLevel("all")}
                   >
-                    {experienceLevels.find((e) => e.value === experienceLevel)?.label}
+                    {
+                      experienceLevels.find(
+                        (e) => e.value === experienceLevel
+                      )?.label
+                    }
                     <X className="h-3 w-3 ml-1" />
                   </Badge>
                 )}
@@ -391,7 +601,10 @@ export default function EventsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   {neighborhoods.map((neighborhood) => (
-                    <SelectItem key={neighborhood.value} value={neighborhood.value}>
+                    <SelectItem
+                      key={neighborhood.value}
+                      value={neighborhood.value}
+                    >
                       {neighborhood.label}
                     </SelectItem>
                   ))}
@@ -522,7 +735,9 @@ export default function EventsPage() {
                         <Checkbox
                           id={option.value}
                           checked={selectedAccessibility.includes(option.value)}
-                          onCheckedChange={() => toggleAccessibility(option.value)}
+                          onCheckedChange={() =>
+                            toggleAccessibility(option.value)
+                          }
                         />
                         <label
                           htmlFor={option.value}
@@ -553,15 +768,24 @@ export default function EventsPage() {
             {/* Results count and mobile view toggle */}
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-muted-foreground">
-                Znaleziono{" "}
-                <span className="font-semibold text-foreground">
-                  {filteredEvents.length}
-                </span>{" "}
-                {filteredEvents.length === 1
-                  ? "wydarzenie"
-                  : filteredEvents.length < 5
-                  ? "wydarzenia"
-                  : "wydarzeń"}
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Wczytywanie...
+                  </span>
+                ) : (
+                  <>
+                    Znaleziono{" "}
+                    <span className="font-semibold text-foreground">
+                      {filteredEvents.length}
+                    </span>{" "}
+                    {filteredEvents.length === 1
+                      ? "wydarzenie"
+                      : filteredEvents.length < 5
+                      ? "wydarzenia"
+                      : "wydarzeń"}
+                  </>
+                )}
               </p>
               {/* Mobile view toggle */}
               <div className="flex md:hidden border rounded-lg overflow-hidden">
@@ -584,32 +808,56 @@ export default function EventsPage() {
               </div>
             </div>
 
+            {/* Loading state */}
+            {loading && (
+              <div className="flex flex-col items-center justify-center py-16">
+                <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+                <p className="text-muted-foreground">
+                  Wczytywanie wydarzeń...
+                </p>
+              </div>
+            )}
+
             {/* Map view */}
-            {viewMode === "map" && (
+            {!loading && viewMode === "map" && (
               <div className="h-[600px] mb-6">
-                <EventsMap events={filteredEvents} />
+                <EventsMap events={mapEvents as any} />
               </div>
             )}
 
             {/* List view */}
-            {viewMode === "list" && (
+            {!loading && viewMode === "list" && (
               <>
                 {filteredEvents.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredEvents.map((event) => (
+                      <StaggerItem key={event.id}>
                       <EventCard
-                        key={event.id}
                         id={event.id}
                         title={event.title}
-                        type={event.type}
-                        date={event.dateFormatted}
-                        location={event.location}
-                        price={event.price}
+                        type={
+                          eventTypeDisplayName[event.eventType] ||
+                          event.eventType
+                        }
+                        date={formatEventDate(event)}
+                        location={event.locationPublic}
+                        price={event.price / 100}
                         spotsLeft={event.spotsLeft}
-                        imageGradient={event.imageGradient}
+                        imageGradient={
+                          eventTypeGradient[event.eventType] ||
+                          "from-primary/15 to-orange-300"
+                        }
+                        imageUrl={
+                          event.images && event.images.length > 0
+                            ? event.images[0]
+                            : undefined
+                        }
+                        hostName={event.host.businessName}
+                        hostAvatar={event.host.avatarUrl || undefined}
                       />
+                      </StaggerItem>
                     ))}
-                  </div>
+                  </StaggerContainer>
                 ) : (
                   <div className="text-center py-16">
                     <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
@@ -632,5 +880,6 @@ export default function EventsPage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

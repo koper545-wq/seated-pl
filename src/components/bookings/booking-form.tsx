@@ -226,7 +226,7 @@ export function BookingForm({
               className={cn(
                 "w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm transition-colors",
                 step >= s
-                  ? "bg-amber-600 text-white"
+                  ? "bg-primary text-white"
                   : "bg-muted text-muted-foreground"
               )}
             >
@@ -236,7 +236,7 @@ export function BookingForm({
               <div
                 className={cn(
                   "w-16 sm:w-24 h-1 mx-2",
-                  step > s ? "bg-amber-600" : "bg-muted"
+                  step > s ? "bg-primary" : "bg-muted"
                 )}
               />
             )}
@@ -257,15 +257,15 @@ export function BookingForm({
             {/* Event info summary */}
             <div className="bg-muted/50 rounded-lg p-4 space-y-2">
               <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 text-amber-600" />
+                <Calendar className="h-4 w-4 text-primary" />
                 <span>{eventDate}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <Clock className="h-4 w-4 text-amber-600" />
+                <Clock className="h-4 w-4 text-primary" />
                 <span>Godzina {eventTime}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <MapPin className="h-4 w-4 text-amber-600" />
+                <MapPin className="h-4 w-4 text-primary" />
                 <span>{eventLocation}</span>
               </div>
             </div>
@@ -388,7 +388,7 @@ export function BookingForm({
             </div>
 
             <Button
-              className="w-full bg-amber-600 hover:bg-amber-700"
+              className="w-full bg-primary hover:bg-primary/90"
               size="lg"
               onClick={() => setStep(2)}
               disabled={!isStep1Valid}
@@ -493,7 +493,7 @@ export function BookingForm({
                 Wstecz
               </Button>
               <Button
-                className="flex-1 bg-amber-600 hover:bg-amber-700"
+                className="flex-1 bg-primary hover:bg-primary/90"
                 onClick={() => setStep(3)}
                 disabled={!isStep2Valid}
               >
@@ -586,7 +586,7 @@ export function BookingForm({
               <Separator />
               <div className="flex justify-between font-semibold text-lg">
                 <span>Do zapłaty</span>
-                <span className="text-amber-600">
+                <span className="text-primary">
                   {formatPrice(totalWithFee * 100)}
                 </span>
               </div>
@@ -614,11 +614,11 @@ export function BookingForm({
               />
               <label htmlFor="terms" className="text-sm cursor-pointer">
                 Akceptuję{" "}
-                <a href="/terms" className="text-amber-600 underline">
+                <a href="/terms" className="text-primary underline">
                   regulamin
                 </a>{" "}
                 i{" "}
-                <a href="/privacy" className="text-amber-600 underline">
+                <a href="/privacy" className="text-primary underline">
                   politykę prywatności
                 </a>
                 . Rozumiem, że płatność zostanie pobrana po akceptacji rezerwacji
@@ -631,7 +631,7 @@ export function BookingForm({
                 Wstecz
               </Button>
               <Button
-                className="flex-1 bg-amber-600 hover:bg-amber-700"
+                className="flex-1 bg-primary hover:bg-primary/90"
                 size="lg"
                 onClick={handleSubmit}
                 disabled={!isStep3Valid || isSubmitting}

@@ -58,8 +58,8 @@ export default function AdminEventsPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-stone-900">Wydarzenia</h1>
-        <p className="text-stone-500 mt-1">
+        <h1 className="text-3xl font-bold text-foreground">Wydarzenia</h1>
+        <p className="text-muted-foreground mt-1">
           Zarządzaj wydarzeniami na platformie
         </p>
       </div>
@@ -88,13 +88,13 @@ export default function AdminEventsPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-stone-50 border-stone-200">
+        <Card className="bg-muted/50 border">
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-stone-700">
+              <p className="text-2xl font-bold text-muted-foreground">
                 {statusCounts.draft}
               </p>
-              <p className="text-sm text-stone-600">Szkice</p>
+              <p className="text-sm text-muted-foreground">Szkice</p>
             </div>
           </CardContent>
         </Card>
@@ -156,7 +156,7 @@ export default function AdminEventsPage() {
           {filteredEvents.length === 0 ? (
             <Card className="p-8 text-center">
               <span className="text-4xl mb-2 block">🔍</span>
-              <p className="text-stone-500">Brak wydarzeń spełniających kryteria</p>
+              <p className="text-muted-foreground">Brak wydarzeń spełniających kryteria</p>
             </Card>
           ) : (
             <div className="space-y-4">
@@ -175,10 +175,10 @@ export default function AdminEventsPage() {
                       <div className="flex-1 p-6">
                         <div className="flex items-start justify-between mb-3">
                           <div>
-                            <h3 className="font-semibold text-lg text-stone-900">
+                            <h3 className="font-semibold text-lg text-foreground">
                               {event.title}
                             </h3>
-                            <p className="text-sm text-stone-500">
+                            <p className="text-sm text-muted-foreground">
                               {event.type} · {event.location}
                             </p>
                           </div>
@@ -193,34 +193,34 @@ export default function AdminEventsPage() {
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                           <div>
-                            <p className="text-xs text-stone-400 uppercase tracking-wide">
+                            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                               Data
                             </p>
-                            <p className="text-sm text-stone-700">
+                            <p className="text-sm text-muted-foreground">
                               {event.dateFormatted}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-stone-400 uppercase tracking-wide">
+                            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                               Cena
                             </p>
-                            <p className="text-sm text-stone-700">
+                            <p className="text-sm text-muted-foreground">
                               {event.price} zł
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-stone-400 uppercase tracking-wide">
+                            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                               Miejsca
                             </p>
-                            <p className="text-sm text-stone-700">
+                            <p className="text-sm text-muted-foreground">
                               {event.capacity - event.spotsLeft}/{event.capacity}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-stone-400 uppercase tracking-wide">
+                            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                               Przychód
                             </p>
-                            <p className="text-sm text-stone-700">
+                            <p className="text-sm text-muted-foreground">
                               {((event.revenue || 0) / 100).toLocaleString()} zł
                             </p>
                           </div>

@@ -33,8 +33,8 @@ export default function AdminDashboardPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-stone-900">Dashboard</h1>
-        <p className="text-stone-500 mt-1">
+        <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+        <p className="text-muted-foreground mt-1">
           Przegląd platformy Seated
         </p>
       </div>
@@ -45,8 +45,8 @@ export default function AdminDashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-stone-500">Użytkownicy</p>
-                <p className="text-3xl font-bold text-stone-900">
+                <p className="text-sm text-muted-foreground">Użytkownicy</p>
+                <p className="text-3xl font-bold text-foreground">
                   {adminStats.totalUsers.toLocaleString()}
                 </p>
               </div>
@@ -62,14 +62,14 @@ export default function AdminDashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-stone-500">Hosty</p>
-                <p className="text-3xl font-bold text-stone-900">
+                <p className="text-sm text-muted-foreground">Hosty</p>
+                <p className="text-3xl font-bold text-foreground">
                   {adminStats.totalHosts}
                 </p>
               </div>
               <span className="text-4xl">👨‍🍳</span>
             </div>
-            <p className="text-xs text-amber-600 mt-2">
+            <p className="text-xs text-primary mt-2">
               {adminStats.pendingHostApplications} oczekujących aplikacji
             </p>
           </CardContent>
@@ -79,8 +79,8 @@ export default function AdminDashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-stone-500">Wydarzenia</p>
-                <p className="text-3xl font-bold text-stone-900">
+                <p className="text-sm text-muted-foreground">Wydarzenia</p>
+                <p className="text-3xl font-bold text-foreground">
                   {adminStats.totalEvents}
                 </p>
               </div>
@@ -96,8 +96,8 @@ export default function AdminDashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-stone-500">Przychód</p>
-                <p className="text-3xl font-bold text-stone-900">
+                <p className="text-sm text-muted-foreground">Przychód</p>
+                <p className="text-3xl font-bold text-foreground">
                   {(adminStats.totalRevenue / 100).toLocaleString()} zł
                 </p>
               </div>
@@ -141,7 +141,7 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-lg flex items-center gap-2">
               <span>📋</span> Aplikacje hostów
               {pendingApplications.length > 0 && (
-                <span className="bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">
+                <span className="bg-primary/50 text-white text-xs px-2 py-0.5 rounded-full">
                   {pendingApplications.length}
                 </span>
               )}
@@ -154,7 +154,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             {pendingApplications.length === 0 ? (
-              <p className="text-stone-500 text-sm py-4 text-center">
+              <p className="text-muted-foreground text-sm py-4 text-center">
                 Brak oczekujących aplikacji 🎉
               </p>
             ) : (
@@ -163,17 +163,17 @@ export default function AdminDashboardPage() {
                   <Link
                     key={app.id}
                     href={`/admin/hosts/${app.id}`}
-                    className="flex items-center justify-between p-3 bg-stone-50 rounded-lg hover:bg-stone-100 transition-colors"
+                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-lg">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
                         👤
                       </div>
                       <div>
-                        <p className="font-medium text-stone-900">
+                        <p className="font-medium text-foreground">
                           {app.firstName} {app.lastName}
                         </p>
-                        <p className="text-xs text-stone-500">
+                        <p className="text-xs text-muted-foreground">
                           {app.cuisineTypes.join(", ")}
                         </p>
                       </div>
@@ -186,7 +186,7 @@ export default function AdminDashboardPage() {
                       >
                         {hostApplicationStatusLabels[app.status].label}
                       </span>
-                      <p className="text-xs text-stone-400 mt-1">
+                      <p className="text-xs text-muted-foreground/70 mt-1">
                         {format(app.submittedAt, "d MMM", { locale: pl })}
                       </p>
                     </div>
@@ -216,7 +216,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             {pendingEvents.length === 0 ? (
-              <p className="text-stone-500 text-sm py-4 text-center">
+              <p className="text-muted-foreground text-sm py-4 text-center">
                 Brak wydarzeń do akceptacji 🎉
               </p>
             ) : (
@@ -225,7 +225,7 @@ export default function AdminDashboardPage() {
                   <Link
                     key={event.id}
                     href={`/admin/events/${event.id}`}
-                    className="flex items-center justify-between p-3 bg-stone-50 rounded-lg hover:bg-stone-100 transition-colors"
+                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -234,10 +234,10 @@ export default function AdminDashboardPage() {
                         🍴
                       </div>
                       <div>
-                        <p className="font-medium text-stone-900 text-sm">
+                        <p className="font-medium text-foreground text-sm">
                           {event.title}
                         </p>
-                        <p className="text-xs text-stone-500">
+                        <p className="text-xs text-muted-foreground">
                           {event.dateFormatted}
                         </p>
                       </div>
@@ -273,27 +273,27 @@ export default function AdminDashboardPage() {
                 <Link
                   key={user.id}
                   href={`/admin/users/${user.id}`}
-                  className="flex items-center justify-between p-3 bg-stone-50 rounded-lg hover:bg-stone-100 transition-colors"
+                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-lg">
+                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
                       {user.avatar || "👤"}
                     </div>
                     <div>
-                      <p className="font-medium text-stone-900">
+                      <p className="font-medium text-foreground">
                         {user.firstName} {user.lastName}
                       </p>
-                      <p className="text-xs text-stone-500">{user.email}</p>
+                      <p className="text-xs text-muted-foreground">{user.email}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
                         user.role === "host"
-                          ? "bg-amber-100 text-amber-700"
+                          ? "bg-primary/10 text-primary"
                           : user.role === "admin"
                           ? "bg-purple-100 text-purple-700"
-                          : "bg-stone-100 text-stone-700"
+                          : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {user.role === "host"
@@ -302,7 +302,7 @@ export default function AdminDashboardPage() {
                         ? "Admin"
                         : "Gość"}
                     </span>
-                    <p className="text-xs text-stone-400 mt-1">
+                    <p className="text-xs text-muted-foreground/70 mt-1">
                       {format(user.createdAt, "d MMM yyyy", { locale: pl })}
                     </p>
                   </div>

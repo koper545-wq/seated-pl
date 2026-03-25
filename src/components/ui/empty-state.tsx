@@ -29,7 +29,7 @@ export function EmptyState({
       <h3 className={`font-semibold ${compact ? "text-base mb-1" : "text-lg mb-2"}`}>{title}</h3>
       <p className={`text-muted-foreground ${compact ? "text-sm" : "mb-4 max-w-sm mx-auto"}`}>{description}</p>
       {actionLabel && actionHref && (
-        <Button asChild className="bg-amber-600 hover:bg-amber-700 mt-4">
+        <Button asChild className="bg-primary hover:bg-primary/90 mt-4">
           <Link href={actionHref}>
             {ActionIcon && <ActionIcon className="h-4 w-4 mr-2" />}
             {actionLabel}

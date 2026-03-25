@@ -151,7 +151,7 @@ export default function CommunicationSettingsPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl font-bold flex items-center gap-2">
-                <MessageSquare className="h-6 w-6 text-amber-600" />
+                <MessageSquare className="h-6 w-6 text-primary" />
                 Automatyzacja komunikacji
               </h1>
               <p className="text-muted-foreground mt-1">
@@ -161,7 +161,7 @@ export default function CommunicationSettingsPage() {
             <Button
               onClick={handleSaveSettings}
               disabled={isSaving}
-              className="bg-amber-600 hover:bg-amber-700"
+              className="bg-primary hover:bg-primary/90"
             >
               {isSaving ? (
                 <>Zapisywanie...</>
@@ -209,7 +209,7 @@ export default function CommunicationSettingsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <Bell className="h-5 w-5 text-amber-600" />
+                      <Bell className="h-5 w-5 text-primary" />
                       Automatyczne przypomnienia
                     </CardTitle>
                     <CardDescription>
@@ -305,7 +305,7 @@ export default function CommunicationSettingsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-amber-600" />
+                      <Sparkles className="h-5 w-5 text-primary" />
                       Sekwencja follow-up
                     </CardTitle>
                     <CardDescription>
@@ -378,12 +378,12 @@ export default function CommunicationSettingsPage() {
                       Oś czasu automatycznych wiadomości:
                     </p>
                     <div className="relative">
-                      <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-amber-200" />
+                      <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-primary/15" />
                       {settings.followUpSequence
                         .filter((item) => item.enabled)
                         .map((item, index) => (
                           <div key={index} className="relative pl-10 pb-4 last:pb-0">
-                            <div className="absolute left-2.5 w-3 h-3 rounded-full bg-amber-500" />
+                            <div className="absolute left-2.5 w-3 h-3 rounded-full bg-primary/50" />
                             <div className="text-sm">
                               <span className="font-medium">
                                 {followUpTimingLabels[item.timing].label}
@@ -406,7 +406,7 @@ export default function CommunicationSettingsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <Star className="h-5 w-5 text-amber-600" />
+                      <Star className="h-5 w-5 text-primary" />
                       Prośby o opinie
                     </CardTitle>
                     <CardDescription>
@@ -458,7 +458,7 @@ export default function CommunicationSettingsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <Gift className="h-5 w-5 text-amber-600" />
+                      <Gift className="h-5 w-5 text-primary" />
                       Oferty powrotu
                     </CardTitle>
                     <CardDescription>
@@ -599,7 +599,7 @@ export default function CommunicationSettingsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-amber-600" />
+                  <Zap className="h-5 w-5 text-primary" />
                   Dostępne zmienne
                 </CardTitle>
                 <CardDescription>
@@ -652,7 +652,7 @@ export default function CommunicationSettingsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-amber-600" />
+                  <Settings className="h-5 w-5 text-primary" />
                   Kanały komunikacji
                 </CardTitle>
                 <CardDescription>

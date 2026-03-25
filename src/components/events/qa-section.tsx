@@ -45,7 +45,7 @@ export function QASection({ questions, eventId, hostName }: QASectionProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold flex items-center gap-2">
-          <MessageCircle className="h-5 w-5 text-amber-600" />
+          <MessageCircle className="h-5 w-5 text-primary" />
           Pytania i odpowiedzi
         </h2>
         {questions.length > 0 && (
@@ -63,7 +63,7 @@ export function QASection({ questions, eventId, hostName }: QASectionProps) {
                   {/* Question */}
                   <div className="flex gap-3">
                     <Avatar className="h-8 w-8 flex-shrink-0">
-                      <AvatarFallback className="bg-stone-100 text-stone-600 text-xs">
+                      <AvatarFallback className="bg-muted text-muted-foreground text-xs">
                         {q.authorName
                           .split(" ")
                           .map((n) => n[0])
@@ -88,9 +88,9 @@ export function QASection({ questions, eventId, hostName }: QASectionProps) {
                   {q.answer && (
                     <>
                       <Separator className="my-2" />
-                      <div className="flex gap-3 pl-4 border-l-2 border-amber-200">
+                      <div className="flex gap-3 pl-4 border-l-2 border-primary/20">
                         <Avatar className="h-8 w-8 flex-shrink-0">
-                          <AvatarFallback className="bg-amber-100 text-amber-700 text-xs">
+                          <AvatarFallback className="bg-primary/10 text-primary text-xs">
                             {hostName
                               .split(" ")
                               .map((n) => n[0])
@@ -102,7 +102,7 @@ export function QASection({ questions, eventId, hostName }: QASectionProps) {
                             <span className="font-medium text-sm">{hostName}</span>
                             <Badge
                               variant="outline"
-                              className="text-xs px-1.5 py-0 h-5 border-amber-300 text-amber-700"
+                              className="text-xs px-1.5 py-0 h-5 border-primary/40 text-primary"
                             >
                               Host
                             </Badge>
@@ -182,7 +182,7 @@ export function QASection({ questions, eventId, hostName }: QASectionProps) {
                 <Button
                   onClick={handleSubmitQuestion}
                   disabled={!newQuestion.trim() || isSubmitting}
-                  className="bg-amber-600 hover:bg-amber-700"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   {isSubmitting ? (
                     "Wysyłanie..."

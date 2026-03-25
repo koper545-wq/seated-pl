@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BookingCard } from "@/components/bookings/booking-card";
-import { getBookingsByGuestId, MockBooking } from "@/lib/mock-data";
+import { MockBooking } from "@/lib/mock-data";
 import { Calendar, CalendarCheck, CalendarX, History, Search, Loader2 } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { format } from "date-fns";
@@ -44,7 +44,7 @@ function mapApiBookingToMock(b: Record<string, unknown>): MockBooking {
       date: eventDate,
       dateFormatted: format(eventDate, "d MMMM yyyy", { locale: pl }),
       location: (event.locationPublic as string) || "",
-      imageGradient: "from-amber-400 to-orange-500",
+      imageGradient: "from-primary/70 to-orange-500",
       hostName: (host.businessName as string) || "",
       hostId: (host.id as string) || "",
     },
@@ -57,32 +57,27 @@ export default function GuestBookingsPage() {
   const [isLoadingBookings, setIsLoadingBookings] = useState(true);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
-  // Load bookings from API or mock data
+  // Load bookings from API
   useEffect(() => {
     if (userLoading) return;
 
-    if (isMockUser) {
-      setBookings(getBookingsByGuestId("user-current"));
-      setIsLoadingBookings(false);
-    } else {
-      fetch("/api/bookings")
-        .then((res) => res.ok ? res.json() : null)
-        .then((data) => {
-          if (data?.bookings) {
-            setBookings(data.bookings.map(mapApiBookingToMock));
-          }
-        })
-        .catch(console.error)
-        .finally(() => setIsLoadingBookings(false));
-    }
-  }, [isMockUser, userLoading]);
+    fetch("/api/bookings")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.bookings) {
+          setBookings(data.bookings.map(mapApiBookingToMock));
+        }
+      })
+      .catch(console.error)
+      .finally(() => setIsLoadingBookings(false));
+  }, [userLoading]);
 
   if (userLoading || isLoadingBookings) {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Ładowanie rezerwacji...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Ładowanie rezerwacji...</p>
         </div>
       </div>
     );
@@ -153,7 +148,7 @@ export default function GuestBookingsPage() {
               <CalendarCheck className="h-4 w-4" />
               <span className="hidden sm:inline">Nadchodzące</span>
               {upcomingBookings.length > 0 && (
-                <span className="bg-amber-600 text-white text-xs px-1.5 py-0.5 rounded-full">
+                <span className="bg-primary text-white text-xs px-1.5 py-0.5 rounded-full">
                   {upcomingBookings.length}
                 </span>
               )}

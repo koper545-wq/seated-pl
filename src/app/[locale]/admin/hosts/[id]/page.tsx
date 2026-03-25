@@ -49,10 +49,10 @@ export default function HostApplicationDetailPage({
       <div className="max-w-7xl mx-auto">
         <Card className="p-8 text-center">
           <span className="text-6xl mb-4 block">🔍</span>
-          <h1 className="text-xl font-bold text-stone-900 mb-2">
+          <h1 className="text-xl font-bold text-foreground mb-2">
             Nie znaleziono aplikacji
           </h1>
-          <p className="text-stone-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             Aplikacja o podanym ID nie istnieje
           </p>
           <Link href="/admin/hosts">
@@ -96,10 +96,10 @@ export default function HostApplicationDetailPage({
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-stone-900">
+            <h1 className="text-2xl font-bold text-foreground">
               Aplikacja: {application.firstName} {application.lastName}
             </h1>
-            <p className="text-stone-500">ID: {application.id}</p>
+            <p className="text-muted-foreground">ID: {application.id}</p>
           </div>
         </div>
         <span
@@ -122,32 +122,32 @@ export default function HostApplicationDetailPage({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Imię i nazwisko
                   </p>
-                  <p className="text-stone-900 font-medium">
+                  <p className="text-foreground font-medium">
                     {application.firstName} {application.lastName}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Email
                   </p>
-                  <p className="text-stone-900">{application.email}</p>
+                  <p className="text-foreground">{application.email}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Telefon
                   </p>
-                  <p className="text-stone-900">{application.phone}</p>
+                  <p className="text-foreground">{application.phone}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Miasto
                   </p>
-                  <p className="text-stone-900">{application.city}</p>
+                  <p className="text-foreground">{application.city}</p>
                 </div>
               </div>
             </CardContent>
@@ -161,18 +161,18 @@ export default function HostApplicationDetailPage({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Dzielnica
                   </p>
-                  <p className="text-stone-900">{application.neighborhood}</p>
+                  <p className="text-foreground">{application.neighborhood}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Pełny adres
                   </p>
-                  <p className="text-stone-900">{application.address}</p>
+                  <p className="text-foreground">{application.address}</p>
                 </div>
               </div>
             </CardContent>
@@ -187,7 +187,7 @@ export default function HostApplicationDetailPage({
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <p className="text-xs text-stone-400 uppercase tracking-wide mb-2">
+                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-2">
                   Poziom doświadczenia
                 </p>
                 <span
@@ -196,7 +196,7 @@ export default function HostApplicationDetailPage({
                       ? "bg-green-100 text-green-700"
                       : application.experience === "some"
                       ? "bg-yellow-100 text-yellow-700"
-                      : "bg-stone-100 text-stone-700"
+                      : "bg-muted text-muted-foreground"
                   }`}
                 >
                   {application.experience === "none" && "Brak doświadczenia"}
@@ -206,14 +206,14 @@ export default function HostApplicationDetailPage({
               </div>
 
               <div>
-                <p className="text-xs text-stone-400 uppercase tracking-wide mb-2">
+                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-2">
                   Typy kuchni
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {application.cuisineTypes.map((cuisine) => (
                     <span
                       key={cuisine}
-                      className="px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-sm"
+                      className="px-3 py-1.5 bg-primary/5 text-primary rounded-full text-sm"
                     >
                       {cuisine}
                     </span>
@@ -222,7 +222,7 @@ export default function HostApplicationDetailPage({
               </div>
 
               <div>
-                <p className="text-xs text-stone-400 uppercase tracking-wide mb-2">
+                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide mb-2">
                   Planowane typy wydarzeń
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -250,7 +250,7 @@ export default function HostApplicationDetailPage({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-stone-700 whitespace-pre-wrap">
+              <p className="text-muted-foreground whitespace-pre-wrap">
                 {application.bio}
               </p>
             </CardContent>
@@ -265,15 +265,15 @@ export default function HostApplicationDetailPage({
             </CardHeader>
             <CardContent>
               {application.photos.length === 0 ? (
-                <p className="text-stone-500 text-center py-4">
+                <p className="text-muted-foreground text-center py-4">
                   Brak załączonych zdjęć
                 </p>
               ) : (
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {application.photos.map((photo, index) => (
                     <div
                       key={index}
-                      className="aspect-square bg-stone-200 rounded-lg"
+                      className="aspect-square bg-muted rounded-lg"
                     >
                       <img
                         src={photo}
@@ -297,10 +297,10 @@ export default function HostApplicationDetailPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-xs text-stone-400 uppercase tracking-wide">
+                <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                   Data złożenia
                 </p>
-                <p className="text-stone-900">
+                <p className="text-foreground">
                   {format(application.submittedAt, "d MMMM yyyy, HH:mm", {
                     locale: pl,
                   })}
@@ -309,10 +309,10 @@ export default function HostApplicationDetailPage({
 
               {application.reviewedAt && (
                 <div>
-                  <p className="text-xs text-stone-400 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground/70 uppercase tracking-wide">
                     Data rozpatrzenia
                   </p>
-                  <p className="text-stone-900">
+                  <p className="text-foreground">
                     {format(application.reviewedAt, "d MMMM yyyy, HH:mm", {
                       locale: pl,
                     })}

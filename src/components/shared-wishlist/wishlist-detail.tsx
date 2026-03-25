@@ -113,14 +113,14 @@ export function WishlistDetail({
           {/* Collaborators */}
           <div className="space-y-3">
             <h4 className="font-medium text-sm flex items-center gap-2">
-              <Users className="h-4 w-4 text-amber-600" />
+              <Users className="h-4 w-4 text-primary" />
               Współpracownicy ({collaborators.length + 1})
             </h4>
             <div className="flex flex-wrap gap-2">
               {/* Owner */}
               <Badge variant="secondary" className="gap-2 py-1.5 px-3">
                 <Avatar className="h-5 w-5">
-                  <AvatarFallback className="text-xs bg-amber-100 text-amber-700">
+                  <AvatarFallback className="text-xs bg-primary/10 text-primary">
                     {wishlist.ownerName[0]}
                   </AvatarFallback>
                 </Avatar>
@@ -163,7 +163,7 @@ export function WishlistDetail({
               <p className="text-muted-foreground mb-4">
                 Ta lista jest pusta. Dodaj wydarzenia, które chcesz rozważyć!
               </p>
-              <Button asChild className="bg-amber-600 hover:bg-amber-700">
+              <Button asChild className="bg-primary hover:bg-primary/90">
                 <Link href="/events">Przeglądaj wydarzenia</Link>
               </Button>
             </CardContent>
@@ -187,7 +187,7 @@ export function WishlistDetail({
                       <div className="space-y-2">
                         <Link
                           href={`/events/${event!.id}`}
-                          className="text-lg font-semibold hover:text-amber-600 transition-colors"
+                          className="text-lg font-semibold hover:text-primary transition-colors"
                         >
                           {event!.title}
                         </Link>
@@ -203,7 +203,7 @@ export function WishlistDetail({
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge variant="outline">{event!.type}</Badge>
-                          <span className="text-lg font-bold text-amber-600">
+                          <span className="text-lg font-bold text-primary">
                             {event!.price} PLN
                           </span>
                         </div>
@@ -235,13 +235,13 @@ export function WishlistDetail({
                           </span>
                         )}
                         {summary.interested > 0 && (
-                          <span className="flex items-center gap-1 text-amber-600">
+                          <span className="flex items-center gap-1 text-primary">
                             <Star className="h-4 w-4" />
                             {summary.interested} zainteresowanych
                           </span>
                         )}
                         {summary.skip > 0 && (
-                          <span className="flex items-center gap-1 text-stone-500">
+                          <span className="flex items-center gap-1 text-muted-foreground">
                             <X className="h-4 w-4" />
                             {summary.skip} pomija
                           </span>
@@ -261,7 +261,7 @@ export function WishlistDetail({
         <CardContent className="py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <MessageCircle className="h-8 w-8 text-amber-600" />
+              <MessageCircle className="h-8 w-8 text-primary" />
               <div>
                 <h4 className="font-medium">Omówcie wybór razem</h4>
                 <p className="text-sm text-muted-foreground">

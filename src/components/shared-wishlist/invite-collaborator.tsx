@@ -122,7 +122,7 @@ export function InviteCollaborator({
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
                       <AvatarImage src={homie.avatar} />
-                      <AvatarFallback className="bg-amber-100 text-amber-700">
+                      <AvatarFallback className="bg-primary/10 text-primary">
                         {homie.name[0]}
                       </AvatarFallback>
                     </Avatar>
@@ -137,7 +137,7 @@ export function InviteCollaborator({
                     variant="ghost"
                     size="sm"
                     onClick={() => handleInvite(homie.id)}
-                    className="gap-1 text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+                    className="gap-1 text-primary hover:text-primary hover:bg-primary/5"
                   >
                     <UserPlus className="h-4 w-4" />
                     Zaproś
@@ -155,7 +155,7 @@ export function InviteCollaborator({
             <Button
               onClick={() => setOpen(false)}
               disabled={invitedIds.length === 0}
-              className="bg-amber-600 hover:bg-amber-700"
+              className="bg-primary hover:bg-primary/90"
             >
               <Check className="h-4 w-4 mr-2" />
               Wyślij zaproszenia ({invitedIds.length})

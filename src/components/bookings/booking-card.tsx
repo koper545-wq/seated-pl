@@ -128,7 +128,7 @@ export function BookingCard({
                   <Button
                     asChild
                     size="sm"
-                    className="bg-amber-600 hover:bg-amber-700"
+                    className="bg-primary hover:bg-primary/90"
                   >
                     <Link href={`/dashboard/bookings/${booking.id}/feedback`}>
                       <Star className="h-4 w-4 sm:mr-1" />

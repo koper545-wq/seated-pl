@@ -31,21 +31,21 @@ export default function SocialFeedPage() {
     switch (type) {
       case "friends":
         return {
-          icon: <Users className="h-12 w-12 text-stone-300" />,
+          icon: <Users className="h-12 w-12 text-muted-foreground/50" />,
           title: "Brak aktywności znajomych",
           description: "Zaobserwuj więcej osób, aby zobaczyć ich aktywność tutaj.",
           action: { label: "Znajdź znajomych", href: "/dashboard/homies" },
         };
       case "nearby":
         return {
-          icon: <MapPin className="h-12 w-12 text-stone-300" />,
+          icon: <MapPin className="h-12 w-12 text-muted-foreground/50" />,
           title: "Brak aktywności w pobliżu",
           description: "Nie ma jeszcze żadnych postów z Twojej okolicy.",
           action: { label: "Przeglądaj wydarzenia", href: "/events" },
         };
       case "global":
         return {
-          icon: <Globe className="h-12 w-12 text-stone-300" />,
+          icon: <Globe className="h-12 w-12 text-muted-foreground/50" />,
           title: "Brak aktywności",
           description: "Wkrótce pojawią się tutaj popularne posty.",
           action: { label: "Przeglądaj wydarzenia", href: "/events" },
@@ -60,8 +60,8 @@ export default function SocialFeedPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <div className="flex justify-center mb-4">{empty.icon}</div>
-            <h3 className="font-semibold text-stone-900 mb-2">{empty.title}</h3>
-            <p className="text-stone-500 mb-4">{empty.description}</p>
+            <h3 className="font-semibold text-foreground mb-2">{empty.title}</h3>
+            <p className="text-muted-foreground mb-4">{empty.description}</p>
             <Link href={empty.action.href}>
               <Button variant="outline">{empty.action.label}</Button>
             </Link>
@@ -80,9 +80,9 @@ export default function SocialFeedPage() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Header */}
-      <header className="bg-white border-b border-stone-200 sticky top-0 z-10">
+      <header className="bg-white border-b border sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -92,8 +92,8 @@ export default function SocialFeedPage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-xl font-bold text-stone-900 flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-amber-500" />
+                <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary/80" />
                   Społeczność
                 </h1>
               </div>
@@ -143,7 +143,7 @@ export default function SocialFeedPage() {
         <Link href="/events">
           <Button
             size="lg"
-            className="rounded-full shadow-lg bg-amber-500 hover:bg-amber-600 h-14 w-14"
+            className="rounded-full shadow-lg bg-primary/50 hover:bg-primary h-14 w-14"
           >
             <Plus className="h-6 w-6" />
           </Button>

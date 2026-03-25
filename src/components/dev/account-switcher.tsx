@@ -80,7 +80,7 @@ export function DevAccountSwitcher() {
   const getRoleBadgeColor = (user: MockUser) => {
     if (user.role === "guest") return "bg-blue-100 text-blue-700";
     if (user.hostType === "restaurant") return "bg-purple-100 text-purple-700";
-    return "bg-amber-100 text-amber-700";
+    return "bg-primary/10 text-primary";
   };
 
   const getInitials = (name: string) => {

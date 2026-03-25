@@ -34,12 +34,12 @@ export default function HostApplicationSuccessPage() {
               <h2 className="font-semibold text-lg mb-4">Co teraz?</h2>
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 font-semibold">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 font-semibold">
                     1
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <Mail className="h-4 w-4 text-amber-600" />
+                      <Mail className="h-4 w-4 text-primary" />
                       <p className="font-medium">Potwierdzenie email</p>
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -50,12 +50,12 @@ export default function HostApplicationSuccessPage() {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 font-semibold">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 font-semibold">
                     2
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <Calendar className="h-4 w-4 text-amber-600" />
+                      <Calendar className="h-4 w-4 text-primary" />
                       <p className="font-medium">Umówienie spotkania</p>
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -66,12 +66,12 @@ export default function HostApplicationSuccessPage() {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 font-semibold">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 font-semibold">
                     3
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <MessageSquare className="h-4 w-4 text-amber-600" />
+                      <MessageSquare className="h-4 w-4 text-primary" />
                       <p className="font-medium">Weryfikacja</p>
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -101,7 +101,7 @@ export default function HostApplicationSuccessPage() {
           </Card>
 
           {/* Application number */}
-          <Card className="mb-6 border-amber-200 bg-amber-50">
+          <Card className="mb-6 border-primary/20 bg-primary/5">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -111,7 +111,7 @@ export default function HostApplicationSuccessPage() {
                     {String(Math.floor(Math.random() * 10000)).padStart(4, "0")}
                   </p>
                 </div>
-                <Button variant="ghost" size="sm" className="text-amber-600">
+                <Button variant="ghost" size="sm" className="text-primary">
                   Skopiuj
                 </Button>
               </div>
@@ -134,7 +134,7 @@ export default function HostApplicationSuccessPage() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild className="flex-1 bg-amber-600 hover:bg-amber-700">
+            <Button asChild className="flex-1 bg-primary hover:bg-primary/90">
               <Link href="/events">
                 Przeglądaj wydarzenia
                 <ArrowRight className="h-4 w-4 ml-2" />

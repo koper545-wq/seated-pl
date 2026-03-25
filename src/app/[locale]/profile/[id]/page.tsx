@@ -40,13 +40,13 @@ export default function PublicProfilePage({
   // Check if profile is public
   if (!profile.isPublic) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted/50 flex items-center justify-center p-4">
         <Card className="max-w-sm w-full text-center p-8">
           <span className="text-6xl mb-4 block">🔒</span>
-          <h1 className="text-xl font-bold text-stone-900 mb-2">
+          <h1 className="text-xl font-bold text-foreground mb-2">
             Profil prywatny
           </h1>
-          <p className="text-stone-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             Ten użytkownik ma ustawiony profil jako prywatny.
           </p>
           <Link href="/events">
@@ -58,9 +58,9 @@ export default function PublicProfilePage({
   }
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Header */}
-      <header className="bg-white border-b border-stone-200 sticky top-0 z-10">
+      <header className="bg-white border-b border sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <Link href="/events">
@@ -68,7 +68,7 @@ export default function PublicProfilePage({
                 ← Wróć
               </Button>
             </Link>
-            <h1 className="font-semibold text-stone-900">Profil gościa</h1>
+            <h1 className="font-semibold text-foreground">Profil gościa</h1>
           </div>
         </div>
       </header>
@@ -76,7 +76,7 @@ export default function PublicProfilePage({
       <main className="max-w-lg mx-auto px-4 py-6 pb-8">
         {/* Profile Header */}
         <Card className="mb-6 overflow-hidden">
-          <div className="bg-gradient-to-r from-amber-400 to-orange-500 h-24" />
+          <div className="bg-gradient-to-r from-primary/70 to-orange-500 h-24" />
           <CardContent className="pt-0 -mt-12">
             <div className="flex flex-col items-center text-center mb-4">
               <div className="w-24 h-24 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center text-4xl mb-3">
@@ -90,10 +90,10 @@ export default function PublicProfilePage({
                   "👤"
                 )}
               </div>
-              <h1 className="text-2xl font-bold text-stone-900">
+              <h1 className="text-2xl font-bold text-foreground">
                 {profile.firstName} {profile.lastName.charAt(0)}.
               </h1>
-              <p className="text-stone-500">
+              <p className="text-muted-foreground">
                 📍 {profile.city} · Członek od{" "}
                 {format(profile.memberSince, "MMMM yyyy", { locale: pl })}
               </p>
@@ -106,7 +106,7 @@ export default function PublicProfilePage({
                       href={`https://instagram.com/${profile.socialLinks.instagram}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-stone-500 hover:text-pink-500 transition-colors"
+                      className="text-muted-foreground hover:text-pink-500 transition-colors"
                     >
                       <span className="text-xl">📸</span>
                       <span className="text-sm ml-1">
@@ -120,55 +120,55 @@ export default function PublicProfilePage({
 
             {/* Bio */}
             {profile.bio && (
-              <p className="text-stone-600 text-center mb-6 leading-relaxed">
+              <p className="text-muted-foreground text-center mb-6 leading-relaxed">
                 {profile.bio}
               </p>
             )}
 
             {/* Level Card */}
-            <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 mb-4">
+            <div className="bg-gradient-to-r from-primary/5 to-orange-50 rounded-xl p-4 mb-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-3xl">🏅</span>
                   <div>
-                    <p className="font-bold text-stone-900">
+                    <p className="font-bold text-foreground">
                       Poziom {levelInfo.level}
                     </p>
-                    <p className="text-sm text-stone-600">{levelInfo.namePl}</p>
+                    <p className="text-sm text-muted-foreground">{levelInfo.namePl}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-amber-600">
+                  <p className="text-2xl font-bold text-primary">
                     {profile.xp}
                   </p>
-                  <p className="text-xs text-stone-500">punktów XP</p>
+                  <p className="text-xs text-muted-foreground">punktów XP</p>
                 </div>
               </div>
               <Progress value={xpProgress.percent} className="h-2" />
-              <p className="text-xs text-stone-500 text-center mt-2">
+              <p className="text-xs text-muted-foreground text-center mt-2">
                 {xpProgress.percent}% do następnego poziomu
               </p>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="text-center p-4 bg-stone-50 rounded-xl">
-                <p className="text-3xl font-bold text-stone-900">
+              <div className="text-center p-4 bg-muted/50 rounded-xl">
+                <p className="text-3xl font-bold text-foreground">
                   {profile.eventsAttended}
                 </p>
-                <p className="text-sm text-stone-500">Wydarzeń</p>
+                <p className="text-sm text-muted-foreground">Wydarzeń</p>
               </div>
-              <div className="text-center p-4 bg-stone-50 rounded-xl">
-                <p className="text-3xl font-bold text-stone-900">
+              <div className="text-center p-4 bg-muted/50 rounded-xl">
+                <p className="text-3xl font-bold text-foreground">
                   {profile.reviewsWritten}
                 </p>
-                <p className="text-sm text-stone-500">Opinii</p>
+                <p className="text-sm text-muted-foreground">Opinii</p>
               </div>
-              <div className="text-center p-4 bg-stone-50 rounded-xl">
-                <p className="text-3xl font-bold text-stone-900">
+              <div className="text-center p-4 bg-muted/50 rounded-xl">
+                <p className="text-3xl font-bold text-foreground">
                   {badges.length}
                 </p>
-                <p className="text-sm text-stone-500">Odznak</p>
+                <p className="text-sm text-muted-foreground">Odznak</p>
               </div>
             </div>
           </CardContent>
@@ -178,7 +178,7 @@ export default function PublicProfilePage({
         {badges.length > 0 && (
           <Card className="mb-6">
             <CardContent className="p-4">
-              <h2 className="font-semibold text-stone-900 mb-4 flex items-center gap-2">
+              <h2 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <span>🏆</span> Zdobyte odznaki
               </h2>
               <TooltipProvider>
@@ -222,7 +222,7 @@ export default function PublicProfilePage({
               {profile.attendedEvents.length === 0 ? (
                 <Card className="p-8 text-center">
                   <span className="text-4xl mb-2 block">🍽️</span>
-                  <p className="text-stone-500">Brak odbytych wydarzeń</p>
+                  <p className="text-muted-foreground">Brak odbytych wydarzeń</p>
                 </Card>
               ) : (
                 profile.attendedEvents.map((event) => (
@@ -235,17 +235,17 @@ export default function PublicProfilePage({
                           🍴
                         </div>
                         <div className="flex-1 p-4">
-                          <p className="font-medium text-stone-900 line-clamp-1">
+                          <p className="font-medium text-foreground line-clamp-1">
                             {event.eventTitle}
                           </p>
-                          <p className="text-sm text-stone-500 mt-1">
+                          <p className="text-sm text-muted-foreground mt-1">
                             u {event.hostName}
                           </p>
                           <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xs bg-stone-100 text-stone-600 px-2 py-1 rounded-full">
+                            <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">
                               {event.eventType}
                             </span>
-                            <span className="text-xs text-stone-400">
+                            <span className="text-xs text-muted-foreground/70">
                               {format(event.eventDate, "d MMM yyyy", {
                                 locale: pl,
                               })}
@@ -265,29 +265,29 @@ export default function PublicProfilePage({
               {guestWrittenReviews.length === 0 ? (
                 <Card className="p-8 text-center">
                   <span className="text-4xl mb-2 block">⭐</span>
-                  <p className="text-stone-500">Brak napisanych opinii</p>
+                  <p className="text-muted-foreground">Brak napisanych opinii</p>
                 </Card>
               ) : (
                 guestWrittenReviews.map((review) => (
                   <Card key={review.id} className="p-4">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <p className="font-medium text-stone-900">
+                        <p className="font-medium text-foreground">
                           {review.eventTitle}
                         </p>
-                        <p className="text-sm text-stone-500">
+                        <p className="text-sm text-muted-foreground">
                           u {review.hostName}
                         </p>
                       </div>
-                      <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full">
-                        <span className="text-amber-500">★</span>
-                        <span className="font-medium text-amber-700">
+                      <div className="flex items-center gap-1 bg-primary/5 px-2 py-1 rounded-full">
+                        <span className="text-primary/80">★</span>
+                        <span className="font-medium text-primary">
                           {review.overallRating}
                         </span>
                       </div>
                     </div>
-                    <p className="text-stone-600">{review.text}</p>
-                    <p className="text-xs text-stone-400 mt-2">
+                    <p className="text-muted-foreground">{review.text}</p>
+                    <p className="text-xs text-muted-foreground/70 mt-2">
                       {format(review.createdAt, "d MMMM yyyy", { locale: pl })}
                     </p>
                   </Card>
@@ -300,14 +300,14 @@ export default function PublicProfilePage({
         {/* Photos Gallery */}
         {profile.photos.length > 0 && (
           <section className="mt-6">
-            <h2 className="font-semibold text-stone-900 mb-4 flex items-center gap-2">
+            <h2 className="font-semibold text-foreground mb-4 flex items-center gap-2">
               <span>📸</span> Zdjęcia z wydarzeń
             </h2>
             <div className="grid grid-cols-3 gap-2">
               {profile.photos.map((photo, index) => (
                 <div
                   key={index}
-                  className="aspect-square bg-stone-200 rounded-lg overflow-hidden"
+                  className="aspect-square bg-muted rounded-lg overflow-hidden"
                 >
                   <img
                     src={photo}
@@ -324,14 +324,14 @@ export default function PublicProfilePage({
         {profile.favoriteCategories.length > 0 && (
           <Card className="mt-6">
             <CardContent className="p-4">
-              <h2 className="font-semibold text-stone-900 mb-3 flex items-center gap-2">
+              <h2 className="font-semibold text-foreground mb-3 flex items-center gap-2">
                 <span>❤️</span> Ulubione kategorie
               </h2>
               <div className="flex flex-wrap gap-2">
                 {profile.favoriteCategories.map((category) => (
                   <span
                     key={category}
-                    className="px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-sm"
+                    className="px-3 py-1.5 bg-primary/5 text-primary rounded-full text-sm"
                   >
                     {category === "supper-club" && "🍽️ Supper Club"}
                     {category === "warsztaty" && "👨‍🍳 Warsztaty"}

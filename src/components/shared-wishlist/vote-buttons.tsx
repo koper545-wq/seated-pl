@@ -59,8 +59,8 @@ export function VoteButtons({
           buttonSize,
           "gap-1.5",
           vote === "interested"
-            ? "bg-amber-100 text-amber-700 hover:bg-amber-200 hover:text-amber-800"
-            : "text-muted-foreground hover:text-amber-700"
+            ? "bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary"
+            : "text-muted-foreground hover:text-primary"
         )}
       >
         <Star className={iconSize} />
@@ -75,8 +75,8 @@ export function VoteButtons({
           buttonSize,
           "gap-1.5",
           vote === "skip"
-            ? "bg-stone-100 text-stone-700 hover:bg-stone-200 hover:text-stone-800"
-            : "text-muted-foreground hover:text-stone-700"
+            ? "bg-muted text-muted-foreground hover:bg-muted hover:text-foreground"
+            : "text-muted-foreground hover:text-muted-foreground"
         )}
       >
         <X className={iconSize} />

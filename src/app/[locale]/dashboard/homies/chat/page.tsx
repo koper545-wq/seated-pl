@@ -45,9 +45,9 @@ export default function HomiesChatListPage() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Header */}
-      <header className="bg-white border-b border-stone-200 sticky top-0 z-10">
+      <header className="bg-white border-b border sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <Link href="/dashboard/homies">
@@ -56,8 +56,8 @@ export default function HomiesChatListPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-xl font-bold text-stone-900">Wiadomości</h1>
-              <p className="text-sm text-stone-500">
+              <h1 className="text-xl font-bold text-foreground">Wiadomości</h1>
+              <p className="text-sm text-muted-foreground">
                 {conversations.length} rozmów
               </p>
             </div>
@@ -68,7 +68,7 @@ export default function HomiesChatListPage() {
       <main className="max-w-2xl mx-auto px-4 py-6 pb-24">
         {/* Search */}
         <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/70" />
           <Input
             placeholder="Szukaj rozmów..."
             value={searchQuery}
@@ -82,7 +82,7 @@ export default function HomiesChatListPage() {
           <Card className="mb-6">
             <CardHeader className="pb-2">
               <CardTitle className="text-base flex items-center gap-2">
-                <MessageSquarePlus className="h-4 w-4 text-amber-500" />
+                <MessageSquarePlus className="h-4 w-4 text-primary/80" />
                 Rozpocznij rozmowę
               </CardTitle>
             </CardHeader>
@@ -102,10 +102,10 @@ export default function HomiesChatListPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="gap-2 hover:bg-amber-50"
+                        className="gap-2 hover:bg-primary/5"
                       >
                         <Avatar className="h-6 w-6">
-                          <AvatarFallback className="bg-amber-100 text-amber-700 text-xs">
+                          <AvatarFallback className="bg-primary/10 text-primary text-xs">
                             {initials}
                           </AvatarFallback>
                         </Avatar>
@@ -128,11 +128,11 @@ export default function HomiesChatListPage() {
 
         {conversations.length === 0 && (
           <div className="text-center mt-8">
-            <Users className="h-12 w-12 text-stone-300 mx-auto mb-4" />
-            <h3 className="font-semibold text-stone-900 mb-2">
+            <Users className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+            <h3 className="font-semibold text-foreground mb-2">
               Zacznij rozmawiać!
             </h3>
-            <p className="text-stone-500 mb-4">
+            <p className="text-muted-foreground mb-4">
               Znajdź swoich homies i rozpocznij rozmowę.
             </p>
             <Link href="/dashboard/homies">

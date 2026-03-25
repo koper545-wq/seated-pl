@@ -94,7 +94,7 @@ export function ReviewList({
             <div className="text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
                 <span className="text-4xl font-bold">{averageRating}</span>
-                <Star className="h-8 w-8 fill-amber-400 text-amber-400" />
+                <Star className="h-8 w-8 fill-primary/70 text-primary/70" />
               </div>
               <p className="text-sm text-muted-foreground">
                 Na podstawie {ratingSummary.count}{" "}
@@ -130,10 +130,10 @@ export function ReviewList({
                     )}
                   >
                     <span className="text-sm font-medium w-3">{rating}</span>
-                    <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                    <Star className="h-3 w-3 fill-primary/70 text-primary/70" />
                     <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-amber-400 transition-all group-hover:bg-amber-500"
+                        className="h-full bg-primary/70 transition-all group-hover:bg-primary/50"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -152,7 +152,7 @@ export function ReviewList({
                 variant="ghost"
                 size="sm"
                 onClick={() => setFilterRating(null)}
-                className="text-amber-600"
+                className="text-primary"
               >
                 Pokaż wszystkie opinie
               </Button>
@@ -213,7 +213,7 @@ export function ReviewList({
             variant="ghost"
             size="sm"
             onClick={() => setFilterRating(null)}
-            className="mt-2 text-amber-600"
+            className="mt-2 text-primary"
           >
             Pokaż wszystkie opinie
           </Button>

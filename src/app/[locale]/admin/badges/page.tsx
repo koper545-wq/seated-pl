@@ -74,7 +74,7 @@ const colorOptions = [
   { value: "bg-green-100 text-green-700", label: "Zielony", preview: "bg-green-100" },
   { value: "bg-blue-100 text-blue-700", label: "Niebieski", preview: "bg-blue-100" },
   { value: "bg-purple-100 text-purple-700", label: "Fioletowy", preview: "bg-purple-100" },
-  { value: "bg-amber-100 text-amber-700", label: "Bursztynowy", preview: "bg-amber-100" },
+  { value: "bg-primary/10 text-primary", label: "Bursztynowy", preview: "bg-primary/10" },
   { value: "bg-orange-100 text-orange-700", label: "Pomarańczowy", preview: "bg-orange-100" },
   { value: "bg-pink-100 text-pink-700", label: "Różowy", preview: "bg-pink-100" },
   { value: "bg-red-100 text-red-700", label: "Czerwony", preview: "bg-red-100" },
@@ -124,7 +124,7 @@ export default function AdminBadgesPage() {
     descriptionPl: "",
     icon: "🏆",
     category: "guest" as "guest" | "host",
-    color: "bg-amber-100 text-amber-700",
+    color: "bg-primary/10 text-primary",
     triggerType: "manual" as BadgeTriggerType,
     triggerValue: 1,
     triggerDuration: 7,
@@ -138,7 +138,7 @@ export default function AdminBadgesPage() {
       descriptionPl: "",
       icon: "🏆",
       category: "guest",
-      color: "bg-amber-100 text-amber-700",
+      color: "bg-primary/10 text-primary",
       triggerType: "manual",
       triggerValue: 1,
       triggerDuration: 7,
@@ -257,12 +257,12 @@ export default function AdminBadgesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-stone-900">Zarządzanie odznaki</h1>
-          <p className="text-stone-500">Twórz i zarządzaj odznakgami dla gości i hostów</p>
+          <h1 className="text-2xl font-bold text-foreground">Zarządzanie odznaki</h1>
+          <p className="text-muted-foreground">Twórz i zarządzaj odznakgami dla gości i hostów</p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-amber-600 hover:bg-amber-700">
+            <Button className="bg-primary hover:bg-primary/90">
               <Plus className="h-4 w-4 mr-2" />
               Nowa odznaka
             </Button>
@@ -289,12 +289,12 @@ export default function AdminBadgesPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-full bg-amber-100">
-                <Award className="h-6 w-6 text-amber-600" />
+              <div className="p-3 rounded-full bg-primary/10">
+                <Award className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{allBadges.length}</p>
-                <p className="text-sm text-stone-500">Wszystkie odznaki</p>
+                <p className="text-sm text-muted-foreground">Wszystkie odznaki</p>
               </div>
             </div>
           </CardContent>
@@ -307,7 +307,7 @@ export default function AdminBadgesPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{guestBadgesCount}</p>
-                <p className="text-sm text-stone-500">Odznaki dla gości</p>
+                <p className="text-sm text-muted-foreground">Odznaki dla gości</p>
               </div>
             </div>
           </CardContent>
@@ -320,7 +320,7 @@ export default function AdminBadgesPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{hostBadgesCount}</p>
-                <p className="text-sm text-stone-500">Odznaki dla hostów</p>
+                <p className="text-sm text-muted-foreground">Odznaki dla hostów</p>
               </div>
             </div>
           </CardContent>
@@ -333,7 +333,7 @@ export default function AdminBadgesPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{totalAwarded}</p>
-                <p className="text-sm text-stone-500">Przyznanych łącznie</p>
+                <p className="text-sm text-muted-foreground">Przyznanych łącznie</p>
               </div>
             </div>
           </CardContent>
@@ -381,11 +381,11 @@ export default function AdminBadgesPage() {
                       <TableCell>
                         <div>
                           <p className="font-medium">{badge.namePl}</p>
-                          <p className="text-xs text-stone-400">{badge.name}</p>
+                          <p className="text-xs text-muted-foreground/70">{badge.name}</p>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <p className="text-sm text-stone-600 max-w-xs truncate">
+                        <p className="text-sm text-muted-foreground max-w-xs truncate">
                           {badge.descriptionPl}
                         </p>
                       </TableCell>
@@ -399,13 +399,13 @@ export default function AdminBadgesPage() {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <p className="text-sm text-stone-600">
+                        <p className="text-sm text-muted-foreground">
                           {badge.trigger
                             ? triggerTypes.find((t) => t.value === badge.trigger?.type)?.label || "Niestandardowy"
                             : "Ręczne"}
                         </p>
                         {badge.trigger && (
-                          <p className="text-xs text-stone-400">
+                          <p className="text-xs text-muted-foreground/70">
                             Wartość: {badge.trigger.value}
                             {badge.trigger.duration && ` / ${badge.trigger.duration} dni`}
                           </p>
@@ -420,7 +420,7 @@ export default function AdminBadgesPage() {
                           className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
                             badge.isActive
                               ? "bg-green-100 text-green-700"
-                              : "bg-stone-100 text-stone-500"
+                              : "bg-muted text-muted-foreground"
                           }`}
                         >
                           {badge.isActive ? "Aktywna" : "Nieaktywna"}
@@ -512,15 +512,15 @@ function BadgeForm({
   return (
     <div className="space-y-6">
       {/* Preview */}
-      <div className="p-4 bg-stone-50 rounded-lg">
-        <p className="text-sm text-stone-500 mb-2">Podgląd</p>
+      <div className="p-4 bg-muted/50 rounded-lg">
+        <p className="text-sm text-muted-foreground mb-2">Podgląd</p>
         <div className="flex items-center gap-3">
           <span className={`inline-flex items-center justify-center w-12 h-12 rounded-full text-2xl ${formData.color}`}>
             {formData.icon}
           </span>
           <div>
             <p className="font-medium">{formData.namePl || "Nazwa odznaki"}</p>
-            <p className="text-sm text-stone-500">{formData.descriptionPl || "Opis odznaki"}</p>
+            <p className="text-sm text-muted-foreground">{formData.descriptionPl || "Opis odznaki"}</p>
           </div>
         </div>
       </div>
@@ -580,8 +580,8 @@ function BadgeForm({
                 key={emoji}
                 type="button"
                 onClick={() => setFormData({ ...formData, icon: emoji })}
-                className={`w-9 h-9 rounded-lg text-xl hover:bg-stone-100 transition-colors ${
-                  formData.icon === emoji ? "bg-amber-100 ring-2 ring-amber-400" : ""
+                className={`w-9 h-9 rounded-lg text-xl hover:bg-muted transition-colors ${
+                  formData.icon === emoji ? "bg-primary/10 ring-2 ring-primary/60" : ""
                 }`}
               >
                 {emoji}
@@ -598,7 +598,7 @@ function BadgeForm({
                 type="button"
                 onClick={() => setFormData({ ...formData, color: color.value })}
                 className={`w-9 h-9 rounded-lg ${color.preview} ${
-                  formData.color === color.value ? "ring-2 ring-stone-400" : ""
+                  formData.color === color.value ? "ring-2 ring-muted-foreground/50" : ""
                 }`}
                 title={color.label}
               />
@@ -635,7 +635,7 @@ function BadgeForm({
       </div>
 
       {/* Trigger Configuration */}
-      <div className="space-y-4 p-4 bg-stone-50 rounded-lg">
+      <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
         <h4 className="font-medium">Warunki przyznania</h4>
 
         <div className="space-y-2">
@@ -658,7 +658,7 @@ function BadgeForm({
             </SelectContent>
           </Select>
           {selectedTrigger && (
-            <p className="text-xs text-stone-500">{selectedTrigger.description}</p>
+            <p className="text-xs text-muted-foreground">{selectedTrigger.description}</p>
           )}
         </div>
 
@@ -698,7 +698,7 @@ function BadgeForm({
       </div>
 
       <DialogFooter>
-        <Button onClick={onSubmit} className="bg-amber-600 hover:bg-amber-700">
+        <Button onClick={onSubmit} className="bg-primary hover:bg-primary/90">
           {submitLabel}
         </Button>
       </DialogFooter>

@@ -205,12 +205,12 @@ export default function AdminSettingsPage() {
                 htmlFor="percentage"
                 className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${
                   settings.commissionType === "percentage"
-                    ? "border-amber-600 bg-amber-50"
+                    ? "border-primary bg-primary/5"
                     : "hover:bg-muted"
                 }`}
               >
                 <RadioGroupItem value="percentage" id="percentage" />
-                <Percent className="h-5 w-5 text-amber-600" />
+                <Percent className="h-5 w-5 text-primary" />
                 <div>
                   <p className="font-medium">{t("percentage")}</p>
                   <p className="text-sm text-muted-foreground">
@@ -222,12 +222,12 @@ export default function AdminSettingsPage() {
                 htmlFor="fixed"
                 className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${
                   settings.commissionType === "fixed"
-                    ? "border-amber-600 bg-amber-50"
+                    ? "border-primary bg-primary/5"
                     : "hover:bg-muted"
                 }`}
               >
                 <RadioGroupItem value="fixed" id="fixed" />
-                <Banknote className="h-5 w-5 text-amber-600" />
+                <Banknote className="h-5 w-5 text-primary" />
                 <div>
                   <p className="font-medium">{t("fixed")}</p>
                   <p className="text-sm text-muted-foreground">
@@ -349,7 +349,7 @@ export default function AdminSettingsPage() {
 
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Prowizja</p>
-                <p className="text-2xl font-bold text-amber-600">
+                <p className="text-2xl font-bold text-primary">
                   {formatPrice(previewFee)}
                 </p>
               </div>
@@ -360,10 +360,10 @@ export default function AdminSettingsPage() {
                 ? `${settings.commissionValue}% z ${formatPrice(previewPrice)} = ${formatPrice(previewFee)}`
                 : `Stała opłata: ${formatPrice(settings.commissionValue * 100)}`}
               {settings.minCommission && previewFee === settings.minCommission && (
-                <span className="text-amber-600"> (minimalna prowizja)</span>
+                <span className="text-primary"> (minimalna prowizja)</span>
               )}
               {settings.maxCommission && previewFee === settings.maxCommission && (
-                <span className="text-amber-600"> (maksymalna prowizja)</span>
+                <span className="text-primary"> (maksymalna prowizja)</span>
               )}
             </p>
           </div>
@@ -373,7 +373,7 @@ export default function AdminSettingsPage() {
             <Button
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-amber-600 hover:bg-amber-700"
+              className="bg-primary hover:bg-primary/90"
             >
               {isSaving ? (
                 <>
@@ -426,7 +426,7 @@ export default function AdminSettingsPage() {
             </div>
             <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
               <DialogTrigger asChild>
-                <Button className="bg-amber-600 hover:bg-amber-700">
+                <Button className="bg-primary hover:bg-primary/90">
                   <Plus className="h-4 w-4 mr-2" />
                   Dodaj
                 </Button>
@@ -575,7 +575,7 @@ export default function AdminSettingsPage() {
                   <Button
                     onClick={handleAddOverride}
                     disabled={!newOverride.hostId}
-                    className="bg-amber-600 hover:bg-amber-700"
+                    className="bg-primary hover:bg-primary/90"
                   >
                     Dodaj
                   </Button>
@@ -599,8 +599,8 @@ export default function AdminSettingsPage() {
                   className="flex items-center justify-between p-4 border rounded-lg"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                      <Percent className="h-5 w-5 text-amber-600" />
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                      <Percent className="h-5 w-5 text-primary" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
@@ -616,7 +616,7 @@ export default function AdminSettingsPage() {
                         )}
                       </div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span className="text-amber-600 font-semibold">{override.commissionRate}%</span>
+                        <span className="text-primary font-semibold">{override.commissionRate}%</span>
                         <span>•</span>
                         {override.type === "time_limited" && override.validFrom && override.validUntil && (
                           <span>

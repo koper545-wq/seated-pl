@@ -108,7 +108,7 @@ export function WaitlistDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button variant="link" className="text-amber-600 p-0 h-auto">
+          <Button variant="link" className="text-primary p-0 h-auto">
             {t("joinWaitlist")}
           </Button>
         )}
@@ -118,7 +118,7 @@ export function WaitlistDialog({
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Bell className="h-5 w-5 text-amber-600" />
+                <Bell className="h-5 w-5 text-primary" />
                 {t("title")}
               </DialogTitle>
               <DialogDescription>
@@ -213,8 +213,8 @@ export function WaitlistDialog({
               )}
 
               {/* Info about notification */}
-              <div className="flex items-start gap-2 text-xs text-muted-foreground bg-amber-50 p-3 rounded-lg">
-                <Clock className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
+              <div className="flex items-start gap-2 text-xs text-muted-foreground bg-primary/5 p-3 rounded-lg">
+                <Clock className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
                 <span>
                   Gdy zwolni się miejsce, wyślemy email z linkiem do rezerwacji.
                   Będziesz mieć <strong>12 godzin</strong> na dokonanie rezerwacji.
@@ -233,7 +233,7 @@ export function WaitlistDialog({
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-amber-600 hover:bg-amber-700"
+                  className="flex-1 bg-primary hover:bg-primary/90"
                   disabled={isLoading || !email.trim()}
                 >
                   {isLoading ? (
@@ -260,10 +260,10 @@ export function WaitlistDialog({
               </p>
 
               {position && (
-                <div className="bg-amber-50 rounded-xl p-4 mb-4">
-                  <p className="text-sm text-amber-700 mb-1">Twoja pozycja na liście</p>
-                  <p className="text-4xl font-bold text-amber-600">#{position}</p>
-                  <p className="text-xs text-amber-600 mt-2">
+                <div className="bg-primary/5 rounded-xl p-4 mb-4">
+                  <p className="text-sm text-primary mb-1">Twoja pozycja na liście</p>
+                  <p className="text-4xl font-bold text-primary">#{position}</p>
+                  <p className="text-xs text-primary mt-2">
                     Szukasz {ticketsWanted} {parseInt(ticketsWanted) === 1 ? "miejsca" : "miejsc"}
                   </p>
                 </div>
@@ -280,7 +280,7 @@ export function WaitlistDialog({
                   Powiadomimy Cię emailem, gdy zwolni się miejsce
                 </p>
                 <p className="flex items-center gap-2">
-                  <Clock className="h-3 w-3 text-amber-600" />
+                  <Clock className="h-3 w-3 text-primary" />
                   Będziesz mieć 12 godzin na rezerwację
                 </p>
                 <p className="flex items-center gap-2">

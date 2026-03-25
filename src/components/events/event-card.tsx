@@ -1,6 +1,9 @@
+"use client";
+
 import { Link } from "@/i18n/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { HoverScale } from "@/components/ui/motion";
 import { Calendar, MapPin, Users } from "lucide-react";
 
 export interface EventCardProps {
@@ -25,12 +28,13 @@ export function EventCard({
   location,
   price,
   spotsLeft,
-  imageGradient = "from-amber-200 to-orange-300",
+  imageGradient = "from-primary/30 to-orange-300",
   imageUrl,
 }: EventCardProps) {
   const isSoldOut = spotsLeft === 0;
 
   return (
+    <HoverScale scale={1.02}>
     <Link href={`/events/${id}`}>
       <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group h-full">
         <div className="relative">
@@ -60,7 +64,7 @@ export function EventCard({
           </Badge>
         </div>
         <CardContent className="p-5">
-          <h3 className="text-lg font-semibold mb-3 line-clamp-2 group-hover:text-amber-600 transition-colors">
+          <h3 className="text-lg font-semibold mb-3 line-clamp-2 group-hover:text-primary transition-colors">
             {title}
           </h3>
           <div className="flex flex-col gap-2 text-sm text-muted-foreground">
@@ -83,5 +87,6 @@ export function EventCard({
         </CardContent>
       </Card>
     </Link>
+    </HoverScale>
   );
 }

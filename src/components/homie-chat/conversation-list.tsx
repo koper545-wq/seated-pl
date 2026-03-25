@@ -52,8 +52,8 @@ export function ConversationList({
             href={`/dashboard/homies/chat/${otherUserId}`}
           >
             <Card
-              className={`hover:bg-stone-50 transition-colors cursor-pointer ${
-                unreadCount > 0 ? "border-amber-200 bg-amber-50/50" : ""
+              className={`hover:bg-muted/50 transition-colors cursor-pointer ${
+                unreadCount > 0 ? "border-primary/20 bg-primary/5" : ""
               }`}
             >
               <CardContent className="p-4">
@@ -62,7 +62,7 @@ export function ConversationList({
                     {otherAvatar && (
                       <AvatarImage src={otherAvatar} alt={otherName} />
                     )}
-                    <AvatarFallback className="bg-amber-100 text-amber-700">
+                    <AvatarFallback className="bg-primary/10 text-primary">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
@@ -70,14 +70,14 @@ export function ConversationList({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span
-                        className={`font-semibold text-stone-900 truncate ${
+                        className={`font-semibold text-foreground truncate ${
                           unreadCount > 0 ? "font-bold" : ""
                         }`}
                       >
                         {otherName}
                       </span>
                       {conversation.lastMessageAt && (
-                        <span className="text-xs text-stone-500 flex-shrink-0">
+                        <span className="text-xs text-muted-foreground flex-shrink-0">
                           {formatDistanceToNow(conversation.lastMessageAt, {
                             addSuffix: false,
                             locale: pl,
@@ -89,14 +89,14 @@ export function ConversationList({
                       <p
                         className={`text-sm truncate ${
                           unreadCount > 0
-                            ? "text-stone-900 font-medium"
-                            : "text-stone-500"
+                            ? "text-foreground font-medium"
+                            : "text-muted-foreground"
                         }`}
                       >
                         {conversation.lastMessage || "Brak wiadomości"}
                       </p>
                       {unreadCount > 0 && (
-                        <Badge className="bg-amber-500 hover:bg-amber-500 flex-shrink-0">
+                        <Badge className="bg-primary/50 hover:bg-primary/50 flex-shrink-0">
                           {unreadCount}
                         </Badge>
                       )}

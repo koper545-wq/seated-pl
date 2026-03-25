@@ -70,7 +70,7 @@ export function ReferralStats({
     return (
       <div className={cn("flex items-center gap-6", className)}>
         <div className="text-center">
-          <p className="text-2xl font-bold text-amber-600">{data.completedReferrals}</p>
+          <p className="text-2xl font-bold text-primary">{data.completedReferrals}</p>
           <p className="text-xs text-muted-foreground">Zaproszonych</p>
         </div>
         <div className="text-center">
@@ -92,10 +92,10 @@ export function ReferralStats({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="grid grid-cols-3 gap-4">
-        <div className="text-center p-4 bg-amber-50 rounded-xl">
-          <Users className="h-6 w-6 text-amber-600 mx-auto mb-2" />
-          <p className="text-2xl font-bold text-amber-700">{data.completedReferrals}</p>
-          <p className="text-xs text-amber-600">Zaproszeni znajomi</p>
+        <div className="text-center p-4 bg-primary/5 rounded-xl">
+          <Users className="h-6 w-6 text-primary mx-auto mb-2" />
+          <p className="text-2xl font-bold text-primary">{data.completedReferrals}</p>
+          <p className="text-xs text-primary">Zaproszeni znajomi</p>
         </div>
         <div className="text-center p-4 bg-green-50 rounded-xl">
           <Gift className="h-6 w-6 text-green-600 mx-auto mb-2" />
@@ -184,7 +184,7 @@ export function InviteFriendDialog({
     <Dialog>
       <DialogTrigger asChild>
         {trigger || (
-          <Button className="gap-2 bg-amber-600 hover:bg-amber-700">
+          <Button className="gap-2 bg-primary hover:bg-primary/90">
             <Gift className="h-4 w-4" />
             Zaproś znajomych
           </Button>
@@ -193,12 +193,12 @@ export function InviteFriendDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Gift className="h-5 w-5 text-amber-600" />
+            <Gift className="h-5 w-5 text-primary" />
             Zaproś znajomych
           </DialogTitle>
           <DialogDescription>
             Zaproś znajomych i otrzymaj{" "}
-            <span className="font-semibold text-amber-600">{rewardAmount} PLN</span> za każdą
+            <span className="font-semibold text-primary">{rewardAmount} PLN</span> za każdą
             osobę, która dokona rezerwacji!
           </DialogDescription>
         </DialogHeader>
@@ -367,7 +367,7 @@ export function ReferralCodeInput({
   return (
     <div className={cn("space-y-2", className)}>
       <Label htmlFor="referral-code" className="flex items-center gap-2">
-        <Gift className="h-4 w-4 text-amber-600" />
+        <Gift className="h-4 w-4 text-primary" />
         Masz kod polecający?
       </Label>
       <div className="flex gap-2">
@@ -397,14 +397,14 @@ export function ReferralCodeInput({
 export function ReferralCard({ data, className }: ReferralCardProps) {
   return (
     <Card className={cn("overflow-hidden", className)}>
-      <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
+      <CardHeader className="bg-gradient-to-r from-primary/85 to-orange-500 text-white">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
             <Gift className="h-6 w-6" />
           </div>
           <div>
             <CardTitle className="text-white">Program poleceń</CardTitle>
-            <CardDescription className="text-amber-100">
+            <CardDescription className="text-primary/20">
               Zaproś znajomych i zarabiaj!
             </CardDescription>
           </div>
@@ -415,12 +415,12 @@ export function ReferralCard({ data, className }: ReferralCardProps) {
         {/* How it works */}
         <div className="space-y-3">
           <h4 className="font-semibold flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-amber-600" />
+            <Sparkles className="h-4 w-4 text-primary" />
             Jak to działa?
           </h4>
           <div className="grid gap-3">
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-amber-600">
+              <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-primary">
                 1
               </div>
               <div>
@@ -429,7 +429,7 @@ export function ReferralCard({ data, className }: ReferralCardProps) {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-amber-600">
+              <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-primary">
                 2
               </div>
               <div>
@@ -438,7 +438,7 @@ export function ReferralCard({ data, className }: ReferralCardProps) {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-amber-600">
+              <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-primary">
                 3
               </div>
               <div>
@@ -458,7 +458,7 @@ export function ReferralCard({ data, className }: ReferralCardProps) {
           referralLink={data.referralLink}
           rewardAmount={data.rewardPerReferral}
           trigger={
-            <Button className="w-full gap-2 bg-amber-600 hover:bg-amber-700">
+            <Button className="w-full gap-2 bg-primary hover:bg-primary/90">
               <Gift className="h-4 w-4" />
               Zaproś znajomych
               <ArrowRight className="h-4 w-4 ml-auto" />

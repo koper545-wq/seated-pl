@@ -282,7 +282,7 @@ export default function CreateEventPage() {
         pendingBookings: 0,
         confirmedGuests: 0,
         revenue: 0,
-        imageGradient: "from-amber-400 to-orange-500",
+        imageGradient: "from-primary/70 to-orange-500",
         status: asDraft ? "draft" : "pending_review",
         description,
         menuDescription,
@@ -341,7 +341,7 @@ export default function CreateEventPage() {
                       step > s
                         ? "bg-green-500 text-white"
                         : step === s
-                        ? "bg-amber-600 text-white"
+                        ? "bg-primary text-white"
                         : "bg-muted text-muted-foreground"
                     )}
                   >
@@ -397,8 +397,8 @@ export default function CreateEventPage() {
                         className={cn(
                           "border rounded-lg p-3 cursor-pointer transition-all text-center",
                           eventType === type.value
-                            ? "border-amber-600 bg-amber-50"
-                            : "hover:border-amber-300"
+                            ? "border-primary bg-primary/5"
+                            : "hover:border-primary/40"
                         )}
                         onClick={() => setEventType(type.value)}
                       >
@@ -419,8 +419,8 @@ export default function CreateEventPage() {
                         className={cn(
                           "cursor-pointer",
                           selectedTags.includes(tag)
-                            ? "bg-amber-600 hover:bg-amber-700"
-                            : "hover:bg-amber-50"
+                            ? "bg-primary hover:bg-primary/90"
+                            : "hover:bg-primary/5"
                         )}
                         onClick={() => handleTagToggle(tag)}
                       >
@@ -434,7 +434,7 @@ export default function CreateEventPage() {
                         <Badge
                           key={tag}
                           variant="default"
-                          className="bg-amber-600 hover:bg-amber-700 cursor-pointer"
+                          className="bg-primary hover:bg-primary/90 cursor-pointer"
                           onClick={() => handleTagToggle(tag)}
                         >
                           {tag} ×
@@ -523,14 +523,14 @@ export default function CreateEventPage() {
                         className={cn(
                           "flex items-center gap-2 px-3 py-2 rounded-full border text-sm transition-all",
                           selectedLanguages.includes(lang.value)
-                            ? "border-amber-600 bg-amber-50 text-amber-800"
-                            : "border-muted hover:border-amber-300"
+                            ? "border-primary bg-primary/5 text-primary"
+                            : "border-muted hover:border-primary/40"
                         )}
                       >
                         <span>{lang.flag}</span>
                         <span>{lang.label}</span>
                         {selectedLanguages.includes(lang.value) && (
-                          <CheckCircle className="h-4 w-4 text-amber-600" />
+                          <CheckCircle className="h-4 w-4 text-primary" />
                         )}
                       </button>
                     ))}
@@ -634,7 +634,7 @@ export default function CreateEventPage() {
                   </div>
 
                   {isRecurring && eventDate && (
-                    <div className="pl-6 space-y-4 border-l-2 border-amber-200 ml-2">
+                    <div className="pl-6 space-y-4 border-l-2 border-primary/20 ml-2">
                       {/* Pattern selector */}
                       <div className="space-y-2">
                         <Label>Częstotliwość</Label>
@@ -722,19 +722,19 @@ export default function CreateEventPage() {
                       )}
 
                       {/* Preview */}
-                      <div className="bg-amber-50 rounded-lg p-3">
-                        <p className="font-medium text-sm mb-2 text-amber-800">
+                      <div className="bg-primary/5 rounded-lg p-3">
+                        <p className="font-medium text-sm mb-2 text-primary">
                           Podgląd terminów ({generatedDates.length}):
                         </p>
-                        <div className="max-h-32 overflow-y-auto text-sm text-amber-700 space-y-1">
+                        <div className="max-h-32 overflow-y-auto text-sm text-primary space-y-1">
                           {generatedDates.slice(0, 10).map((date, i) => (
                             <div key={i} className="flex items-center gap-2">
-                              <span className="text-amber-500">{i + 1}.</span>
+                              <span className="text-primary/80">{i + 1}.</span>
                               {format(date, "EEEE, d MMMM yyyy", { locale: pl })}
                             </div>
                           ))}
                           {generatedDates.length > 10 && (
-                            <div className="text-amber-600 italic">
+                            <div className="text-primary italic">
                               ... i {generatedDates.length - 10} więcej
                             </div>
                           )}
@@ -973,7 +973,7 @@ export default function CreateEventPage() {
                     <button
                       type="button"
                       onClick={simulatePhotoUpload}
-                      className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-amber-500 hover:bg-amber-50 transition-colors"
+                      className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-primary hover:bg-primary/5 transition-colors"
                     >
                       <Upload className="h-8 w-8 text-muted-foreground/50 mb-2" />
                       <span className="text-sm text-muted-foreground">Dodaj zdjęcie</span>
@@ -1023,7 +1023,7 @@ export default function CreateEventPage() {
                 <Button
                   onClick={() => setStep(step + 1)}
                   disabled={!canProceed()}
-                  className="bg-amber-600 hover:bg-amber-700"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   Dalej
                   <ArrowRight className="h-4 w-4 ml-2" />
@@ -1032,7 +1032,7 @@ export default function CreateEventPage() {
                 <Button
                   onClick={() => handleSubmit(false)}
                   disabled={!canProceed() || isSubmitting}
-                  className="bg-amber-600 hover:bg-amber-700"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   {isSubmitting ? (
                     <>

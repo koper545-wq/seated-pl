@@ -92,7 +92,7 @@ export function WishlistCard({ wishlist, showActions = true }: WishlistCardProps
           <div className="flex -space-x-2">
             {wishlist.collaboratorIds.slice(0, 5).map((_, index) => (
               <Avatar key={index} className="h-7 w-7 border-2 border-background">
-                <AvatarFallback className="text-xs bg-amber-100 text-amber-700">
+                <AvatarFallback className="text-xs bg-primary/10 text-primary">
                   {String.fromCharCode(65 + index)}
                 </AvatarFallback>
               </Avatar>

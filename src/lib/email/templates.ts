@@ -32,41 +32,41 @@ export function bookingRequestConfirmation(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
-          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <h2 style="margin: 0 0 10px 0; color: #92400e;">Zapytanie wysłane!</h2>
-            <p style="margin: 0; color: #78716c;">Twoje zapytanie o rezerwację zostało wysłane do hosta.</p>
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <h2 style="margin: 0 0 10px 0; color: #8B4226;">Zapytanie wysłane!</h2>
+            <p style="margin: 0; color: #6B6560;">Twoje zapytanie o rezerwację zostało wysłane do hosta.</p>
           </div>
 
           <p>Cześć <strong>${data.guestName}</strong>! 👋</p>
 
           <p>Dziękujemy za zainteresowanie wydarzeniem. Twoje zapytanie o rezerwację zostało przesłane do hosta <strong>${data.hostName}</strong>.</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">📋 Szczegóły rezerwacji</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">📋 Szczegóły rezerwacji</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Wydarzenie:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Wydarzenie:</td>
                 <td style="padding: 8px 0; font-weight: 600;">${data.eventTitle}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Data:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Data:</td>
                 <td style="padding: 8px 0;">${data.eventDate}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Godzina:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Godzina:</td>
                 <td style="padding: 8px 0;">${data.eventTime}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Liczba biletów:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Liczba biletów:</td>
                 <td style="padding: 8px 0;">${data.ticketCount}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Kwota:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Kwota:</td>
                 <td style="padding: 8px 0; font-weight: 600; color: #059669;">${data.totalPrice} zł</td>
               </tr>
             </table>
@@ -79,13 +79,13 @@ export function bookingRequestConfirmation(data: {
             </p>
           </div>
 
-          <p style="color: #78716c; font-size: 14px;">
+          <p style="color: #6B6560; font-size: 14px;">
             Masz pytania? Możesz zadać je bezpośrednio na stronie wydarzenia.
           </p>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.<br>
             © ${new Date().getFullYear()} Seated. Wszystkie prawa zastrzeżone.
           </p>
@@ -143,9 +143,9 @@ export function bookingApproved(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dcfce7; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -158,51 +158,51 @@ export function bookingApproved(data: {
           <p>Świetna wiadomość! <strong>${data.hostName}</strong> potwierdził/a Twoją rezerwację. Poniżej znajdziesz wszystkie szczegóły wydarzenia.</p>
 
           ${data.paymentLink ? `
-          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
-            <p style="margin: 0 0 15px 0; color: #92400e; font-weight: 600;">💳 Dokończ płatność</p>
-            <a href="${data.paymentLink}" style="display: inline-block; background: #d97706; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Zapłać ${data.totalPrice} zł</a>
-            <p style="margin: 15px 0 0 0; color: #78716c; font-size: 12px;">Masz 24h na dokończenie płatności</p>
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0 0 15px 0; color: #8B4226; font-weight: 600;">💳 Dokończ płatność</p>
+            <a href="${data.paymentLink}" style="display: inline-block; background: #C05C36; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Zapłać ${data.totalPrice} zł</a>
+            <p style="margin: 15px 0 0 0; color: #6B6560; font-size: 12px;">Masz 24h na dokończenie płatności</p>
           </div>
           ` : ''}
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">📋 Szczegóły wydarzenia</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">📋 Szczegóły wydarzenia</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Wydarzenie:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Wydarzenie:</td>
                 <td style="padding: 8px 0; font-weight: 600;">${data.eventTitle}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Data:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Data:</td>
                 <td style="padding: 8px 0;">${data.eventDate}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Godzina:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Godzina:</td>
                 <td style="padding: 8px 0;">${data.eventTime}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Czas trwania:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Czas trwania:</td>
                 <td style="padding: 8px 0;">~${data.eventDuration} min</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Liczba biletów:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Liczba biletów:</td>
                 <td style="padding: 8px 0;">${data.ticketCount}</td>
               </tr>
             </table>
           </div>
 
-          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #92400e;">📍 Adres</h3>
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #8B4226;">📍 Adres</h3>
             <p style="margin: 0; font-weight: 600; font-size: 16px;">${data.fullAddress}</p>
-            <p style="margin: 5px 0 0 0; color: #78716c;">${data.neighborhood}</p>
-            ${data.hostPhone ? `<p style="margin: 10px 0 0 0; color: #78716c;">📱 Kontakt do hosta: <strong>${data.hostPhone}</strong></p>` : ''}
+            <p style="margin: 5px 0 0 0; color: #6B6560;">${data.neighborhood}</p>
+            ${data.hostPhone ? `<p style="margin: 10px 0 0 0; color: #6B6560;">📱 Kontakt do hosta: <strong>${data.hostPhone}</strong></p>` : ''}
           </div>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">🍴 Menu</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">🍴 Menu</h3>
             <p style="margin: 0;">${data.menuDescription}</p>
             ${data.dietaryOptions.length > 0 ? `
-            <p style="margin: 15px 0 0 0; color: #78716c; font-size: 14px;">
+            <p style="margin: 15px 0 0 0; color: #6B6560; font-size: 14px;">
               <strong>Opcje dietetyczne:</strong> ${data.dietaryOptions.join(', ')}
             </p>
             ` : ''}
@@ -217,23 +217,23 @@ export function bookingApproved(data: {
           ` : ''}
 
           ${data.specialInstructions ? `
-          <div style="background: #fef3c7; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #92400e;">
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #8B4226;">
               <strong>ℹ️ Dodatkowe informacje od hosta:</strong><br>
               ${data.specialInstructions}
             </p>
           </div>
           ` : ''}
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #44403c; font-size: 14px;">
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #1A1916; font-size: 14px;">
               <strong>⏰ Przypomnienie:</strong> Otrzymasz przypomnienie o wydarzeniu 24h i 3h przed rozpoczęciem.
             </p>
           </div>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.<br>
             © ${new Date().getFullYear()} Seated. Wszystkie prawa zastrzeżone.
           </p>
@@ -297,9 +297,9 @@ export function bookingDeclined(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <p>Cześć <strong>${data.guestName}</strong>,</p>
@@ -307,8 +307,8 @@ export function bookingDeclined(data: {
           <p>Niestety, <strong>${data.hostName}</strong> nie mógł/mogła potwierdzić Twojej rezerwacji na wydarzenie <strong>${data.eventTitle}</strong> (${data.eventDate}).</p>
 
           ${data.reason ? `
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #44403c;">
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #1A1916;">
               <strong>Powód:</strong> ${data.reason}
             </p>
           </div>
@@ -317,12 +317,12 @@ export function bookingDeclined(data: {
           <p>Nie martw się! Na Seated znajdziesz wiele innych wspaniałych wydarzeń kulinarnych.</p>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://seated.pl/events" style="display: inline-block; background: #d97706; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Odkryj inne wydarzenia</a>
+            <a href="https://seated.pl/events" style="display: inline-block; background: #C05C36; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Odkryj inne wydarzenia</a>
           </div>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.
           </p>
         </body>
@@ -368,13 +368,13 @@ export function eventReminder(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
-          <div style="background: ${isUrgent ? '#fef3c7' : '#dbeafe'}; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <h2 style="margin: 0 0 10px 0; color: ${isUrgent ? '#92400e' : '#1e40af'};">
+          <div style="background: ${isUrgent ? '#F0D8CC' : '#dbeafe'}; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <h2 style="margin: 0 0 10px 0; color: ${isUrgent ? '#8B4226' : '#1e40af'};">
               ${isUrgent ? '⏰ Już za 3 godziny!' : '📅 Przypomnienie o jutrzejszym wydarzeniu'}
             </h2>
           </div>
@@ -383,7 +383,7 @@ export function eventReminder(data: {
 
           <p>${isUrgent ? 'Twoje wydarzenie zaczyna się już za 3 godziny!' : 'Przypominamy o jutrzejszym wydarzeniu!'}</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
             <h3 style="margin: 0 0 15px 0;">${data.eventTitle}</h3>
             <p style="margin: 0;">📅 ${data.eventDate} o ${data.eventTime}</p>
             <p style="margin: 10px 0 0 0;">📍 ${data.fullAddress}</p>
@@ -391,11 +391,11 @@ export function eventReminder(data: {
             ${data.hostPhone ? `<p style="margin: 10px 0 0 0;">📱 ${data.hostPhone}</p>` : ''}
           </div>
 
-          <p style="color: #78716c;">Smacznego i do zobaczenia! 🍴</p>
+          <p style="color: #6B6560;">Smacznego i do zobaczenia! 🍴</p>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.
           </p>
         </body>
@@ -448,9 +448,9 @@ export function newBookingRequest(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dbeafe; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -462,35 +462,35 @@ export function newBookingRequest(data: {
 
           <p><strong>${data.guestName}</strong> chce zarezerwować miejsce na wydarzenie <strong>${data.eventTitle}</strong>.</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">📋 Szczegóły rezerwacji</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">📋 Szczegóły rezerwacji</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Gość:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Gość:</td>
                 <td style="padding: 8px 0; font-weight: 600;">${data.guestName}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Email:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Email:</td>
                 <td style="padding: 8px 0;">${data.guestEmail}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Data wydarzenia:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Data wydarzenia:</td>
                 <td style="padding: 8px 0;">${data.eventDate}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Liczba biletów:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Liczba biletów:</td>
                 <td style="padding: 8px 0;">${data.ticketCount}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Kwota:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Kwota:</td>
                 <td style="padding: 8px 0; font-weight: 600; color: #059669;">${data.totalPrice} zł</td>
               </tr>
             </table>
           </div>
 
           ${data.dietaryInfo ? `
-          <div style="background: #fef3c7; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #92400e;">
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #8B4226;">
               <strong>🥗 Wymagania dietetyczne:</strong><br>
               ${data.dietaryInfo}
             </p>
@@ -507,18 +507,18 @@ export function newBookingRequest(data: {
           ` : ''}
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${data.dashboardLink}" style="display: inline-block; background: #d97706; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Zarządzaj rezerwacjami</a>
+            <a href="${data.dashboardLink}" style="display: inline-block; background: #C05C36; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Zarządzaj rezerwacjami</a>
           </div>
 
-          <div style="background: #fef3c7; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #92400e; font-size: 14px;">
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #8B4226; font-size: 14px;">
               <strong>⏰ Pamiętaj:</strong> Masz 48 godzin na potwierdzenie lub odrzucenie rezerwacji.
             </p>
           </div>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.
           </p>
         </body>
@@ -573,9 +573,9 @@ export function paymentConfirmedHost(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dcfce7; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -587,30 +587,30 @@ export function paymentConfirmedHost(data: {
 
           <p><strong>${data.guestName}</strong> opłacił/a rezerwację na wydarzenie <strong>${data.eventTitle}</strong>.</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">💵 Szczegóły płatności</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">💵 Szczegóły płatności</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Wydarzenie:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Wydarzenie:</td>
                 <td style="padding: 8px 0;">${data.eventTitle}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Data:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Data:</td>
                 <td style="padding: 8px 0;">${data.eventDate}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Bilety:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Bilety:</td>
                 <td style="padding: 8px 0;">${data.ticketCount}</td>
               </tr>
-              <tr style="border-top: 1px solid #e7e5e4;">
-                <td style="padding: 8px 0; color: #78716c;">Kwota od gościa:</td>
+              <tr style="border-top: 1px solid #EDE0CE;">
+                <td style="padding: 8px 0; color: #6B6560;">Kwota od gościa:</td>
                 <td style="padding: 8px 0;">${data.totalPrice} zł</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Prowizja platformy (10%):</td>
+                <td style="padding: 8px 0; color: #6B6560;">Prowizja platformy (10%):</td>
                 <td style="padding: 8px 0; color: #dc2626;">-${data.platformFee} zł</td>
               </tr>
-              <tr style="border-top: 1px solid #e7e5e4;">
+              <tr style="border-top: 1px solid #EDE0CE;">
                 <td style="padding: 8px 0; font-weight: 600;">Twój zarobek:</td>
                 <td style="padding: 8px 0; font-weight: 600; color: #059669; font-size: 18px;">${data.hostEarnings} zł</td>
               </tr>
@@ -623,9 +623,9 @@ export function paymentConfirmedHost(data: {
             </p>
           </div>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.
           </p>
         </body>
@@ -674,34 +674,34 @@ export function bookingCancelledHost(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <p>Cześć <strong>${data.hostName}</strong>,</p>
 
           <p><strong>${data.guestName}</strong> anulował/a rezerwację na wydarzenie <strong>${data.eventTitle}</strong> (${data.eventDate}).</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 15px; margin: 20px 0;">
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 15px; margin: 20px 0;">
             <p style="margin: 0;">
               <strong>Zwolnione miejsca:</strong> ${data.ticketCount}
             </p>
           </div>
 
           ${data.reason ? `
-          <div style="background: #fef3c7; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #92400e;">
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #8B4226;">
               <strong>Powód anulacji:</strong> ${data.reason}
             </p>
           </div>
           ` : ''}
 
-          <p style="color: #78716c;">Te miejsca są teraz dostępne dla innych gości.</p>
+          <p style="color: #6B6560;">Te miejsca są teraz dostępne dla innych gości.</p>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.
           </p>
         </body>
@@ -743,9 +743,9 @@ export function hostApplicationReceived(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dcfce7; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -756,24 +756,24 @@ export function hostApplicationReceived(data: {
 
           <p>Dziękujemy za złożenie aplikacji na hosta platformy Seated! Jesteśmy podekscytowani możliwością współpracy z Tobą.</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #44403c;">
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #1A1916;">
               <strong>Numer aplikacji:</strong> ${data.applicationId}
             </p>
           </div>
 
           <h3>Co dalej?</h3>
-          <ol style="color: #44403c;">
+          <ol style="color: #1A1916;">
             <li>Nasz zespół przejrzy Twoją aplikację w ciągu <strong>48 godzin</strong></li>
             <li>Skontaktujemy się z Tobą, aby umówić <strong>krótką rozmowę weryfikacyjną</strong></li>
             <li>Po pozytywnej weryfikacji, będziesz mógł/mogła tworzyć wydarzenia!</li>
           </ol>
 
-          <p style="color: #78716c;">Masz pytania? Odpisz na tego emaila, a chętnie pomożemy.</p>
+          <p style="color: #6B6560;">Masz pytania? Odpisz na tego emaila, a chętnie pomożemy.</p>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.
           </p>
         </body>
@@ -817,9 +817,9 @@ export function hostApplicationApproved(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dcfce7; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
@@ -832,22 +832,22 @@ export function hostApplicationApproved(data: {
           <p>Z ogromną przyjemnością informujemy, że Twoja aplikacja została <strong>zaakceptowana</strong>! Witamy w społeczności hostów Seated.</p>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${data.dashboardLink}" style="display: inline-block; background: #d97706; color: white; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">Stwórz swoje pierwsze wydarzenie</a>
+            <a href="${data.dashboardLink}" style="display: inline-block; background: #C05C36; color: white; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">Stwórz swoje pierwsze wydarzenie</a>
           </div>
 
           <h3>Porady na start:</h3>
-          <ul style="color: #44403c;">
+          <ul style="color: #1A1916;">
             <li>Dodaj atrakcyjne zdjęcia swoich potraw</li>
             <li>Opisz szczegółowo menu i atmosferę</li>
             <li>Zacznij od mniejszej grupy (6-8 osób)</li>
             <li>Odpowiadaj szybko na zapytania gości</li>
           </ul>
 
-          <p style="color: #78716c;">Powodzenia i smacznych wydarzeń! 🍴</p>
+          <p style="color: #6B6560;">Powodzenia i smacznych wydarzeń! 🍴</p>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.
           </p>
         </body>
@@ -905,9 +905,9 @@ export function waitlistJoined(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dbeafe; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -919,29 +919,29 @@ export function waitlistJoined(data: {
 
           <p>Świetnie! Zapisaliśmy Cię na listę oczekujących na wydarzenie <strong>${data.eventTitle}</strong>.</p>
 
-          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
-            <p style="margin: 0; color: #92400e; font-size: 14px;">Twoja pozycja na liście</p>
-            <p style="margin: 10px 0 0 0; color: #92400e; font-size: 48px; font-weight: 700;">#${data.position}</p>
-            <p style="margin: 10px 0 0 0; color: #78716c; font-size: 14px;">Szukasz ${data.ticketsWanted} ${data.ticketsWanted === 1 ? 'miejsca' : 'miejsc'}</p>
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0; color: #8B4226; font-size: 14px;">Twoja pozycja na liście</p>
+            <p style="margin: 10px 0 0 0; color: #8B4226; font-size: 48px; font-weight: 700;">#${data.position}</p>
+            <p style="margin: 10px 0 0 0; color: #6B6560; font-size: 14px;">Szukasz ${data.ticketsWanted} ${data.ticketsWanted === 1 ? 'miejsca' : 'miejsc'}</p>
           </div>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">📋 Szczegóły wydarzenia</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">📋 Szczegóły wydarzenia</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Wydarzenie:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Wydarzenie:</td>
                 <td style="padding: 8px 0; font-weight: 600;">${data.eventTitle}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Data:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Data:</td>
                 <td style="padding: 8px 0;">${data.eventDate}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Godzina:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Godzina:</td>
                 <td style="padding: 8px 0;">${data.eventTime}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Host:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Host:</td>
                 <td style="padding: 8px 0;">${data.hostName}</td>
               </tr>
             </table>
@@ -957,12 +957,12 @@ export function waitlistJoined(data: {
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://seated.pl/events" style="display: inline-block; background: #d97706; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Przeglądaj inne wydarzenia</a>
+            <a href="https://seated.pl/events" style="display: inline-block; background: #C05C36; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Przeglądaj inne wydarzenia</a>
           </div>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.<br>
             © ${new Date().getFullYear()} Seated. Wszystkie prawa zastrzeżone.
           </p>
@@ -1026,9 +1026,9 @@ export function waitlistSpotAvailable(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dcfce7; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
@@ -1040,35 +1040,35 @@ export function waitlistSpotAvailable(data: {
 
           <p>Czekałeś/aś na to! Właśnie zwolniło się miejsce na wydarzenie <strong>${data.eventTitle}</strong>, na które byłeś/aś na liście oczekujących.</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">📋 Szczegóły wydarzenia</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">📋 Szczegóły wydarzenia</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Wydarzenie:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Wydarzenie:</td>
                 <td style="padding: 8px 0; font-weight: 600;">${data.eventTitle}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Data:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Data:</td>
                 <td style="padding: 8px 0;">${data.eventDate}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Godzina:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Godzina:</td>
                 <td style="padding: 8px 0;">${data.eventTime}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Lokalizacja:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Lokalizacja:</td>
                 <td style="padding: 8px 0;">${data.eventLocation}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Host:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Host:</td>
                 <td style="padding: 8px 0;">${data.hostName}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Dostępne miejsca:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Dostępne miejsca:</td>
                 <td style="padding: 8px 0; font-weight: 600; color: #059669;">${data.availableSpots}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Cena:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Cena:</td>
                 <td style="padding: 8px 0; font-weight: 600;">${data.price} zł/os</td>
               </tr>
             </table>
@@ -1078,21 +1078,21 @@ export function waitlistSpotAvailable(data: {
             <a href="${data.bookingUrl}" style="display: inline-block; background: #059669; color: white; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px;">🎫 Zarezerwuj teraz</a>
           </div>
 
-          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
-            <p style="margin: 0 0 10px 0; color: #92400e; font-weight: 600; font-size: 16px;">⏰ WAŻNE: Masz 12 godzin na rezerwację!</p>
-            <p style="margin: 0; color: #78716c;">Link wygasa: <strong>${data.expiresAt}</strong></p>
-            <p style="margin: 15px 0 0 0; color: #92400e; font-size: 14px;">
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0 0 10px 0; color: #8B4226; font-weight: 600; font-size: 16px;">⏰ WAŻNE: Masz 12 godzin na rezerwację!</p>
+            <p style="margin: 0; color: #6B6560;">Link wygasa: <strong>${data.expiresAt}</strong></p>
+            <p style="margin: 15px 0 0 0; color: #8B4226; font-size: 14px;">
               Jeśli nie zarezerwujesz w tym czasie,<br>
               miejsce zostanie zaoferowane kolejnej osobie z listy.
             </p>
           </div>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.<br>
             Nie chcesz już otrzymywać powiadomień o tym wydarzeniu?<br>
-            <a href="#" style="color: #78716c;">Wypisz się z listy oczekujących</a>
+            <a href="#" style="color: #6B6560;">Wypisz się z listy oczekujących</a>
           </p>
         </body>
       </html>
@@ -1147,13 +1147,13 @@ export function waitlistExpired(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
-          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <h2 style="margin: 0 0 10px 0; color: #92400e;">⏰ Czas na rezerwację minął</h2>
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <h2 style="margin: 0 0 10px 0; color: #8B4226;">⏰ Czas na rezerwację minął</h2>
           </div>
 
           <p>${greeting}</p>
@@ -1162,19 +1162,19 @@ export function waitlistExpired(data: {
 
           <p>Miejsce zostało zaoferowane kolejnej osobie z listy oczekujących.</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #44403c;">
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #1A1916;">
               Nie martw się! Na Seated znajdziesz wiele innych wspaniałych wydarzeń kulinarnych.
             </p>
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://seated.pl/events" style="display: inline-block; background: #d97706; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Przeglądaj wydarzenia</a>
+            <a href="https://seated.pl/events" style="display: inline-block; background: #C05C36; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Przeglądaj wydarzenia</a>
           </div>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.
           </p>
         </body>
@@ -1228,9 +1228,9 @@ export function reportSubmittedConfirmation(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dbeafe; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -1242,42 +1242,42 @@ export function reportSubmittedConfirmation(data: {
 
           <p>Dziękujemy za zgłoszenie problemu. Twoja opinia pomaga nam utrzymać bezpieczną i przyjazną społeczność na platformie Seated.</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">📋 Szczegóły zgłoszenia</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">📋 Szczegóły zgłoszenia</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Numer zgłoszenia:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Numer zgłoszenia:</td>
                 <td style="padding: 8px 0; font-weight: 600;">#${data.reportId}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Typ zgłoszenia:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Typ zgłoszenia:</td>
                 <td style="padding: 8px 0;">${typeLabels[data.reportType]}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Dotyczy:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Dotyczy:</td>
                 <td style="padding: 8px 0;">${data.reportedEntityName}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Kategoria:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Kategoria:</td>
                 <td style="padding: 8px 0;">${data.category}</td>
               </tr>
             </table>
           </div>
 
-          <div style="background: #fef3c7; border-radius: 12px; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #92400e;">
+          <div style="background: #F0D8CC; border-radius: 12px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #8B4226;">
               <strong>⏳ Co dalej?</strong><br>
               Nasz zespół przejrzy Twoje zgłoszenie w ciągu <strong>48 godzin</strong>. Poinformujemy Cię o podjętych działaniach.
             </p>
           </div>
 
-          <p style="color: #78716c; font-size: 14px;">
+          <p style="color: #6B6560; font-size: 14px;">
             Jeśli masz dodatkowe informacje do przekazania, odpisz na tego emaila.
           </p>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.<br>
             © ${new Date().getFullYear()} Seated. Wszystkie prawa zastrzeżone.
           </p>
@@ -1334,9 +1334,9 @@ export function newReportNotificationAdmin(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated Admin</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated Admin</h1>
           </div>
 
           <div style="background: #fee2e2; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -1344,34 +1344,34 @@ export function newReportNotificationAdmin(data: {
             <p style="margin: 0; color: #ef4444;">Wymaga przeglądu przez zespół.</p>
           </div>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">📋 Szczegóły zgłoszenia</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">📋 Szczegóły zgłoszenia</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Numer zgłoszenia:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Numer zgłoszenia:</td>
                 <td style="padding: 8px 0; font-weight: 600;">#${data.reportId}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Typ:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Typ:</td>
                 <td style="padding: 8px 0;">${typeLabels[data.reportType]}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Zgłaszający:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Zgłaszający:</td>
                 <td style="padding: 8px 0;">${data.reporterName} (${data.reporterRole})</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Dotyczy:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Dotyczy:</td>
                 <td style="padding: 8px 0; font-weight: 600;">${data.reportedEntityName}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Kategoria:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Kategoria:</td>
                 <td style="padding: 8px 0; color: #dc2626; font-weight: 600;">${data.category}</td>
               </tr>
             </table>
           </div>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h4 style="margin: 0 0 10px 0; color: #44403c;">📝 Opis problemu:</h4>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h4 style="margin: 0 0 10px 0; color: #1A1916;">📝 Opis problemu:</h4>
             <p style="margin: 0; color: #57534e; white-space: pre-wrap;">${data.description}</p>
           </div>
 
@@ -1381,9 +1381,9 @@ export function newReportNotificationAdmin(data: {
             </a>
           </div>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Seated Admin Notification System
           </p>
         </body>
@@ -1429,9 +1429,9 @@ export function reportResolved(data: {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1c1917; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1916; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d97706; margin: 0;">🍽️ Seated</h1>
+            <h1 style="color: #C05C36; margin: 0;">🍽️ Seated</h1>
           </div>
 
           <div style="background: #dcfce7; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
@@ -1443,19 +1443,19 @@ export function reportResolved(data: {
 
           <p>Dziękujemy za cierpliwość. Twoje zgłoszenie dotyczące <strong>${data.reportedEntityName}</strong> zostało rozpatrzone.</p>
 
-          <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <h3 style="margin: 0 0 15px 0; color: #44403c;">📋 Podsumowanie</h3>
+          <div style="background: #EDE0CE; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #1A1916;">📋 Podsumowanie</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Numer zgłoszenia:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Numer zgłoszenia:</td>
                 <td style="padding: 8px 0; font-weight: 600;">#${data.reportId}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Dotyczyło:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Dotyczyło:</td>
                 <td style="padding: 8px 0;">${data.reportedEntityName}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #78716c;">Podjęte działania:</td>
+                <td style="padding: 8px 0; color: #6B6560;">Podjęte działania:</td>
                 <td style="padding: 8px 0; font-weight: 600; color: #059669;">${data.resolution}</td>
               </tr>
             </table>
@@ -1470,13 +1470,13 @@ export function reportResolved(data: {
           </div>
           ` : ''}
 
-          <p style="color: #78716c; font-size: 14px;">
+          <p style="color: #6B6560; font-size: 14px;">
             Dziękujemy za pomoc w utrzymaniu bezpiecznej społeczności na Seated. Jeśli masz dodatkowe pytania, odpisz na tego emaila.
           </p>
 
-          <hr style="border: none; border-top: 1px solid #e7e5e4; margin: 30px 0;">
+          <hr style="border: none; border-top: 1px solid #EDE0CE; margin: 30px 0;">
 
-          <p style="color: #a8a29e; font-size: 12px; text-align: center;">
+          <p style="color: #6B6560; font-size: 12px; text-align: center;">
             Ten email został wysłany automatycznie przez platformę Seated.<br>
             © ${new Date().getFullYear()} Seated. Wszystkie prawa zastrzeżone.
           </p>

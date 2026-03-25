@@ -28,7 +28,7 @@ export function ReviewsSection({
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-amber-600" />
+          <MessageSquare className="h-5 w-5 text-primary" />
           Opinie o tym hoście ({reviews.length})
         </h2>
         {canReview && !showForm && (
@@ -36,7 +36,7 @@ export function ReviewsSection({
             variant="outline"
             size="sm"
             onClick={() => setShowForm(true)}
-            className="text-amber-600 border-amber-200 hover:bg-amber-50"
+            className="text-primary border-primary/20 hover:bg-primary/5"
           >
             <PenLine className="h-4 w-4 mr-2" />
             Napisz opinię

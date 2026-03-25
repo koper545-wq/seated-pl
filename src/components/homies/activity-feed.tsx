@@ -25,7 +25,7 @@ export function ActivityFeed({
       case "attended_event":
         return <Calendar className="h-4 w-4 text-blue-600" />;
       case "reviewed":
-        return <Star className="h-4 w-4 text-amber-600" />;
+        return <Star className="h-4 w-4 text-primary" />;
       case "hosted_event":
         return <ChefHat className="h-4 w-4 text-rose-600" />;
       case "earned_badge":
@@ -41,7 +41,7 @@ export function ActivityFeed({
             uczestniczył(a) w{" "}
             <Link
               href={`/events/${activity.eventId}`}
-              className="font-medium text-foreground hover:text-amber-600"
+              className="font-medium text-foreground hover:text-primary"
             >
               {activity.eventTitle}
             </Link>
@@ -53,7 +53,7 @@ export function ActivityFeed({
             dodał(a) opinię o{" "}
             <Link
               href={`/events/${activity.eventId}`}
-              className="font-medium text-foreground hover:text-amber-600"
+              className="font-medium text-foreground hover:text-primary"
             >
               {activity.eventTitle}
             </Link>
@@ -65,7 +65,7 @@ export function ActivityFeed({
             zorganizował(a){" "}
             <Link
               href={`/events/${activity.eventId}`}
-              className="font-medium text-foreground hover:text-amber-600"
+              className="font-medium text-foreground hover:text-primary"
             >
               {activity.eventTitle}
             </Link>
@@ -108,7 +108,7 @@ export function ActivityFeed({
               {activity.userAvatar ? (
                 <AvatarImage src={activity.userAvatar} alt={activity.userName} />
               ) : null}
-              <AvatarFallback className="bg-amber-100 text-amber-700 text-sm">
+              <AvatarFallback className="bg-primary/10 text-primary text-sm">
                 {activity.userName
                   .split(" ")
                   .map((n) => n[0])

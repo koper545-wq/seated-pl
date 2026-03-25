@@ -92,7 +92,7 @@ export default function AdminVouchersPage() {
       );
     }
     return (
-      <Badge variant="outline" className="gap-1 bg-amber-50 text-amber-700 border-amber-200">
+      <Badge variant="outline" className="gap-1 bg-primary/5 text-primary border-primary/20">
         <Gift className="h-3 w-3" /> {t("giftCard")}
       </Badge>
     );
@@ -162,7 +162,7 @@ export default function AdminVouchersPage() {
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-amber-600 hover:bg-amber-700">
+            <Button className="bg-primary hover:bg-primary/90">
               <Plus className="h-4 w-4 mr-2" />
               {t("createVoucher")}
             </Button>
@@ -193,7 +193,7 @@ export default function AdminVouchersPage() {
                     htmlFor="new-percentage"
                     className={cn(
                       "flex items-center gap-2 p-3 border rounded-lg cursor-pointer",
-                      newType === "percentage" && "border-amber-600 bg-amber-50"
+                      newType === "percentage" && "border-primary bg-primary/5"
                     )}
                   >
                     <RadioGroupItem value="percentage" id="new-percentage" />
@@ -204,7 +204,7 @@ export default function AdminVouchersPage() {
                     htmlFor="new-fixed"
                     className={cn(
                       "flex items-center gap-2 p-3 border rounded-lg cursor-pointer",
-                      newType === "fixed" && "border-amber-600 bg-amber-50"
+                      newType === "fixed" && "border-primary bg-primary/5"
                     )}
                   >
                     <RadioGroupItem value="fixed" id="new-fixed" />
@@ -305,7 +305,7 @@ export default function AdminVouchersPage() {
                 {t("cancel")}
               </Button>
               <Button
-                className="bg-amber-600 hover:bg-amber-700"
+                className="bg-primary hover:bg-primary/90"
                 onClick={handleCreateVoucher}
                 disabled={!newCode || !newValue || !newValidUntil}
               >
@@ -317,7 +317,7 @@ export default function AdminVouchersPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -334,8 +334,8 @@ export default function AdminVouchersPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
-                <Gift className="h-5 w-5 text-amber-600" />
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Gift className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{giftCards}</p>
@@ -377,7 +377,7 @@ export default function AdminVouchersPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <code className="text-lg font-mono font-bold bg-stone-100 px-3 py-1 rounded">
+                      <code className="text-lg font-mono font-bold bg-muted px-3 py-1 rounded">
                         {voucher.code}
                       </code>
                       <button

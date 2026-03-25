@@ -37,10 +37,10 @@ export default function DashboardLayout({
   // Show loading while checking
   if (!checked || (!hasMockUser && status === "loading")) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-2" />
-          <p className="text-stone-500">Sprawdzanie dostępu...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+          <p className="text-muted-foreground">Sprawdzanie dostępu...</p>
         </div>
       </div>
     );
