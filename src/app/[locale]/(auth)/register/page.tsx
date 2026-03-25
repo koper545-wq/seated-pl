@@ -277,6 +277,13 @@ export default function RegisterPage() {
   if (userType === "GUEST") {
     return (
       <PageTransition>
+      <div className="relative overflow-hidden">
+        <div className="absolute -right-32 -top-20 w-[400px] h-[350px] pointer-events-none select-none opacity-40" aria-hidden="true">
+          <img src="/blob-sage.svg" alt="" className="w-full h-full object-contain" />
+        </div>
+        <div className="absolute -left-32 -bottom-20 w-[350px] h-[300px] pointer-events-none select-none opacity-30" aria-hidden="true">
+          <img src="/blob-terra.svg" alt="" className="w-full h-full object-contain" />
+        </div>
       <ScaleIn>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
@@ -493,6 +500,7 @@ export default function RegisterPage() {
         </CardFooter>
       </Card>
       </ScaleIn>
+      </div>
       </PageTransition>
     );
   }
@@ -502,6 +510,13 @@ export default function RegisterPage() {
   // ============================================
   return (
     <PageTransition>
+    <div className="relative overflow-hidden">
+      <div className="absolute -right-32 -top-20 w-[400px] h-[350px] pointer-events-none select-none opacity-40" aria-hidden="true">
+        <img src="/blob-sage.svg" alt="" className="w-full h-full object-contain" />
+      </div>
+      <div className="absolute -left-32 -bottom-20 w-[350px] h-[300px] pointer-events-none select-none opacity-30" aria-hidden="true">
+        <img src="/blob-terra.svg" alt="" className="w-full h-full object-contain" />
+      </div>
     <ScaleIn>
     <div className="w-full max-w-2xl">
       {/* Header */}
@@ -1222,6 +1237,7 @@ export default function RegisterPage() {
       )}
     </div>
     </ScaleIn>
+    </div>
     </PageTransition>
   );
 }

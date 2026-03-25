@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getTranslations } from "next-intl/server";
 import { PageTransition, FadeInUp, StaggerContainer, StaggerItem } from "@/components/ui/motion";
+import { OrganicBlob } from "@/components/ui/organic-blob";
 import {
   Search,
   CalendarCheck,
@@ -85,8 +86,10 @@ export default async function HowItWorksPage() {
   return (
     <PageTransition className="min-h-screen bg-muted/50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary/5 to-muted/50 py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section className="relative bg-gradient-to-b from-primary/5 to-muted/50 py-16 md:py-24 overflow-hidden">
+        <OrganicBlob variant="hero" className="right-0 top-0 w-[500px] h-[350px] opacity-50 hidden md:block" />
+        <OrganicBlob variant="sage" className="-left-20 bottom-0 w-[300px] h-[250px] opacity-40 hidden lg:block" />
+        <div className="max-w-4xl mx-auto px-4 text-center relative">
           <FadeInUp>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               {t("hero.title")}
@@ -111,8 +114,10 @@ export default async function HowItWorksPage() {
       </section>
 
       {/* Steps Section */}
-      <section className="py-16 md:py-24">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="relative py-16 md:py-24 overflow-hidden">
+        <OrganicBlob variant="terra" className="-right-24 top-20 w-[350px] h-[300px] opacity-35 hidden md:block" />
+        <OrganicBlob variant="sage" className="-left-24 bottom-20 w-[350px] h-[300px] opacity-30 hidden md:block" />
+        <div className="max-w-6xl mx-auto px-4 relative">
           <h2 className="text-3xl font-bold text-center text-foreground mb-4">
             {t("steps.title")}
           </h2>
@@ -152,6 +157,11 @@ export default async function HowItWorksPage() {
         </div>
       </section>
 
+      {/* Decorative divider */}
+      <div className="flex justify-center -my-4 relative z-10" aria-hidden="true">
+        <img src="/splash-accent.svg" alt="" className="w-32 h-16 opacity-60" />
+      </div>
+
       {/* Event Types Section */}
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
@@ -184,8 +194,13 @@ export default async function HowItWorksPage() {
         </div>
       </section>
 
+      {/* Decorative divider */}
+      <div className="flex justify-center -my-4 relative z-10" aria-hidden="true">
+        <img src="/splash-accent.svg" alt="" className="w-32 h-16 opacity-60" />
+      </div>
+
       {/* Features Section */}
-      <section className="py-16 md:py-24">
+      <section className="relative py-16 md:py-24 overflow-hidden">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-foreground mb-4">
             {t("features.title")}

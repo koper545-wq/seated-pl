@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <!-- Organic drip accent -->
+  <path
+    d="M10 30
+       C 20 10, 45 5, 65 15
+       C 82 24, 88 38, 100 30
+       C 112 22, 118 8, 140 12
+       C 158 15, 170 28, 178 20
+       C 185 13, 192 18, 195 28"
+    stroke="#C05C36"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.25"
+    fill="none"
+  />
+  <path
+    d="M5 38
+       C 18 48, 40 52, 60 42
+       C 78 33, 92 45, 110 40
+       C 128 35, 140 48, 160 42
+       C 175 37, 185 45, 195 40"
+    stroke="#6E8060"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    opacity="0.18"
+    fill="none"
+  />
+  <!-- Small organic dots -->
+  <circle cx="50" cy="25" r="3" fill="#C05C36" opacity="0.12" />
+  <circle cx="100" cy="45" r="2.5" fill="#6E8060" opacity="0.15" />
+  <circle cx="150" cy="22" r="2" fill="#EDE0CE" opacity="0.35" />
+</svg>

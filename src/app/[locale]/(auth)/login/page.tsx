@@ -297,11 +297,19 @@ function LoginFormSkeleton() {
 export default function LoginPage() {
   return (
     <PageTransition>
-      <Suspense fallback={<LoginFormSkeleton />}>
-        <ScaleIn>
-          <LoginForm />
-        </ScaleIn>
-      </Suspense>
+      <div className="relative overflow-hidden">
+        <div className="absolute -right-32 -top-20 w-[400px] h-[350px] pointer-events-none select-none opacity-40" aria-hidden="true">
+          <img src="/blob-sage.svg" alt="" className="w-full h-full object-contain" />
+        </div>
+        <div className="absolute -left-32 -bottom-20 w-[350px] h-[300px] pointer-events-none select-none opacity-30" aria-hidden="true">
+          <img src="/blob-terra.svg" alt="" className="w-full h-full object-contain" />
+        </div>
+        <Suspense fallback={<LoginFormSkeleton />}>
+          <ScaleIn>
+            <LoginForm />
+          </ScaleIn>
+        </Suspense>
+      </div>
     </PageTransition>
   );
 }
