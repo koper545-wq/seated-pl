@@ -18,10 +18,11 @@ import {
   MapPin,
   Loader2,
 } from "lucide-react";
-import { type HostEvent } from "@/lib/mock-data";
+import { type HostEvent, hostEvents as mockHostEventsData } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useEvents } from "@/contexts/events-context";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 
@@ -149,6 +150,7 @@ export default function HostCalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<"month" | "list">("month");
   const { user, isLoading, effectiveRole, isMockUser } = useCurrentUser();
+  const { mvpMode } = useMVPMode();
   const { getHostEvents, isLoaded: eventsLoaded } = useEvents();
   const router = useRouter();
   const [apiEvents, setApiEvents] = useState<HostEvent[] | null>(null);
@@ -157,9 +159,17 @@ export default function HostCalendarPage() {
   const hostId = isMockUser && user && 'id' in user ? user.id : "host-1";
   const mockHostEvents = isMockUser ? getHostEvents(hostId) : [];
 
-  // Fetch events from API for real users
+  // Fetch events from API for real users (or use mock data in demo mode)
   useEffect(() => {
-    if (isMockUser || isLoading || effectiveRole === "guest") return;
+    if (isLoading || effectiveRole === "guest") return;
+
+    if (mvpMode) {
+      setApiEvents(mockHostEventsData);
+      setApiEventsLoading(false);
+      return;
+    }
+
+    if (isMockUser) return; // legacy mock user path handled below
     setApiEventsLoading(true);
     fetch("/api/host/events")
       .then((res) => res.ok ? res.json() : null)
@@ -169,9 +179,9 @@ export default function HostCalendarPage() {
       })
       .catch(() => setApiEvents([]))
       .finally(() => setApiEventsLoading(false));
-  }, [isMockUser, isLoading, effectiveRole]);
+  }, [mvpMode, isMockUser, isLoading, effectiveRole]);
 
-  const hostEvents = isMockUser ? mockHostEvents : (apiEvents || []);
+  const hostEvents = mvpMode ? (apiEvents || []) : (isMockUser ? mockHostEvents : (apiEvents || []));
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();

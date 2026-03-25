@@ -56,6 +56,8 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 import { Loader2 } from "lucide-react";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
+import { getHostEventById } from "@/lib/mock-data";
 
 const eventTypes = [
   { value: "supper-club", label: "Supper Club", icon: "🍽️" },
@@ -103,6 +105,7 @@ export default function EditEventPage() {
   const router = useRouter();
   const params = useParams();
   const eventId = params.id as string;
+  const { mvpMode } = useMVPMode();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -125,8 +128,32 @@ export default function EditEventPage() {
   const [whatToBring, setWhatToBring] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
 
-  // Load event data from API
+  // Load event data from API (or mock data in demo mode)
   useEffect(() => {
+    if (mvpMode) {
+      const mockEvent = getHostEventById(eventId);
+      if (mockEvent) {
+        setTitle(mockEvent.title);
+        setEventType(mockEvent.typeSlug || "");
+        setSelectedTags([]);
+        setDescription(mockEvent.description || "");
+        setEventDate(new Date(mockEvent.date));
+        setStartTime(mockEvent.startTime);
+        setDuration(mockEvent.duration);
+        setNeighborhood(mockEvent.location || "");
+        setFullAddress(mockEvent.fullAddress || "");
+        setCapacity(mockEvent.capacity);
+        setPrice(mockEvent.price); // mock data already in PLN
+        setMenuDescription(mockEvent.menuDescription || "");
+        setSelectedDietary(mockEvent.dietaryOptions || []);
+        setWhatToBring("");
+        setPhotos([]);
+      }
+      setIsLoading(false);
+      setHasChanges(false);
+      return;
+    }
+
     fetch(`/api/events/${eventId}`)
       .then((res) => res.ok ? res.json() : null)
       .then((event) => {
@@ -155,7 +182,7 @@ export default function EditEventPage() {
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
-  }, [eventId]);
+  }, [eventId, mvpMode]);
 
   // Track changes
   useEffect(() => {

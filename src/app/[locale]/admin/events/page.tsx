@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
   SUPPER_CLUB: "Supper Club",
@@ -44,7 +45,21 @@ interface AdminEvent {
   _count: { bookings: number; reviews: number };
 }
 
+const mockAdminEvents: AdminEvent[] = [
+  { id: "evt-1", title: "Kolacja gruzinska u Nino", eventType: "SUPPER_CLUB", status: "PUBLISHED", date: "2026-04-12T19:00:00Z", locationPublic: "Wroclaw, Srodmiescie", price: 18900, capacity: 12, spotsLeft: 3, revenue: 170100, host: { businessName: "Kuchnia Nino", user: { email: "nino@example.com" } }, _count: { bookings: 9, reviews: 6 } },
+  { id: "evt-2", title: "Warsztaty pierogowe z Basia", eventType: "COOKING_CLASS", status: "PUBLISHED", date: "2026-04-15T17:00:00Z", locationPublic: "Krakow, Kazimierz", price: 14500, capacity: 8, spotsLeft: 0, revenue: 116000, host: { businessName: "Pierogi u Basi", user: { email: "basia@example.com" } }, _count: { bookings: 8, reviews: 5 } },
+  { id: "evt-3", title: "Degustacja win naturalnych", eventType: "TASTING", status: "PENDING_REVIEW", date: "2026-04-20T18:30:00Z", locationPublic: "Warszawa, Mokotow", price: 22000, capacity: 16, spotsLeft: 16, revenue: 0, host: { businessName: "Winne Horyzonty", user: { email: "marek.wino@example.com" } }, _count: { bookings: 0, reviews: 0 } },
+  { id: "evt-4", title: "Pop-up ramen bar", eventType: "POPUP", status: "PUBLISHED", date: "2026-04-18T12:00:00Z", locationPublic: "Gdansk, Wrzeszcz", price: 7500, capacity: 30, spotsLeft: 12, revenue: 135000, host: { businessName: "Ramen Sensei", user: { email: "tomek.ramen@example.com" } }, _count: { bookings: 18, reviews: 10 } },
+  { id: "evt-5", title: "Chef's Table: kuchnia molekularna", eventType: "CHEFS_TABLE", status: "DRAFT", date: "2026-05-01T20:00:00Z", locationPublic: "Poznan, Stare Miasto", price: 35000, capacity: 6, spotsLeft: 6, revenue: 0, host: { businessName: "Molekularna Uczta", user: { email: "chef.adam@example.com" } }, _count: { bookings: 0, reviews: 0 } },
+  { id: "evt-6", title: "Food Tour po Wroclawiu", eventType: "FOOD_TOUR", status: "PUBLISHED", date: "2026-04-22T10:00:00Z", locationPublic: "Wroclaw, Rynek", price: 12000, capacity: 15, spotsLeft: 5, revenue: 120000, host: { businessName: "Smaki Wroclawia", user: { email: "ola.tour@example.com" } }, _count: { bookings: 10, reviews: 7 } },
+  { id: "evt-7", title: "Kolacja peruwiansko-polska", eventType: "SUPPER_CLUB", status: "PENDING_REVIEW", date: "2026-04-25T19:30:00Z", locationPublic: "Warszawa, Praga Polnoc", price: 21000, capacity: 10, spotsLeft: 10, revenue: 0, host: { businessName: "Lima nad Wisla", user: { email: "carlos@example.com" } }, _count: { bookings: 0, reviews: 0 } },
+  { id: "evt-8", title: "Sniadanie na farmie", eventType: "FARM_EXPERIENCE", status: "CANCELLED", date: "2026-03-10T08:00:00Z", locationPublic: "okolice Krakowa", price: 9500, capacity: 20, spotsLeft: 20, revenue: 0, host: { businessName: "EkoFarma Kowalskich", user: { email: "farma@example.com" } }, _count: { bookings: 0, reviews: 0 } },
+  { id: "evt-9", title: "Kurs sushi dla poczatkujacych", eventType: "COOKING_CLASS", status: "COMPLETED", date: "2026-03-05T16:00:00Z", locationPublic: "Lodz, Manufaktura", price: 16000, capacity: 10, spotsLeft: 0, revenue: 160000, host: { businessName: "Sushi Master Kasia", user: { email: "kasia.sushi@example.com" } }, _count: { bookings: 10, reviews: 8 } },
+  { id: "evt-10", title: "Active hiking + ognisko", eventType: "ACTIVE_FOOD", status: "DRAFT", date: "2026-05-10T09:00:00Z", locationPublic: "Bieszczady", price: 8500, capacity: 25, spotsLeft: 25, revenue: 0, host: { businessName: "Gorskie Smaki", user: { email: "piotr.gory@example.com" } }, _count: { bookings: 0, reviews: 0 } },
+];
+
 export default function AdminEventsPage() {
+  const { mvpMode } = useMVPMode();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [events, setEvents] = useState<AdminEvent[]>([]);
@@ -52,6 +67,22 @@ export default function AdminEventsPage() {
   const [loading, setLoading] = useState(true);
 
   const fetchEvents = useCallback(async () => {
+    if (mvpMode) {
+      let filtered = [...mockAdminEvents];
+      if (search) {
+        const q = search.toLowerCase();
+        filtered = filtered.filter(
+          (e) => e.title.toLowerCase().includes(q) || (e.locationPublic || "").toLowerCase().includes(q)
+        );
+      }
+      if (activeTab !== "all") {
+        filtered = filtered.filter((e) => e.status === activeTab.toUpperCase());
+      }
+      setEvents(filtered);
+      setTotal(filtered.length);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -68,7 +99,7 @@ export default function AdminEventsPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, activeTab]);
+  }, [search, activeTab, mvpMode]);
 
   useEffect(() => {
     const timer = setTimeout(fetchEvents, 300);
@@ -76,6 +107,10 @@ export default function AdminEventsPage() {
   }, [fetchEvents]);
 
   const handleStatusChange = async (eventId: string, newStatus: string) => {
+    if (mvpMode) {
+      setEvents((prev) => prev.map((e) => (e.id === eventId ? { ...e, status: newStatus } : e)));
+      return;
+    }
     try {
       const res = await fetch(`/api/admin/events/${eventId}`, {
         method: "PATCH",

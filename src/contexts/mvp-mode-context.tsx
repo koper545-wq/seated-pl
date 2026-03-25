@@ -16,15 +16,15 @@ interface MVPModeContextType {
 const MVPModeContext = createContext<MVPModeContextType | undefined>(undefined);
 
 export function MVPModeProvider({ children }: { children: React.ReactNode }) {
-  const [mvpMode, setMVPModeState] = useState(false);
+  const [mvpMode, setMVPModeState] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load MVP mode from localStorage on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem(MVP_MODE_KEY);
-      if (stored === "true") {
-        setMVPModeState(true);
+      if (stored !== null) {
+        setMVPModeState(stored === "true");
       }
     } catch (error) {
       console.error("Failed to load MVP mode from localStorage:", error);
@@ -75,6 +75,7 @@ export const useDemoMode = useMVPMode;
 
 // Get MVP mode from localStorage (for non-hook usage)
 export function getMVPMode(): boolean {
-  if (typeof window === "undefined") return false;
-  return localStorage.getItem(MVP_MODE_KEY) === "true";
+  if (typeof window === "undefined") return true;
+  const stored = localStorage.getItem(MVP_MODE_KEY);
+  return stored === null ? true : stored === "true";
 }

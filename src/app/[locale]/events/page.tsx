@@ -30,7 +30,9 @@ import {
   languageOptions,
   experienceLevels,
   accessibilityOptions,
+  mockEvents as mockEventsRaw,
 } from "@/lib/mock-data";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 import {
   Search,
   SlidersHorizontal,
@@ -148,12 +150,65 @@ const eventTypeGradient: Record<string, string> = {
   OTHER: "from-primary/15 to-orange-300",
 };
 
+// Map mock event typeSlug to API eventType enum
+const typeSlugToEventType: Record<string, string> = {
+  "supper-club": "SUPPER_CLUB",
+  "chefs-table": "CHEFS_TABLE",
+  "popup": "POPUP",
+  "warsztaty": "COOKING_CLASS",
+  "degustacje": "WINE_TASTING",
+  "active-food": "ACTIVE_FOOD",
+  "farm": "FARM_EXPERIENCE",
+  "other": "OTHER",
+  "default": "OTHER",
+};
+
+function mockEventToApiEvent(e: (typeof mockEventsRaw)[number]): ApiEvent {
+  return {
+    id: e.id,
+    title: e.title,
+    slug: e.slug,
+    description: e.description,
+    eventType: typeSlugToEventType[e.typeSlug] || "OTHER",
+    date: e.date.toISOString(),
+    startTime: e.startTime,
+    duration: e.duration,
+    locationPublic: e.location,
+    locationFull: e.fullAddress,
+    price: e.price * 100, // PLN → grosze (API returns grosze)
+    capacity: e.capacity,
+    spotsLeft: e.spotsLeft,
+    menuDescription: e.menuDescription,
+    dietaryOptions: e.dietaryOptions,
+    whatToBring: e.whatToBring,
+    images: [],
+    status: "PUBLISHED",
+    featured: false,
+    host: {
+      id: e.host.id,
+      userId: e.host.id,
+      businessName: e.host.name,
+      avatarUrl: e.host.avatar || null,
+      verified: e.host.verified,
+    },
+    _count: { reviews: e.host.reviewCount, bookings: 0 },
+  };
+}
+
 export default function EventsPage() {
+  const { mvpMode } = useMVPMode();
+
   // API data state
   const [events, setEvents] = useState<ApiEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (mvpMode) {
+      setEvents(mockEventsRaw.map(mockEventToApiEvent));
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     fetch("/api/events?limit=200")
       .then((res) => res.json())
@@ -168,7 +223,7 @@ export default function EventsPage() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [mvpMode]);
 
   // Filter states
   const [search, setSearch] = useState("");

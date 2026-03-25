@@ -42,6 +42,8 @@ import {
 } from "lucide-react";
 import { ReportDialog } from "@/components/reports";
 import { cn, formatPrice } from "@/lib/utils";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
+import { getBookingsByEventId, getHostEventById } from "@/lib/mock-data";
 
 // ---------------------------------------------------------------------------
 // Types matching the API response from GET /api/events/[id]/guests
@@ -135,6 +137,7 @@ interface EventGuestsPageProps {
 
 export default function EventGuestsPage({ params }: EventGuestsPageProps) {
   const { id: eventId } = use(params);
+  const { mvpMode } = useMVPMode();
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [eventTitle, setEventTitle] = useState<string>("");
@@ -146,8 +149,45 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
   } | null>(null);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
 
-  // Fetch guests data
+  // Fetch guests data (or use mock data in demo mode)
   const fetchGuests = useCallback(async () => {
+    if (mvpMode) {
+      // Use mock data
+      const mockEvent = getHostEventById(eventId);
+      const mockBookings = getBookingsByEventId(eventId);
+      setEventTitle(mockEvent?.title || "Wydarzenie");
+      // Convert mock bookings to the Booking shape expected by this page
+      setBookings(mockBookings.map((b) => ({
+        id: b.id,
+        eventId: b.eventId,
+        guestId: b.guestId,
+        ticketCount: b.ticketCount,
+        totalPrice: b.totalPrice * 100, // PLN → grosze
+        platformFee: b.platformFee * 100,
+        status: b.status.toUpperCase() as Booking["status"],
+        dietaryInfo: b.dietaryInfo || null,
+        specialRequests: b.specialRequests || null,
+        createdAt: b.createdAt.toISOString(),
+        approvedAt: b.approvedAt ? b.approvedAt.toISOString() : null,
+        cancelledAt: b.cancelledAt ? b.cancelledAt.toISOString() : null,
+        cancelReason: b.cancelReason || null,
+        guest: {
+          id: b.guestId,
+          email: b.guestEmail,
+          guestProfile: {
+            firstName: b.guestName.split(" ")[0] || null,
+            lastName: b.guestName.split(" ").slice(1).join(" ") || null,
+            avatarUrl: null,
+            dietaryRestrictions: null,
+            allergies: null,
+          },
+        },
+        transactions: [],
+      })));
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setError(null);
       const res = await fetch(`/api/events/${eventId}/guests`);
@@ -170,7 +210,7 @@ export default function EventGuestsPage({ params }: EventGuestsPageProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [eventId]);
+  }, [eventId, mvpMode]);
 
   useEffect(() => {
     fetchGuests();

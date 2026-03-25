@@ -21,7 +21,9 @@ import { EmptyState } from "@/components/ui/empty-state";
 import {
   MockBooking,
   bookingStatusLabels,
+  mockBookings as mockBookingsData,
 } from "@/lib/mock-data";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 import {
   Calendar,
   Check,
@@ -79,6 +81,7 @@ function mapApiHostBookingToMock(b: Record<string, unknown>): MockBooking {
 
 export default function HostBookingsPage() {
   const { user, isLoading, effectiveRole, isMockUser } = useCurrentUser();
+  const { mvpMode } = useMVPMode();
   const router = useRouter();
   const hostId = isMockUser && user && 'id' in user ? user.id : "host-1";
 
@@ -96,9 +99,17 @@ export default function HostBookingsPage() {
     }
   }, [isLoading, effectiveRole, router]);
 
-  // Initialize bookings from API
+  // Initialize bookings from API (or mock data in demo mode)
   useEffect(() => {
     if (isLoading) return;
+
+    if (mvpMode) {
+      // In demo mode, use mock bookings for host-1
+      const hostBookings = mockBookingsData.filter((b) => b.event.hostId === "host-1");
+      setBookings(hostBookings);
+      setIsLoadingBookings(false);
+      return;
+    }
 
     fetch("/api/bookings?role=host")
       .then((res) => res.ok ? res.json() : null)
@@ -109,7 +120,7 @@ export default function HostBookingsPage() {
       })
       .catch(console.error)
       .finally(() => setIsLoadingBookings(false));
-  }, [isLoading]);
+  }, [isLoading, mvpMode]);
 
   if (isLoading || isLoadingBookings) {
     return (

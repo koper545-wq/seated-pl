@@ -10,7 +10,9 @@ import { EmptyState } from "@/components/ui/empty-state";
 import {
   HostEvent,
   hostEventStatusLabels,
+  hostEvents as mockHostEventsData,
 } from "@/lib/mock-data";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 import {
   Plus,
   Calendar,
@@ -86,6 +88,7 @@ function mapApiEventToHostEvent(e: Record<string, unknown>): HostEvent {
 
 export default function HostDashboardPage() {
   const { user, isLoading, effectiveRole, isMockUser } = useCurrentUser();
+  const { mvpMode } = useMVPMode();
   const router = useRouter();
   const [apiEvents, setApiEvents] = useState<HostEvent[] | null>(null);
   const [apiEventsLoading, setApiEventsLoading] = useState(false);
@@ -97,9 +100,16 @@ export default function HostDashboardPage() {
     }
   }, [isLoading, effectiveRole, router]);
 
-  // Fetch events from API
+  // Fetch events from API (or use mock data in demo mode)
   useEffect(() => {
     if (isLoading || effectiveRole === "guest") return;
+
+    if (mvpMode) {
+      setApiEvents(mockHostEventsData);
+      setApiEventsLoading(false);
+      return;
+    }
+
     setApiEventsLoading(true);
     fetch("/api/host/events")
       .then((res) => res.ok ? res.json() : null)
@@ -112,7 +122,7 @@ export default function HostDashboardPage() {
       })
       .catch(() => setApiEvents([]))
       .finally(() => setApiEventsLoading(false));
-  }, [isMockUser, isLoading, effectiveRole]);
+  }, [mvpMode, isLoading, effectiveRole]);
 
   // Show loading while checking user or events
   const isDataLoading = isLoading || apiEventsLoading;

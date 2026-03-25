@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 import {
   bookingStatusLabels,
+  mockBookings,
 } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,16 +47,37 @@ export default function GuestDashboardPage() {
     }
   }, [isLoading, effectiveRole, router]);
 
-  // Fetch bookings from API
+  // Fetch bookings from API (or use mock data in demo mode)
   useEffect(() => {
     if (isLoading || effectiveRole === "host") return;
+
+    if (mvpMode) {
+      // In demo mode, convert mock bookings to the API shape expected by this component
+      const guestBookings = mockBookings.filter((b) => b.guestId === "user-current");
+      setApiBookings(guestBookings.map((b) => ({
+        id: b.id,
+        status: b.status.toUpperCase(),
+        ticketCount: b.ticketCount,
+        totalPrice: b.totalPrice * 100, // PLN → grosze
+        event: {
+          id: b.eventId,
+          title: b.event.title,
+          date: b.event.date.toISOString(),
+          dateFormatted: b.event.dateFormatted,
+          imageGradient: b.event.imageGradient,
+          locationPublic: b.event.location,
+        },
+      })));
+      return;
+    }
+
     fetch("/api/bookings")
       .then((res) => res.ok ? res.json() : null)
       .then((data) => {
         if (data?.bookings) setApiBookings(data.bookings);
       })
       .catch(console.error);
-  }, [isMockUser, isLoading, effectiveRole]);
+  }, [mvpMode, isLoading, effectiveRole]);
 
   // Show loading while checking user
   if (isLoading) {

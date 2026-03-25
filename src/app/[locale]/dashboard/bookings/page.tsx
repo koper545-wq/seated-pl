@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BookingCard } from "@/components/bookings/booking-card";
-import { MockBooking } from "@/lib/mock-data";
+import { MockBooking, mockBookings as mockBookingsData } from "@/lib/mock-data";
 import { Calendar, CalendarCheck, CalendarX, History, Search, Loader2 } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 
@@ -53,13 +54,21 @@ function mapApiBookingToMock(b: Record<string, unknown>): MockBooking {
 
 export default function GuestBookingsPage() {
   const { isMockUser, isLoading: userLoading } = useCurrentUser();
+  const { mvpMode } = useMVPMode();
   const [bookings, setBookings] = useState<MockBooking[]>([]);
   const [isLoadingBookings, setIsLoadingBookings] = useState(true);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
-  // Load bookings from API
+  // Load bookings from API (or mock data in demo mode)
   useEffect(() => {
     if (userLoading) return;
+
+    if (mvpMode) {
+      const guestBookings = mockBookingsData.filter((b) => b.guestId === "user-current");
+      setBookings(guestBookings);
+      setIsLoadingBookings(false);
+      return;
+    }
 
     fetch("/api/bookings")
       .then((res) => res.ok ? res.json() : null)
@@ -70,7 +79,7 @@ export default function GuestBookingsPage() {
       })
       .catch(console.error)
       .finally(() => setIsLoadingBookings(false));
-  }, [userLoading]);
+  }, [userLoading, mvpMode]);
 
   if (userLoading || isLoadingBookings) {
     return (

@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 
 interface AdminUser {
   id: string;
@@ -28,7 +29,21 @@ const roleLabels: Record<string, { label: string; color: string }> = {
   ADMIN: { label: "Admin", color: "bg-purple-100 text-purple-700" },
 };
 
+const mockAdminUsers: AdminUser[] = [
+  { id: "u-1", email: "anna.kowalska@example.com", userType: "GUEST", status: "ACTIVE", emailVerified: true, createdAt: "2025-07-10T10:00:00Z", firstName: "Anna", lastName: "Kowalska", bookingsCount: 12, hostProfile: null },
+  { id: "u-2", email: "nino@example.com", userType: "HOST", status: "ACTIVE", emailVerified: true, createdAt: "2025-06-10T10:00:00Z", firstName: "Nino", lastName: "Gelashvili", bookingsCount: 0, hostProfile: { id: "host-1", businessName: "Kuchnia Nino", verified: true } },
+  { id: "u-3", email: "basia@example.com", userType: "HOST", status: "ACTIVE", emailVerified: true, createdAt: "2025-08-18T10:00:00Z", firstName: "Barbara", lastName: "Nowak", bookingsCount: 2, hostProfile: { id: "host-2", businessName: "Pierogi u Basi", verified: true } },
+  { id: "u-4", email: "tomek.ramen@example.com", userType: "HOST", status: "ACTIVE", emailVerified: true, createdAt: "2025-08-30T10:00:00Z", firstName: "Tomasz", lastName: "Kaminski", bookingsCount: 0, hostProfile: { id: "host-3", businessName: "Ramen Sensei", verified: true } },
+  { id: "u-5", email: "jan.wisniak@example.com", userType: "GUEST", status: "ACTIVE", emailVerified: true, createdAt: "2025-09-15T10:00:00Z", firstName: "Jan", lastName: "Wisniak", bookingsCount: 7, hostProfile: null },
+  { id: "u-6", email: "carlos@example.com", userType: "HOST", status: "ACTIVE", emailVerified: false, createdAt: "2026-02-08T10:00:00Z", firstName: "Carlos", lastName: "Rodriguez", bookingsCount: 0, hostProfile: { id: "host-4", businessName: "Lima nad Wisla", verified: false } },
+  { id: "u-7", email: "admin@seated.pl", userType: "ADMIN", status: "ACTIVE", emailVerified: true, createdAt: "2025-01-01T10:00:00Z", firstName: "Michal", lastName: "Adminowski", bookingsCount: 0, hostProfile: null },
+  { id: "u-8", email: "katarzyna.zielinska@example.com", userType: "GUEST", status: "ACTIVE", emailVerified: true, createdAt: "2025-11-20T10:00:00Z", firstName: "Katarzyna", lastName: "Zielinska", bookingsCount: 4, hostProfile: null },
+  { id: "u-9", email: "piotr.gory@example.com", userType: "HOST", status: "ACTIVE", emailVerified: true, createdAt: "2025-12-05T10:00:00Z", firstName: "Piotr", lastName: "Gorski", bookingsCount: 1, hostProfile: { id: "host-7", businessName: "Gorskie Smaki", verified: false } },
+  { id: "u-10", email: "ewa.kwiatkowska@example.com", userType: "GUEST", status: "ACTIVE", emailVerified: false, createdAt: "2026-03-10T10:00:00Z", firstName: "Ewa", lastName: "Kwiatkowska", bookingsCount: 1, hostProfile: null },
+];
+
 export default function AdminUsersPage() {
+  const { mvpMode } = useMVPMode();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -36,6 +51,25 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(true);
 
   const fetchUsers = useCallback(async () => {
+    if (mvpMode) {
+      let filtered = [...mockAdminUsers];
+      if (search) {
+        const q = search.toLowerCase();
+        filtered = filtered.filter(
+          (u) =>
+            u.firstName.toLowerCase().includes(q) ||
+            u.lastName.toLowerCase().includes(q) ||
+            u.email.toLowerCase().includes(q)
+        );
+      }
+      if (activeTab !== "all") {
+        filtered = filtered.filter((u) => u.userType === activeTab.toUpperCase());
+      }
+      setUsers(filtered);
+      setTotal(filtered.length);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -52,7 +86,7 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, activeTab]);
+  }, [search, activeTab, mvpMode]);
 
   useEffect(() => {
     const timer = setTimeout(fetchUsers, 300);

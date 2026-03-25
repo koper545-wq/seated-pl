@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, CheckCircle, Clock } from "lucide-react";
+import { useMVPMode } from "@/contexts/mvp-mode-context";
 
 interface AdminHost {
   id: string;
@@ -28,7 +29,17 @@ interface AdminHost {
   publishedEvents: number;
 }
 
+const mockAdminHosts: AdminHost[] = [
+  { id: "host-1", userId: "u-1", businessName: "Kuchnia Nino", description: "Autentyczna kuchnia gruzinska w sercu Wroclawia", city: "Wroclaw", neighborhood: "Srodmiescie", verified: true, cuisineSpecialties: ["gruzinska", "kaukaska"], responseRate: 98, rating: 4.9, reviewCount: 42, createdAt: "2025-06-15T10:00:00Z", user: { id: "u-1", email: "nino@example.com", status: "ACTIVE", createdAt: "2025-06-10T10:00:00Z" }, eventsCount: 15, publishedEvents: 3 },
+  { id: "host-2", userId: "u-2", businessName: "Pierogi u Basi", description: "Tradycyjne pierogi w nowoczesnym wydaniu", city: "Krakow", neighborhood: "Kazimierz", verified: true, cuisineSpecialties: ["polska", "regionalna"], responseRate: 95, rating: 4.7, reviewCount: 28, createdAt: "2025-08-20T10:00:00Z", user: { id: "u-2", email: "basia@example.com", status: "ACTIVE", createdAt: "2025-08-18T10:00:00Z" }, eventsCount: 10, publishedEvents: 2 },
+  { id: "host-3", userId: "u-3", businessName: "Ramen Sensei", description: "Japonski ramen prosto z Gdanska", city: "Gdansk", neighborhood: "Wrzeszcz", verified: true, cuisineSpecialties: ["japonska", "azjatycka", "ramen"], responseRate: 100, rating: 4.8, reviewCount: 35, createdAt: "2025-09-01T10:00:00Z", user: { id: "u-3", email: "tomek.ramen@example.com", status: "ACTIVE", createdAt: "2025-08-30T10:00:00Z" }, eventsCount: 8, publishedEvents: 1 },
+  { id: "host-4", userId: "u-4", businessName: "Lima nad Wisla", description: "Fuzja kuchni peruwianskiej i polskiej", city: "Warszawa", neighborhood: "Praga Polnoc", verified: false, cuisineSpecialties: ["peruwianska", "fusion"], responseRate: 80, rating: 0, reviewCount: 0, createdAt: "2026-02-10T10:00:00Z", user: { id: "u-4", email: "carlos@example.com", status: "ACTIVE", createdAt: "2026-02-08T10:00:00Z" }, eventsCount: 1, publishedEvents: 0 },
+  { id: "host-5", userId: "u-5", businessName: "Winne Horyzonty", description: "Degustacje win naturalnych i organicznych", city: "Warszawa", neighborhood: "Mokotow", verified: false, cuisineSpecialties: ["wino", "sommelier"], responseRate: 70, rating: 0, reviewCount: 0, createdAt: "2026-03-01T10:00:00Z", user: { id: "u-5", email: "marek.wino@example.com", status: "ACTIVE", createdAt: "2026-02-28T10:00:00Z" }, eventsCount: 1, publishedEvents: 0 },
+  { id: "host-6", userId: "u-6", businessName: "Smaki Wroclawia", description: "Food tours po najlepszych knajpach Wroclawia", city: "Wroclaw", neighborhood: "Rynek", verified: true, cuisineSpecialties: ["food tour", "lokalna"], responseRate: 92, rating: 4.6, reviewCount: 19, createdAt: "2025-11-05T10:00:00Z", user: { id: "u-6", email: "ola.tour@example.com", status: "ACTIVE", createdAt: "2025-11-01T10:00:00Z" }, eventsCount: 12, publishedEvents: 2 },
+];
+
 export default function AdminHostsPage() {
+  const { mvpMode } = useMVPMode();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [hosts, setHosts] = useState<AdminHost[]>([]);
@@ -36,6 +47,24 @@ export default function AdminHostsPage() {
   const [loading, setLoading] = useState(true);
 
   const fetchHosts = useCallback(async () => {
+    if (mvpMode) {
+      let filtered = [...mockAdminHosts];
+      if (search) {
+        const q = search.toLowerCase();
+        filtered = filtered.filter(
+          (h) =>
+            h.businessName.toLowerCase().includes(q) ||
+            h.city.toLowerCase().includes(q) ||
+            h.user.email.toLowerCase().includes(q)
+        );
+      }
+      if (activeTab === "verified") filtered = filtered.filter((h) => h.verified);
+      if (activeTab === "unverified") filtered = filtered.filter((h) => !h.verified);
+      setHosts(filtered);
+      setTotal(filtered.length);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -53,7 +82,7 @@ export default function AdminHostsPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, activeTab]);
+  }, [search, activeTab, mvpMode]);
 
   useEffect(() => {
     const timer = setTimeout(fetchHosts, 300);
@@ -61,6 +90,10 @@ export default function AdminHostsPage() {
   }, [fetchHosts]);
 
   const handleVerifyToggle = async (hostId: string, verified: boolean) => {
+    if (mvpMode) {
+      setHosts((prev) => prev.map((h) => (h.id === hostId ? { ...h, verified } : h)));
+      return;
+    }
     try {
       const res = await fetch(`/api/admin/hosts/${hostId}`, {
         method: "PATCH",
