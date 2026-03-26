@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { GoogleIcon, FacebookIcon } from "@/components/icons";
 import { PageTransition, ScaleIn } from "@/components/ui/motion";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { cn } from "@/lib/utils";
 
 type UserType = "GUEST" | "HOST";
@@ -278,12 +279,8 @@ export default function RegisterPage() {
     return (
       <PageTransition>
       <div className="relative overflow-hidden">
-        <div className="absolute -right-32 -top-20 w-[400px] h-[350px] pointer-events-none select-none opacity-40" aria-hidden="true">
-          <img src="/blob-sage.svg" alt="" className="w-full h-full object-contain" />
-        </div>
-        <div className="absolute -left-32 -bottom-20 w-[350px] h-[300px] pointer-events-none select-none opacity-30" aria-hidden="true">
-          <img src="/blob-terra.svg" alt="" className="w-full h-full object-contain" />
-        </div>
+        <AnimatedBlob variant={2} className="-right-32 -top-20 w-[400px] h-[350px] z-0" opacity={0.10} duration={22} rotate={[-4, 4]} />
+        <AnimatedBlob variant={1} className="-left-32 -bottom-20 w-[350px] h-[300px] z-0" opacity={0.08} duration={26} scale={[0.96, 1.04]} />
       <ScaleIn>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
@@ -511,12 +508,8 @@ export default function RegisterPage() {
   return (
     <PageTransition>
     <div className="relative overflow-hidden">
-      <div className="absolute -right-32 -top-20 w-[400px] h-[350px] pointer-events-none select-none opacity-40" aria-hidden="true">
-        <img src="/blob-sage.svg" alt="" className="w-full h-full object-contain" />
-      </div>
-      <div className="absolute -left-32 -bottom-20 w-[350px] h-[300px] pointer-events-none select-none opacity-30" aria-hidden="true">
-        <img src="/blob-terra.svg" alt="" className="w-full h-full object-contain" />
-      </div>
+      <AnimatedBlob variant={5} className="-right-32 -top-20 w-[400px] h-[350px] z-0" opacity={0.12} duration={24} rotate={[-3, 3]} />
+      <AnimatedBlob variant={3} className="-left-32 -bottom-20 w-[350px] h-[300px] z-0" opacity={0.08} duration={20} scale={[0.97, 1.03]} />
     <ScaleIn>
     <div className="w-full max-w-2xl">
       {/* Header */}

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getTranslations } from "next-intl/server";
 import { PageTransition, FadeInUp, StaggerContainer, StaggerItem } from "@/components/ui/motion";
-import { OrganicBlob } from "@/components/ui/organic-blob";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import {
   Search,
   CalendarCheck,
@@ -87,8 +87,8 @@ export default async function HowItWorksPage() {
     <PageTransition className="min-h-screen bg-muted/50">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-b from-primary/5 to-muted/50 py-16 md:py-24 overflow-hidden">
-        <OrganicBlob variant="hero" className="right-0 top-0 w-[500px] h-[350px] opacity-50 hidden md:block" />
-        <OrganicBlob variant="sage" className="-left-20 bottom-0 w-[300px] h-[250px] opacity-40 hidden lg:block" />
+        <AnimatedBlob variant={1} className="right-0 top-0 w-[300px] h-[300px] hidden md:block z-0" opacity={0.12} duration={22} rotate={[-5, 5]} />
+        <AnimatedBlob variant={5} className="-left-16 bottom-0 w-[250px] h-[250px] hidden lg:block z-0" opacity={0.15} duration={26} scale={[0.95, 1.05]} />
         <div className="max-w-4xl mx-auto px-4 text-center relative">
           <FadeInUp>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -115,8 +115,8 @@ export default async function HowItWorksPage() {
 
       {/* Steps Section */}
       <section className="relative py-16 md:py-24 overflow-hidden">
-        <OrganicBlob variant="terra" className="-right-24 top-20 w-[350px] h-[300px] opacity-35 hidden md:block" />
-        <OrganicBlob variant="sage" className="-left-24 bottom-20 w-[350px] h-[300px] opacity-30 hidden md:block" />
+        <AnimatedBlob variant={3} className="-right-20 top-20 w-[280px] h-[280px] hidden md:block z-0" opacity={0.10} duration={20} rotate={[-3, 3]} />
+        <AnimatedBlob variant={2} className="-left-20 bottom-20 w-[260px] h-[260px] hidden md:block z-0" opacity={0.08} duration={25} scale={[0.97, 1.03]} />
         <div className="max-w-6xl mx-auto px-4 relative">
           <h2 className="text-3xl font-bold text-center text-foreground mb-4">
             {t("steps.title")}
@@ -157,11 +157,6 @@ export default async function HowItWorksPage() {
         </div>
       </section>
 
-      {/* Decorative divider */}
-      <div className="flex justify-center -my-4 relative z-10" aria-hidden="true">
-        <img src="/splash-accent.svg" alt="" className="w-32 h-16 opacity-60" />
-      </div>
-
       {/* Event Types Section */}
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
@@ -194,13 +189,9 @@ export default async function HowItWorksPage() {
         </div>
       </section>
 
-      {/* Decorative divider */}
-      <div className="flex justify-center -my-4 relative z-10" aria-hidden="true">
-        <img src="/splash-accent.svg" alt="" className="w-32 h-16 opacity-60" />
-      </div>
-
       {/* Features Section */}
       <section className="relative py-16 md:py-24 overflow-hidden">
+        <AnimatedBlob variant={6} className="-right-16 top-10 w-[220px] h-[220px] z-0" opacity={0.10} duration={18} rotate={[-4, 4]} />
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-foreground mb-4">
             {t("features.title")}

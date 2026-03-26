@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { FAQSection } from "@/components/faq-section";
 import { PartnersMarquee } from "@/components/partners-marquee";
 import { FeaturedEventsSection } from "@/components/home/featured-events-section";
-import { OrganicBlob } from "@/components/ui/organic-blob";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import {
   PageTransition,
   FadeIn,
@@ -138,9 +138,8 @@ export default async function Home() {
       <div className="flex flex-col">
         {/* Hero Section */}
         <section className="relative py-20 md:py-32 bg-gradient-to-b from-primary/5 to-background overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/blob-dots.svg')] bg-repeat opacity-40 z-0" />
-          <OrganicBlob variant="hero" className="right-0 top-0 w-[600px] h-[400px] opacity-30 hidden md:block z-0" />
-          <OrganicBlob variant="terra" className="-left-32 bottom-0 w-[400px] h-[350px] opacity-20 hidden lg:block z-0" />
+          <AnimatedBlob variant={1} className="right-0 top-0 w-[300px] h-[300px] hidden md:block z-0" opacity={0.12} duration={22} rotate={[-5, 5]} />
+          <AnimatedBlob variant={5} className="-left-16 bottom-10 w-[250px] h-[250px] hidden lg:block z-0" opacity={0.15} duration={26} scale={[0.95, 1.05]} />
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <FadeIn duration={0.4}>
@@ -185,7 +184,8 @@ export default async function Home() {
 
         {/* Categories */}
         <section className="relative py-16 container mx-auto px-4 overflow-hidden">
-          <OrganicBlob variant="sage" className="-left-20 top-1/2 -translate-y-1/2 w-[400px] h-[350px] opacity-20 z-0" />
+          <AnimatedBlob variant={2} className="-right-16 top-1/3 w-[200px] h-[200px] z-0" opacity={0.10} duration={18} rotate={[-4, 4]} />
+          <AnimatedBlob variant={6} className="-left-10 bottom-0 w-[180px] h-[180px] z-0" opacity={0.12} duration={24} scale={[0.98, 1.06]} />
           <FadeInUp duration={0.4} distance={15}>
             <div className="text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
@@ -221,11 +221,6 @@ export default async function Home() {
           </StaggerContainer>
         </section>
 
-        {/* Decorative divider */}
-        <div className="flex justify-center -my-4 relative z-10" aria-hidden="true">
-          <img src="/splash-accent.svg" alt="" className="w-32 h-16 opacity-60" />
-        </div>
-
         {/* Featured Events — client component with mvpMode support */}
         <FeaturedEventsSection
           title={t("featured.title")}
@@ -236,13 +231,10 @@ export default async function Home() {
           ctaSecondaryLabel={t("hero.ctaSecondary")}
         />
 
-        {/* Decorative divider */}
-        <div className="flex justify-center -my-4 relative z-10" aria-hidden="true">
-          <img src="/splash-accent.svg" alt="" className="w-32 h-16 opacity-60" />
-        </div>
-
         {/* Benefits */}
-        <section className="py-16 container mx-auto px-4">
+        <section className="relative py-16 container mx-auto px-4 overflow-hidden">
+          <AnimatedBlob variant={3} className="-left-20 top-10 w-[280px] h-[280px] z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
+          <AnimatedBlob variant={4} className="-right-24 bottom-0 w-[350px] h-[350px] z-0" opacity={0.20} duration={30} scale={[0.97, 1.03]} />
           <FadeInUp duration={0.4} distance={15}>
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
@@ -274,7 +266,9 @@ export default async function Home() {
         </section>
 
         {/* How It Works */}
-        <section className="py-16 bg-muted/30">
+        <section className="relative py-16 bg-muted/30 overflow-hidden">
+          <AnimatedBlob variant={7} className="right-1/4 top-8 w-[200px] h-[200px] z-0" opacity={0.06} duration={15} rotate={[-6, 6]} />
+          <AnimatedBlob variant={8} className="-left-12 bottom-4 w-[150px] h-[150px] z-0" opacity={0.04} duration={19} scale={[0.96, 1.04]} />
           <div className="container mx-auto px-4">
             <FadeInUp duration={0.4} distance={15}>
               <div className="text-center mb-12">

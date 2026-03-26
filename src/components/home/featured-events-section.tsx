@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { EventCard, type EventCardProps } from "@/components/events";
 import { StaggerContainer, StaggerItem, FadeInUp } from "@/components/ui/motion";
 import { useMVPMode } from "@/contexts/mvp-mode-context";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
 
 // Gradient palette for events without images
@@ -170,9 +171,7 @@ export function FeaturedEventsSection({
 
   return (
     <section className="relative py-16 bg-muted/30 overflow-hidden">
-      <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[450px] h-[400px] pointer-events-none select-none hidden md:block opacity-20 z-0" aria-hidden="true">
-        <img src="/blob-terra.svg" alt="" className="w-full h-full object-contain" />
-      </div>
+      <AnimatedBlob variant={3} className="-right-20 top-1/2 -translate-y-1/2 w-[280px] h-[280px] hidden md:block z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
       <div className="container mx-auto px-4 relative z-10">
         <FadeInUp duration={0.4} distance={15}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
