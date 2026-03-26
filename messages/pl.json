@@ -147,6 +147,46 @@
     },
     "partners": {
       "title": "Zaufali nam"
+    },
+    "personalized": {
+      "hero": {
+        "badge": "Wrocław",
+        "greeting": "Cześć",
+        "guestSubtitle": "Co dobrego zjemy dziś? Sprawdź nadchodzące wydarzenia kulinarne w Twoim mieście.",
+        "hostSubtitle": "Sprawdź swoje nadchodzące wydarzenia i zarządzaj rezerwacjami.",
+        "guestCta": "Przeglądaj wydarzenia",
+        "guestCtaSecondary": "Moje rezerwacje",
+        "hostCta": "Stwórz wydarzenie",
+        "hostCtaSecondary": "Panel hosta"
+      },
+      "upcomingBookings": {
+        "title": "Twoje nadchodzące rezerwacje",
+        "subtitle": "Nie przegap żadnego wydarzenia",
+        "viewAll": "Wszystkie rezerwacje",
+        "today": "Dziś!",
+        "tomorrow": "Jutro",
+        "inDays": "za",
+        "days": "dni",
+        "noBookings": "Brak nadchodzących rezerwacji",
+        "noBookingsDescription": "Przeglądaj wydarzenia i zarezerwuj swoje miejsce przy stole.",
+        "browseEvents": "Przeglądaj wydarzenia"
+      },
+      "hostStats": {
+        "upcomingEvents": "Nadchodzące wydarzenia",
+        "pendingBookings": "Oczekujące rezerwacje",
+        "totalGuests": "Łączna liczba gości",
+        "revenueMonth": "Przychód (ten miesiąc)",
+        "yourEvents": "Twoje nadchodzące wydarzenia",
+        "yourEventsSubtitle": "Zarządzaj wydarzeniami i sprawdzaj rezerwacje",
+        "dashboard": "Panel hosta",
+        "newEvent": "Nowe",
+        "today": "Dziś!",
+        "tomorrow": "Jutro",
+        "filled": "Zapełnienie",
+        "noEvents": "Brak nadchodzących wydarzeń",
+        "noEventsDescription": "Stwórz swoje pierwsze wydarzenie kulinarne i zacznij przyjmować gości.",
+        "createFirst": "Stwórz pierwsze wydarzenie"
+      }
     }
   },
   "events": {

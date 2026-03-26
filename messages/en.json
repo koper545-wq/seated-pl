@@ -147,6 +147,46 @@
     },
     "partners": {
       "title": "Trusted by"
+    },
+    "personalized": {
+      "hero": {
+        "badge": "Wrocław",
+        "greeting": "Hello",
+        "guestSubtitle": "What delicious food shall we try today? Check out upcoming culinary events in your city.",
+        "hostSubtitle": "Check your upcoming events and manage bookings.",
+        "guestCta": "Browse events",
+        "guestCtaSecondary": "My bookings",
+        "hostCta": "Create event",
+        "hostCtaSecondary": "Host panel"
+      },
+      "upcomingBookings": {
+        "title": "Your upcoming bookings",
+        "subtitle": "Don't miss any event",
+        "viewAll": "All bookings",
+        "today": "Today!",
+        "tomorrow": "Tomorrow",
+        "inDays": "in",
+        "days": "days",
+        "noBookings": "No upcoming bookings",
+        "noBookingsDescription": "Browse events and book your seat at the table.",
+        "browseEvents": "Browse events"
+      },
+      "hostStats": {
+        "upcomingEvents": "Upcoming events",
+        "pendingBookings": "Pending bookings",
+        "totalGuests": "Total guests",
+        "revenueMonth": "Revenue (this month)",
+        "yourEvents": "Your upcoming events",
+        "yourEventsSubtitle": "Manage events and check bookings",
+        "dashboard": "Host panel",
+        "newEvent": "New",
+        "today": "Today!",
+        "tomorrow": "Tomorrow",
+        "filled": "Filled",
+        "noEvents": "No upcoming events",
+        "noEventsDescription": "Create your first culinary event and start welcoming guests.",
+        "createFirst": "Create first event"
+      }
     }
   },
   "events": {
