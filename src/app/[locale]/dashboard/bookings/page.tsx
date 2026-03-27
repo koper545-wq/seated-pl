@@ -18,6 +18,7 @@ import { MockBooking, mockBookings as mockBookingsData } from "@/lib/mock-data";
 import { Calendar, CalendarCheck, CalendarX, History, Search, Loader2 } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMVPMode } from "@/contexts/mvp-mode-context";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 
@@ -138,7 +139,10 @@ export default function GuestBookingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/30 relative overflow-hidden">
+      {/* Decorative blob */}
+      <AnimatedBlob variant={5} className="absolute -top-36 -right-36 w-96 h-96 z-0" opacity={0.06} duration={26} rotate={[-2, 2]} />
+
       {/* Header */}
       <div className="bg-background border-b">
         <div className="container mx-auto px-4 py-6">
@@ -150,7 +154,7 @@ export default function GuestBookingsPage() {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         <Tabs defaultValue="upcoming" className="space-y-6">
           <TabsList className="grid w-full max-w-md grid-cols-3">
             <TabsTrigger value="upcoming" className="flex items-center gap-2">

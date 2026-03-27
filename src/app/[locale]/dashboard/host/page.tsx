@@ -42,6 +42,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn, formatPrice } from "@/lib/utils";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
@@ -160,7 +161,11 @@ export default function HostDashboardPage() {
   const pendingBookings = hostEvents.reduce((sum, e) => sum + e.pendingBookings, 0);
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/30 relative overflow-hidden">
+      {/* Decorative blobs */}
+      <AnimatedBlob variant={2} className="absolute -top-40 -right-40 w-[500px] h-[500px] z-0" opacity={0.06} duration={28} rotate={[-2, 2]} />
+      <AnimatedBlob variant={6} className="absolute bottom-20 -left-32 w-72 h-72 z-0" opacity={0.07} duration={32} rotate={[-3, 3]} />
+
       {/* Header */}
       <div className="bg-background border-b">
         <div className="container mx-auto px-4 py-6">
@@ -202,7 +207,7 @@ export default function HostDashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-6 relative z-10">
         <div className="grid grid-cols-3 gap-4 mb-8">
           <Card>
             <CardContent className="p-4">

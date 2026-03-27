@@ -19,6 +19,7 @@ import {
   ChefHat,
   Heart,
 } from "lucide-react";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { cn, formatPrice } from "@/lib/utils";
 import { giftCardAmounts, createGiftCard } from "@/lib/mock-data";
 import { Link } from "@/i18n/navigation";
@@ -73,7 +74,11 @@ export default function GiftCardsPage() {
   };
 
   return (
-    <PageTransition className="min-h-screen bg-gradient-to-b from-primary/5 to-white">
+    <PageTransition className="min-h-screen bg-gradient-to-b from-primary/5 to-white relative overflow-hidden">
+      {/* Decorative blobs */}
+      <AnimatedBlob variant={1} className="absolute top-60 -right-40 w-[500px] h-[500px] z-0" opacity={0.10} duration={22} rotate={[-3, 3]} />
+      <AnimatedBlob variant={4} className="absolute bottom-40 -left-32 w-96 h-96 z-0" opacity={0.12} duration={28} rotate={[-2, 2]} />
+
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary to-orange-500 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -89,7 +94,7 @@ export default function GiftCardsPage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 py-12 relative z-10">
         {/* Benefits */}
         <StaggerContainer className="grid md:grid-cols-3 gap-6 mb-12">
           <StaggerItem>

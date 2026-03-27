@@ -3,18 +3,26 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 const blobs = [
-  "/blobs/blob-1.svg",
-  "/blobs/blob-2.svg",
-  "/blobs/blob-3.svg",
-  "/blobs/blob-4.svg",
-  "/blobs/blob-5.svg",
-  "/blobs/blob-6.svg",
-  "/blobs/blob-7.svg",
-  "/blobs/blob-8.svg",
+  "/blobs/blob-1.svg",   // 1: Terrakota #C05C36
+  "/blobs/blob-2.svg",   // 2: Sage #6E8060
+  "/blobs/blob-3.svg",   // 3: Terra mid #D9846A
+  "/blobs/blob-4.svg",   // 4: Krem ciemny #EDE0CE
+  "/blobs/blob-5.svg",   // 5: Szałwia jasna #D7E2CF
+  "/blobs/blob-6.svg",   // 6: Terra jasna #F0D8CC
+  "/blobs/blob-7.svg",   // 7: Warm gray #6B6560
+  "/blobs/blob-8.svg",   // 8: Węgiel #1A1916
+  "/blobs/blob-9.svg",   // 9: Złoty ciemny #B8860B
+  "/blobs/blob-10.svg",  // 10: Brąz saddle #8B4513
+  "/blobs/blob-11.svg",  // 11: Sienna #A0522D
+  "/blobs/blob-12.svg",  // 12: Oliwka ciemna #556B2F
+  "/blobs/blob-13.svg",  // 13: Piasek ciepły #E8C4A0
+  "/blobs/blob-14.svg",  // 14: Kawa mleczna #9B7653
+  "/blobs/blob-15.svg",  // 15: Peru #CD853F
+  "/blobs/blob-16.svg",  // 16: Leśna zieleń #4A7C59
 ];
 
 interface AnimatedBlobProps {
-  /** Which blob variant (1-8) */
+  /** Which blob variant (1-16) */
   variant?: number;
   /** Additional CSS classes for positioning */
   className?: string;

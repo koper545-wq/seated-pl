@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Loader2, CheckCircle, ArrowLeft, KeyRound } from "lucide-react";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -175,16 +176,22 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense
-      fallback={
-        <Card className="w-full max-w-md">
-          <CardContent className="pt-8 pb-8 flex items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </CardContent>
-        </Card>
-      }
-    >
-      <ResetPasswordForm />
-    </Suspense>
+    <div className="min-h-screen bg-muted/50 flex items-center justify-center px-4 relative overflow-hidden">
+      <AnimatedBlob variant={3} className="-right-16 top-[20%] w-[260px] h-[260px] hidden md:block z-0" opacity={0.10} duration={24} rotate={[-4, 4]} />
+      <AnimatedBlob variant={5} className="-left-20 bottom-[15%] w-[240px] h-[240px] hidden md:block z-0" opacity={0.08} duration={22} rotate={[-3, 3]} />
+      <div className="relative z-10 w-full flex items-center justify-center">
+        <Suspense
+          fallback={
+            <Card className="w-full max-w-md">
+              <CardContent className="pt-8 pb-8 flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </CardContent>
+            </Card>
+          }
+        >
+          <ResetPasswordForm />
+        </Suspense>
+      </div>
+    </div>
   );
 }

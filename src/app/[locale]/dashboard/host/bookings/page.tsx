@@ -40,6 +40,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
@@ -186,7 +187,10 @@ export default function HostBookingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/30 relative overflow-hidden">
+      {/* Decorative blob */}
+      <AnimatedBlob variant={3} className="absolute -top-32 -left-32 w-80 h-80 z-0" opacity={0.06} duration={24} rotate={[-2, 2]} />
+
       {/* Header */}
       <div className="bg-background border-b">
         <div className="container mx-auto px-4 py-6">
@@ -198,7 +202,7 @@ export default function HostBookingsPage() {
       </div>
 
       {/* Stats */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-6 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="p-4">

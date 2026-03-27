@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMVPMode } from "@/contexts/mvp-mode-context";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { Loader2 } from "lucide-react";
 
 export default function GuestDashboardPage() {
@@ -117,7 +118,11 @@ export default function GuestDashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-muted/50">
+    <div className="min-h-screen bg-muted/50 relative overflow-hidden">
+      {/* Decorative blobs */}
+      <AnimatedBlob variant={1} className="absolute -top-32 -right-32 w-96 h-96 z-0" opacity={0.07} duration={25} rotate={[-2, 2]} />
+      <AnimatedBlob variant={4} className="absolute bottom-40 -left-40 w-80 h-80 z-0" opacity={0.06} duration={30} rotate={[-3, 3]} />
+
       {/* Header */}
       <header className="bg-white border-b border sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4">
@@ -134,7 +139,7 @@ export default function GuestDashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-6 pb-24">
+      <main className="max-w-lg mx-auto px-4 py-6 pb-24 relative z-10">
         {/* Profile Card */}
         <Card className="mb-6 overflow-hidden">
           <div className="bg-gradient-to-r from-primary/70 to-orange-500 h-20" />

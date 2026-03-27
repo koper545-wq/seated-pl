@@ -12,6 +12,7 @@ import { getTranslations } from "next-intl/server";
 import { ArrowLeft, HelpCircle, Calendar, ChefHat, CreditCard } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 import { PageTransition, FadeInUp, StaggerContainer, StaggerItem } from "@/components/ui/motion";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 type CategoryId = "general" | "booking" | "hosts" | "payments";
 
@@ -31,9 +32,13 @@ export default async function FAQPage() {
   const t = await getTranslations("faqPage");
 
   return (
-    <PageTransition className="min-h-screen bg-muted/50">
+    <PageTransition className="min-h-screen bg-muted/50 relative overflow-hidden">
+      {/* Decorative blobs */}
+      <AnimatedBlob variant={2} className="-right-20 top-16 w-[300px] h-[300px] hidden md:block z-0" opacity={0.10} duration={25} rotate={[-4, 4]} />
+      <AnimatedBlob variant={6} className="-left-24 bottom-[20%] w-[260px] h-[260px] hidden md:block z-0" opacity={0.08} duration={20} rotate={[-3, 3]} />
+
       {/* Header */}
-      <div className="bg-gradient-to-b from-primary/5 to-muted/50 py-12 md:py-16">
+      <div className="bg-gradient-to-b from-primary/5 to-muted/50 py-12 md:py-16 relative z-10">
         <div className="max-w-4xl mx-auto px-4">
           <Link href="/">
             <Button variant="ghost" className="mb-6">
@@ -59,7 +64,7 @@ export default async function FAQPage() {
       </div>
 
       {/* Category Cards */}
-      <div className="max-w-4xl mx-auto px-4 -mt-4">
+      <div className="max-w-4xl mx-auto px-4 -mt-4 relative z-10">
         <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
           {categoryData.map((category) => (
             <StaggerItem key={category.id}>
@@ -87,7 +92,7 @@ export default async function FAQPage() {
       </div>
 
       {/* FAQ Sections */}
-      <div className="max-w-4xl mx-auto px-4 pb-16">
+      <div className="max-w-4xl mx-auto px-4 pb-16 relative z-10">
         {categoryData.map((category) => {
           const items = getFAQByCategory(category.id);
           return (

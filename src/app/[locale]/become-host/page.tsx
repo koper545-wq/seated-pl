@@ -44,6 +44,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PageTransition, FadeIn, FadeInUp } from "@/components/ui/motion";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 const cuisineKeys = [
   "polish", "italian", "french", "asian", "japanese", "indian",
@@ -244,8 +245,14 @@ export default function BecomeHostPage() {
   };
 
   return (
-    <PageTransition className="min-h-screen bg-muted/30 py-8">
-      <div className="container mx-auto px-4">
+    <PageTransition className="min-h-screen bg-muted/30 py-8 relative overflow-hidden">
+      {/* Decorative blobs */}
+      <AnimatedBlob variant={1} className="-right-24 top-12 w-[320px] h-[320px] hidden md:block z-0" opacity={0.10} duration={24} rotate={[-4, 4]} />
+      <AnimatedBlob variant={5} className="-left-20 top-[40%] w-[280px] h-[280px] hidden md:block z-0" opacity={0.08} duration={28} rotate={[-3, 3]} />
+      <AnimatedBlob variant={3} className="right-8 bottom-[15%] w-[240px] h-[240px] hidden lg:block z-0" opacity={0.09} duration={22} rotate={[-5, 5]} />
+      <AnimatedBlob variant={7} className="-left-16 bottom-24 w-[200px] h-[200px] hidden md:block z-0" opacity={0.08} duration={26} rotate={[-3, 3]} />
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <FadeInUp>

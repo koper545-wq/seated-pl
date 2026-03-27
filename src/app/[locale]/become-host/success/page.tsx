@@ -9,12 +9,16 @@ import {
   Home,
   ArrowRight,
 } from "lucide-react";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 export default function HostApplicationSuccessPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-background py-12">
+    <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-green-50 to-background py-12">
+      <AnimatedBlob variant={2} className="absolute -top-20 -right-20 w-80 h-80 z-0" opacity={0.12} duration={20} rotate={[-3, 3]} />
+      <AnimatedBlob variant={1} className="absolute bottom-10 -left-16 w-64 h-64 z-0" opacity={0.10} duration={26} rotate={[-4, 4]} />
+      <AnimatedBlob variant={4} className="absolute top-1/2 right-1/3 w-48 h-48 z-0" opacity={0.08} duration={32} rotate={[-2, 2]} />
       <div className="container mx-auto px-4">
-        <div className="max-w-lg mx-auto">
+        <div className="relative z-10 max-w-lg mx-auto">
           {/* Success header */}
           <div className="text-center mb-8">
             <div className="w-24 h-24 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6 animate-bounce">

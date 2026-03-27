@@ -32,6 +32,20 @@ export function PersonalizedHero({ userRole, userName, t }: PersonalizedHeroProp
         duration={26}
         scale={[0.95, 1.05]}
       />
+      <AnimatedBlob
+        variant={15}
+        className="left-1/3 -top-12 w-[200px] h-[200px] hidden lg:block z-0"
+        opacity={0.09}
+        duration={28}
+        rotate={[-6, 6]}
+      />
+      <AnimatedBlob
+        variant={11}
+        className="-right-10 bottom-1/3 w-[180px] h-[180px] hidden xl:block z-0"
+        opacity={0.08}
+        duration={24}
+        scale={[0.97, 1.04]}
+      />
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <FadeIn duration={0.4}>

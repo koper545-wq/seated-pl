@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { validateWaitlistToken, getWaitlistEntry } from "@/lib/mock-data";
 import { getEventDetail } from "@/lib/dal/events";
 import { BookingForm } from "@/components/bookings";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { ArrowLeft, Clock } from "lucide-react";
 import { getWaitlistTimeRemaining } from "@/lib/waitlist";
 
@@ -64,8 +65,10 @@ export default async function BookingPage({ params, searchParams }: BookingPageP
       </div>
 
       {/* Main content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-xl mx-auto">
+      <div className="relative overflow-hidden container mx-auto px-4 py-8">
+        <AnimatedBlob variant={4} className="right-[-80px] top-[-40px] w-[260px] h-[260px] hidden md:block z-0" opacity={0.10} duration={24} rotate={[-4, 4]} />
+        <AnimatedBlob variant={2} className="left-[-100px] bottom-[100px] w-[220px] h-[220px] hidden lg:block z-0" opacity={0.08} duration={28} rotate={[-3, 3]} />
+        <div className="relative z-10 max-w-xl mx-auto">
           {/* Waitlist booking banner */}
           {isWaitlistBooking && timeRemaining && (
             <div className="bg-gradient-to-r from-primary/5 to-green-50 border border-primary/20 rounded-xl p-4 mb-6">

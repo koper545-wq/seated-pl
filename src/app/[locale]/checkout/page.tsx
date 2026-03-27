@@ -8,6 +8,7 @@ import { MockPayment } from "@/components/checkout/mock-payment";
 import { getEventById } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { AlertTriangle, ArrowLeft, Loader2 } from "lucide-react";
 
 export default function CheckoutPage() {
@@ -100,8 +101,11 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/50 py-8">
-      <div className="max-w-lg mx-auto px-4">
+    <div className="min-h-screen bg-muted/50 py-8 relative overflow-hidden">
+      {/* Decorative blob */}
+      <AnimatedBlob variant={7} className="absolute -bottom-32 -right-32 w-80 h-80 z-0" opacity={0.06} duration={28} rotate={[-2, 2]} />
+
+      <div className="max-w-lg mx-auto px-4 relative z-10">
         {/* Back button */}
         <Link
           href={`/events/${event.id}`}

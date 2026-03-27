@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, CheckCircle, Building2, User, MapPin, ChefHat } from "lucide-react";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 const EVENT_TYPE_OPTIONS = [
   { value: "supper_club", label: "Klub kolacyjny" },
@@ -189,8 +190,10 @@ export default function HostOnboardingPage() {
   const isBusiness = hostSubtype === "business";
 
   return (
-    <div className="min-h-screen bg-muted/50 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="relative overflow-hidden min-h-screen bg-muted/50 py-8 px-4">
+      <AnimatedBlob variant={3} className="absolute -top-16 -left-16 w-64 h-64 z-0" opacity={0.10} duration={22} rotate={[-3, 3]} />
+      <AnimatedBlob variant={2} className="absolute bottom-20 -right-20 w-72 h-72 z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
+      <div className="relative z-10 max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">

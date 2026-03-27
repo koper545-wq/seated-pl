@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Mail, CheckCircle, Loader2 } from "lucide-react";
 import { PageTransition, ScaleIn } from "@/components/ui/motion";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -43,8 +44,10 @@ export default function ForgotPasswordPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-muted/50 flex items-center justify-center px-4">
-        <PageTransition>
+      <div className="min-h-screen bg-muted/50 flex items-center justify-center px-4 relative overflow-hidden">
+        <AnimatedBlob variant={2} className="-right-20 top-[15%] w-[280px] h-[280px] hidden md:block z-0" opacity={0.10} duration={22} rotate={[-4, 4]} />
+        <AnimatedBlob variant={6} className="-left-16 bottom-[20%] w-[240px] h-[240px] hidden md:block z-0" opacity={0.09} duration={26} rotate={[-3, 3]} />
+        <PageTransition className="relative z-10">
         <ScaleIn>
         <Card className="w-full max-w-md">
           <CardContent className="pt-8 pb-8 text-center">
@@ -89,8 +92,10 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/50 flex items-center justify-center px-4">
-      <PageTransition>
+    <div className="min-h-screen bg-muted/50 flex items-center justify-center px-4 relative overflow-hidden">
+      <AnimatedBlob variant={2} className="-right-20 top-[15%] w-[280px] h-[280px] hidden md:block z-0" opacity={0.10} duration={22} rotate={[-4, 4]} />
+      <AnimatedBlob variant={6} className="-left-16 bottom-[20%] w-[240px] h-[240px] hidden md:block z-0" opacity={0.09} duration={26} rotate={[-3, 3]} />
+      <PageTransition className="relative z-10">
       <ScaleIn>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">

@@ -22,6 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 export default function PublicProfilePage({
   params,
@@ -58,9 +59,11 @@ export default function PublicProfilePage({
   }
 
   return (
-    <div className="min-h-screen bg-muted/50">
+    <div className="relative overflow-hidden min-h-screen bg-muted/50">
+      <AnimatedBlob variant={1} className="absolute top-40 -right-20 w-72 h-72 z-0" opacity={0.08} duration={24} rotate={[-3, 3]} />
+      <AnimatedBlob variant={5} className="absolute bottom-32 -left-16 w-56 h-56 z-0" opacity={0.10} duration={30} rotate={[-2, 2]} />
       {/* Header */}
-      <header className="bg-white border-b border sticky top-0 z-10">
+      <header className="relative z-10 bg-white border-b border sticky top-0">
         <div className="max-w-lg mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <Link href="/events">
@@ -73,7 +76,7 @@ export default function PublicProfilePage({
         </div>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-6 pb-8">
+      <main className="relative z-10 max-w-lg mx-auto px-4 py-6 pb-8">
         {/* Profile Header */}
         <Card className="mb-6 overflow-hidden">
           <div className="bg-gradient-to-r from-primary/70 to-orange-500 h-24" />

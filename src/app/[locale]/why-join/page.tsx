@@ -32,6 +32,7 @@ import {
   ArrowRight,
   Check,
 } from "lucide-react";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 type Audience = "guest" | "host" | "restaurant";
 
@@ -49,8 +50,10 @@ export default function WhyJoinPage() {
   return (
     <div className="min-h-screen">
       {/* HERO */}
-      <section className="bg-gradient-to-b from-primary/5 to-muted/50 py-20 md:py-28">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section className="bg-gradient-to-b from-primary/5 to-muted/50 py-20 md:py-28 relative overflow-hidden">
+        <AnimatedBlob variant={1} className="-right-16 top-8 w-[280px] h-[280px] hidden md:block z-0" opacity={0.10} duration={24} rotate={[-4, 4]} />
+        <AnimatedBlob variant={4} className="-left-20 bottom-4 w-[250px] h-[250px] hidden md:block z-0" opacity={0.12} duration={20} rotate={[-3, 3]} />
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-6">
             <Sparkles className="w-4 h-4" />
             Seated.pl
@@ -68,8 +71,9 @@ export default function WhyJoinPage() {
       </section>
 
       {/* AUDIENCE PICKER */}
-      <section className="py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4">
+      <section className="py-12 md:py-16 relative overflow-hidden">
+        <AnimatedBlob variant={8} className="-right-24 top-1/2 -translate-y-1/2 w-[220px] h-[220px] hidden lg:block z-0" opacity={0.08} duration={26} rotate={[-3, 3]} />
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
           <p className="text-center text-muted-foreground mb-8 text-sm font-medium uppercase tracking-wider">
             Kim jesteś?
           </p>

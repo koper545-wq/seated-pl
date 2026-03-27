@@ -1,11 +1,13 @@
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-muted/50">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="relative overflow-hidden min-h-screen bg-muted/50">
+      <AnimatedBlob variant={2} className="absolute top-32 -right-24 w-72 h-72 z-0" opacity={0.08} duration={26} rotate={[-2, 2]} />
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
         <Link href="/">
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />

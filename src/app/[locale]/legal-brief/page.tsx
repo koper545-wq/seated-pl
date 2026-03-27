@@ -14,11 +14,13 @@ import {
   HelpCircle,
   Server,
 } from "lucide-react";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 
 export default function LegalBriefPage() {
   return (
-    <div className="min-h-screen bg-muted/50">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="relative overflow-hidden min-h-screen bg-muted/50">
+      <AnimatedBlob variant={7} className="absolute top-64 -right-16 w-60 h-60 z-0" opacity={0.10} duration={28} rotate={[-2, 2]} />
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
         <Link href="/">
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />

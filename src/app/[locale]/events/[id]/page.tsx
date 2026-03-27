@@ -15,6 +15,7 @@ import {
 import { WaitlistDialog } from "@/components/waitlist";
 import { getEventDetail, getPublishedEvents } from "@/lib/dal/events";
 import { db } from "@/lib/db";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import {
   Calendar,
   Clock,
@@ -135,8 +136,9 @@ export default async function EventPage({ params }: EventPageProps) {
       {/* Hero image / gradient */}
       <EventHeroFadeIn>
       <div
-        className={`relative h-64 md:h-80 bg-gradient-to-br ${event.imageGradient}`}
+        className={`relative overflow-hidden h-64 md:h-80 bg-gradient-to-br ${event.imageGradient}`}
       >
+        <AnimatedBlob variant={3} className="right-[-60px] top-[-30px] w-[300px] h-[300px] hidden md:block z-0" opacity={0.12} duration={22} rotate={[-5, 5]} />
         <div className="absolute inset-0 bg-black/20" />
         <div className="container mx-auto px-4 h-full flex items-end pb-6">
           <Link
@@ -155,8 +157,9 @@ export default async function EventPage({ params }: EventPageProps) {
       </div>
       </EventHeroFadeIn>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="relative overflow-hidden container mx-auto px-4 py-8">
+        <AnimatedBlob variant={6} className="left-[-120px] top-[400px] w-[350px] h-[350px] hidden lg:block z-0" opacity={0.09} duration={25} rotate={[-3, 3]} />
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Title and basic info */}
@@ -390,7 +393,7 @@ export default async function EventPage({ params }: EventPageProps) {
 
         {/* Similar events */}
         {similarEvents.length > 0 && (
-          <div className="mt-16">
+          <div className="relative z-10 mt-16">
             <h2 className="text-2xl font-bold mb-6">Podobne wydarzenia</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {similarEvents.map((event) => (

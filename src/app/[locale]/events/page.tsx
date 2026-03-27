@@ -33,6 +33,7 @@ import {
   mockEvents as mockEventsRaw,
 } from "@/lib/mock-data";
 import { useMVPMode } from "@/contexts/mvp-mode-context";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import {
   Search,
   SlidersHorizontal,
@@ -438,8 +439,10 @@ export default function EventsPage() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <FadeIn>
-      <div className="bg-gradient-to-b from-primary/5 to-background py-8 md:py-12">
-        <div className="container mx-auto px-4">
+      <div className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background py-8 md:py-12">
+        <AnimatedBlob variant={1} className="right-[-60px] top-[-40px] w-[280px] h-[280px] hidden md:block z-0" opacity={0.10} duration={24} rotate={[-4, 4]} />
+        <AnimatedBlob variant={2} className="left-[-80px] bottom-[-50px] w-[220px] h-[220px] hidden md:block z-0" opacity={0.08} duration={28} rotate={[-3, 3]} />
+        <div className="relative z-10 container mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
             Odkryj wydarzenia
           </h1>
@@ -819,7 +822,9 @@ export default function EventsPage() {
           </aside>
 
           {/* Events content */}
-          <main className="flex-1">
+          <main className="relative overflow-hidden flex-1">
+            <AnimatedBlob variant={5} className="right-[-100px] top-[200px] w-[350px] h-[350px] hidden lg:block z-0" opacity={0.08} duration={26} rotate={[-3, 3]} />
+            <div className="relative z-10">
             {/* Results count and mobile view toggle */}
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-muted-foreground">
@@ -931,6 +936,7 @@ export default function EventsPage() {
                 )}
               </>
             )}
+            </div>
           </main>
         </div>
       </div>

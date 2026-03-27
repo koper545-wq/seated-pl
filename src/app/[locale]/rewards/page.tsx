@@ -35,6 +35,7 @@ import {
   Info,
   Sparkles,
 } from "lucide-react";
+import { AnimatedBlob } from "@/components/ui/organic-blob";
 import { PageTransition, FadeInUp } from "@/components/ui/motion";
 
 // Rarity colors
@@ -206,7 +207,11 @@ export default function RewardsPage() {
   const purchasableRewards = rewards.filter(r => r.xpCost && r.isActive);
 
   return (
-    <PageTransition className="min-h-screen bg-muted/50">
+    <PageTransition className="min-h-screen bg-muted/50 relative overflow-hidden">
+      {/* Decorative blobs */}
+      <AnimatedBlob variant={1} className="absolute top-80 -right-40 w-[500px] h-[500px] z-0" opacity={0.10} duration={24} rotate={[-3, 3]} />
+      <AnimatedBlob variant={2} className="absolute bottom-60 -left-36 w-96 h-96 z-0" opacity={0.12} duration={30} rotate={[-2, 2]} />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-primary/5 to-muted/50 py-12 md:py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -227,7 +232,7 @@ export default function RewardsPage() {
       </section>
 
       {/* Main Content */}
-      <section className="py-12 md:py-16">
+      <section className="py-12 md:py-16 relative z-10">
         <div className="max-w-6xl mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2">
