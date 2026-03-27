@@ -76,8 +76,8 @@ export default function GiftCardsPage() {
   return (
     <PageTransition className="min-h-screen bg-gradient-to-b from-primary/5 to-white relative overflow-hidden">
       {/* Decorative blobs */}
-      <AnimatedBlob variant={1} className="absolute top-60 -right-40 w-[500px] h-[500px] z-0" opacity={0.10} duration={22} rotate={[-3, 3]} />
-      <AnimatedBlob variant={4} className="absolute bottom-40 -left-32 w-96 h-96 z-0" opacity={0.12} duration={28} rotate={[-2, 2]} />
+      <AnimatedBlob variant={1} className="absolute top-60 -right-40 w-[500px] h-[500px] hidden md:block z-0" opacity={0.10} duration={22} rotate={[-3, 3]} />
+      <AnimatedBlob variant={4} className="absolute bottom-40 -left-32 w-96 h-96 hidden md:block z-0" opacity={0.12} duration={28} rotate={[-2, 2]} />
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary to-orange-500 text-white py-16">

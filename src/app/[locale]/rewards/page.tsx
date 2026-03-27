@@ -209,8 +209,8 @@ export default function RewardsPage() {
   return (
     <PageTransition className="min-h-screen bg-muted/50 relative overflow-hidden">
       {/* Decorative blobs */}
-      <AnimatedBlob variant={1} className="absolute top-80 -right-40 w-[500px] h-[500px] z-0" opacity={0.10} duration={24} rotate={[-3, 3]} />
-      <AnimatedBlob variant={2} className="absolute bottom-60 -left-36 w-96 h-96 z-0" opacity={0.12} duration={30} rotate={[-2, 2]} />
+      <AnimatedBlob variant={1} className="absolute top-80 -right-40 w-[500px] h-[500px] hidden md:block z-0" opacity={0.10} duration={24} rotate={[-3, 3]} />
+      <AnimatedBlob variant={2} className="absolute bottom-60 -left-36 w-96 h-96 hidden md:block z-0" opacity={0.12} duration={30} rotate={[-2, 2]} />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-primary/5 to-muted/50 py-12 md:py-20">

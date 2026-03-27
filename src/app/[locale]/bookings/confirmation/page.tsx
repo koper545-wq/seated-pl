@@ -110,8 +110,8 @@ function ConfirmationContent() {
   return (
     <div className="min-h-screen bg-muted/30 py-12 relative overflow-hidden">
       {/* Celebratory decorative blobs */}
-      <AnimatedBlob variant={1} className="absolute -top-24 -right-24 w-80 h-80 z-0" opacity={0.10} duration={20} rotate={[-3, 3]} />
-      <AnimatedBlob variant={2} className="absolute bottom-32 -left-32 w-72 h-72 z-0" opacity={0.08} duration={26} rotate={[-2, 2]} />
+      <AnimatedBlob variant={1} className="absolute -top-24 -right-24 w-80 h-80 hidden md:block z-0" opacity={0.10} duration={20} rotate={[-3, 3]} />
+      <AnimatedBlob variant={2} className="absolute bottom-32 -left-32 w-72 h-72 hidden md:block z-0" opacity={0.08} duration={26} rotate={[-2, 2]} />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-lg mx-auto">

@@ -141,7 +141,7 @@ export default function GuestBookingsPage() {
   return (
     <div className="min-h-screen bg-muted/30 relative overflow-hidden">
       {/* Decorative blob */}
-      <AnimatedBlob variant={5} className="absolute -top-36 -right-36 w-96 h-96 z-0" opacity={0.06} duration={26} rotate={[-2, 2]} />
+      <AnimatedBlob variant={5} className="absolute -top-36 -right-36 w-96 h-96 hidden md:block z-0" opacity={0.06} duration={26} rotate={[-2, 2]} />
 
       {/* Header */}
       <div className="bg-background border-b">

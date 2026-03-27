@@ -299,8 +299,8 @@ export default function LoginPage() {
   return (
     <PageTransition>
       <div className="relative overflow-hidden">
-        <AnimatedBlob variant={2} className="-right-32 -top-20 w-[400px] h-[350px] z-0" opacity={0.10} duration={22} rotate={[-4, 4]} />
-        <AnimatedBlob variant={1} className="-left-32 -bottom-20 w-[350px] h-[300px] z-0" opacity={0.08} duration={26} scale={[0.96, 1.04]} />
+        <AnimatedBlob variant={2} className="-right-32 -top-20 w-[400px] h-[350px] hidden md:block z-0" opacity={0.10} duration={22} rotate={[-4, 4]} />
+        <AnimatedBlob variant={1} className="-left-32 -bottom-20 w-[350px] h-[300px] hidden md:block z-0" opacity={0.08} duration={26} scale={[0.96, 1.04]} />
         <Suspense fallback={<LoginFormSkeleton />}>
           <ScaleIn>
             <LoginForm />

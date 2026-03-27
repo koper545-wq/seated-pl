@@ -163,8 +163,8 @@ export default function HostDashboardPage() {
   return (
     <div className="min-h-screen bg-muted/30 relative overflow-hidden">
       {/* Decorative blobs */}
-      <AnimatedBlob variant={2} className="absolute -top-40 -right-40 w-[500px] h-[500px] z-0" opacity={0.06} duration={28} rotate={[-2, 2]} />
-      <AnimatedBlob variant={6} className="absolute bottom-20 -left-32 w-72 h-72 z-0" opacity={0.07} duration={32} rotate={[-3, 3]} />
+      <AnimatedBlob variant={2} className="absolute -top-40 -right-40 w-[500px] h-[500px] hidden md:block z-0" opacity={0.06} duration={28} rotate={[-2, 2]} />
+      <AnimatedBlob variant={6} className="absolute bottom-20 -left-32 w-72 h-72 hidden md:block z-0" opacity={0.07} duration={32} rotate={[-3, 3]} />
 
       {/* Header */}
       <div className="bg-background border-b">

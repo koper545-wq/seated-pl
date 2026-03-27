@@ -189,7 +189,7 @@ export default function HostBookingsPage() {
   return (
     <div className="min-h-screen bg-muted/30 relative overflow-hidden">
       {/* Decorative blob */}
-      <AnimatedBlob variant={3} className="absolute -top-32 -left-32 w-80 h-80 z-0" opacity={0.06} duration={24} rotate={[-2, 2]} />
+      <AnimatedBlob variant={3} className="absolute -top-32 -left-32 w-80 h-80 hidden md:block z-0" opacity={0.06} duration={24} rotate={[-2, 2]} />
 
       {/* Header */}
       <div className="bg-background border-b">

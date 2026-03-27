@@ -191,8 +191,8 @@ export default function HostOnboardingPage() {
 
   return (
     <div className="relative overflow-hidden min-h-screen bg-muted/50 py-8 px-4">
-      <AnimatedBlob variant={3} className="absolute -top-16 -left-16 w-64 h-64 z-0" opacity={0.10} duration={22} rotate={[-3, 3]} />
-      <AnimatedBlob variant={2} className="absolute bottom-20 -right-20 w-72 h-72 z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
+      <AnimatedBlob variant={3} className="absolute -top-16 -left-16 w-64 h-64 hidden md:block z-0" opacity={0.10} duration={22} rotate={[-3, 3]} />
+      <AnimatedBlob variant={2} className="absolute bottom-20 -right-20 w-72 h-72 hidden md:block z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
       <div className="relative z-10 max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">

@@ -19,7 +19,7 @@ import { AnimatedBlob } from "@/components/ui/organic-blob";
 export default function LegalBriefPage() {
   return (
     <div className="relative overflow-hidden min-h-screen bg-muted/50">
-      <AnimatedBlob variant={7} className="absolute top-64 -right-16 w-60 h-60 z-0" opacity={0.10} duration={28} rotate={[-2, 2]} />
+      <AnimatedBlob variant={7} className="absolute top-64 -right-16 w-60 h-60 hidden md:block z-0" opacity={0.10} duration={28} rotate={[-2, 2]} />
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
         <Link href="/">
           <Button variant="ghost" className="mb-6">

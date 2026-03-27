@@ -6,7 +6,7 @@ import { AnimatedBlob } from "@/components/ui/organic-blob";
 export default function TermsPage() {
   return (
     <div className="relative overflow-hidden min-h-screen bg-muted/50">
-      <AnimatedBlob variant={4} className="absolute top-48 -left-20 w-64 h-64 z-0" opacity={0.10} duration={24} rotate={[-3, 3]} />
+      <AnimatedBlob variant={4} className="absolute top-48 -left-20 w-64 h-64 hidden md:block z-0" opacity={0.10} duration={24} rotate={[-3, 3]} />
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
         <Link href="/">
           <Button variant="ghost" className="mb-6">

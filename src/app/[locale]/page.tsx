@@ -229,8 +229,8 @@ export default async function Home() {
 
       {/* Benefits — only for anonymous */}
       <section className="relative py-16 container mx-auto px-4 overflow-hidden">
-        <AnimatedBlob variant={3} className="-left-20 top-10 w-[280px] h-[280px] z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
-        <AnimatedBlob variant={4} className="-right-24 bottom-0 w-[350px] h-[350px] z-0" opacity={0.18} duration={30} scale={[0.97, 1.03]} />
+        <AnimatedBlob variant={3} className="-left-20 top-10 w-[280px] h-[280px] hidden md:block z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
+        <AnimatedBlob variant={4} className="-right-24 bottom-0 w-[350px] h-[350px] hidden md:block z-0" opacity={0.18} duration={30} scale={[0.97, 1.03]} />
         <AnimatedBlob variant={15} className="right-1/4 -top-8 w-[200px] h-[200px] hidden lg:block z-0" opacity={0.10} duration={24} rotate={[-4, 4]} />
         <FadeInUp duration={0.4} distance={15}>
           <div className="text-center mb-12">
@@ -264,8 +264,8 @@ export default async function Home() {
 
       {/* How It Works — only for anonymous */}
       <section className="relative py-16 bg-muted/30 overflow-hidden">
-        <AnimatedBlob variant={7} className="right-1/4 top-8 w-[200px] h-[200px] z-0" opacity={0.06} duration={15} rotate={[-6, 6]} />
-        <AnimatedBlob variant={8} className="-left-12 bottom-4 w-[150px] h-[150px] z-0" opacity={0.04} duration={19} scale={[0.96, 1.04]} />
+        <AnimatedBlob variant={7} className="right-1/4 top-8 w-[200px] h-[200px] hidden md:block z-0" opacity={0.06} duration={15} rotate={[-6, 6]} />
+        <AnimatedBlob variant={8} className="-left-12 bottom-4 w-[150px] h-[150px] hidden md:block z-0" opacity={0.04} duration={19} scale={[0.96, 1.04]} />
         <AnimatedBlob variant={12} className="-right-10 top-1/2 w-[220px] h-[220px] hidden md:block z-0" opacity={0.07} duration={22} rotate={[-3, 3]} />
         <AnimatedBlob variant={11} className="left-1/4 -bottom-8 w-[160px] h-[160px] hidden lg:block z-0" opacity={0.06} duration={27} scale={[0.98, 1.03]} />
         <div className="container mx-auto px-4">
@@ -342,8 +342,8 @@ export default async function Home() {
     <>
       {/* Categories */}
       <section className="relative py-16 container mx-auto px-4 overflow-hidden">
-        <AnimatedBlob variant={2} className="-right-16 top-1/3 w-[200px] h-[200px] z-0" opacity={0.10} duration={18} rotate={[-4, 4]} />
-        <AnimatedBlob variant={6} className="-left-10 bottom-0 w-[180px] h-[180px] z-0" opacity={0.12} duration={24} scale={[0.98, 1.06]} />
+        <AnimatedBlob variant={2} className="-right-16 top-1/3 w-[200px] h-[200px] hidden md:block z-0" opacity={0.10} duration={18} rotate={[-4, 4]} />
+        <AnimatedBlob variant={6} className="-left-10 bottom-0 w-[180px] h-[180px] hidden md:block z-0" opacity={0.12} duration={24} scale={[0.98, 1.06]} />
         <AnimatedBlob variant={10} className="left-1/4 -top-8 w-[160px] h-[160px] hidden lg:block z-0" opacity={0.08} duration={20} rotate={[-5, 5]} />
         <AnimatedBlob variant={16} className="-right-8 bottom-1/4 w-[140px] h-[140px] hidden xl:block z-0" opacity={0.09} duration={28} scale={[0.96, 1.05]} />
         <FadeInUp duration={0.4} distance={15}>

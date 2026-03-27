@@ -103,7 +103,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-muted/50 py-8 relative overflow-hidden">
       {/* Decorative blob */}
-      <AnimatedBlob variant={7} className="absolute -bottom-32 -right-32 w-80 h-80 z-0" opacity={0.06} duration={28} rotate={[-2, 2]} />
+      <AnimatedBlob variant={7} className="absolute -bottom-32 -right-32 w-80 h-80 hidden md:block z-0" opacity={0.06} duration={28} rotate={[-2, 2]} />
 
       <div className="max-w-lg mx-auto px-4 relative z-10">
         {/* Back button */}

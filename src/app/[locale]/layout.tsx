@@ -12,6 +12,8 @@ import { EventsProvider } from "@/contexts/events-context";
 import { MVPModeProvider } from "@/contexts/mvp-mode-context";
 import { BookingsProvider } from "@/contexts/bookings-context";
 
+const BASE_URL = "https://seated-pl.vercel.app";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin", "latin-ext"],
@@ -38,11 +40,48 @@ export async function generateMetadata({
     en: "Discover unique culinary events - supper clubs, pop-ups, cooking workshops and more. Join the food lovers community.",
   };
 
+  const title = titles[locale as keyof typeof titles] || titles.pl;
+  const description =
+    descriptions[locale as keyof typeof descriptions] || descriptions.pl;
+  const ogLocale = locale === "pl" ? "pl_PL" : "en_US";
+  const alternateLocale = locale === "pl" ? "en" : "pl";
+
   return {
-    title: titles[locale as keyof typeof titles] || titles.pl,
-    description:
-      descriptions[locale as keyof typeof descriptions] || descriptions.pl,
+    metadataBase: new URL(BASE_URL),
+    title,
+    description,
     manifest: "/manifest.json",
+    alternates: {
+      canonical: `${BASE_URL}/${locale}`,
+      languages: {
+        pl: `${BASE_URL}/pl`,
+        en: `${BASE_URL}/en`,
+        "x-default": `${BASE_URL}/pl`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${BASE_URL}/${locale}`,
+      siteName: "Seated",
+      locale: ogLocale,
+      alternateLocale: alternateLocale === "pl" ? "pl_PL" : "en_US",
+      type: "website",
+      images: [
+        {
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "Seated - Kulinarne doświadczenia we Wrocławiu",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/opengraph-image"],
+    },
     appleWebApp: {
       capable: true,
       statusBarStyle: "default",
@@ -74,6 +113,15 @@ export default async function LocaleLayout({
   // Get messages for the locale
   const messages = await getMessages();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Seated",
+    url: BASE_URL,
+    description: "Kulinarne doświadczenia we Wrocławiu",
+    logo: `${BASE_URL}/opengraph-image`,
+  };
+
   return (
     <html lang={locale}>
       <head>
@@ -83,7 +131,11 @@ export default async function LocaleLayout({
         <meta name="apple-mobile-web-app-title" content="Seated" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#C05C36" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/apple-icon" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <SessionProvider>

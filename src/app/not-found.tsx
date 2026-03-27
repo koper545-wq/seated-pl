@@ -5,9 +5,9 @@ export default function RootNotFound() {
   return (
     <html lang="pl">
       <body className="relative overflow-hidden flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
-        <AnimatedBlob variant={3} className="absolute -top-24 -left-24 w-80 h-80 z-0" opacity={0.10} duration={24} rotate={[-3, 3]} />
-        <AnimatedBlob variant={5} className="absolute -bottom-20 -right-20 w-72 h-72 z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
-        <AnimatedBlob variant={1} className="absolute top-1/2 right-1/4 w-56 h-56 z-0" opacity={0.08} duration={32} rotate={[-4, 4]} />
+        <AnimatedBlob variant={3} className="absolute -top-24 -left-24 w-80 h-80 hidden md:block z-0" opacity={0.10} duration={24} rotate={[-3, 3]} />
+        <AnimatedBlob variant={5} className="absolute -bottom-20 -right-20 w-72 h-72 hidden md:block z-0" opacity={0.08} duration={28} rotate={[-2, 2]} />
+        <AnimatedBlob variant={1} className="absolute top-1/2 right-1/4 w-56 h-56 hidden md:block z-0" opacity={0.08} duration={32} rotate={[-4, 4]} />
 
         <h1 className="relative z-10 text-8xl font-bold tracking-tight text-primary">404</h1>
 

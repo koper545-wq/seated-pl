@@ -191,7 +191,7 @@ export default async function HowItWorksPage() {
 
       {/* Features Section */}
       <section className="relative py-16 md:py-24 overflow-hidden">
-        <AnimatedBlob variant={6} className="-right-16 top-10 w-[220px] h-[220px] z-0" opacity={0.10} duration={18} rotate={[-4, 4]} />
+        <AnimatedBlob variant={6} className="-right-16 top-10 w-[220px] h-[220px] hidden md:block z-0" opacity={0.10} duration={18} rotate={[-4, 4]} />
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-foreground mb-4">
             {t("features.title")}

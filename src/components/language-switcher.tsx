@@ -34,7 +34,7 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2">
+        <Button variant="ghost" size="sm" className="gap-2 min-h-[44px] min-w-[44px]">
           <Globe className="h-4 w-4" />
           <span className="hidden sm:inline">
             {languageFlags[locale as keyof typeof languageFlags]}
