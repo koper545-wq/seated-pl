@@ -404,10 +404,10 @@ export default async function Home() {
             <p className="text-muted-foreground">{t("testimonials.subtitle")}</p>
           </div>
         </FadeInUp>
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
           {testimonials.map((testimonial, index) => (
-            <StaggerItem key={index}>
-              <Card className="p-6">
+            <StaggerItem key={index} className="h-full">
+              <Card className="p-6 h-full flex flex-col">
                 <div className="flex gap-1 mb-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
@@ -416,10 +416,10 @@ export default async function Home() {
                     />
                   ))}
                 </div>
-                <p className="text-muted-foreground mb-4 text-sm italic">
+                <p className="text-muted-foreground mb-4 text-sm italic flex-1">
                   &ldquo;{testimonial.text}&rdquo;
                 </p>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mt-auto">
                   <span className="font-medium text-sm">{testimonial.name}</span>
                   <Badge variant="secondary" className="text-xs">
                     {testimonial.event}
