@@ -103,24 +103,26 @@ interface ApiEvent {
 // Maps the filter dropdown value (e.g. "supper-club") to API eventType (e.g. "SUPPER_CLUB")
 const filterValueToEventType: Record<string, string> = {
   "supper-club": "SUPPER_CLUB",
-  "chefs-table": "CHEFS_TABLE",
+  "kolacja-degustacyjna": "CHEFS_TABLE",
   "popup": "POPUP",
   "warsztaty": "COOKING_CLASS",
   "degustacje": "WINE_TASTING",
   "active-food": "ACTIVE_FOOD",
   "farm": "FARM_EXPERIENCE",
+  "sniadania": "BREAKFAST",
   "other": "OTHER",
 };
 
 // Maps API eventType to a display name
 const eventTypeDisplayName: Record<string, string> = {
   SUPPER_CLUB: "Supper Club",
-  CHEFS_TABLE: "Chef's Table",
+  CHEFS_TABLE: "Kolacja Degustacyjna",
   POPUP: "Pop-up",
   COOKING_CLASS: "Warsztaty",
   WINE_TASTING: "Degustacje",
   ACTIVE_FOOD: "Active + Food",
   FARM_EXPERIENCE: "Farm Experience",
+  BREAKFAST: "Śniadania",
   RESTAURANT_COLLAB: "Kolaboracja",
   OTHER: "Inne",
 };
@@ -128,12 +130,13 @@ const eventTypeDisplayName: Record<string, string> = {
 // Maps API eventType to a typeSlug for the EventsMap colors
 const eventTypeToSlug: Record<string, string> = {
   SUPPER_CLUB: "supper-club",
-  CHEFS_TABLE: "chefs-table",
+  CHEFS_TABLE: "kolacja-degustacyjna",
   POPUP: "popup",
   COOKING_CLASS: "warsztaty",
   WINE_TASTING: "degustacje",
   ACTIVE_FOOD: "active-food",
   FARM_EXPERIENCE: "farm",
+  BREAKFAST: "sniadania",
   RESTAURANT_COLLAB: "other",
   OTHER: "default",
 };
@@ -147,6 +150,7 @@ const eventTypeGradient: Record<string, string> = {
   WINE_TASTING: "from-rose-200 to-pink-300",
   ACTIVE_FOOD: "from-primary/15 to-orange-300",
   FARM_EXPERIENCE: "from-yellow-200 to-green-200",
+  BREAKFAST: "from-amber-100 to-orange-200",
   RESTAURANT_COLLAB: "from-primary/15 to-primary/20",
   OTHER: "from-primary/15 to-orange-300",
 };
@@ -154,12 +158,13 @@ const eventTypeGradient: Record<string, string> = {
 // Map mock event typeSlug to API eventType enum
 const typeSlugToEventType: Record<string, string> = {
   "supper-club": "SUPPER_CLUB",
-  "chefs-table": "CHEFS_TABLE",
+  "kolacja-degustacyjna": "CHEFS_TABLE",
   "popup": "POPUP",
   "warsztaty": "COOKING_CLASS",
   "degustacje": "WINE_TASTING",
   "active-food": "ACTIVE_FOOD",
   "farm": "FARM_EXPERIENCE",
+  "sniadania": "BREAKFAST",
   "other": "OTHER",
   "default": "OTHER",
 };

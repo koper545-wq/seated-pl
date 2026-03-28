@@ -17,6 +17,7 @@ const EVENT_TYPE_OPTIONS = [
   { value: "tasting", label: "Degustacja" },
   { value: "popup", label: "Pop-up" },
   { value: "active_food", label: "Aktywne doświadczenia" },
+  { value: "breakfast", label: "Śniadania" },
 ];
 
 const EXPERIENCE_OPTIONS = [

@@ -72,12 +72,13 @@ const features: Feature[] = [
 
 const eventTypeKeys = [
   { key: "supperClub", emoji: "🍽️", slug: "supper-club" },
-  { key: "chefsTable", emoji: "👑", slug: "chefs-table" },
+  { key: "chefsTable", emoji: "👑", slug: "kolacja-degustacyjna" },
   { key: "workshops", emoji: "👨‍🍳", slug: "warsztaty" },
   { key: "tastings", emoji: "🍷", slug: "degustacje" },
   { key: "popup", emoji: "🎪", slug: "popup" },
   { key: "activeFood", emoji: "🏃", slug: "active-food" },
   { key: "farmExperience", emoji: "🌾", slug: "farm" },
+  { key: "breakfast", emoji: "☀️", slug: "sniadania" },
 ];
 
 export default async function HowItWorksPage() {

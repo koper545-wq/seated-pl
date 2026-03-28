@@ -12,13 +12,14 @@ import { useMVPMode } from "@/contexts/mvp-mode-context";
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
   SUPPER_CLUB: "Supper Club",
-  CHEFS_TABLE: "Chef's Table",
+  CHEFS_TABLE: "Kolacja Degustacyjna",
   POPUP: "Pop-up",
   COOKING_CLASS: "Warsztaty",
   TASTING: "Degustacje",
   FOOD_TOUR: "Food Tour",
   ACTIVE_FOOD: "Active + Food",
   FARM_EXPERIENCE: "Farm Experience",
+  BREAKFAST: "Śniadania",
   OTHER: "Inne",
 };
 
@@ -50,7 +51,7 @@ const mockAdminEvents: AdminEvent[] = [
   { id: "evt-2", title: "Warsztaty pierogowe z Basia", eventType: "COOKING_CLASS", status: "PUBLISHED", date: "2026-04-15T17:00:00Z", locationPublic: "Krakow, Kazimierz", price: 14500, capacity: 8, spotsLeft: 0, revenue: 116000, host: { businessName: "Pierogi u Basi", user: { email: "basia@example.com" } }, _count: { bookings: 8, reviews: 5 } },
   { id: "evt-3", title: "Degustacja win naturalnych", eventType: "TASTING", status: "PENDING_REVIEW", date: "2026-04-20T18:30:00Z", locationPublic: "Warszawa, Mokotow", price: 22000, capacity: 16, spotsLeft: 16, revenue: 0, host: { businessName: "Winne Horyzonty", user: { email: "marek.wino@example.com" } }, _count: { bookings: 0, reviews: 0 } },
   { id: "evt-4", title: "Pop-up ramen bar", eventType: "POPUP", status: "PUBLISHED", date: "2026-04-18T12:00:00Z", locationPublic: "Gdansk, Wrzeszcz", price: 7500, capacity: 30, spotsLeft: 12, revenue: 135000, host: { businessName: "Ramen Sensei", user: { email: "tomek.ramen@example.com" } }, _count: { bookings: 18, reviews: 10 } },
-  { id: "evt-5", title: "Chef's Table: kuchnia molekularna", eventType: "CHEFS_TABLE", status: "DRAFT", date: "2026-05-01T20:00:00Z", locationPublic: "Poznan, Stare Miasto", price: 35000, capacity: 6, spotsLeft: 6, revenue: 0, host: { businessName: "Molekularna Uczta", user: { email: "chef.adam@example.com" } }, _count: { bookings: 0, reviews: 0 } },
+  { id: "evt-5", title: "Kolacja Degustacyjna: kuchnia molekularna", eventType: "CHEFS_TABLE", status: "DRAFT", date: "2026-05-01T20:00:00Z", locationPublic: "Poznan, Stare Miasto", price: 35000, capacity: 6, spotsLeft: 6, revenue: 0, host: { businessName: "Molekularna Uczta", user: { email: "chef.adam@example.com" } }, _count: { bookings: 0, reviews: 0 } },
   { id: "evt-6", title: "Food Tour po Wroclawiu", eventType: "FOOD_TOUR", status: "PUBLISHED", date: "2026-04-22T10:00:00Z", locationPublic: "Wroclaw, Rynek", price: 12000, capacity: 15, spotsLeft: 5, revenue: 120000, host: { businessName: "Smaki Wroclawia", user: { email: "ola.tour@example.com" } }, _count: { bookings: 10, reviews: 7 } },
   { id: "evt-7", title: "Kolacja peruwiansko-polska", eventType: "SUPPER_CLUB", status: "PENDING_REVIEW", date: "2026-04-25T19:30:00Z", locationPublic: "Warszawa, Praga Polnoc", price: 21000, capacity: 10, spotsLeft: 10, revenue: 0, host: { businessName: "Lima nad Wisla", user: { email: "carlos@example.com" } }, _count: { bookings: 0, reviews: 0 } },
   { id: "evt-8", title: "Sniadanie na farmie", eventType: "FARM_EXPERIENCE", status: "CANCELLED", date: "2026-03-10T08:00:00Z", locationPublic: "okolice Krakowa", price: 9500, capacity: 20, spotsLeft: 20, revenue: 0, host: { businessName: "EkoFarma Kowalskich", user: { email: "farma@example.com" } }, _count: { bookings: 0, reviews: 0 } },

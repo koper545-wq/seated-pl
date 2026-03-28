@@ -11,12 +11,13 @@ function mockToFrontendEvent(e: MockEvent): FrontendEvent {
   // Map typeSlug to EventType enum
   const typeSlugToEnum: Record<string, string> = {
     "supper-club": "SUPPER_CLUB",
-    "chefs-table": "CHEFS_TABLE",
+    "kolacja-degustacyjna": "CHEFS_TABLE",
     "popup": "POPUP",
     "warsztaty": "COOKING_CLASS",
     "degustacje": "WINE_TASTING",
     "active-food": "ACTIVE_FOOD",
     "farm": "FARM_EXPERIENCE",
+    "sniadania": "BREAKFAST",
   };
 
   return {
@@ -132,12 +133,13 @@ export interface FrontendHostEvent {
 // Event type label mapping
 const EVENT_TYPE_LABELS: Record<string, string> = {
   SUPPER_CLUB: "Supper Club",
-  CHEFS_TABLE: "Chef's Table",
+  CHEFS_TABLE: "Kolacja Degustacyjna",
   POPUP: "Pop-up",
   COOKING_CLASS: "Warsztaty",
   WINE_TASTING: "Degustacje",
   ACTIVE_FOOD: "Active + Food",
   FARM_EXPERIENCE: "Farm Experience",
+  BREAKFAST: "Śniadania",
   RESTAURANT_COLLAB: "Kolaboracja restauracyjna",
   OTHER: "Inne",
 };
@@ -145,12 +147,13 @@ const EVENT_TYPE_LABELS: Record<string, string> = {
 // Event type slug mapping
 const EVENT_TYPE_SLUGS: Record<string, string> = {
   SUPPER_CLUB: "supper-club",
-  CHEFS_TABLE: "chefs-table",
+  CHEFS_TABLE: "kolacja-degustacyjna",
   POPUP: "popup",
   COOKING_CLASS: "warsztaty",
   WINE_TASTING: "degustacje",
   ACTIVE_FOOD: "active-food",
   FARM_EXPERIENCE: "farm",
+  BREAKFAST: "sniadania",
   RESTAURANT_COLLAB: "restaurant-collab",
   OTHER: "other",
 };

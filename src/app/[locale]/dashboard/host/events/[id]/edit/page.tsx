@@ -61,12 +61,13 @@ import { getHostEventById } from "@/lib/mock-data";
 
 const eventTypes = [
   { value: "supper-club", label: "Supper Club", icon: "🍽️" },
-  { value: "chefs-table", label: "Chef's Table", icon: "👑" },
+  { value: "kolacja-degustacyjna", label: "Kolacja Degustacyjna", icon: "👑" },
   { value: "warsztaty", label: "Warsztaty", icon: "👨‍🍳" },
   { value: "degustacje", label: "Degustacje", icon: "🍷" },
   { value: "popup", label: "Pop-up", icon: "🎪" },
   { value: "active-food", label: "Active + Food", icon: "🏃" },
   { value: "farm", label: "Farm Experience", icon: "🌾" },
+  { value: "sniadania", label: "Śniadania", icon: "☀️" },
 ];
 
 const cuisineTags = [
@@ -160,9 +161,9 @@ export default function EditEventPage() {
         if (event) {
           setTitle(event.title);
           const typeSlugMap: Record<string, string> = {
-            SUPPER_CLUB: "supper-club", CHEFS_TABLE: "chefs-table", POPUP: "popup",
+            SUPPER_CLUB: "supper-club", CHEFS_TABLE: "kolacja-degustacyjna", POPUP: "popup",
             COOKING_CLASS: "warsztaty", WINE_TASTING: "degustacje",
-            ACTIVE_FOOD: "active-food", FARM_EXPERIENCE: "farm", OTHER: "other",
+            ACTIVE_FOOD: "active-food", FARM_EXPERIENCE: "farm", BREAKFAST: "sniadania", OTHER: "other",
           };
           setEventType(typeSlugMap[event.eventType] || "");
           setSelectedTags(event.cuisineTags || []);
@@ -217,9 +218,9 @@ export default function EditEventPage() {
     setIsSaving(true);
     try {
       const typeEnumMap: Record<string, string> = {
-        "supper-club": "SUPPER_CLUB", "chefs-table": "CHEFS_TABLE", "popup": "POPUP",
+        "supper-club": "SUPPER_CLUB", "kolacja-degustacyjna": "CHEFS_TABLE", "popup": "POPUP",
         "warsztaty": "COOKING_CLASS", "degustacje": "WINE_TASTING",
-        "active-food": "ACTIVE_FOOD", "farm": "FARM_EXPERIENCE", "other": "OTHER",
+        "active-food": "ACTIVE_FOOD", "farm": "FARM_EXPERIENCE", "sniadania": "BREAKFAST", "other": "OTHER",
       };
       const res = await fetch(`/api/events/${eventId}`, {
         method: "PATCH",

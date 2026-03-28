@@ -26,6 +26,7 @@ import {
   Shield,
   CreditCard,
   Crown,
+  Sun,
   LucideIcon,
 } from "lucide-react";
 
@@ -48,7 +49,7 @@ const categories: Category[] = [
   {
     nameKey: "chefsTable",
     descKey: "chefsTableDesc",
-    slug: "chefs-table",
+    slug: "kolacja-degustacyjna",
     icon: Crown,
     color: "bg-slate-100 text-slate-700 hover:bg-slate-200",
   },
@@ -86,6 +87,13 @@ const categories: Category[] = [
     slug: "farm",
     icon: TreePine,
     color: "bg-emerald-100 text-emerald-700 hover:bg-emerald-200",
+  },
+  {
+    nameKey: "breakfast",
+    descKey: "breakfastDesc",
+    slug: "sniadania",
+    icon: Sun,
+    color: "bg-amber-100 text-amber-700 hover:bg-amber-200",
   },
 ];
 

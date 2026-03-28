@@ -59,12 +59,13 @@ import { useEvents } from "@/contexts/events-context";
 
 const eventTypes = [
   { value: "supper-club", label: "Supper Club", icon: "🍽️" },
-  { value: "chefs-table", label: "Chef's Table", icon: "👑" },
+  { value: "kolacja-degustacyjna", label: "Kolacja Degustacyjna", icon: "👑" },
   { value: "warsztaty", label: "Warsztaty", icon: "👨‍🍳" },
   { value: "degustacje", label: "Degustacje", icon: "🍷" },
   { value: "popup", label: "Pop-up", icon: "🎪" },
   { value: "active-food", label: "Active + Food", icon: "🏃" },
   { value: "farm", label: "Farm Experience", icon: "🌾" },
+  { value: "sniadania", label: "Śniadania", icon: "☀️" },
 ];
 
 const cuisineTags = [

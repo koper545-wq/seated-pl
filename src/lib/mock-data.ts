@@ -1790,12 +1790,13 @@ export function getReviewsByEventId(eventId: string): MockReview[] {
 export const eventTypes = [
   { value: "all", label: "Wszystkie typy" },
   { value: "supper-club", label: "Supper Club" },
-  { value: "chefs-table", label: "Chef's Table" },
+  { value: "kolacja-degustacyjna", label: "Kolacja Degustacyjna" },
   { value: "popup", label: "Pop-up" },
   { value: "warsztaty", label: "Warsztaty" },
   { value: "degustacje", label: "Degustacje" },
   { value: "active-food", label: "Active + Food" },
   { value: "farm", label: "Farm Experience" },
+  { value: "sniadania", label: "Śniadania" },
 ];
 
 export const neighborhoods = [
@@ -2264,10 +2265,10 @@ export const mockEvents: MockEvent[] = [
   },
   {
     id: "9",
-    title: "Chef's Table - Menu Degustacyjne by Michał Nowak",
-    slug: "chefs-table-menu-degustacyjne-michal-nowak",
-    type: "Chef's Table",
-    typeSlug: "chefs-table",
+    title: "Kolacja Degustacyjna - Menu Degustacyjne by Michał Nowak",
+    slug: "kolacja-degustacyjna-menu-degustacyjne-michal-nowak",
+    type: "Kolacja Degustacyjna",
+    typeSlug: "kolacja-degustacyjna",
     date: new Date("2025-03-20T19:00:00"),
     dateFormatted: "Czw, 20 Mar · 19:00",
     startTime: "19:00",
@@ -2307,10 +2308,10 @@ export const mockEvents: MockEvent[] = [
   },
   {
     id: "10",
-    title: "Chef's Table w Restauracji Umami - Kuchnia Fusion",
-    slug: "chefs-table-restauracja-umami-kuchnia-fusion",
-    type: "Chef's Table",
-    typeSlug: "chefs-table",
+    title: "Kolacja Degustacyjna w Restauracji Umami - Kuchnia Fusion",
+    slug: "kolacja-degustacyjna-restauracja-umami-kuchnia-fusion",
+    type: "Kolacja Degustacyjna",
+    typeSlug: "kolacja-degustacyjna",
     date: new Date("2025-03-28T19:30:00"),
     dateFormatted: "Pt, 28 Mar · 19:30",
     startTime: "19:30",
@@ -2324,7 +2325,7 @@ export const mockEvents: MockEvent[] = [
     spotsLeft: 7,
     imageGradient: "from-primary/90 to-primary/70",
     description:
-      "Chef's Table w sercu restauracji Umami! Usiądźcie przy barze szefa kuchni i obserwujcie z bliska jak powstaje 5-daniowe menu fusion łączące techniki japońskie z polskimi składnikami. Chef Aleksandra Wiśniewska opowie o inspiracjach i tajnikach każdego dania.",
+      "Kolacja Degustacyjna w sercu restauracji Umami! Usiądźcie przy barze szefa kuchni i obserwujcie z bliska jak powstaje 5-daniowe menu fusion łączące techniki japońskie z polskimi składnikami. Chef Aleksandra Wiśniewska opowie o inspiracjach i tajnikach każdego dania.",
     menuDescription:
       "5-daniowe menu fusion: Pierogi gyoza z kaszanką i sosem ponzu, Zupa miso z polskimi grzybami, Łosoś teriyaki z kaszą jaglaną, Kacze piersi z glazurą z polskich jabłek, Deser: Sernik matcha z białą czekoladą",
     dietaryOptions: ["Opcja pescetariańska", "Bez glutenu po uzgodnieniu"],
@@ -3223,7 +3224,7 @@ export const mockGuestProfiles: Record<string, GuestProfile> = {
     xp: 720,
     level: 4,
     dietaryRestrictions: [],
-    favoriteCategories: ["supper-club", "chefs-table", "degustacje"],
+    favoriteCategories: ["supper-club", "kolacja-degustacyjna", "degustacje"],
     socialLinks: {
       instagram: "anna_foodie_wroclaw",
     },

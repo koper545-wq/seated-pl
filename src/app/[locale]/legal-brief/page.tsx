@@ -253,7 +253,7 @@ export default function LegalBriefPage() {
                   desc: "Prywatne kolacje/obiady",
                 },
                 {
-                  name: "Chef's Table",
+                  name: "Kolacja Degustacyjna",
                   desc: "Ekskluzywne doświadczenia kulinarne",
                 },
                 {

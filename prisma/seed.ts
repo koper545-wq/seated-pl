@@ -370,12 +370,12 @@ async function main() {
     },
   });
 
-  // Sample Event 2: Chef's Table — Kuchnia Japońska z Twist
+  // Sample Event 2: Kolacja Degustacyjna — Kuchnia Japońska z Twist
   const sampleEvent2 = await prisma.event.create({
     data: {
       hostId: hostGuestProfile.id,
-      title: "Chef's Table: Kuchnia Japońska z Twist",
-      slug: "chefs-table-kuchnia-japonska-z-twist",
+      title: "Kolacja Degustacyjna: Kuchnia Japońska z Twist",
+      slug: "kolacja-degustacyjna-kuchnia-japonska-z-twist",
       description: "Ekskluzywne doświadczenie kulinarne przy barze szefa kuchni. Siedem dań łączących japońskie techniki z polskimi składnikami — omakase w wydaniu wrocławskim. Każde danie przygotowywane na Twoich oczach z objaśnieniem technik i historii. Limitowana liczba miejsc gwarantuje intymną atmosferę.",
       eventType: EventType.CHEFS_TABLE,
       cuisineTags: ["Kuchnia japońska", "Fusion", "Omakase", "Fine dining"],

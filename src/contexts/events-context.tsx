@@ -106,12 +106,13 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
       // Dual-write: also save to API (fire-and-forget)
       const typeMap: Record<string, string> = {
         "supper-club": "SUPPER_CLUB",
-        "chefs-table": "CHEFS_TABLE",
+        "kolacja-degustacyjna": "CHEFS_TABLE",
         "warsztaty": "COOKING_CLASS",
         "degustacje": "WINE_TASTING",
         "popup": "POPUP",
         "active-food": "ACTIVE_FOOD",
         "farm": "FARM_EXPERIENCE",
+        "sniadania": "BREAKFAST",
       };
       fetch("/api/events", {
         method: "POST",

@@ -25,13 +25,14 @@ const EVENT_GRADIENTS = [
 // Event type display labels
 const EVENT_TYPE_LABELS: Record<string, string> = {
   SUPPER_CLUB: "Supper Club",
-  CHEFS_TABLE: "Chef's Table",
+  CHEFS_TABLE: "Kolacja Degustacyjna",
   POPUP: "Pop-up",
   WORKSHOP: "Warsztaty",
   TASTING: "Degustacje",
   FOOD_TOUR: "Food Tour",
   ACTIVE_FOOD: "Active + Food",
   FARM_EXPERIENCE: "Farm Experience",
+  BREAKFAST: "Śniadania",
   OTHER: "Inne",
 };
 

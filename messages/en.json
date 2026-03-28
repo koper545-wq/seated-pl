@@ -49,8 +49,8 @@
       "subtitle": "From intimate dinners to active meetups - find something for yourself",
       "supperClub": "Supper Club",
       "supperClubDesc": "Intimate home dinners",
-      "chefsTable": "Chef's Table",
-      "chefsTableDesc": "Exclusive menus from top chefs",
+      "chefsTable": "Tasting Dinner",
+      "chefsTableDesc": "Exclusive tasting menus from top chefs",
       "popup": "Pop-up",
       "popupDesc": "Temporary restaurants",
       "workshops": "Workshops",
@@ -60,7 +60,9 @@
       "activeFood": "Active + Food",
       "activeFoodDesc": "Sports and food",
       "farmExperience": "Farm Experience",
-      "farmExperienceDesc": "From field to table"
+      "farmExperienceDesc": "From field to table",
+      "breakfast": "Breakfasts",
+      "breakfastDesc": "Morning gatherings around a shared table"
     },
     "featured": {
       "title": "Upcoming events",
@@ -1004,7 +1006,7 @@
         "description": "Multi-course dinner in a host's private home"
       },
       "chefsTable": {
-        "title": "Chef's Table",
+        "title": "Tasting Dinner",
         "description": "Exclusive tasting menu from a professional chef"
       },
       "workshops": {
@@ -1026,6 +1028,9 @@
       "farmExperience": {
         "title": "Farm Experience",
         "description": "From field to table - discover local farms"
+      },
+      "breakfast": {
+        "title": "Breakfasts"
       }
     },
     "features": {

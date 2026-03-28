@@ -4,13 +4,14 @@
 export const eventTypes = [
   { value: "all", label: "Wszystkie typy" },
   { value: "SUPPER_CLUB", label: "Supper Club" },
-  { value: "CHEFS_TABLE", label: "Chef's Table" },
+  { value: "CHEFS_TABLE", label: "Kolacja Degustacyjna" },
   { value: "POPUP", label: "Pop-up" },
   { value: "COOKING_CLASS", label: "Warsztaty" },
   { value: "WINE_TASTING", label: "Degustacje" },
   { value: "ACTIVE_FOOD", label: "Active + Food" },
   { value: "FARM_EXPERIENCE", label: "Farm Experience" },
   { value: "RESTAURANT_COLLAB", label: "Kolaboracja restauracyjna" },
+  { value: "BREAKFAST", label: "Śniadania" },
   { value: "OTHER", label: "Inne" },
 ];
 

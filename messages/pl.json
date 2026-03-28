@@ -49,8 +49,8 @@
       "subtitle": "Od intymnych kolacji po aktywne spotkania - znajdź coś dla siebie",
       "supperClub": "Supper Club",
       "supperClubDesc": "Intymne kolacje w domach",
-      "chefsTable": "Chef's Table",
-      "chefsTableDesc": "Ekskluzywne menu od szefów kuchni",
+      "chefsTable": "Kolacja Degustacyjna",
+      "chefsTableDesc": "Ekskluzywne menu degustacyjne",
       "popup": "Pop-up",
       "popupDesc": "Tymczasowe restauracje",
       "workshops": "Warsztaty",
@@ -60,7 +60,9 @@
       "activeFood": "Active + Food",
       "activeFoodDesc": "Sport i jedzenie",
       "farmExperience": "Farm Experience",
-      "farmExperienceDesc": "Od pola do stołu"
+      "farmExperienceDesc": "Od pola do stołu",
+      "breakfast": "Śniadania",
+      "breakfastDesc": "Poranne spotkania przy wspólnym stole"
     },
     "featured": {
       "title": "Nadchodzące wydarzenia",
@@ -1004,7 +1006,7 @@
         "description": "Wielodaniowa kolacja w prywatnym domu hosta"
       },
       "chefsTable": {
-        "title": "Chef's Table",
+        "title": "Kolacja Degustacyjna",
         "description": "Ekskluzywne menu degustacyjne od profesjonalnego szefa kuchni"
       },
       "workshops": {
@@ -1026,6 +1028,9 @@
       "farmExperience": {
         "title": "Farm Experience",
         "description": "Od pola do stołu - poznaj lokalne gospodarstwa"
+      },
+      "breakfast": {
+        "title": "Śniadania"
       }
     },
     "features": {

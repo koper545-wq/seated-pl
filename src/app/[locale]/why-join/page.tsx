@@ -864,7 +864,7 @@ function RestaurantDeck() {
             {[
               {
                 icon: Award,
-                title: "Chef's Table",
+                title: "Kolacja Degustacyjna",
                 desc: "Limitowane miejsca, wyjątkowe menu",
               },
               {

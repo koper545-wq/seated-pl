@@ -12,12 +12,13 @@ interface EventsMapProps {
 // Event type colors mapping
 const eventTypeColors: Record<string, { bg: string; border: string; icon: string }> = {
   "supper-club": { bg: "#C05C36", border: "#A04D2E", icon: "🍽️" },      // terrakota
-  "chefs-table": { bg: "#6E8060", border: "#5A6B4E", icon: "👨‍🍳" },     // szałwia
+  "kolacja-degustacyjna": { bg: "#6E8060", border: "#5A6B4E", icon: "👨‍🍳" },     // szałwia
   "popup": { bg: "#D9846A", border: "#C0735A", icon: "🎪" },            // terra mid
   "warsztaty": { bg: "#8B7355", border: "#725F46", icon: "🥘" },        // warm brown
   "degustacje": { bg: "#9B8B6E", border: "#847660", icon: "🍷" },       // tan
   "active-food": { bg: "#7A9E7E", border: "#658266", icon: "🏃" },      // green sage
   "farm": { bg: "#A8956E", border: "#8F7D5C", icon: "🌾" },             // golden brown
+  "sniadania": { bg: "#D9846A", border: "#C05C36", icon: "☀️" },        // terra mid
   "default": { bg: "#C05C36", border: "#A04D2E", icon: "🍴" },          // terrakota fallback
 };
 
@@ -240,12 +241,13 @@ export function EventsMap({ events }: EventsMapProps) {
             .map(([typeSlug, colors]) => {
               const typeLabel = {
                 "supper-club": "Supper Club",
-                "chefs-table": "Chef's Table",
+                "kolacja-degustacyjna": "Kolacja Degustacyjna",
                 "popup": "Pop-up",
                 "warsztaty": "Warsztaty",
                 "degustacje": "Degustacje",
                 "active-food": "Active + Food",
                 "farm": "Farm Experience",
+                "sniadania": "Śniadania",
               }[typeSlug];
 
               return (
